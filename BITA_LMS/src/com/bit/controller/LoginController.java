@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.bit.model.UserDao;
+import com.bit.model.UserDto;
 
 @WebServlet("/login.bit")
 public class LoginController extends HttpServlet {
@@ -29,16 +30,15 @@ public class LoginController extends HttpServlet {
 		String pw = req.getParameter("pw");
 		
 		UserDao dao = new UserDao();
-		String belong = "";
-		belong = dao.login(id, pw);
+		UserDto userBean = dao.login(id, pw);
 		//System.out.println("LoginController :: belong = "+belong);
-		if(belong.equals("teacher")){
+		if(userBean.getBelong().equals("teacher")){
 			//session
 			HttpSession session = req.getSession();
-			session.setAttribute("id", id);
-			session.setAttribute("belong", belong);
+			session.setAttribute("userBean", userBean);
+//			session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
 			
-			resp.sendRedirect("main.t");
+			resp.sendRedirect("main.tea");
 		}else{
 			req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
 			doGet(req, resp);

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.bit.model.AttendanceDto;
 import com.bit.model.TeacherDao;
+import com.bit.model.UserDto;
 
 @WebServlet("*.t")
 public class TeacherController extends HttpServlet {
@@ -27,26 +28,22 @@ public class TeacherController extends HttpServlet {
 		System.out.println("teacherController :: path = "+path);
 		
 		HttpSession session = req.getSession();
-		String belong = (String) session.getAttribute("belong");
-		int lectureId = (int) session.getAttribute("lectureId");
+		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		RequestDispatcher rd = null;
 
 		try{
-			if(belong.equals("teacher")){
-				System.out.println("belong.equals 통과, path="+ path);
-				if(path.equals("/main.t")){
-//					RequestDispatcher rd = req.getRequestDispatcher("teacher/main_T.jsp");
-					
-					//테스트용으로 다른 주소로 넘김
-					TeacherDao dao = new TeacherDao();
-					ArrayList<AttendanceDto> todayAttendanceList = dao.getTodayAttendance(lectureId);
+			if(userBean.getBelong().equals("teacher")){
+				TeacherDao dao = new TeacherDao();
+				if(path.equals("/main.tea")){
+					rd = req.getRequestDispatcher("teacher/main_T.jsp");
+
+				}else if(path.equals("/attendance.tea")){
+					ArrayList<AttendanceDto> todayAttendanceList = dao.getTodayAttendance(userBean.getLecture_id());
 					
 					req.setAttribute("todayAttendanceList", todayAttendanceList);
-					rd = req.getRequestDispatcher("teacher/test_T.jsp");
-					
-					
-				}else if(path.equals("/stumanage.t")){
-					rd = req.getRequestDispatcher("studentManage.t");
+					rd = req.getRequestDispatcher("attendance_T.jsp");
+				}else if(path.equals("/score.tea")){
+					rd = req.getRequestDispatcher("score_T.jsp");
 				}
 				rd.forward(req, resp);
 			}

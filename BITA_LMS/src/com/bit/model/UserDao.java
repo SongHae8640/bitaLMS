@@ -28,8 +28,9 @@ public class UserDao {
 		}
 	}
 	
-	public String login(String id, String pw){
-		String sql = "select belong from bitauser where user_id=? and password=?";
+	public UserDto login(String id, String pw){
+		String sql = "SELECT * FROM user01 WHERE user_id=? AND password=?";
+		UserDto bean = new UserDto();
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -38,7 +39,13 @@ public class UserDao {
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()){;
-				return rs.getString("belong");
+				bean.setUserId(rs.getString("user_id"));
+				bean.setPassword(rs.getString("password")); //나중에 패스워스 수정을 사용할 수도 있으니, 안쓸꺼면 지우고
+				bean.setName(rs.getString("name"));
+				bean.setEmail(rs.getString("email"));
+				bean.setPhoneNumber(rs.getString("phone_number"));
+				bean.setLecture_id(rs.getInt("lecture_id"));
+				bean.setBelong(rs.getString("belong"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -51,6 +58,6 @@ public class UserDao {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return bean;
 	}
 }
