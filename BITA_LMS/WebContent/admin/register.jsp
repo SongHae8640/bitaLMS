@@ -24,23 +24,9 @@
 <body>
 	<div>
 		<div id="header">
-			<!-- <a href="#">logout</a> --> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
-		<!-- 강사팀 메뉴
-			<ul>
-				<li class="topmenu"><a href="#">학생관리</a>
-					<ul class="submenu">
-						<li><a href="#">출결관리</a></li>
-						<li><a href="#">성적관리</a></li>
-						<li><a href="#">과제관리</a></li>
-					</ul></li>
-				<li><a href="#">1:1문의</a></li>
-			</ul>
-			
-			-->
-			<!--
-			행정팀메뉴
 			<ul>
 				<li class="topmenu"><a href="#">학생관리</a>
 					<ul class="submenu">
@@ -51,36 +37,9 @@
 				<li><a href="#">강사관리</a></li>
 				<li><a href="#">1:1문의</a></li>
 			</ul>
-			
-			-->
-			<!-- 학생메뉴
-			
-			<ul>
-				<li class="topmenu"><a href="#">출결관리</a>
-				<li><a href="#">성적관리</a></li>
-				<li><a href="#">과제관리</a></li>
-				<li><a href="#">1:1문의</a></li>
-			</ul>
-			
-			-->
 		</div>
 		<div id="content">
-			<h2>로그인페이지</h2>
-			<form action="login.bit" method="post">
-				<div>
-					<lable for="id">id</lable>
-					<input type="text" name="id" id="id" />
-				</div>
-				<div>
-					<lable for="pw">pw</lable>
-					<input type="password" name="pw" id="pw" />
-				</div>
-				<div>
-					<button type="submit">로그인</button>
-					<button type="reset">취소</button>
-					<button type="button">회원가입</button>
-				</div>
-			</form>
+			<h2>학생등록</h2>
 		</div>
 		<div id="footer">
 			<div>
@@ -94,11 +53,5 @@
 			</div>
 		</div>
 	</div>
-	<%
-		//ui를 깨지지 않게 하려면 항상 body 닫기 전에 넣는 것이 좋다. 로딩하다가 출력되기 때문
-		Object obj = request.getAttribute("errmsg");
-		if (obj != null)
-			out.println(obj);
-	%>
 </body>
 </html>
