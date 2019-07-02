@@ -31,13 +31,14 @@ public class LoginController extends HttpServlet {
 		UserDao dao = new UserDao();
 		String belong = "";
 		belong = dao.login(id, pw);
-		System.out.println(belong);
+		//System.out.println("LoginController :: belong = "+belong);
 		if(belong.equals("teacher")){
 			//session
 			HttpSession session = req.getSession();
 			session.setAttribute("id", id);
 			session.setAttribute("belong", belong);
-			resp.sendRedirect("main.bit");
+			
+			resp.sendRedirect("main.t");
 		}else{
 			req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
 			doGet(req, resp);

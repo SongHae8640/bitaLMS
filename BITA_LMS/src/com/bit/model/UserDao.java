@@ -37,8 +37,7 @@ public class UserDao {
 			pstmt.setString(2, pw);
 			rs = pstmt.executeQuery();
 			
-			if(rs.next()){
-				System.out.println(rs.getString("belong"));
+			if(rs.next()){;
 				return rs.getString("belong");
 			}
 		} catch (SQLException e) {
