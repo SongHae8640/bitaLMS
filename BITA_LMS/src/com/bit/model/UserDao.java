@@ -47,6 +47,7 @@ public class UserDao {
 				bean.setEmail(rs.getString("email"));
 				bean.setPhoneNumber(rs.getString("phone_number"));
 				bean.setBelong(rs.getString("belong"));
+				bean.setLecture_id(rs.getInt("lecture_id"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
