@@ -54,7 +54,7 @@
 	float:right;
 	width: 55px;
 	}
-	#content #app_list{
+	#content #q_list{
 	clear:both;
 	width: 500px;
 	height:500px;
@@ -62,7 +62,7 @@
 	text-align:center;
 	}
 	#content #under_list{
-	width: 500px;
+	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
@@ -115,20 +115,17 @@
 			</ul>
 		</div>
 		<div id="content">
-			<div id="sidebar">
+				<div id="sidebar">
 			<br/><br/><br/><br/>
-			<h3>학생관리</h3>
+			<h3>1:1문의</h3>
 			<br/><br/>
-			<ul>
-				<li><a href="qna.adm">1:1문의</a></li>
-			</ul>
 		</div>
 		<div id="real_content">
 			<br/>
 			<div id="page_name">
 				<h2>1:1문의</h2>
 			</div>
-			<div id="app_list">
+			<div id="q_list">
 			<table>
 				<thead>
 					<tr>
@@ -144,7 +141,7 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><a href="./register_detail.jsp">프린트도 사용가능한가요?</a></td>
+						<td><a href="./qna_A_detail.jsp">프린트도 사용가능한가요?</a></td>
 						<td>김코난</td>
 						<td>2019-07-02</td>
 						<td>답변대기</td>

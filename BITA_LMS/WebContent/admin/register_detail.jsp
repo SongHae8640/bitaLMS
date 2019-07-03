@@ -42,13 +42,14 @@
 	width: 600px;
 	}
 	#app_table{
-	width:400px;
+	width:600px;
 	}
 	#content #real_content #app_detail table,th,td{
-	border: 1px solid red;
+	border: 1px solid red; 
 	}
 	#content #real_content #app_detail #reg_form {
-	width:600px;
+	width:300px;
+	margin: 0 auto;
 	}
 	#content #real_content #app_detail #reg_form div{
 	clear:both;
@@ -81,7 +82,7 @@
 	text-align:center;
 	}
 	#content #under_list{
-	width: 500px;
+	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
@@ -95,6 +96,7 @@
 	float: right;
 	}
 	#content #under_list #del_button{
+	width: 45px;
 	float: right;
 	}
 </style>
@@ -119,6 +121,9 @@
 			else { 
 				//no-변동사항없음
 				} 
+			});
+		$('#list_btn').click(function(){
+				location.replace('register.adm');
 			});
 	});
 </script>
@@ -195,7 +200,7 @@
 		</div>
 		<div id="under_list">
 			<div id="list_button">
-				<button type="button">목록</button>
+				<button type="button" id="list_btn">목록</button>
 			</div>
 			<div id="del_button">
 				<button type="button" id="del_btn">삭제</button>
