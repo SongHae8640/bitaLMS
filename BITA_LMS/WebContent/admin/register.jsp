@@ -156,7 +156,7 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><a href="./register_detail.jsp">김경민님의 수강신청</a></td>
+						<td><a href="register_detail.adm">김경민님의 수강신청</a></td>
 						<td>rudals108</td>
 						<td>김경민</td>
 						<td>JAVA</td>

@@ -10,6 +10,11 @@
 	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
+#menu>ul {
+	width: 610px;
+	list-style-type: none;
+	margin: 0px auto;
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -60,7 +65,7 @@
 					<tr>
 					<tr>
 						<td>1</td>
-						<td><a href="qna_S/qnadetail_S.jsp">sub</a></td>
+						<td><a href="qnadetail.stu">sub</a></td>
 						<td>name</td>
 						<td>day</td>
 						<td>vs</td>
@@ -83,7 +88,7 @@
 				</tfooter>
 			</table>
 			<div>
-				<form action="qna_S/qnaadd_S.jsp">
+				<form action="qnaadd.stu">
 					<button type="submit">등록</button>
 				</form>
 				<button type="">삭제</button>

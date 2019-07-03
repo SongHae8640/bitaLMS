@@ -144,7 +144,7 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><a href="./manage_lec_detail.jsp">JAVA</a></td>
+						<td><a href="manage_lec_detail.adm">JAVA</a></td>
 						<td>김코난</td>
 						<td>2019-07-02</td>
 					</tr>
