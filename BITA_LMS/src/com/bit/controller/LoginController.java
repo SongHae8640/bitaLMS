@@ -31,6 +31,7 @@ public class LoginController extends HttpServlet {
 		
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login(id, pw);
+		//System.out.println("LoginController :: belong = "+belong);
 		System.out.println(userBean.toString());
 		if(userBean.getBelong().equals("teacher")){
 			//session
@@ -39,6 +40,16 @@ public class LoginController extends HttpServlet {
 //			session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
 			
 			resp.sendRedirect("main.tea");
+		}else if(userBean.getBelong().equals("admin")){
+			HttpSession session = req.getSession();
+			session.setAttribute("userBean", userBean);
+			
+			resp.sendRedirect("main.adm");
+		}else if(userBean.getBelong().equals("student")){
+			HttpSession session = req.getSession();
+			session.setAttribute("userBean", userBean);
+			
+			resp.sendRedirect("main.stu");
 		}else{
 			req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
 			doGet(req, resp);

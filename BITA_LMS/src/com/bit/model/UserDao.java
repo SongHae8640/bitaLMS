@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class UserDao {
 	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@192.168.1.7:1521:xe";
+	String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	String user = "bita";
 	String password = "bita";
 	
@@ -29,9 +29,7 @@ public class UserDao {
 	}
 	
 	public UserDto login(String id, String pw){
-		String sql = "SELECT * FROM user01 u JOIN lectureUser l "
-				+ "ON u.user_id=l.user_id "
-				+ "WHERE u.user_id=? AND u.password=?";
+		String sql = "SELECT * FROM user01 WHERE user_id=? AND password=?";
 		UserDto bean = new UserDto();
 		
 		try {
@@ -44,8 +42,9 @@ public class UserDao {
 				bean.setUserId(rs.getString("user_id"));
 				bean.setPassword(rs.getString("password")); //나중에 패스워스 수정을 사용할 수도 있으니, 안쓸꺼면 지우고
 				bean.setName(rs.getString("name"));
-				bean.setEmail(rs.getString("email"));
-				bean.setPhoneNumber(rs.getString("phone_number"));
+//				bean.setEmail(rs.getString("email"));
+//				bean.setPhoneNumber(rs.getString("phone_number"));
+//				bean.setLecture_id(rs.getInt("lecture_id"));
 				bean.setBelong(rs.getString("belong"));
 			}
 		} catch (SQLException e) {

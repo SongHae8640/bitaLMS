@@ -8,6 +8,11 @@
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
+#menu>ul {
+	width: 610px;
+	list-style-type: none;
+	margin: 0px auto;
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -24,18 +29,18 @@
 <body>
 	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="../img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
 				<li class="topmenu"><a href="#">학생관리</a>
 					<ul class="submenu">
-						<li><a href="#">학생등록</a></li>
-						<li><a href="#">수강생관리</a></li>
+						<li><a href="register.adm">학생등록</a></li>
+						<li><a href="manage_stu.adm">수강생관리</a></li>
 					</ul></li>
-				<li><a href="#">강좌관리</a></li>
-				<li><a href="#">강사관리</a></li>
-				<li><a href="#">1:1문의</a></li>
+				<li><a href="manage_lec.adm">강좌관리</a></li>
+				<li><a href="manage_tea.adm">강사관리</a></li>
+				<li><a href="qna.adm">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">

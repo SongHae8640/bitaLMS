@@ -23,35 +23,44 @@ public class TeacherController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
-		
+
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		
+		System.out.println("teacherController :: path = " + path);
+
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
-		RequestDispatcher rd = null;
+//		RequestDispatcher rd = null;
 
-		try{
-			if(userBean.getBelong().equals("teacher")){
-				TeacherDao dao = new TeacherDao();
-				if(path.equals("/main.tea")){
-					rd = req.getRequestDispatcher("teacher/main_T.jsp");
-
-				}else if(path.equals("/attendance.tea")){
-					ArrayList<AttendanceDto> todayAttendanceList = dao.getTodayAttendance(userBean.getLecture_id());
-					
-					req.setAttribute("todayAttendanceList", todayAttendanceList);
-					rd = req.getRequestDispatcher("attendance_T.jsp");
-				}else if(path.equals("/score.tea")){
-					rd = req.getRequestDispatcher("score_T.jsp");
-				}
+		try {
+			// if(session.getAttribute("userBean").equals("teacher")){
+//			TeacherDao dao = new TeacherDao();
+			if (path.equals("/main.tea")) {
+				RequestDispatcher rd = req.getRequestDispatcher("teacher/main_T.jsp");
 				rd.forward(req, resp);
+			} else if (path.equals("/attendance.tea")) {
+//				ArrayList<AttendanceDto> todayAttendanceList = dao
+//						.getTodayAttendance(userBean.getLecture_id());
+//
+//				req.setAttribute("todayAttendanceList", todayAttendanceList);
+				RequestDispatcher rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
+				rd.forward(req, resp);
+			} else if (path.equals("/score.tea")) {
+				RequestDispatcher rd= req.getRequestDispatcher("teacher/score_T.jsp");
+				rd.forward(req, resp);
+			} else if (path.equals("/assignment.tea")) {
+				RequestDispatcher rd= req.getRequestDispatcher("teacher/assignment_T.jsp");
+				rd.forward(req, resp);
+			} else if (path.equals("/qna.tea")) {
+				RequestDispatcher rd= req.getRequestDispatcher("teacher/qna_T.jsp");
+				rd.forward(req, resp);
+			} else {
+				System.out.println("¿À·ù");
 			}
-		}catch(java.lang.NullPointerException e){
+			// }
+		} catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
 		}
-		
+
 	}
-	
-	
-	
+
 }

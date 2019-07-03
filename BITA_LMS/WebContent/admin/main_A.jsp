@@ -5,62 +5,70 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="/css/frame.css" />
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
-	body *{
-		padding:0px;
-		margin: 0px;
-	}
-	body div{
-	border: 1px solid gray;
-	width: 800px;
+#menu>ul {
+	width: 610px;
+	list-style-type: none;
+	margin: 0px auto;
+}
+
+#content {
+	height: 700px;
 	margin: 0 auto;
-	}
-	#content{
-	height:700px;
+}
+
+#content #content_upper {
+	height: 450px;
 	margin: 0 auto;
-	}
-	#content #content_upper{
-	height:450px;
-	margin: 0 auto;
-	}
-	#content #content_under{
-	height:250px;
-	}
-	#content #content_under #myinfo{
+}
+
+#content #content_under {
+	height: 250px;
+}
+
+#content #content_under #myinfo {
 	float: left;
 	width: 400px;
 	margin-top: 50px;
-	}
-	#content #content_under #myinfo #myinfo_form{
+}
+
+#content #content_under #myinfo #myinfo_form {
 	width: 300px;
 	margin: 0 auto;
-	}
-	#content #content_under #myinfo #myinfo_form #mypic{
-	float:left;
+}
+
+#content #content_under #myinfo #myinfo_form #mypic {
+	float: left;
 	height: 100px;
 	width: 100px;
-	}
-	#content #content_under #myinfo #myinfo_form #welcome{
-	float:right;
-	line-height:50px;
+}
+
+#content #content_under #myinfo #myinfo_form #welcome {
+	float: right;
+	line-height: 50px;
 	width: 190px;
 	text-align: center;
-	}
-	#content #content_under #myinfo #myinfo_form2{
-	overflow:auto;
+}
+
+#content #content_under #myinfo #myinfo_form2 {
+	overflow: auto;
 	width: 300px;
-	}
-	#content #content_under #mywork{
+}
+
+#content #content_under #mywork {
 	float: right;
 	width: 395px;
 	margin: 100px auto;
-	}
-	#content #content_under #mywork #mywork_form{
+}
+
+#content #content_under #mywork #mywork_form {
 	width: 395px;
 	text-align: center;
-	}
+}
 </style>
 
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -84,47 +92,42 @@
 			<ul>
 				<li class="topmenu"><a href="#">학생관리</a>
 					<ul class="submenu">
-						<li><a href="#">학생등록</a></li>
-						<li><a href="#">수강생관리</a></li>
+						<li><a href="register.adm">학생등록</a></li>
+						<li><a href="manage_stu.adm">수강생관리</a></li>
 					</ul></li>
-				<li><a href="#">강좌관리</a></li>
-				<li><a href="#">강사관리</a></li>
-				<li><a href="#">1:1문의</a></li>
+				<li><a href="manage_lec.adm">강좌관리</a></li>
+				<li><a href="manage_tea.adm">강사관리</a></li>
+				<li><a href="qna.adm">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
-		<div id="content_upper">
-			<div id="calender">
-				<h1>달력</h1>
+			<div id="content_upper">
+				<div id="calender">
+					<h1>달력</h1>
+				</div>
 			</div>
-		</div>
-		<div id="content_under">
-			<div id="myinfo">
-				<div id="myinfo_form">
-					<img id="mypic" alt="mypic" src="<%=request.getContextPath()%>/imgs/person_sample.png">
-					<div id="welcome">
-						<h1><%=request.getAttribute("name") %></h1><p>님 환영합니다!</p>
+			<div id="content_under">
+				<div id="myinfo">
+					<div id="myinfo_form">
+						<img id="mypic" alt="mypic" src="img/person_sample.png">
+						<div id="welcome">
+							<h1><%=request.getAttribute("name")%></h1>
+							<p>님 환영합니다!</p>
+						</div>
+					</div>
+					<div id="myinfo_form2">
+						<label for="branch">지점 :</label> <span>비트교육센터 안양지점</span> <br /> <label
+							for="belong">소속 :</label> <span>belong</span>
 					</div>
 				</div>
-					<div id="myinfo_form2">
-						<label for="branch">지점 :</label>
-						<span>비트교육센터 안양지점</span>
-						<br/>			
-						<label for="belong">소속 :</label>
-						<span>belong</span>
+				<div id="mywork">
+					<div id="mywork_form">
+						<label for="today_a">신청현황 </label> <span> ?? / 30</span> <br /> <label
+							for="today_q">문의현황 </label> <span> ?? / 30</span>
 					</div>
-			</div>
-			<div id="mywork">
-				<div id="mywork_form">
-						<label for="today_a">신청현황 </label>
-						<span> ?? / 30</span>
-						<br/>			
-						<label for="today_q">문의현황 </label>
-						<span> ?? / 30</span>
-					</div>
+				</div>
 			</div>
 		</div>
-	</div>
 
 		<div id="footer">
 			<div>
