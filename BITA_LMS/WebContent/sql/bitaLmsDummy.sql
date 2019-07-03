@@ -71,10 +71,7 @@ INSERT INTO submission(assignment_id, std_id,submit_date,file_name,is_check) VAL
 --null 을 넣으면 안되니까 질문 생성시 빈칸으로 해서 생성할것
 INSERT INTO qna_l(question_id,std_id, type, title, question_content, responder_id, answer_content, write_date) VALUES(1,'stu1','의의신청','성적문의 입니다(제목)','성적이 잘못 나온것 같습니다. 수정 해주세요.','tea1','네 그게 맞습니다 더 공부하세요.',SYSDATE);
 
-
 commit;
-
-
 
 
 

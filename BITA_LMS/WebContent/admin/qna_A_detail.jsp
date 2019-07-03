@@ -24,6 +24,7 @@
 	width: 200px;
 	text-align:center;
 	z-index: 1;
+	background-color: gray;
 	}
 	#content #sidebar ul li{
 	list-style: none;
@@ -32,57 +33,40 @@
 	text-decoration: none;
 	color: rgb(0,0,0);
 	}
-	#content #real_content{
-	position:relative;
-	left:300px;
-	width: 600px;
-	height:700px;
-	}
-	#content #real_content #app_detail{
-	width: 600px;
-	}
-	#app_table{
-	width:400px;
-	}
-	#content #real_content #app_detail table,th,td{
-	border: 1px solid gray;
-	}
-	#content #real_content #app_detail #qna_content {
-	width:600px;
-	}
-	#content #real_content #app_detail #qna_content div{
-	clear:both;
-	width:300px;
-	}
-	#qna_answer{
-	height:150px;
-	background-color: gray;
-	}
-	#content #real_content #app_detail #submit{
-	width:150px;
-	float: right;
-	}
 	#content #page_name{
 	width: 120px;
 	margin: 0 auto;
 	text-align:center;
 	border: 1px solid gray;
 	}
-	#content #people_check{
-	float:right;
-	width: 130px;
+	#content #real_content{
+	position:relative;
+	left:300px;
+	width: 600px;
+	height:700px;
 	}
-	#content #lecture_list{
-	clear:both;
-	float:right;
-	width: 55px;
+	#content #real_content #q_detail{
+	width: 600px;
 	}
-	#content #app_list{
-	clear:both;
-	width: 500px;
-	height:500px;
+	#content #real_content #q_detail table{
+	width: 600px;
 	margin: 0 auto;
-	text-align:center;
+	}
+	#content #real_content #q_detail table,th,td{
+	border: 1px solid gray;
+	}
+	#content #real_content #q_detail #submit{
+	width:145px;
+	float: right;
+	}
+	#content #real_content #q_detail #qna_content {
+	overflow:auto;
+	width:600px;
+	height:200px;
+	}
+	#qna_answer{
+	height:200px;
+	background-color: gray;
 	}
 	#content #under_list{
 	width: 600px;
@@ -98,8 +82,8 @@
 	#content #under_list #ans_button{
 	float: right;
 	}
-	#content #under_list #del_button{
-	width: 45px;
+	#content #under_list #ok_button{
+	width: 43px;
 	float: right;
 	}
 </style>
@@ -154,8 +138,9 @@
 			<div id="page_name">
 				<h2>1:1문의</h2>
 			</div>
-		<div id="app_detail">
-			<table id="app_table">
+			<br/><br/>
+		<div id="q_detail">
+			<table>
 					<tr>
 						<th>제목</th>
 						<td>프린트사용가능한가요?</td>
@@ -168,7 +153,7 @@
 						<td colspan="2">
 						<div id="qna_content">
 							<div id="submit">
-								<span>작성일 2019-07-03</span>
+								<span >작성일 2019-07-03</span>
 							</div>
 							<div>
 								<p>출력할게 있는데 프린트사용가능한가용?</p>
@@ -185,8 +170,8 @@
 			<div id="list_button">
 				<button type="button" id="list_btn">목록</button>
 			</div>
-			<div id="del_button">
-				<button type="button" id="del_btn">확인</button>
+			<div id="ok_button">
+				<button type="button" id="dok_btn">확인</button>
 			</div>
 			<div id="ans_button">
 				<button type="button">답변등록</button>

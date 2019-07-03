@@ -26,15 +26,15 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//ë“¤ì–´ì˜¤ëŠ” ì£¼ì†Œ í™•ì¸í•˜ê³  ë’·ì£¼ì†Œë§Œ ì €ì¥í•˜ê¸°
+		//?“¤?–´?˜¤?Š” ì£¼ì†Œ ?™•?¸?•˜ê³? ?’·ì£¼ì†Œë§? ???¥?•˜ê¸?
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController :: path = " + path);
 
-		//ì„¸ì…˜ ì €ì¥
+		//?„¸?…˜ ???¥
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//ì¤‘ë³µë˜ëŠ” RequestDispatcher
+		//ì¤‘ë³µ?˜?Š” RequestDispatcher
 		RequestDispatcher rd = null;
 
 		try {
@@ -45,7 +45,7 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/main_T.jsp");
 				} else if (path.equals("/attendance.tea")) {
 					 ArrayList<AttendanceDto> todayAttendanceList = dao.getTodayAttendance(userBean.getLecture_id());
-					 //ì–´íŠ¸ë¦¬ë·°íŠ¸ë¡œ ì €ì¥í•˜ê³  jspí˜ì´ì§€ì—ì„œ getìœ¼ë¡œ ë¶ˆëŸ¬ì˜¤ê¸°
+					 //?–´?Š¸ë¦¬ë·°?Š¸ë¡? ???¥?•˜ê³? jsp?˜?´ì§??—?„œ get?œ¼ë¡? ë¶ˆëŸ¬?˜¤ê¸?
 					 req.setAttribute("todayAttendanceList",todayAttendanceList);
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 
@@ -64,10 +64,10 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
 				
 				} else {
-					System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” í˜ì´ì§€");
+					System.out.println("ì¡´ì¬?•˜ì§? ?•Š?Š” ?˜?´ì§?");
 				}
 			}else {
-				//teacherë‚˜ studentí˜ì´ì§€ë¡œ ì ‘ê·¼í•˜ë ¤ê³  í•˜ë©´ ê± ë³´ë‚´ë²„ë¦¼
+				//teacher?‚˜ student?˜?´ì§?ë¡? ? ‘ê·¼í•˜? ¤ê³? ?•˜ë©? ê±? ë³´ë‚´ë²„ë¦¼
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
