@@ -14,7 +14,6 @@
 	margin: 0px auto;
 	}
 	#content{
-	border: 1px solid gray;
 	height:700px;
 	margin: 0 auto;
 	}
@@ -39,6 +38,28 @@
 	width: 600px;
 	height:700px;
 	}
+	#content #real_content #lec_detail{
+	width: 600px;
+	}
+	#content #real_content #lec_detail table,th,td{
+	border: 1px solid gray;
+	}
+	#lec_table1{
+	width:400px;
+	}
+	#lec_table2{
+	}
+	#content #real_content #lec_detail #qna_content {
+	width:600px;
+	}
+	#content #real_content #lec_detail #qna_content div{
+	clear:both;
+	width:300px;
+	}
+	#content #real_content #lec_detail #submit{
+	width:150px;
+	float: right;
+	}
 	#content #page_name{
 	width: 120px;
 	margin: 0 auto;
@@ -54,36 +75,30 @@
 	float:right;
 	width: 55px;
 	}
-	#content #lec_lists{
+	#content #app_list{
 	clear:both;
 	width: 500px;
 	height:500px;
 	margin: 0 auto;
 	text-align:center;
 	}
-	#content #lec_list table,tr,th,td{
-	border:1px solid gray;
-	margin: 0 auto;
-	width: 600px;
-	text-align: center;
-	}
 	#content #under_list{
 	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
-	#content #under_list #close_button{
-	float:right;
-	width: 100px;
+	#content #under_list div{
+	width: 80px;
 	}
-	#content #under_list #search_box{
-	clear:both;
-	width: 230px;
-	margin: 0 auto;
+	#content #under_list #list_button{
+	float: left;
 	}
-	#content #under_list #page_button{
-	width: 150px;
-	margin: 0 auto;
+	#content #under_list #ans_button{
+	float: right;
+	}
+	#content #under_list #del_button{
+	width: 45px;
+	float: right;
 	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -95,6 +110,17 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		$('#del_btn').click(function(){
+			var result = confirm('정말 삭제하시겠습니까?'); 
+			if(result) { //yes-해당수강신청삭제
+				location.replace('register.adm'); } 
+			else { 
+				//no-변동사항없음
+				} 
+			});
+		$('#list_btn').click(function(){
+				location.replace('qna.adm'); } 
+			});
 	});
 </script>
 </head>
@@ -116,7 +142,7 @@
 			</ul>
 		</div>
 		<div id="content">
-				<div id="sidebar">
+			<div id="sidebar">
 			<br/><br/><br/><br/>
 			<h3>강좌관리</h3>
 			<br/><br/>
@@ -124,44 +150,71 @@
 		<div id="real_content">
 			<br/>
 			<div id="page_name">
-				<h2>강좌관리</h2>
+				<h2>강좌상세</h2>
 			</div>
-			<div id="lec_list">
-			<table>
-				<thead>
+		<div id="lec_detail">
+			<div>
+				<h3>커리큘럼이미지</h3>
+			</div>
+			<table id="lec_table1">
 					<tr>
-						<th>번호</th>
-						<th>강좌명</th>
-						<th>강사명</th>
-						<th>개강일</th>
+						<td>강좌명</td>
+						<td>JAVA</td>
 					</tr>
-				</thead>
-				<tbody>
 					<tr>
-						<td>1</td>
-						<td><a href="./manage_lec_detail.jsp">JAVA</a></td>
+						<td>강사명</td>
 						<td>김코난</td>
-						<td>2019-07-02</td>
 					</tr>
-				</tbody>
+					<tr>
+						<td>교육기간</td>
+						<td>2019-07-01 ~ 2019-10-01</td>
+					</tr>
+					<tr>
+						<td>교육수준</td>
+						<td>3수준</td>
+					</tr>
+					<tr>
+						<td>최대인원</td>
+						<td>30</td>
+					</tr>
+			</table>
+			<table id="lec_table2">
+				<tr>
+					<td>
+						<label>진도율</label>
+						<progress value="20" max="100"></progress>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>강좌내용</label>
+						<p>응용소프트웨어 엔지니어링은 컴퓨터 프로그래밍 언어로 각 
+						업무에맞는 소프트웨어의 기능에 관한 설계, 구현 및 테스트를 
+						수행하고,사용자에게 배포하며, 버전관리를 통해 제품의 성능을 
+						향상시키고,서비스를 개선할 수 있는 인재양성을 목표로 한다.
+						데이터베이스 구현을 위하여 DBMS(Data Base Management System)
+						(DataBase Management Systems) 설치, 데이터베이스 생성, 데이
+						터베이스 오브젝트를 계획, 설계하고 구현하는 능력을 함양한다.
+						</p>
+					</td>
+				</tr>
+				<tr>
+				<div>
+					<h3>커리큘럼이미지</h3>			
+				</div>
+				</tr>
 			</table>
 		</div>
 		<div id="under_list">
-			<div id="close_button">
-				<button type="button">삭제</button>
+			<div id="list_button">
+				<button type="button" id="list_btn">목록</button>
 			</div>
-			<div id="search_box">
-				<form action="register_list.adm">
-					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit">검색</button>
-				</form>
+			<div id="del_button">
+				<button type="button" id="del_btn">삭제</button>
 			</div>
-			<div id="page_button">
-				<button><</button>
-				<button>1</button>
-				<button>2</button>
-				<button>3</button>
-				<button>></button>
+			<div id="ans_button">
+				<button type="button">수정</button>
+			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
 	</div>

@@ -14,7 +14,6 @@
 	margin: 0px auto;
 	}
 	#content{
-	border: 1px solid gray;
 	height:700px;
 	margin: 0 auto;
 	}
@@ -39,6 +38,30 @@
 	width: 600px;
 	height:700px;
 	}
+	#content #real_content #app_detail{
+	width: 600px;
+	}
+	#app_table{
+	width:400px;
+	}
+	#content #real_content #app_detail table,th,td{
+	border: 1px solid gray;
+	}
+	#content #real_content #app_detail #qna_content {
+	width:600px;
+	}
+	#content #real_content #app_detail #qna_content div{
+	clear:both;
+	width:300px;
+	}
+	#qna_answer{
+	height:150px;
+	background-color: gray;
+	}
+	#content #real_content #app_detail #submit{
+	width:150px;
+	float: right;
+	}
 	#content #page_name{
 	width: 120px;
 	margin: 0 auto;
@@ -54,36 +77,30 @@
 	float:right;
 	width: 55px;
 	}
-	#content #lec_lists{
+	#content #app_list{
 	clear:both;
 	width: 500px;
 	height:500px;
 	margin: 0 auto;
 	text-align:center;
 	}
-	#content #lec_list table,tr,th,td{
-	border:1px solid gray;
-	margin: 0 auto;
-	width: 600px;
-	text-align: center;
-	}
 	#content #under_list{
 	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
-	#content #under_list #close_button{
-	float:right;
-	width: 100px;
+	#content #under_list div{
+	width: 80px;
 	}
-	#content #under_list #search_box{
-	clear:both;
-	width: 230px;
-	margin: 0 auto;
+	#content #under_list #list_button{
+	float: left;
 	}
-	#content #under_list #page_button{
-	width: 150px;
-	margin: 0 auto;
+	#content #under_list #ans_button{
+	float: right;
+	}
+	#content #under_list #del_button{
+	width: 45px;
+	float: right;
 	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -95,6 +112,17 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		$('#del_btn').click(function(){
+			var result = confirm('정말 삭제하시겠습니까?'); 
+			if(result) { //yes-해당수강신청삭제
+				location.replace('register.adm'); } 
+			else { 
+				//no-변동사항없음
+				} 
+			});
+		$('#list_btn').click(function(){
+				location.replace('qna.adm'); } 
+			});
 	});
 </script>
 </head>
@@ -116,52 +144,53 @@
 			</ul>
 		</div>
 		<div id="content">
-				<div id="sidebar">
+			<div id="sidebar">
 			<br/><br/><br/><br/>
-			<h3>강좌관리</h3>
+			<h3>1:1문의</h3>
 			<br/><br/>
 		</div>
 		<div id="real_content">
 			<br/>
 			<div id="page_name">
-				<h2>강좌관리</h2>
+				<h2>1:1문의</h2>
 			</div>
-			<div id="lec_list">
-			<table>
-				<thead>
+		<div id="app_detail">
+			<table id="app_table">
 					<tr>
-						<th>번호</th>
-						<th>강좌명</th>
-						<th>강사명</th>
-						<th>개강일</th>
+						<th>제목</th>
+						<td>프린트사용가능한가요?</td>
 					</tr>
-				</thead>
-				<tbody>
 					<tr>
-						<td>1</td>
-						<td><a href="./manage_lec_detail.jsp">JAVA</a></td>
+						<th>작성자</th>
 						<td>김코난</td>
-						<td>2019-07-02</td>
 					</tr>
-				</tbody>
+					<tr>
+						<td colspan="2">
+						<div id="qna_content">
+							<div id="submit">
+								<span>작성일 2019-07-03</span>
+							</div>
+							<div>
+								<p>출력할게 있는데 프린트사용가능한가용?</p>
+							</div>
+						</div>
+						<div id="qna_answer">
+							<span>네 맘껏 사용하세요.</span>
+						</div>
+						</td>
+					</tr>
 			</table>
 		</div>
 		<div id="under_list">
-			<div id="close_button">
-				<button type="button">삭제</button>
+			<div id="list_button">
+				<button type="button" id="list_btn">목록</button>
 			</div>
-			<div id="search_box">
-				<form action="register_list.adm">
-					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit">검색</button>
-				</form>
+			<div id="del_button">
+				<button type="button" id="del_btn">확인</button>
 			</div>
-			<div id="page_button">
-				<button><</button>
-				<button>1</button>
-				<button>2</button>
-				<button>3</button>
-				<button>></button>
+			<div id="ans_button">
+				<button type="button">답변등록</button>
+			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
 	</div>
