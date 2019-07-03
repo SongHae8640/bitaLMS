@@ -58,6 +58,10 @@ INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture
 --Score
 -- null 이면 안되니까 -1을 넣어서 0점과 구분
 INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu1',90,90,90,90);
+INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu2',80,90,85,85);
+INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu3',80,80,80,80);
+INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu4',70,80,90,80);
+INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu6',70,70,70,70);
 
 --Assignment
 INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(1,'과제1','과제1 내용을 이러하다.',1,SYSDATE);

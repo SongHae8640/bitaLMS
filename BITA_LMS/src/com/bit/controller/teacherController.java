@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.bit.model.AssignmentDto;
 import com.bit.model.AttendanceDto;
 import com.bit.model.ScoreDto;
 import com.bit.model.TeacherDao;
@@ -50,13 +51,13 @@ public class TeacherController extends HttpServlet {
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 
 				} else if (path.equals("/score.tea")) {
-					
-					ArrayList<ScoreDto> scoreList = dao.getScore(userBean.getLecture_id());
+					ArrayList<ScoreDto> scoreList = dao.getScoreList(userBean.getLecture_id());
 					req.setAttribute("scoreList",scoreList);
 					rd = req.getRequestDispatcher("teacher/score_T.jsp");
 					
 				} else if (path.equals("/assignment.tea")) {
-					
+					ArrayList<AssignmentDto> assignmentList = dao.getAssignmentList(userBean.getLecture_id());
+					req.setAttribute("assignmentList", assignmentList);
 					rd = req.getRequestDispatcher("teacher/assignment_T.jsp");
 					
 				} else if (path.equals("/qna.tea")) {

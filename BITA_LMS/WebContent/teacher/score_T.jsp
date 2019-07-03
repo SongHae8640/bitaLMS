@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.ScoreDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -44,6 +46,24 @@
 		</div>
 		<div id="content">
 			<h2>성적관리</h2>
+			<a>이름	1차	2차	3차	평균</a>
+			<%
+			ArrayList<ScoreDto> scoreList = (ArrayList<ScoreDto>)request.getAttribute("scoreList");
+			if (scoreList !=null){
+				for(ScoreDto bean : scoreList){
+					%>
+					<br>
+					<a><%=bean.getName() %></a>	
+					<a><%=bean.getFirstScore() %></a>	
+					<a><%=bean.getSecondScore() %></a>	
+					<a><%=bean.getThirdScore() %></a>	
+					<a><%=bean.getAvgScore() %></a>
+					
+					<%
+				}
+			}
+			
+			%>
 		</div>
 		<div id="footer">
 			<div>

@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.AssignmentDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -44,6 +46,23 @@
 		</div>
 		<div id="content">
 			<h2>과제관리</h2>
+			<a>글번호, 과제번호, 과제제목, 작성일</a>
+			<%
+			ArrayList<AssignmentDto> assignmentList = (ArrayList<AssignmentDto>)request.getAttribute("assignmentList");
+			if(assignmentList !=null){
+				for(AssignmentDto bean : assignmentList){
+
+					
+					%>
+					<br>
+					<a><%=bean.getRowNum() %></a>,	
+					<a><%=bean.getAssignmentId() %></a>,	
+					<a><%=bean.getTitle() %></a>,	
+					<a><%=bean.getWriteDate() %></a>
+					<%
+				}
+			}
+			%>
 		</div>
 		<div id="footer">
 			<div>
