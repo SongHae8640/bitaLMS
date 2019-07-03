@@ -5,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 </style>
@@ -28,35 +30,58 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance_S.jsp">출결관리</a>
-				<li><a href="score_S.jsp">성적관리</a></li>
-				<li><a href="assignment_S.jsp">과제관리</a></li>
-				<li><a href="qna_S.jsp">1:1문의</a></li>
+				<li class="topmenu"><a href="../attendance_S.jsp">출결관리</a>
+				<li><a href="../score_S.jsp">성적관리</a></li>
+				<li><a href="../assignment_S.jsp">과제관리</a></li>
+				<li><a href="../qna_S.jsp">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
-			<h2>과제관리</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>이름</th>
-						<th>1차</th>
-						<th>2차</th>
-						<th>3차</th>
-					</tr>
-				</thead>
-				<thead>
-					<tr>
-						<th>홍길동</th>
-						<th>80</th>
-						<th>70</th>
-						<th>60</th>
-					</tr>
-				</thead>
-			</table>
+			<h2>과제 상세</h2>
+
 			<div>
-				<button onclick="location='qna_S/qnaadd_S.jsp'">이의신청</button>
+				<label>제목</label> <span>8/2</span>
 			</div>
+			<div>
+				<label>작성자</label> <span>김강사</span>
+			</div>
+			<div>
+				<label>날짜</label> <span>date</span>
+			</div>
+			<div>
+				<label>내용</label>
+				<textarea name="" id="" cols="30" rows="10">hello</textarea>
+			</div>
+
+			<div>
+				<button onclick="location='../assignment_S.jsp'">과제목록</button>
+			</div>
+
+			<form action="">
+				<table border="1">
+					<thead>
+						<tr>
+							<th>번호</th>
+							<th>제목</th>
+							<th>작성일</th>
+							<th>확인여부</th>
+							<th><input type="checkbox" name="ch1" /></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>2</td>
+							<td><a href="#">8/2 김코난 과제</a></td>
+							<td>2019-08-02</td>
+							<td>확인대기</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<button type="submit">추가</button>
+					<button onclick="location=''">삭제</button>
+				</div>
+			</form>
 		</div>
 		<div id="footer">
 			<div>
