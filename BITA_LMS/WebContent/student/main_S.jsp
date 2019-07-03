@@ -8,13 +8,8 @@
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
-#menu>ul {
-	width: 610px;
-	list-style-type: none;
-	margin: 0px auto;
-}
 </style>
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -22,6 +17,13 @@
 		});
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
+		});
+	});
+	$(document).ready(function(){
+		$('#checkout').hide()
+		$('#checkin').click(function(){
+			$('#checkin').hide();
+			$('#checkout').show();
 		});
 	});
 </script>
@@ -33,14 +35,17 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance.stu">출결관리</a>
-				<li><a href="score.stu">성적관리</a></li>
-				<li><a href="assignment.stu">과제관리</a></li>
-				<li><a href="qna.stu">1:1문의</a></li>
+				<li class="topmenu"><a href="attendance_S.jsp">출결관리</a>
+				<li><a href="score_S.jsp">성적관리</a></li>
+				<li><a href="assignment_S.jsp">과제관리</a></li>
+				<li><a href="qna_S.jsp">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
 			<h2>메인</h2>
+			<button id="checkin">입실</button>
+			<button id="checkout">퇴실</button>
+			
 		</div>
 		<div id="footer">
 			<div>
