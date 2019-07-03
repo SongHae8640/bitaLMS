@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import com.bit.model.UserDao;
 import com.bit.model.UserDto;
@@ -20,15 +21,30 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
+		HttpSession session = req.getSession();
 		
-		if(path.equals("/login.bit")){
-			RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
-			rd.forward(req, resp);
-		}else if(path.equals("/logout.bit")){
-			HttpSession session = req.getSession();
-			session.invalidate();
-			resp.sendRedirect("login.bit");
-		}
+			if(path.equals("/login.bit")||path.equals("/index.bit")){
+				//로그인페이지는 세션이 없을때에만 접근가능
+				if(session.getAttribute("userBean") == null){
+					System.out.println(session.getAttribute("userBean"));
+					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
+					rd.forward(req, resp);
+				//이미 로그인을 한 후에는 로그아웃을 해야지만 재로그인을 할 수 있다.
+				}else{
+					UserDto userBean = (UserDto) session.getAttribute("userBean");
+					if(userBean.getBelong().equals("teacher")){
+						resp.sendRedirect("main.tea");
+					}else if(userBean.getBelong().equals("admin")){
+						resp.sendRedirect("main.adm");
+					}else{
+						resp.sendRedirect("main.stu");
+					}
+				}
+			}else if(path.equals("/logout.bit")){
+				session.invalidate();
+				resp.sendRedirect("login.bit");
+			}
+		
 	}
 	
 	@Override
@@ -47,8 +63,7 @@ public class LoginController extends HttpServlet {
 			session.setAttribute("userBean", userBean);
 //			session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
 			
-			resp.sendRedirect("main.stu");
-//			resp.sendRedirect("main.tea");
+			resp.sendRedirect("main.tea");
 		}else if(userBean.getBelong().equals("admin")){
 			HttpSession session = req.getSession();
 			session.setAttribute("userBean", userBean);

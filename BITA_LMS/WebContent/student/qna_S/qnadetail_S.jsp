@@ -25,6 +25,11 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		$('#header>img').click(function() {
+			location.href = 'main.stu'
+		}).mouseenter(function(){
+			$('#header>img').css('cursor', 'pointer')
+		});
 	});
 	$('#content>form input').hide();
 	$('#content>form button').hide().eq(0).show();
@@ -39,7 +44,7 @@
 <body>
 	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
