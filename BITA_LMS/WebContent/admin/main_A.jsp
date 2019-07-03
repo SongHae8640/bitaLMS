@@ -79,13 +79,18 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		$('#header>img').click(function() {
+			location.href = 'main.adm'
+		}).mouseenter(function(){
+			$('#header>img').css('cursor', 'pointer')
+		});
 	});
 </script>
 </head>
 <body>
 	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
