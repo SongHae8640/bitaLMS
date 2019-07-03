@@ -42,6 +42,26 @@
 	width: 600px;
 	height:700px;
 	}
+	#content #real_content #app_detail{
+	width: 600px;
+	}
+	#app_table{
+	width:400px;
+	}
+	#content #real_content #app_detail table,th,td{
+	border: 1px solid red;
+	}
+	#content #real_content #app_detail #reg_form {
+	width:600px;
+	}
+	#content #real_content #app_detail #reg_form div{
+	clear:both;
+	width:300px;
+	}
+	#content #real_content #app_detail #submit{
+	width:150px;
+	float: right;
+	}
 	#content #page_name{
 	width: 120px;
 	margin: 0 auto;
@@ -69,18 +89,8 @@
 	height:95px;
 	margin: 0 auto;
 	}
-	#content #under_list #close_button{
-	float:right;
+	#content #under_list div{
 	width: 31px;
-	}
-	#content #under_list #search_box{
-	clear:both;
-	width: 210px;
-	margin: 0 auto;
-	}
-	#content #under_list #page_button{
-	width: 81px;
-	margin: 0 auto;
 	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -118,7 +128,7 @@
 			<h3>학생관리</h3>
 			<br/><br/>
 			<ul>
-				<li><a href="register_list.adm">학생등록</a></li>
+				<li><a href="register_list.jsp">학생등록</a></li>
 				<br/>
 				<li><a href="manage_stu.adm">수강생관리</a></li>
 			</ul>
@@ -129,7 +139,7 @@
 				<h2>학생등록</h2>
 			</div>
 		<div id="app_detail">
-			<table>
+			<table id="app_table">
 					<tr>
 						<th>제목</th>
 						<td>김경민님의 수강신청</td>
@@ -140,24 +150,26 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-						<div>
-							<span>제출일 2019-07-03</span>
-						</div>
-						<div>
-							<label>이름</label>
-							<span>김경민</span>
-						</div>
-						<div>
-							<label>강좌선택</label>
-							<span>JAVA</span>
-						</div>
-						<div>
-							<label>연락처</label>
-							<span>010-1234-5678</span>
-						</div>
-						<div>
-							<label>파일첨부</label>
-							<span>파일다운로드하는링크</span>
+						<div id="reg_form">
+							<div id="submit">
+								<span>제출일 2019-07-03</span>
+							</div>
+							<div>
+								<label>이름</label>
+								<span>김경민</span>
+							</div>
+							<div>
+								<label>강좌선택</label>
+								<span>JAVA</span>
+							</div>
+							<div>
+								<label>연락처</label>
+								<span>010-1234-5678</span>
+							</div>
+							<div>
+								<label>파일첨부</label>
+								<span>파일다운로드하는링크</span>
+							</div>
 						</div>
 						</td>
 					</tr>

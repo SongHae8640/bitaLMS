@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="/css/frame.css" />
+<link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 	body *{
 	padding:0px;
@@ -42,6 +42,26 @@
 	width: 600px;
 	height:700px;
 	}
+	#content #real_content #app_detail{
+	width: 600px;
+	}
+	#app_table{
+	width:400px;
+	}
+	#content #real_content #app_detail table,th,td{
+	border: 1px solid red;
+	}
+	#content #real_content #app_detail #reg_form {
+	width:600px;
+	}
+	#content #real_content #app_detail #reg_form div{
+	clear:both;
+	width:300px;
+	}
+	#content #real_content #app_detail #submit{
+	width:150px;
+	float: right;
+	}
 	#content #page_name{
 	width: 120px;
 	margin: 0 auto;
@@ -69,18 +89,8 @@
 	height:95px;
 	margin: 0 auto;
 	}
-	#content #under_list #close_button{
-	float:right;
+	#content #under_list div{
 	width: 31px;
-	}
-	#content #under_list #search_box{
-	clear:both;
-	width: 210px;
-	margin: 0 auto;
-	}
-	#content #under_list #page_button{
-	width: 81px;
-	margin: 0 auto;
 	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -91,6 +101,9 @@
 		});
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
+		});
+		$('#del_button').click(function(){
+			
 		});
 	});
 </script>
@@ -128,56 +141,53 @@
 			<div id="page_name">
 				<h2>학생등록</h2>
 			</div>
-			<div id="people_check">
-			<span>num_stu/max_stu</span>
-			</div>
-			<div id="lecture_list">
-				<select name="lecture_name">
-				    <option value="">JAVA</option>
-				    <option value="학생">WEB</option>
-				    <option value="회사원">DB</option>
-				</select>
-			</div>
-			<div id="app_list">
-			<table>
-				<thead>
+		<div id="app_detail">
+			<table id="app_table">
 					<tr>
-						<th>번호</th>
 						<th>제목</th>
-						<th>ID</th>
-						<th>이름</th>
-						<th>강좌</th>
-						<th>신청일</th>
+						<td>김경민님의 수강신청</td>
 					</tr>
-				</thead>
-				<tbody>
 					<tr>
-						<td>1</td>
-						<td><a href="./register_detail.jsp">김경민님의 수강신청</a></td>
+						<th>작성</th>
 						<td>rudals108</td>
-						<td>김경민</td>
-						<td>JAVA</td>
-						<td>2019-07-02</td>
 					</tr>
-				</tbody>
+					<tr>
+						<td colspan="2">
+						<div id="reg_form">
+							<div id="submit">
+								<span>제출일 2019-07-03</span>
+							</div>
+							<div>
+								<label>이름</label>
+								<span>김경민</span>
+							</div>
+							<div>
+								<label>강좌선택</label>
+								<span>JAVA</span>
+							</div>
+							<div>
+								<label>연락처</label>
+								<span>010-1234-5678</span>
+							</div>
+							<div>
+								<label>파일첨부</label>
+								<span>파일다운로드하는링크</span>
+							</div>
+						</div>
+						</td>
+					</tr>
 			</table>
 		</div>
 		<div id="under_list">
-			<div id="close_button">
-				<button type="button">마감</button>
+			<div id="list_button">
+				<button type="button">목록</button>
 			</div>
-			<div id="search_box">
-				<form action="register_list.adm">
-					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit">검색</button>
-				</form>
+			<div id="reg_button">
+				<button type="button">등록</button>
+			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
-			<div id="page_button">
-				<button><</button>
-				<button>1</button>
-				<button>2</button>
-				<button>3</button>
-				<button>></button>
+			<div id="del_button">
+				<button type="button">삭제</button>
 			</div>
 		</div>
 	</div>

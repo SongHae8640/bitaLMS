@@ -84,7 +84,7 @@
 			<ul>
 				<li class="topmenu"><a href="#">학생관리</a>
 					<ul class="submenu">
-						<li><a href="#">학생등록</a></li>
+						<li><a href="./register_list.jsp">학생등록</a></li>
 						<li><a href="#">수강생관리</a></li>
 					</ul></li>
 				<li><a href="#">강좌관리</a></li>
