@@ -42,7 +42,7 @@ public class UserDao {
 			
 			if(rs.next()){;
 				bean.setUserId(rs.getString("user_id"));
-				bean.setPassword(rs.getString("password")); //나중에 패스워스 수정을 사용할 수도 있으니, 안쓸꺼면 지우고
+				bean.setPassword(rs.getString("password")); 
 				bean.setName(rs.getString("name"));
 				bean.setEmail(rs.getString("email"));
 				bean.setPhoneNumber(rs.getString("phone_number"));
