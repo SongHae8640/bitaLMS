@@ -59,13 +59,13 @@
 				<tbody>
 					<tr>
 						<td>2</td>
-						<td><a href="assignment_S/assignmentdetail_S.jsp">8/2 김코난 과제</a></td>
+						<td><a href="assignmentdetail.stu">8/2 김코난 과제</a></td>
 						<td>2019-08-02</td>
 						<td>확인대기</td>
 					</tr>
 					<tr>
 						<td>1</td>
-						<td><a href="assignment_S/assignmentdetail_S.jsp">8/1 김코난 과제</a></td>
+						<td><a href="assignmentdetail.stu">8/1 김코난 과제</a></td>
 						<td>2019-08-01</td>
 						<td>확인완료</td>
 					</tr>

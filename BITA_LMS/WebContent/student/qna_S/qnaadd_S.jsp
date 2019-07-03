@@ -44,14 +44,6 @@
 				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
-		<div id="menu">
-			<ul>
-				<li class="topmenu"><a href="../attendance_S.jsp">출결관리</a>
-				<li><a href="../score_S.jsp">성적관리</a></li>
-				<li><a href="../assignment_S.jsp">과제관리</a></li>
-				<li><a href="../qna_S.jsp">1:1문의</a></li>
-			</ul>
-		</div>
 		<div id="content">
 			<h1>1:1문의 등록</h1>
 			<form action="">
