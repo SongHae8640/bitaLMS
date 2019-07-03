@@ -13,4 +13,4 @@ INSERT INTO lectureUser(lecture_id, user_id) values(2,'tea1');
 INSERT INTO lectureUser(lecture_id, user_id) values(3,'tea1');
 commit;
 
-SELECT * FROM user01 as u JOIN lectureUser as l on u.leture_id = l.lecture_id; 
+SELECT u.name, u.password,l.lecture_id FROM user01 u JOIN lectureUser l ON u.user_id=l.user_id WHERE ;

@@ -25,7 +25,6 @@ public class TeacherController extends HttpServlet {
 		req.setCharacterEncoding("utf-8");
 		
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("teacherController :: path = "+path);
 		
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");

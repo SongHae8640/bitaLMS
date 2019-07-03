@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="css/frame.css" />
+<link type="text/css" rel="stylesheet" href="/css/frame.css" />
 <style type="text/css">
 	body *{
 		padding:0px;
