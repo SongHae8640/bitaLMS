@@ -60,7 +60,7 @@ public class TeacherDao {
 	// 강좌번호를 파라미터로 주고 학생이름, 출석상태, 날짜를 리턴 받는다.
 	public ArrayList<AttendanceDto> getTodayAttendance(int lectureId) {
 		ArrayList<AttendanceDto> list = new ArrayList<AttendanceDto>();
-		String sql ="SELECT u.name AS \"name\",a.status AS \"status\" ,a.day_time AS \"day_time\" "
+		String sql ="SELECT u.name ,a.status  ,a.day_time "
 				+ "FROM attendance as a "
 				+ "JOIN user01 as u "
 				+ "on a.std_id=u.user_id "
