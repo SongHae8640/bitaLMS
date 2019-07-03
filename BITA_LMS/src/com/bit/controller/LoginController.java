@@ -13,14 +13,22 @@ import javax.servlet.http.HttpSession;
 import com.bit.model.UserDao;
 import com.bit.model.UserDto;
 
-@WebServlet("/login.bit")
+@WebServlet("*.bit")
 public class LoginController extends HttpServlet {
-
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
-		rd.forward(req, resp);
+		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
+		
+		if(path.equals("/login.bit")){
+			RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
+			rd.forward(req, resp);
+		}else if(path.equals("/logout.bit")){
+			HttpSession session = req.getSession();
+			session.invalidate();
+			resp.sendRedirect("login.bit");
+		}
 	}
 	
 	@Override
@@ -31,15 +39,28 @@ public class LoginController extends HttpServlet {
 		
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login(id, pw);
-		System.out.println(userBean.toString());
+		
+		try{
 		if(userBean.getBelong().equals("teacher")){
 			//session
 			HttpSession session = req.getSession();
 			session.setAttribute("userBean", userBean);
 //			session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
 			
-			resp.sendRedirect("main.tea");
-		}else{
+			resp.sendRedirect("main.stu");
+//			resp.sendRedirect("main.tea");
+		}else if(userBean.getBelong().equals("admin")){
+			HttpSession session = req.getSession();
+			session.setAttribute("userBean", userBean);
+			
+			resp.sendRedirect("main.adm");
+		}else if(userBean.getBelong().equals("student")){
+			HttpSession session = req.getSession();
+			session.setAttribute("userBean", userBean);
+			
+			resp.sendRedirect("main.stu");
+		}
+		}catch(java.lang.NullPointerException e){
 			req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
 			doGet(req, resp);
 		}

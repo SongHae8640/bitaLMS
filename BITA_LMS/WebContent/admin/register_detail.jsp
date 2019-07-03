@@ -8,14 +8,10 @@
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
-	body *{
-	padding:0px;
-	margin: 0px;
-	}
-	body div{
-	border: 1px solid gray;
-	width: 800px;
-	margin: 0 auto;
+	#menu>ul {
+	width: 610px;
+	list-style-type: none;
+	margin: 0px auto;
 	}
 	#content{
 	height:700px;
@@ -38,9 +34,29 @@
 	}
 	#content #real_content{
 	position:relative;
-	left:100px;
+	left:300px;
 	width: 600px;
 	height:700px;
+	}
+	#content #real_content #app_detail{
+	width: 600px;
+	}
+	#app_table{
+	width:400px;
+	}
+	#content #real_content #app_detail table,th,td{
+	border: 1px solid red;
+	}
+	#content #real_content #app_detail #reg_form {
+	width:600px;
+	}
+	#content #real_content #app_detail #reg_form div{
+	clear:both;
+	width:300px;
+	}
+	#content #real_content #app_detail #submit{
+	width:150px;
+	float: right;
 	}
 	#content #page_name{
 	width: 120px;
@@ -69,18 +85,17 @@
 	height:95px;
 	margin: 0 auto;
 	}
-	#content #under_list #close_button{
-	float:right;
-	width: 31px;
+	#content #under_list div{
+	width: 50px;
 	}
-	#content #under_list #search_box{
-	clear:both;
-	width: 210px;
-	margin: 0 auto;
+	#content #under_list #list_button{
+	float: left;
 	}
-	#content #under_list #page_button{
-	width: 81px;
-	margin: 0 auto;
+	#content #under_list #reg_button{
+	float: right;
+	}
+	#content #under_list #del_button{
+	float: right;
 	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -92,6 +107,14 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		$('#del_btn').click(function(){
+			var result = confirm('정말 삭제하시겠습니까?'); 
+			if(result) { //yes-해당수강신청삭제
+				location.replace('register.adm'); } 
+			else { 
+				//no-변동사항없음
+				} 
+			});
 	});
 </script>
 </head>
@@ -104,12 +127,12 @@
 			<ul>
 				<li class="topmenu"><a href="#">학생관리</a>
 					<ul class="submenu">
-						<li><a href="#">학생등록</a></li>
-						<li><a href="#">수강생관리</a></li>
+						<li><a href="register.adm">학생등록</a></li>
+						<li><a href="manage_stu.adm">수강생관리</a></li>
 					</ul></li>
-				<li><a href="#">강좌관리</a></li>
-				<li><a href="#">강사관리</a></li>
-				<li><a href="#">1:1문의</a></li>
+				<li><a href="manage_lec.adm">강좌관리</a></li>
+				<li><a href="manage_tea.adm">강사관리</a></li>
+				<li><a href="qna.adm">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
@@ -118,7 +141,7 @@
 			<h3>학생관리</h3>
 			<br/><br/>
 			<ul>
-				<li><a href="register_list.adm">학생등록</a></li>
+				<li><a href="register.adm">학생등록</a></li>
 				<br/>
 				<li><a href="manage_stu.adm">수강생관리</a></li>
 			</ul>
@@ -129,7 +152,7 @@
 				<h2>학생등록</h2>
 			</div>
 		<div id="app_detail">
-			<table>
+			<table id="app_table">
 					<tr>
 						<th>제목</th>
 						<td>김경민님의 수강신청</td>
@@ -140,24 +163,26 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-						<div>
-							<span>제출일 2019-07-03</span>
-						</div>
-						<div>
-							<label>이름</label>
-							<span>김경민</span>
-						</div>
-						<div>
-							<label>강좌선택</label>
-							<span>JAVA</span>
-						</div>
-						<div>
-							<label>연락처</label>
-							<span>010-1234-5678</span>
-						</div>
-						<div>
-							<label>파일첨부</label>
-							<span>파일다운로드하는링크</span>
+						<div id="reg_form">
+							<div id="submit">
+								<span>제출일 2019-07-03</span>
+							</div>
+							<div>
+								<label>이름</label>
+								<span>김경민</span>
+							</div>
+							<div>
+								<label>강좌선택</label>
+								<span>JAVA</span>
+							</div>
+							<div>
+								<label>연락처</label>
+								<span>010-1234-5678</span>
+							</div>
+							<div>
+								<label>파일첨부</label>
+								<span>파일다운로드하는링크</span>
+							</div>
 						</div>
 						</td>
 					</tr>
@@ -167,12 +192,12 @@
 			<div id="list_button">
 				<button type="button">목록</button>
 			</div>
+			<div id="del_button">
+				<button type="button" id="del_btn">삭제</button>
+			</div>
 			<div id="reg_button">
 				<button type="button">등록</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
-			</div>
-			<div id="del_button">
-				<button type="button">삭제</button>
 			</div>
 		</div>
 	</div>

@@ -8,6 +8,11 @@
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
+#menu>ul {
+	width: 610px;
+	list-style-type: none;
+	margin: 0px auto;
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -28,14 +33,39 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="#">출결관리</a>
-				<li><a href="#">성적관리</a></li>
-				<li><a href="#">과제관리</a></li>
-				<li><a href="#">1:1문의</a></li>
+				<li class="topmenu"><a href="attendance.stu">출결관리</a>
+				<li><a href="score.stu">성적관리</a></li>
+				<li><a href="assignment.stu">과제관리</a></li>
+				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
 			<h2>과제관리</h2>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>작성일</th>
+						<th>확인여부</th>
+						<th><input type="checkbox" name="ch1" /></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>2</td>
+						<td><a href="assignment_S/assignmentdetail_S.jsp">8/2 김코난 과제</a></td>
+						<td>2019-08-02</td>
+						<td>확인대기</td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td><a href="assignment_S/assignmentdetail_S.jsp">8/1 김코난 과제</a></td>
+						<td>2019-08-01</td>
+						<td>확인완료</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 		<div id="footer">
 			<div>

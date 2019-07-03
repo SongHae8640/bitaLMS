@@ -5,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -24,6 +26,14 @@
 			$('.submenu').css('display', 'none')
 		});
 	});
+	$('#content>form input').hide();
+	$('#content>form button').hide().eq(0).show();
+	$('#content>form button').eq(0).click(function() {
+		$('#content>form input').show().prev('span').hide();
+		$('#content>form input').show().eq(0).hide();
+		$('#content>form button').show().eq(0).hide();
+		$('#edit').text('수정페이지');
+	});
 </script>
 </head>
 <body>
@@ -34,35 +44,46 @@
 		<div id="menu">
 			<ul>
 				<li class="topmenu"><a href="attendance.stu">출결관리</a>
-				<li><a href="score.stu">성적관리</a></li>
+
+					<li><a href="score.stu">성적관리</a></li>
 				<li><a href="assignment.stu">과제관리</a></li>
 				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
-		<div id="content">
-			<h2>성적관리</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>이름</th>
-						<th>1차</th>
-						<th>2차</th>
-						<th>3차</th>
-					</tr>
-				</thead>
-				<thead>
-					<tr>
-						<th>홍길동</th>
-						<th>80</th>
-						<th>70</th>
-						<th>60</th>
-					</tr>
-				</thead>
-			</table>
+<h2 id="edit">상세보기</h2>
+					<div id="content">
+		<form action="">
 			<div>
-				<button onclick="location='qna_S/qnaadd_S.jsp'">이의신청</button>
+				<label>제목</label> <span>sub</span> <input type="text" value="sub" />
 			</div>
-		</div>
+			<div>
+				<label>작성자</label> <span>name</span> <input type="text" value="김코난" />
+			</div>
+			<div>
+				<label>날짜</label> <span>date</span> <input type="text" value="date" />
+			</div>
+			<div>
+				<label>분류</label> <select name="" label="">
+					<opt>
+					<option value="">성적문의</option>
+					<option value="">강사</option>
+					<option value="">행정</option>
+					</opt>
+				</select>
+			</div>
+			<div>
+				<label>내용</label>
+				<textarea name="" id="" cols="30" rows="10">hello</textarea>
+			</div>
+
+			<div>
+				<button type="button">edit</button>
+				<button type="submit">edit</button>
+				<button type="reset">cancle</button>
+				<button type="button">back</button>
+			</div>
+		</form>
+
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />
@@ -75,5 +96,6 @@
 			</div>
 		</div>
 	</div>
-</body>
+
+				</body>
 </html>

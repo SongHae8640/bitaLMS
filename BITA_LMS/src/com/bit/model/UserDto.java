@@ -65,10 +65,10 @@ public class UserDto {
 	@Override
 	public String toString() {
 		return "UserDto [userId=" + userId + ", password=" + password
-				+ ", name=" + name + ", belong=" + belong + ", lecture_id="
+				+ ", name=" + name + ", email=" + email + ", phoneNumber="
+				+ phoneNumber + ", belong=" + belong + ", lecture_id="
 				+ lecture_id + "]";
 	}
-	
 	
 	
 }
