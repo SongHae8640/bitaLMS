@@ -47,8 +47,8 @@ public class LoginController extends HttpServlet {
 			session.setAttribute("userBean", userBean);
 //			session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
 			
-			resp.sendRedirect("main.stu");
-//			resp.sendRedirect("main.tea");
+
+			resp.sendRedirect("main.tea");
 		}else if(userBean.getBelong().equals("admin")){
 			HttpSession session = req.getSession();
 			session.setAttribute("userBean", userBean);
