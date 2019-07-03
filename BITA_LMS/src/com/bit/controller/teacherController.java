@@ -42,11 +42,8 @@ public class TeacherController extends HttpServlet {
 				if (path.equals("/main.tea")) {
 					rd = req.getRequestDispatcher("teacher/main_T.jsp");
 				} else if (path.equals("/attendance.tea")) {
-//					 ArrayList<AttendanceDto> todayAttendanceList = dao
-//					 .getTodayAttendance(userBean.getLecture_id());
-//					
-//					 req.setAttribute("todayAttendanceList",
-//					 todayAttendanceList);
+					ArrayList<AttendanceDto> todayAttendanceList = dao.getTodayAttendance(userBean.getLecture_id());
+					req.setAttribute("todayAttendanceList",todayAttendanceList);
 					rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 				} else if (path.equals("/score.tea")) {
 					rd = req.getRequestDispatcher("teacher/score_T.jsp");

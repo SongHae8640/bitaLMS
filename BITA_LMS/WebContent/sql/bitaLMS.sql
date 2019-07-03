@@ -1,3 +1,27 @@
+bitaLms.sql
+송
+j
+
+암
+유형
+SQL
+크기
+69KB (70,368바이트)
+사용된 저장용량
+609KB (623,300바이트)
+위치
+DB
+소유자
+나
+수정한 날짜
+오후 1:45, 나
+열어본 날짜
+오후 4:17, 나
+2019. 7. 2.에 Google Drive Web
+(으)로
+작성됨
+설명 추가
+뷰어가 다운로드할 수 있음
 DROP TABLE Attendance CASCADE CONSTRAINTS PURGE;
 
 
@@ -352,9 +376,9 @@ ALTER TABLE Submission
 CREATE TABLE Teacher_Info
 (
 	info_id               NUMBER  NOT NULL ,
-	info_type             VARCHAR2(20)  NULL ,
-	info_content          VARCHAR2(1000)  NULL ,
-	lecturer_id           VARCHAR2(20)  NULL 
+	type                  VARCHAR2(20)  NULL ,
+	content               VARCHAR2(1000)  NULL ,
+	teacher_id            VARCHAR2(20)  NULL 
 );
 
 
@@ -483,18 +507,18 @@ ALTER TABLE Submission
 
 
 ALTER TABLE Teacher_Info
-	ADD (CONSTRAINT  R_36 FOREIGN KEY (lecturer_id) REFERENCES User01(user_id) ON DELETE SET NULL);
+	ADD (CONSTRAINT  R_36 FOREIGN KEY (teacher_id) REFERENCES User01(user_id) ON DELETE SET NULL);
 
 
 
 CREATE  TRIGGER tI_Apply BEFORE INSERT ON Apply for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Apply 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Apply on child insert set null */
-    /* ERWIN_RELATION:CHECKSUM="0001eede", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="0001ecbf", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Apply"
     P2C_VERB_PHRASE="R/13", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_13", FK_COLUMNS="user_id" */
@@ -512,7 +536,7 @@ BEGIN
         /* %JoinPKPK(Apply,:%New," = "," AND") */
          and Apply.apply_id = :new.apply_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Apply on child insert set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Apply"
@@ -533,18 +557,18 @@ BEGIN
          and Apply.apply_id = :new.apply_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Apply AFTER UPDATE ON Apply for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Apply 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Apply on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="00021ff9", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="000212ac", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Apply"
     P2C_VERB_PHRASE="R/13", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_13", FK_COLUMNS="user_id" */
@@ -565,7 +589,7 @@ BEGIN
     );
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Lecture  Apply on child update no action */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Apply"
@@ -589,19 +613,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_Assignment BEFORE INSERT ON Assignment for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Assignment 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Assignment on child insert set null */
-    /* ERWIN_RELATION:CHECKSUM="0001034e", PARENT_OWNER="", PARENT_TABLE="Lecture"
+    /* ERWIN_RELATION:CHECKSUM="000102fc", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Assignment"
     P2C_VERB_PHRASE="R/38", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_38", FK_COLUMNS="lecture_id" */
@@ -620,18 +644,18 @@ BEGIN
          and Assignment.assignment_id = :new.assignment_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tD_Assignment AFTER DELETE ON Assignment for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- DELETE trigger on Assignment 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Assignment  Submission on parent delete restrict */
-    /* ERWIN_RELATION:CHECKSUM="0000f6db", PARENT_OWNER="", PARENT_TABLE="Assignment"
+    /* ERWIN_RELATION:CHECKSUM="0000f86a", PARENT_OWNER="", PARENT_TABLE="Assignment"
     CHILD_OWNER="", CHILD_TABLE="Submission"
     P2C_VERB_PHRASE="R/27", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_27", FK_COLUMNS="assignment_id" */
@@ -649,18 +673,18 @@ BEGIN
     END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Assignment AFTER UPDATE ON Assignment for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Assignment 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Assignment  Submission on parent update restrict */
-  /* ERWIN_RELATION:CHECKSUM="00023b45", PARENT_OWNER="", PARENT_TABLE="Assignment"
+  /* ERWIN_RELATION:CHECKSUM="00022cba", PARENT_OWNER="", PARENT_TABLE="Assignment"
     CHILD_OWNER="", CHILD_TABLE="Submission"
     P2C_VERB_PHRASE="R/27", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_27", FK_COLUMNS="assignment_id" */
@@ -682,7 +706,7 @@ BEGIN
     END IF;
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Lecture  Assignment on child update no action */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Assignment"
@@ -706,19 +730,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_Attendance BEFORE INSERT ON Attendance for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Attendance 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Attendance on child insert restrict */
-    /* ERWIN_RELATION:CHECKSUM="0002084d", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="00020f7b", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Attendance"
     P2C_VERB_PHRASE="R/11", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_11", FK_COLUMNS="std_id" */
@@ -739,7 +763,7 @@ BEGIN
       );
     END IF;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Attendance on child insert set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Attendance"
@@ -761,18 +785,18 @@ BEGIN
         Attendance.std_id = :new.std_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Attendance AFTER UPDATE ON Attendance for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Attendance 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Attendance on child update restrict */
-  /* ERWIN_RELATION:CHECKSUM="000212f4", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="00020a30", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Attendance"
     P2C_VERB_PHRASE="R/11", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_11", FK_COLUMNS="std_id" */
@@ -793,7 +817,7 @@ BEGIN
     );
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Lecture  Attendance on child update no action */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Attendance"
@@ -817,19 +841,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_Calendar BEFORE INSERT ON Calendar for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Calendar 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Calendar on child insert set null */
-    /* ERWIN_RELATION:CHECKSUM="0000f4e0", PARENT_OWNER="", PARENT_TABLE="Lecture"
+    /* ERWIN_RELATION:CHECKSUM="0000f431", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Calendar"
     P2C_VERB_PHRASE="R/24", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_24", FK_COLUMNS="lecture_id" */
@@ -848,18 +872,18 @@ BEGIN
          and Calendar.calendar_id = :new.calendar_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Calendar AFTER UPDATE ON Calendar for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Calendar 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Lecture  Calendar on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="0000fbba", PARENT_OWNER="", PARENT_TABLE="Lecture"
+  /* ERWIN_RELATION:CHECKSUM="0000fa4e", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Calendar"
     P2C_VERB_PHRASE="R/24", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_24", FK_COLUMNS="lecture_id" */
@@ -881,19 +905,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_Data_room BEFORE INSERT ON Data_room for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Data_room 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Data_room on child insert set null */
-    /* ERWIN_RELATION:CHECKSUM="0000e607", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="0000e4e1", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Data_room"
     P2C_VERB_PHRASE="R/39", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_39", FK_COLUMNS="writer" */
@@ -912,18 +936,18 @@ BEGIN
          and Data_room.data_id = :new.data_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Data_room AFTER UPDATE ON Data_room for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Data_room 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Data_room on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="0000fa08", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="0000f99c", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Data_room"
     P2C_VERB_PHRASE="R/39", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_39", FK_COLUMNS="writer" */
@@ -945,19 +969,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tD_Lecture AFTER DELETE ON Lecture for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- DELETE trigger on Lecture 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Apply on parent delete set null */
-    /* ERWIN_RELATION:CHECKSUM="00052eb5", PARENT_OWNER="", PARENT_TABLE="Lecture"
+    /* ERWIN_RELATION:CHECKSUM="000551fa", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Apply"
     P2C_VERB_PHRASE="R/14", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_14", FK_COLUMNS="lecture_id" */
@@ -969,7 +993,7 @@ BEGIN
         /* %JoinFKPK(Apply,:%Old," = "," AND") */
         Apply.lecture_id = :old.lecture_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Score on parent delete restrict */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Score"
@@ -988,7 +1012,7 @@ BEGIN
       );
     END IF;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Calendar on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Calendar"
@@ -1002,7 +1026,7 @@ BEGIN
         /* %JoinFKPK(Calendar,:%Old," = "," AND") */
         Calendar.lecture_id = :old.lecture_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Attendance on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Attendance"
@@ -1016,7 +1040,7 @@ BEGIN
         /* %JoinFKPK(Attendance,:%Old," = "," AND") */
         Attendance.lecture_id = :old.lecture_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Assignment on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Assignment"
@@ -1030,7 +1054,7 @@ BEGIN
         /* %JoinFKPK(Assignment,:%Old," = "," AND") */
         Assignment.lecture_id = :old.lecture_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  LectureUser on parent delete restrict */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="LectureUser"
@@ -1050,17 +1074,17 @@ BEGIN
     END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Lecture AFTER UPDATE ON Lecture for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Lecture 
 DECLARE NUMROWS INTEGER;
 BEGIN
   /* Lecture  Apply on parent update set null */
-  /* ERWIN_RELATION:CHECKSUM="0005dfe5", PARENT_OWNER="", PARENT_TABLE="Lecture"
+  /* ERWIN_RELATION:CHECKSUM="0005e7f7", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Apply"
     P2C_VERB_PHRASE="R/14", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_14", FK_COLUMNS="lecture_id" */
@@ -1077,7 +1101,7 @@ BEGIN
         Apply.lecture_id = :old.lecture_id;
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Lecture  Score on parent update restrict */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Score"
@@ -1155,7 +1179,7 @@ BEGIN
         Assignment.lecture_id = :old.lecture_id;
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Lecture  LectureUser on parent update restrict */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="LectureUser"
@@ -1180,19 +1204,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_Lecture_review BEFORE INSERT ON Lecture_review for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Lecture_review 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Lecture_review on child insert set null */
-    /* ERWIN_RELATION:CHECKSUM="000100f0", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="000101ba", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Lecture_review"
     P2C_VERB_PHRASE="R/30", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_30", FK_COLUMNS="writer" */
@@ -1211,18 +1235,18 @@ BEGIN
          and Lecture_review.review_id = :new.review_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Lecture_review AFTER UPDATE ON Lecture_review for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Lecture_review 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Lecture_review on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="00010cc4", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="00010c1e", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Lecture_review"
     P2C_VERB_PHRASE="R/30", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_30", FK_COLUMNS="writer" */
@@ -1244,19 +1268,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_LectureUser BEFORE INSERT ON LectureUser for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on LectureUser 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  LectureUser on child insert restrict */
-    /* ERWIN_RELATION:CHECKSUM="00020f27", PARENT_OWNER="", PARENT_TABLE="Lecture"
+    /* ERWIN_RELATION:CHECKSUM="0001fc12", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="LectureUser"
     P2C_VERB_PHRASE="R/51", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_51", FK_COLUMNS="lecture_id" */
@@ -1277,7 +1301,7 @@ BEGIN
       );
     END IF;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  LectureUser on child insert restrict */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="LectureUser"
@@ -1301,18 +1325,18 @@ BEGIN
     END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_LectureUser AFTER UPDATE ON LectureUser for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on LectureUser 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Lecture  LectureUser on child update restrict */
-  /* ERWIN_RELATION:CHECKSUM="0002017a", PARENT_OWNER="", PARENT_TABLE="Lecture"
+  /* ERWIN_RELATION:CHECKSUM="0002049c", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="LectureUser"
     P2C_VERB_PHRASE="R/51", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_51", FK_COLUMNS="lecture_id" */
@@ -1333,7 +1357,7 @@ BEGIN
     );
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  LectureUser on child update restrict */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="LectureUser"
@@ -1357,19 +1381,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_Notice BEFORE INSERT ON Notice for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Notice 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Notice on child insert set null */
-    /* ERWIN_RELATION:CHECKSUM="0000dd26", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="0000db5b", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Notice"
     P2C_VERB_PHRASE="R/42", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_42", FK_COLUMNS="writer" */
@@ -1388,18 +1412,18 @@ BEGIN
          and Notice.notice_id = :new.notice_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Notice AFTER UPDATE ON Notice for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Notice 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Notice on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="0000f808", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="0000f82a", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Notice"
     P2C_VERB_PHRASE="R/42", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_42", FK_COLUMNS="writer" */
@@ -1421,19 +1445,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_QNA_h BEFORE INSERT ON QNA_h for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on QNA_h 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  QNA_h on child insert set null */
-    /* ERWIN_RELATION:CHECKSUM="0000d9bf", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="0000d854", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="QNA_h"
     P2C_VERB_PHRASE="R/40", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_40", FK_COLUMNS="std_id" */
@@ -1452,18 +1476,18 @@ BEGIN
          and QNA_h.qna_id = :new.qna_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_QNA_h AFTER UPDATE ON QNA_h for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on QNA_h 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  QNA_h on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="00010074", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="00010278", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="QNA_h"
     P2C_VERB_PHRASE="R/40", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_40", FK_COLUMNS="std_id" */
@@ -1485,19 +1509,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_QNA_L BEFORE INSERT ON QNA_L for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on QNA_L 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  QNA_L on child insert set null */
-    /* ERWIN_RELATION:CHECKSUM="0001e027", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="0001e0e1", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="QNA_L"
     P2C_VERB_PHRASE="R/45", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_45", FK_COLUMNS="std_id" */
@@ -1515,7 +1539,7 @@ BEGIN
         /* %JoinPKPK(QNA_L,:%New," = "," AND") */
          and QNA_L.question_id = :new.question_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  QNA_L on child insert set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="QNA_L"
@@ -1536,18 +1560,18 @@ BEGIN
          and QNA_L.question_id = :new.question_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_QNA_L AFTER UPDATE ON QNA_L for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on QNA_L 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  QNA_L on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="00021091", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="0001fa16", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="QNA_L"
     P2C_VERB_PHRASE="R/45", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_45", FK_COLUMNS="std_id" */
@@ -1568,7 +1592,7 @@ BEGIN
     );
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  QNA_L on child update no action */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="QNA_L"
@@ -1592,19 +1616,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_Score BEFORE INSERT ON Score for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Score 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Score on child insert restrict */
-    /* ERWIN_RELATION:CHECKSUM="0001fb8b", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="0002057f", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Score"
     P2C_VERB_PHRASE="R/16", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_16", FK_COLUMNS="std_id" */
@@ -1625,7 +1649,7 @@ BEGIN
       );
     END IF;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Lecture  Score on child insert restrict */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Score"
@@ -1649,18 +1673,18 @@ BEGIN
     END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Score AFTER UPDATE ON Score for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Score 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Score on child update restrict */
-  /* ERWIN_RELATION:CHECKSUM="0001f5d5", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="0001f2e9", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Score"
     P2C_VERB_PHRASE="R/16", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_16", FK_COLUMNS="std_id" */
@@ -1681,7 +1705,7 @@ BEGIN
     );
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Lecture  Score on child update restrict */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="Lecture"
     CHILD_OWNER="", CHILD_TABLE="Score"
@@ -1705,19 +1729,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_Submission BEFORE INSERT ON Submission for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Submission 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* Assignment  Submission on child insert restrict */
-    /* ERWIN_RELATION:CHECKSUM="00020fa4", PARENT_OWNER="", PARENT_TABLE="Assignment"
+    /* ERWIN_RELATION:CHECKSUM="00020f80", PARENT_OWNER="", PARENT_TABLE="Assignment"
     CHILD_OWNER="", CHILD_TABLE="Submission"
     P2C_VERB_PHRASE="R/27", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_27", FK_COLUMNS="assignment_id" */
@@ -1738,7 +1762,7 @@ BEGIN
       );
     END IF;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Submission on child insert restrict */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Submission"
@@ -1762,18 +1786,18 @@ BEGIN
     END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Submission AFTER UPDATE ON Submission for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Submission 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* Assignment  Submission on child update restrict */
-  /* ERWIN_RELATION:CHECKSUM="00021366", PARENT_OWNER="", PARENT_TABLE="Assignment"
+  /* ERWIN_RELATION:CHECKSUM="00020fd1", PARENT_OWNER="", PARENT_TABLE="Assignment"
     CHILD_OWNER="", CHILD_TABLE="Submission"
     P2C_VERB_PHRASE="R/27", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_27", FK_COLUMNS="assignment_id" */
@@ -1794,7 +1818,7 @@ BEGIN
     );
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Submission on child update restrict */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Submission"
@@ -1818,60 +1842,60 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tI_Teacher_Info BEFORE INSERT ON Teacher_Info for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- INSERT trigger on Teacher_Info 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Teacher_Info on child insert set null */
-    /* ERWIN_RELATION:CHECKSUM="00010d48", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="000105ad", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Teacher_Info"
     P2C_VERB_PHRASE="R/36", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="R_36", FK_COLUMNS="lecturer_id" */
+    FK_CONSTRAINT="R_36", FK_COLUMNS="teacher_id" */
     UPDATE Teacher_Info
       SET
         /* %SetFK(Teacher_Info,NULL) */
-        Teacher_Info.lecturer_id = NULL
+        Teacher_Info.teacher_id = NULL
       WHERE
         NOT EXISTS (
           SELECT * FROM User01
             WHERE
               /* %JoinFKPK(:%New,User01," = "," AND") */
-              :new.lecturer_id = User01.user_id
+              :new.teacher_id = User01.user_id
         ) 
         /* %JoinPKPK(Teacher_Info,:%New," = "," AND") */
          and Teacher_Info.info_id = :new.info_id;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_Teacher_Info AFTER UPDATE ON Teacher_Info for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on Teacher_Info 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Teacher_Info on child update no action */
-  /* ERWIN_RELATION:CHECKSUM="00011399", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="00011684", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Teacher_Info"
     P2C_VERB_PHRASE="R/36", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="R_36", FK_COLUMNS="lecturer_id" */
+    FK_CONSTRAINT="R_36", FK_COLUMNS="teacher_id" */
   SELECT count(*) INTO NUMROWS
     FROM User01
     WHERE
       /* %JoinFKPK(:%New,User01," = "," AND") */
-      :new.lecturer_id = User01.user_id;
+      :new.teacher_id = User01.user_id;
   IF (
     /* %NotnullFK(:%New," IS NOT NULL AND") */
-    :new.lecturer_id IS NOT NULL AND
+    :new.teacher_id IS NOT NULL AND
     NUMROWS = 0
   )
   THEN
@@ -1882,19 +1906,19 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 
 CREATE  TRIGGER tD_User01 AFTER DELETE ON User01 for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- DELETE trigger on User01 
 DECLARE NUMROWS INTEGER;
 BEGIN
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Attendance on parent delete restrict */
-    /* ERWIN_RELATION:CHECKSUM="000a4258", PARENT_OWNER="", PARENT_TABLE="User01"
+    /* ERWIN_RELATION:CHECKSUM="000a1fcf", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Attendance"
     P2C_VERB_PHRASE="R/11", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_11", FK_COLUMNS="std_id" */
@@ -1911,7 +1935,7 @@ BEGIN
       );
     END IF;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Apply on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Apply"
@@ -1925,7 +1949,7 @@ BEGIN
         /* %JoinFKPK(Apply,:%Old," = "," AND") */
         Apply.user_id = :old.user_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Score on parent delete restrict */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Score"
@@ -1944,7 +1968,7 @@ BEGIN
       );
     END IF;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Submission on parent delete restrict */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Submission"
@@ -1963,7 +1987,7 @@ BEGIN
       );
     END IF;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Lecture_review on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Lecture_review"
@@ -1977,21 +2001,21 @@ BEGIN
         /* %JoinFKPK(Lecture_review,:%Old," = "," AND") */
         Lecture_review.writer = :old.user_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Teacher_Info on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Teacher_Info"
     P2C_VERB_PHRASE="R/36", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="R_36", FK_COLUMNS="lecturer_id" */
+    FK_CONSTRAINT="R_36", FK_COLUMNS="teacher_id" */
     UPDATE Teacher_Info
       SET
         /* %SetFK(Teacher_Info,NULL) */
-        Teacher_Info.lecturer_id = NULL
+        Teacher_Info.teacher_id = NULL
       WHERE
         /* %JoinFKPK(Teacher_Info,:%Old," = "," AND") */
-        Teacher_Info.lecturer_id = :old.user_id;
+        Teacher_Info.teacher_id = :old.user_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Data_room on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Data_room"
@@ -2005,7 +2029,7 @@ BEGIN
         /* %JoinFKPK(Data_room,:%Old," = "," AND") */
         Data_room.writer = :old.user_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  QNA_h on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="QNA_h"
@@ -2019,7 +2043,7 @@ BEGIN
         /* %JoinFKPK(QNA_h,:%Old," = "," AND") */
         QNA_h.std_id = :old.user_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  Notice on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Notice"
@@ -2033,7 +2057,7 @@ BEGIN
         /* %JoinFKPK(Notice,:%Old," = "," AND") */
         Notice.writer = :old.user_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  QNA_L on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="QNA_L"
@@ -2047,7 +2071,7 @@ BEGIN
         /* %JoinFKPK(QNA_L,:%Old," = "," AND") */
         QNA_L.std_id = :old.user_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  QNA_L on parent delete set null */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="QNA_L"
@@ -2061,7 +2085,7 @@ BEGIN
         /* %JoinFKPK(QNA_L,:%Old," = "," AND") */
         QNA_L.responder_id = :old.user_id;
 
-    /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+    /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
     /* User01  LectureUser on parent delete restrict */
     /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="LectureUser"
@@ -2081,18 +2105,18 @@ BEGIN
     END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
 
 CREATE  TRIGGER tU_User01 AFTER UPDATE ON User01 for each row
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 -- UPDATE trigger on User01 
 DECLARE NUMROWS INTEGER;
 BEGIN
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Attendance on parent update restrict */
-  /* ERWIN_RELATION:CHECKSUM="000b3e14", PARENT_OWNER="", PARENT_TABLE="User01"
+  /* ERWIN_RELATION:CHECKSUM="000b37e1", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Attendance"
     P2C_VERB_PHRASE="R/11", C2P_VERB_PHRASE="", 
     FK_CONSTRAINT="R_11", FK_COLUMNS="std_id" */
@@ -2132,7 +2156,7 @@ BEGIN
         Apply.user_id = :old.user_id;
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Score on parent update restrict */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Score"
@@ -2156,7 +2180,7 @@ BEGIN
     END IF;
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  Submission on parent update restrict */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Submission"
@@ -2202,7 +2226,7 @@ BEGIN
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="Teacher_Info"
     P2C_VERB_PHRASE="R/36", C2P_VERB_PHRASE="", 
-    FK_CONSTRAINT="R_36", FK_COLUMNS="lecturer_id" */
+    FK_CONSTRAINT="R_36", FK_COLUMNS="teacher_id" */
   IF
     /* %JoinPKPK(:%Old,:%New," <> "," OR ") */
     :old.user_id <> :new.user_id
@@ -2210,10 +2234,10 @@ BEGIN
     UPDATE Teacher_Info
       SET
         /* %SetFK(Teacher_Info,NULL) */
-        Teacher_Info.lecturer_id = NULL
+        Teacher_Info.teacher_id = NULL
       WHERE
         /* %JoinFKPK(Teacher_Info,:%Old," = ",",") */
-        Teacher_Info.lecturer_id = :old.user_id;
+        Teacher_Info.teacher_id = :old.user_id;
   END IF;
 
   /* User01  Data_room on parent update set null */
@@ -2306,7 +2330,7 @@ BEGIN
         QNA_L.responder_id = :old.user_id;
   END IF;
 
-  /* ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39 */
+  /* ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23 */
   /* User01  LectureUser on parent update restrict */
   /* ERWIN_RELATION:CHECKSUM="00000000", PARENT_OWNER="", PARENT_TABLE="User01"
     CHILD_OWNER="", CHILD_TABLE="LectureUser"
@@ -2331,7 +2355,6 @@ BEGIN
   END IF;
 
 
--- ERwin Builtin 2019년 7월 3일 수요일 오전 11:26:39
+-- ERwin Builtin 2019년 7월 3일 수요일 오후 2:44:23
 END;
 /
-commit;
