@@ -28,6 +28,7 @@ public class TeacherDao {
 		}
 	}
 	
+	//이건 머지?
 	public int attendance(String id, String pw){
 		String sql = "select belong from bitauser where user_id=? and password=?";
 		int result =0;
@@ -60,23 +61,27 @@ public class TeacherDao {
 	// 강좌번호를 파라미터로 주고 학생이름, 출석상태, 날짜를 리턴 받는다.
 	public ArrayList<AttendanceDto> getTodayAttendance(int lectureId) {
 		ArrayList<AttendanceDto> list = new ArrayList<AttendanceDto>();
-		String sql ="SELECT u.name AS \"name\",a.status AS \"status\" ,a.day_time AS \"day_time\" "
-				+ "FROM attendance as a "
-				+ "JOIN user01 as u "
-				+ "on a.std_id=u.user_id "
-				+ "WHERE a.lecture_id = ? AND "
-				+ "TO_Date(SYSDATE,'yyyymmdd')=TO_Date(a.day_time,'yyyymmdd') "
-				+ "ORDER BY u.name";
+		String sql ="SELECT day_time,name,std_id,TO_CHAR(checkin_time),checkout_time,status,lecture_id "
+				+ "FROM attendance a "
+				+ "JOIN user01 u "
+				+ "ON a.std_id = u.user_id "
+				+ "WHERE a.lecture_id=? ";
+//				+ "AND TO_CHAR(SYSDATE,'yyyymmdd')=TO_CHAR(a.day_time,'yyyymmdd')";
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();
+			System.out.println("getTodayAttendance :: lectureId = " + lectureId);
 			if(rs.next()){
+				System.out.println("bean +1");
 				AttendanceDto bean = new AttendanceDto();
 				bean.setDayTime(rs.getDate("day_time"));
 				bean.setName(rs.getString("name"));
-				bean.setStatus(rs.getString("stutus"));
+//				bean.setCheckinTime(rs.getDate("checkin_time"));
+//				bean.setCheckoutTime(rs.getDate("checkout_time"));
+				bean.setStatus(rs.getString("status"));
+				bean.setLectureId(lectureId);
 				list.add(bean);
 			}
 			

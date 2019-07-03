@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.AttendanceDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -44,6 +46,19 @@
 		</div>
 		<div id="content">
 			<h2>출결관리</h2>
+			<a>출석!!</a>
+			<%
+			ArrayList<AttendanceDto> todayAttendanceList = (ArrayList<AttendanceDto>)request.getAttribute("todayAttendanceList");
+			if(todayAttendanceList !=null){
+				for(AttendanceDto bean : todayAttendanceList){
+					%>
+					<a><%=bean.getDayTime() %></a>
+					<a><%=bean.getName() %></a>
+					<a><%=bean.getStatus() %></a>
+					<%
+				}
+			}
+			%>
 		</div>
 		<div id="footer">
 			<div>

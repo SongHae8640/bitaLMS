@@ -40,7 +40,7 @@ public class UserDao {
 			pstmt.setString(2, pw);
 			rs = pstmt.executeQuery();
 			
-			if(rs.next()){;
+			if(rs.next()){
 				bean.setUserId(rs.getString("user_id"));
 				bean.setPassword(rs.getString("password")); 
 				bean.setName(rs.getString("name"));
