@@ -15,10 +15,10 @@ import com.bit.model.AttendanceDto;
 import com.bit.model.TeacherDao;
 import com.bit.model.UserDto;
 
-@WebServlet("*.t")
+@WebServlet("*.tea")
 public class TeacherController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -41,9 +41,18 @@ public class TeacherController extends HttpServlet {
 					ArrayList<AttendanceDto> todayAttendanceList = dao.getTodayAttendance(userBean.getLecture_id());
 					
 					req.setAttribute("todayAttendanceList", todayAttendanceList);
-					rd = req.getRequestDispatcher("attendance_T.jsp");
+					rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 				}else if(path.equals("/score.tea")){
-					rd = req.getRequestDispatcher("score_T.jsp");
+					rd = req.getRequestDispatcher("teacher/score_T.jsp");
+					rd.forward(req, resp);
+				}else if(path.equals("/assignment.tea")){
+					rd = req.getRequestDispatcher("teacher/assignment_T.jsp");
+					rd.forward(req, resp);
+				}else if(path.equals("/qna.tea")){
+					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
+					rd.forward(req, resp);
+				}else{
+					
 				}
 				rd.forward(req, resp);
 			}
