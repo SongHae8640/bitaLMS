@@ -51,7 +51,9 @@
 			ArrayList<AttendanceDto> todayAttendanceList = (ArrayList<AttendanceDto>)request.getAttribute("todayAttendanceList");
 			if(todayAttendanceList !=null){
 				for(AttendanceDto bean : todayAttendanceList){
+					
 					%>
+					<br>
 					<a><%=bean.getDayTime() %></a>
 					<a><%=bean.getName() %></a>
 					<a><%=bean.getStatus() %></a>
