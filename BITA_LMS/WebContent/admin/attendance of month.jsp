@@ -33,66 +33,61 @@
 	text-decoration: none;
 	color: rgb(0,0,0);
 	}
-	#content #page_name{
-	width: 120px;
-	margin: 0 auto;
-	text-align:center;
-	border: 1px solid gray;
-	}
 	#content #real_content{
 	position:relative;
 	left:300px;
 	width: 600px;
 	height:700px;
 	}
-	#content #tea_detail{
-	clear:both;
-	width: 500px;
-	height:500px;
+	#content #page_name{
+	width: 120px;
 	margin: 0 auto;
-	}
-	#content #tea_detail #tea_pic{
-	float:left;
+	text-align:center;
 	border: 1px solid gray;
-	width: 100px;
-	height:140px;
 	}
-	#content #real_content #tea_detail{
+	#content #upper_content{
 	width: 600px;
 	}
-	#content #real_content #tea_detail table,th,td{
-	border: 1px solid gray;
+	#content #upper_content #month_see{
+	width: 130px;
+	float: left;
 	}
-	#tea_table1{
-	width:300px;
-	} 
-	#tea_table2{
-	width:600px;
-	height:320px;
+	#content #upper_content #month_ck{
+	width: 200px;
+	margin: 0 auto;
+	text-align: center;
+	}
+	#content #upper_content #lecture_list{
+	float:right;
+	width: 55px;
+	}
+	#content #att_list{
+	clear:both;
+	width: 600px;
+	height:500px;
+	margin: 0 auto;
+	text-align:center;
+	}
+	#content #att_list table{
+	width: 600px;
 	margin: 0 auto;
 	}
-	#tea_table2 input{
-	width:160px;
+	#content #att_list table,th,td{
+	border: 1px solid gray;
 	}
 	#content #under_list{
 	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
-	#content #under_list div{
-	width: 80px;
-	}
-	#content #under_list #list_button{
-	float: left;
-	}
-	#content #under_list #ans_button{
-	float: right;
-	}
-	#content #under_list #del_button{
+	#content #under_list #ok_button{
+	float:right;
 	width: 45px;
-	float: right;
 	}
-	
+	#content #under_list #reject_button{
+	float:right;
+	width: 45px;
+	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -103,23 +98,19 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#del_btn').click(function(){
-			var result = confirm('정말 삭제하시겠습니까?'); 
-			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm'); } 
-			else { 
-				//no-변동사항없음
-				} 
-			});
-		$('#list_btn').click(function(){
-				location.replace('qna.adm'); 
+		$('#header>img').click(function() {
+			location.href = 'main.adm'
+		}).mouseenter(function(){
+			$('#header>img').css('cursor', 'pointer')
 		});
 	});
+    //테스트 주석
 </script>
 </head>
 <body>
+	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -136,65 +127,96 @@
 		<div id="content">
 			<div id="sidebar">
 			<br/><br/><br/><br/>
-			<h3>강사관리</h3>
+			<h3>학생관리</h3>
 			<br/><br/>
+			<ul>
+				<li><a href="register.adm">학생등록</a></li>
+				<br/>
+				<li><a href="manage_stu.adm">수강생관리</a></li>
+			</ul>
 		</div>
-		<form name="send_tea" method="post" action="#">
 		<div id="real_content">
+			<br/>
 			<div id="page_name">
-				<h2>강사정보</h2>
+				<h2>학생출석</h2>
 			</div>
-			<br/><br/>
-		<div id="tea_detail">
-			<div id="tea_pic">
-				<h3>강사이미지</h3>
+			<div id=upper_content>
+				<div id="month_see">
+					<button type="button">관리페이지 보기</button>
+				</div>
+				<div id="month_ck">
+					<div><label>month</label></div>
+					<div>
+						<button><</button>
+						<label> 2019-07 </label>
+						<button>></button>
+					</div>
+				</div>
+					<div id="lecture_list">
+						<select name="lecture_name">
+						    <option value="JAVA">JAVA</option>
+						    <option value="WEB">WEB</option>
+						    <option value="DB">DB</option>
+						</select>
+					</div>
 			</div>
-			<table id="tea_table1">
+			<div id="att_list">
+			<table>
+				<thead>
 					<tr>
-						<td>강사명</td>
-						<td><input type="text" name="tea_name" placeholder="김코난"></td>
+						<th>이름</th>
+						<th>1</th>
+						<th>2</th>
+						<th>3</th>
+						<th>4</th>
+						<th>5</th>
+						<th>6</th>
+						<th>7</th>
+						<th>8</th>
+						<th>9</th>
+						<th>10</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>홍길동</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>공결</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
 					</tr>
 					<tr>
-						<td>학력</td>
-						<td><input type="text" name="tea_level" placeholder="세종대학교 컴퓨터공학 석사"></td>
+						<td>김영희</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>공결</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
 					</tr>
+				</tbody>
 			</table>
-			<table id="tea_table2">
-				<tr>
-					<td>경력사항</td>
-					<td>저서</td>
-					<td>자격</td>
-				</tr>
-				<tr>
-				<!-- 추가버튼누르면 빈칸 추가되면서 데이터 입력가능 -->
-					<td><input type="text" name="tea_career1" placeholder="회사명-개발내용"><button type="button" id="add_career1">+</button></td>
-					<td><input type="text" name="tea_career2" placeholder="책제목-출판사"><button type="button" id="add_career2">+</button></td>
-					<td><input type="text" name="tea_qul" placeholder="정처기"><button type="button" id="add_qul">+</button></td>
-				</tr>
-				<tr>
-					<td>이메일</td>
-					<td colspan="2"><input type="text" name="tea_mail" placeholder="kmkm@naver.com"></td>
-				</tr>
-				<tr>
-					<td>연락처</td>
-					<td colspan="2"><input type="text" name="tea_tel" placeholder="010-1234-5678"></td>
-				</tr>
-			</table>
-	</div>
+		</div>
 		<div id="under_list">
-			<div id="list_button">
-				<button type="button" id="list_btn">목록</button>
+			<div id="reject_button">
+				<button type="button">취소</button>
 			</div>
-			<div id="del_button">
-				<button type="button" id="del_btn">삭제</button>
-			</div>
-			<div id="ans_button">
-				<button type="submit">수정</button>
-			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
+			<div id="ok_button">
+				<button type="button">확인</button>
 			</div>
 		</div>
 	</div>
-	</form>
+	</div>
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />

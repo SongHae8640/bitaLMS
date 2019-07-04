@@ -39,26 +39,32 @@
 	width: 600px;
 	height:700px;
 	}
-	height:120px;
 	#content #real_content #lec_detail{
 	width: 600px;
-	}
-	#content #real_content #curri_thumb{
-	border: 1px solid gray;
-	width: 200x;
 	}
 	#content #real_content #lec_detail table,th,td{
 	border: 1px solid gray;
 	}
 	#lec_table1{
 	width:450px;
-	float: right;
-	margin-top: 25px;
 	}
 	#lec_table2{
 	width:600px;
 	height:320px;
 	margin: 0 auto;
+	}
+	#content #real_content #lec_detail #qna_content {
+	width:600px;
+	}
+	#content #real_content #lec_detail #qna_content div{
+	clear:both;
+	width:300px;
+	}
+	#content #real_content #lec_detail #curri_thumb{
+	float: left;
+	width:100px;
+	height:140px;
+	border: 1px solid gray;
 	}
 	#content #page_name{
 	width: 120px;
@@ -66,7 +72,7 @@
 	text-align:center;
 	border: 1px solid gray;
 	}
-	#content #tea_detail{
+	#content #lec_detail{
 	clear:both;
 	width: 500px;
 	height:500px;
@@ -83,16 +89,16 @@
 	#content #under_list #list_button{
 	float: left;
 	}
-	#content #under_list #ans_button{
+	#content #under_list #ok_button{
 	float: right;
 	}
-	#content #under_list #del_button{
+	#content #under_list #reject_button{
 	width: 45px;
 	float: right;
 	}
 	
 </style>
-<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="/BITA_LMS/js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -101,16 +107,16 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#list_btn').click(function(){ 
-			location.href('manage_lec.amd');  
-			}); 
 		$('#del_btn').click(function(){
 			var result = confirm('정말 삭제하시겠습니까?'); 
 			if(result) { //yes-해당수강신청삭제
-				location.href('manage_lec.adm'); } 
+				location.replace('register.adm'); } 
 			else { 
 				//no-변동사항없음
 				} 
+			});
+		$('#list_btn').click(function(){
+				location.replace('qna.adm');
 			});
 	});
 </script>
@@ -137,36 +143,47 @@
 			<h3>강좌관리</h3>
 			<br/><br/>
 		</div>
+		<form name="send_lec" method="post" action="manage_lec_update.adm">
 		<div id="real_content">
-			<br/>
+		<br/>
 			<div id="page_name">
 				<h2>강좌상세</h2>
 			</div>
 			<br/><br/>
 		<div id="lec_detail">
+		<div>
 			<div id="curri_thumb">
 				<h3>커리큘럼이미지</h3>
 			</div>
 			<table id="lec_table1">
 					<tr>
 						<td>강좌명</td>
-						<td>JAVA</td>
+						<td><input type="text" name="lec_name" placeholder="JAVA"></td>
 					</tr>
 					<tr>
 						<td>강사명</td>
-						<td>김코난</td>
+						<td>
+							<select name="tea_name">
+							    <option value="김코난">김코난</option>
+							    <option value="남도일">남도일</option>
+							    <option value="유미란">유미란</option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td>교육기간</td>
-						<td>2019-07-01 ~ 2019-10-01</td>
+						<td>
+						<input type="text" name="lec_start" placeholder="2019-07-01">~ 
+						<input type="text" name="lec_end" placeholder="2019-10-01">
+						</td>
 					</tr>
 					<tr>
 						<td>교육수준</td>
-						<td>3수준</td>
+						<td><input type="text" name="lec_level" placeholder="3">수준</td>
 					</tr>
 					<tr>
 						<td>최대인원</td>
-						<td>30</td>
+						<td><input type="text" name="max_stu" placeholder="30"></td>
 					</tr>
 			</table>
 			<table id="lec_table2">
@@ -183,21 +200,15 @@
 				</tr>
 				<tr>
 					<td>
-						응용소프트웨어 엔지니어링은 컴퓨터 프로그래밍 언어로 각 
-						업무에맞는 소프트웨어의 기능에 관한 설계, 구현 및 테스트를 
-						수행하고,사용자에게 배포하며, 버전관리를 통해 제품의 성능을 
-				 		향상시키고,서비스를 개선할 수 있는 인재양성을 목표로 한다.
-						데이터베이스 구현을 위하여 DBMS(Data Base Management System)
-						(DataBase Management Systems) 설치, 데이터베이스 생성, 데이
-						터베이스 오브젝트를 계획, 설계하고 구현하는 능력을 함양한다.
+						<textarea name="content" rows="6" cols="70">내용</textarea>
 					</td>
 				</tr>
 				<tr>
 					<td>
 						<div id="curri_des">
-							<h3>커리큘럼이미지</h3>			
+							<input type="file"id="lec_file"/>
 						</div>
-					</td>
+					</td> 
 				</tr>
 			</table>
 	</div>
@@ -205,15 +216,16 @@
 			<div id="list_button">
 				<button type="button" id="list_btn">목록</button>
 			</div>
-			<div id="del_button">
-				<button type="button" id="del_btn">삭제</button>
+			<div id="reject_button">
+				<button type="button" id="reject_btn">취소</button>
 			</div>
-			<div id="ans_button">
-				<button type="button">수정</button>
+			<div id="ok_button">
+				<button type="subit">확인</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
 	</div>
+	</form>
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />
