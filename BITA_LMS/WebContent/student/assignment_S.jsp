@@ -23,10 +23,15 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#header>img').click(function() {
-			location.href = 'main.stu'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
+		$('#ch').click(function(){
+			if($("#ch").prop("checked")){
+	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
+	            $("input[name=chk]").prop("checked",true);
+	            //클릭이 안되있으면
+	        }else{
+	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
+	            $("input[name=chk]").prop("checked",false);
+	        }
 		});
 	});
 </script>
@@ -34,7 +39,7 @@
 <body>
 	<div>
 		<div id="header">
-			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -51,23 +56,28 @@
 					<tr>
 						<th>번호</th>
 						<th>제목</th>
+						<th>작성자</th>
 						<th>작성일</th>
 						<th>확인여부</th>
-						<th><input type="checkbox" name="ch1" /></th>
+						<th><input type="checkbox" name="ch1" id="ch"/></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td>2</td>
-						<td><a href="assignment_S/assignmentdetail_S.jsp">8/2 김코난 과제</a></td>
+						<td><a href="assignment_S/assignmentdetail_S.jsp">8/2 과제</a></td>
+						<td>김코난</td>
 						<td>2019-08-02</td>
 						<td>확인대기</td>
+						<td><input type="checkbox" name="chk"/></td>
 					</tr>
 					<tr>
 						<td>1</td>
-						<td><a href="assignment_S/assignmentdetail_S.jsp">8/1 김코난 과제</a></td>
+						<td><a href="assignment_S/assignmentdetail_S.jsp">8/1 과제</a></td>
+						<td>김코난</td>
 						<td>2019-08-01</td>
 						<td>확인완료</td>
+						<td><input type="checkbox" name="chk"/></td>
 					</tr>
 				</tbody>
 			</table>

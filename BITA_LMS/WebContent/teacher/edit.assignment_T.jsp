@@ -25,14 +25,9 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-	});
-	$('#content>form input').hide();
-	$('#content>form button').hide().eq(0).show();
-	$('#content>form button').eq(0).click(function() {
-		$('#content>form input').show().prev('span').hide();
-		$('#content>form input').show().eq(0).hide();
-		$('#content>form button').show().eq(0).hide();
-		$('#edit').text('수정페이지');
+		$('#content>button').hide().eq(0).show().click(function() {
+			$('#content>button').show().eq(0).hide();
+		});
 	});
 </script>
 </head>
@@ -44,49 +39,34 @@
 		<div id="menu">
 			<ul>
 				<li class="topmenu"><a href="attendance.stu">출결관리</a>
-
-					<li><a href="score.stu">성적관리</a></li>
+				<li><a href="score.stu">성적관리</a></li>
 				<li><a href="assignment.stu">과제관리</a></li>
 				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
-<h2 id="edit">상세보기</h2>
-					<div id="content">
-		<form action="">
-			<div>
-				<label>제목</label> <span>sub</span> <input type="text" value="sub" />
-			</div>
-			<div>
-				<label>작성자</label> <span>name</span> <input type="text" value="김코난" />
-			</div>
-			<div>
-				<label>날짜</label> <span>date</span> <input type="text" value="date" />
-			</div>
-			<div>
-				<label>분류</label> <select name="" label="">
-					<opt>
-					<option value="">성적문의</option>
-					<option value="">강사</option>
-					<option value="">행정</option>
-					</opt>
-				</select>
-			</div>
-			<div>
-				<label>내용</label>
-				<textarea name="" id="" cols="30" rows="10">hello</textarea>
-			</div>
+		<div id="content">
+			<h2>과제 등록</h2>
+			<form action="assignment_T.jsp">
+				<div>
+					<label>제목</label> <input type="text">
+				</div>
+				<div>
+					<label>작성자</label> <input type="text">
+				</div>
+				<div>
+					<label>날짜</label> <input type="date">
+				</div>
+				<div>
+					<label>내용</label>
+					<textarea name="" id="" cols="30" rows="10"></textarea>
+				</div>
 
-			<div>
-				<button type="button">edit</button>
-				<button type="submit">edit</button>
-				<button type="reset">cancle</button>
-				<button type="button">back</button>
-			</div>
-		</form>
-		<div>
-			<textarea rows="10" cols="30"></textarea>
+				<div>
+					<button type="submit">등록</button>
+					<button onclick="location=''">삭제</button>
+				</div>
+			</form>
 		</div>
-
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />
@@ -98,7 +78,7 @@
 				</p>
 			</div>
 		</div>
-	</div>
 
-				</body>
+	</div>
+</body>
 </html>

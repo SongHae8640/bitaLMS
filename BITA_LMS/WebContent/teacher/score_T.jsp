@@ -1,5 +1,3 @@
-<%@page import="com.bit.model.ScoreDto"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,18 +18,20 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#header>img').click(function() {
-			location.href = 'main.tea'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
+		$('#insert').click(function(){
+			$(location).attr('href', 'insert_score_T.jsp')
 		});
+		$('#edit').click(function(){
+			$(location).attr('href', 'edit_score_T.jsp')
+		});
+		
 	});
 </script>
 </head>
 <body>
 	<div>
 		<div id="header">
-			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -46,24 +46,30 @@
 		</div>
 		<div id="content">
 			<h2>성적관리</h2>
-			<a>이름	1차	2차	3차	평균</a>
-			<%
-			ArrayList<ScoreDto> scoreList = (ArrayList<ScoreDto>)request.getAttribute("scoreList");
-			if (scoreList !=null){
-				for(ScoreDto bean : scoreList){
-					%>
-					<br>
-					<a><%=bean.getName() %></a>	
-					<a><%=bean.getFirstScore() %></a>	
-					<a><%=bean.getSecondScore() %></a>	
-					<a><%=bean.getThirdScore() %></a>	
-					<a><%=bean.getAvgScore() %></a>
-					
-					<%
-				}
-			}
-			
-			%>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>이름</th>
+						<th>1차</th>
+						<th>2차</th>
+						<th>3차</th>
+						<th>평균</th>
+					</tr>
+				</thead>
+				<thead>
+					<tr>
+						<td>홍길동</td>
+						<td>90</td>
+						<td>70</td>
+						<td></td>
+						<td>80</td>
+					</tr>
+				</thead>
+			</table>
+			<div>
+				<input type="button" value="입력" id="insert"/>
+				<input type="button" value="수정" id="edit"/>
+			</div>
 		</div>
 		<div id="footer">
 			<div>

@@ -5,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -16,21 +18,32 @@
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('.topmenu').mouseenter(function() {
-			$('.submenu').css('display', 'block')
-		});
-		$('.topmenu').mouseleave(function() {
-			$('.submenu').css('display', 'none')
-		});
-		$('#ch').click(function() {
-			if ($('#ch').prop("checked")) {
-				$("input[name=chk]").prop("checked", true);
-			} else {
-				$("input[name=chk]").prop("checked", false);
-			}
-		});
-	});
+	$(document)
+			.ready(
+					function() {
+						$('.topmenu').mouseenter(function() {
+							$('.submenu').css('display', 'block')
+						});
+						$('.topmenu').mouseleave(function() {
+							$('.submenu').css('display', 'none')
+						});
+						$('#ch').click(function() {
+							if ($('#ch').prop("checked")) {
+								$("input[name=chk]").prop("checked", true);
+							} else {
+								$("input[name=chk]").prop("checked", false);
+							}
+						});
+						$("#serch")
+								.keyup(
+										function() {
+											var k = $(this).val();
+											$("table>tbody>tr").hide();
+											var temp = $("table>tbody>tr>td:nth-child(6n+2):contains('"
+													+ k + "')");
+											$(temp).parent().show();
+										});
+					});
 </script>
 </head>
 <body>
@@ -47,27 +60,30 @@
 			</ul>
 		</div>
 		<div id="content">
-			<h2>과제 상세</h2>
+			<form action="edit_assignment_T.jsp">
+				<h2>과제 상세</h2>
 
-			<div>
-				<label>제목</label> <span>8/2</span>
-			</div>
-			<div>
-				<label>작성자</label> <span>김강사</span>
-			</div>
-			<div>
-				<label>날짜</label> <span>date</span>
-			</div>
-			<div>
-				<label>내용</label>
-				<textarea name="" id="" cols="30" rows="10">hello</textarea>
-			</div>
+				<div>
+					<label>제목</label> <span>8/2</span>
+				</div>
+				<div>
+					<label>작성자</label> <span>김강사</span>
+				</div>
+				<div>
+					<label>날짜</label> <span>date</span>
+				</div>
+				<div>
+					<label>내용</label>
+					<textarea name="" id="" cols="30" rows="10">hello</textarea>
+				</div>
 
-			<div>
-				<button onclick="location='../assignment_S.jsp'">과제목록</button>
-			</div>
-
-			<form action="">
+				<div>
+					<button onclick="location='../assignment_S.jsp'">과제목록</button>
+				</div>
+				<div>
+					<button type="submit">수정</button>
+					<button onclick="location='assignment_T.jsp'">삭제</button>
+				</div>
 				<table border="1">
 					<thead>
 						<tr>
@@ -76,7 +92,7 @@
 							<th>작성자</th>
 							<th>작성일</th>
 							<th>확인여부</th>
-							<th><input type="checkbox" name="" id="ch"/></th>
+							<th><input type="checkbox" name="" id="ch" /></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -88,12 +104,21 @@
 							<td>확인대기</td>
 							<td><input type="checkbox" name="chk" /></td>
 						</tr>
+						<tr>
+							<td>3</td>
+							<td><a href="#">8/2 콜롬보 과제</a></td>
+							<td>콜롬보</td>
+							<td>2019-08-02</td>
+							<td>확인대기</td>
+							<td><input type="checkbox" name="chk" /></td>
+						</tr>
 					</tbody>
 				</table>
 				<div>
-					<button type="submit">추가</button>
-					<button onclick="location=''">삭제</button>
+					<input type="text" id="serch">
+					<button>과제확인</button>
 				</div>
+
 			</form>
 		</div>
 		<div id="footer">
