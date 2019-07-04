@@ -220,4 +220,35 @@ public class TeacherDao {
 		}
 		return list;
 	}
+	
+	public AssignmentDto getAssignmentDetail(int assignmentId) {
+		AssignmentDto bean = new AssignmentDto();
+		String sql = "SELECT rownum,assignment_id,title,TO_CHAR(write_date,'yyyy-mm-dd') AS write_date  FROM assignment "
+				+ "WHERE lecture_id =?";
+
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, assignmentId);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				bean.setRowNum(rs.getInt("rownum"));
+				bean.setAssignmentId(rs.getInt("assignment_id"));
+				bean.setTitle(rs.getString("title"));
+				bean.setWriteDate(rs.getString("write_date"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				if(rs!=null)rs.close();
+				if(pstmt!=null)pstmt.close();
+				if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return bean;
+	}
 }

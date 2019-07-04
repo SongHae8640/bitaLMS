@@ -14,7 +14,6 @@
 	margin: 0px auto;
 	}
 	#content{
-	border: 1px solid gray;
 	height:700px;
 	margin: 0 auto;
 	}
@@ -25,6 +24,7 @@
 	width: 200px;
 	text-align:center;
 	z-index: 1;
+	background-color: gray;
 	}
 	#content #sidebar ul li{
 	list-style: none;
@@ -45,21 +45,19 @@
 	text-align:center;
 	border: 1px solid gray;
 	}
-	#content #people_check{
-	float:right;
-	width: 130px;
-	}
-	#content #lecture_list{
-	clear:both;
-	float:right;
-	width: 55px;
-	}
 	#content #q_list{
 	clear:both;
-	width: 500px;
+	width: 600px;
 	height:500px;
 	margin: 0 auto;
 	text-align:center;
+	}
+	#content #q_list table{
+	width: 600px;
+	margin: 0 auto;
+	}
+	#content #q_list table,th,td{
+	border: 1px solid gray;
 	}
 	#content #under_list{
 	width: 600px;
@@ -68,7 +66,7 @@
 	}
 	#content #under_list #close_button{
 	float:right;
-	width: 100px;
+	width: 45px;
 	}
 	#content #under_list #search_box{
 	clear:both;
@@ -125,6 +123,7 @@
 			<div id="page_name">
 				<h2>1:1문의</h2>
 			</div>
+			<br/><br/>
 			<div id="q_list">
 			<table>
 				<thead>
@@ -141,7 +140,7 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><a href="qna_detail.adm">프린트도 사용가능한가요?</a></td>
+						<td><a href="./qna_A_detail.jsp">프린트도 사용가능한가요?</a></td>
 						<td>김코난</td>
 						<td>2019-07-02</td>
 						<td>답변대기</td>

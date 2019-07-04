@@ -14,7 +14,6 @@
 	margin: 0px auto;
 	}
 	#content{
-	border: 1px solid gray;
 	height:700px;
 	margin: 0 auto;
 	}
@@ -25,6 +24,7 @@
 	width: 200px;
 	text-align:center;
 	z-index: 1;
+	background-color: gray;
 	}
 	#content #sidebar ul li{
 	list-style: none;
@@ -56,19 +56,26 @@
 	}
 	#content #app_list{
 	clear:both;
-	width: 500px;
+	width: 600px;
 	height:500px;
 	margin: 0 auto;
 	text-align:center;
 	}
+	#content #app_list table{
+	width: 600px;
+	margin: 0 auto;
+	}
+	#content #app_list table,th,td{
+	border: 1px solid gray;
+	}
 	#content #under_list{
-	width: 500px;
+	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
 	#content #under_list #close_button{
 	float:right;
-	width: 100px;
+	width: 45px;
 	}
 	#content #under_list #search_box{
 	clear:both;
@@ -136,9 +143,9 @@
 			</div>
 			<div id="lecture_list">
 				<select name="lecture_name">
-				    <option value="">JAVA</option>
-				    <option value="학생">WEB</option>
-				    <option value="회사원">DB</option>
+				    <option value="JAVA">JAVA</option>
+				    <option value="WEB">WEB</option>
+				    <option value="DB">DB</option>
 				</select>
 			</div>
 			<div id="app_list">
@@ -156,7 +163,7 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><a href="register_detail.adm">김경민님의 수강신청</a></td>
+						<td><a href="./register_detail.jsp">김경민님의 수강신청</a></td>
 						<td>rudals108</td>
 						<td>김경민</td>
 						<td>JAVA</td>
