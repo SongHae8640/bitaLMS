@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="css/frame.css" />
+<link type="text/css" rel="stylesheet" href="/BITA_LMS/css/frame.css" />
 <style type="text/css">
 	#menu>ul {
 	width: 610px;
@@ -19,11 +19,12 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:160px;
+	top:243px;
 	height:700px;
 	width: 200px;
 	text-align:center;
 	z-index: 1;
+	background-color: gray;
 	}
 	#content #sidebar ul li{
 	list-style: none;
@@ -38,27 +39,26 @@
 	width: 600px;
 	height:700px;
 	}
+	height:120px;
 	#content #real_content #lec_detail{
 	width: 600px;
+	}
+	#content #real_content #curri_thumb{
+	border: 1px solid gray;
+	width: 200x;
 	}
 	#content #real_content #lec_detail table,th,td{
 	border: 1px solid gray;
 	}
 	#lec_table1{
-	width:400px;
+	width:450px;
+	float: right;
+	margin-top: 25px;
 	}
 	#lec_table2{
-	}
-	#content #real_content #lec_detail #qna_content {
 	width:600px;
-	}
-	#content #real_content #lec_detail #qna_content div{
-	clear:both;
-	width:300px;
-	}
-	#content #real_content #lec_detail #submit{
-	width:150px;
-	float: right;
+	height:320px;
+	margin: 0 auto;
 	}
 	#content #page_name{
 	width: 120px;
@@ -66,21 +66,11 @@
 	text-align:center;
 	border: 1px solid gray;
 	}
-	#content #people_check{
-	float:right;
-	width: 130px;
-	}
-	#content #lecture_list{
-	clear:both;
-	float:right;
-	width: 55px;
-	}
-	#content #app_list{
+	#content #tea_detail{
 	clear:both;
 	width: 500px;
 	height:500px;
 	margin: 0 auto;
-	text-align:center;
 	}
 	#content #under_list{
 	width: 600px;
@@ -100,8 +90,9 @@
 	width: 45px;
 	float: right;
 	}
+	
 </style>
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -110,30 +101,23 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#header>img').click(function() {
-			location.href = 'main.adm'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
-		});
+		$('#list_btn').click(function(){ 
+			location.href('manage_lec.amd');  
+			}); 
 		$('#del_btn').click(function(){
 			var result = confirm('정말 삭제하시겠습니까?'); 
 			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm')
-			} 
+				location.href('manage_lec.adm'); } 
 			else { 
 				//no-변동사항없음
-			} 
-		});
-		$('#list_btn').click(function(){
-			location.replace('qna.adm');
-		});
+				} 
+			});
 	});
 </script>
 </head>
 <body>
-	<div>
 		<div id="header">
-			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -154,12 +138,12 @@
 			<br/><br/>
 		</div>
 		<div id="real_content">
-			<br/>
 			<div id="page_name">
 				<h2>강좌상세</h2>
 			</div>
+			<br/><br/>
 		<div id="lec_detail">
-			<div>
+			<div id="curri_thumb">
 				<h3>커리큘럼이미지</h3>
 			</div>
 			<table id="lec_table1">
@@ -193,24 +177,29 @@
 				</tr>
 				<tr>
 					<td>
-						<label>강좌내용</label>
-						<p>응용소프트웨어 엔지니어링은 컴퓨터 프로그래밍 언어로 각 
-						업무에맞는 소프트웨어의 기능에 관한 설계, 구현 및 테스트를 
-						수행하고,사용자에게 배포하며, 버전관리를 통해 제품의 성능을 
-						향상시키고,서비스를 개선할 수 있는 인재양성을 목표로 한다.
-						데이터베이스 구현을 위하여 DBMS(Data Base Management System)
-						(DataBase Management Systems) 설치, 데이터베이스 생성, 데이
-						터베이스 오브젝트를 계획, 설계하고 구현하는 능력을 함양한다.
-						</p>
+						강좌내용
 					</td>
 				</tr>
 				<tr>
-				<div>
-					<h3>커리큘럼이미지</h3>			
-				</div>
+					<td>
+						응용소프트웨어 엔지니어링은 컴퓨터 프로그래밍 언어로 각 
+						업무에맞는 소프트웨어의 기능에 관한 설계, 구현 및 테스트를 
+						수행하고,사용자에게 배포하며, 버전관리를 통해 제품의 성능을 
+				 		향상시키고,서비스를 개선할 수 있는 인재양성을 목표로 한다.
+						데이터베이스 구현을 위하여 DBMS(Data Base Management System)
+						(DataBase Management Systems) 설치, 데이터베이스 생성, 데이
+						터베이스 오브젝트를 계획, 설계하고 구현하는 능력을 함양한다.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="curri_des">
+							<h3>커리큘럼이미지</h3>			
+						</div>
+					</td>
 				</tr>
 			</table>
-		</div>
+	</div>
 		<div id="under_list">
 			<div id="list_button">
 				<button type="button" id="list_btn">목록</button>
@@ -223,7 +212,6 @@
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
-	</div>
 	</div>
 		<div id="footer">
 			<div>

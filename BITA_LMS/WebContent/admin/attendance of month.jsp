@@ -45,53 +45,48 @@
 	text-align:center;
 	border: 1px solid gray;
 	}
-	#content #tea_list{
+	#content #upper_content{
+	width: 600px;
+	}
+	#content #upper_content #month_see{
+	width: 130px;
+	float: left;
+	}
+	#content #upper_content #month_ck{
+	width: 200px;
+	margin: 0 auto;
+	text-align: center;
+	}
+	#content #upper_content #lecture_list{
+	float:right;
+	width: 55px;
+	}
+	#content #att_list{
 	clear:both;
 	width: 600px;
 	height:500px;
 	margin: 0 auto;
 	text-align:center;
 	}
-	#content #tea_list table{
+	#content #att_list table{
 	width: 600px;
 	margin: 0 auto;
 	}
-	
-	#content #tea_list table,th,td{
+	#content #att_list table,th,td{
 	border: 1px solid gray;
-	}
-	#content #tea_list #tea_pic{
-	float: left;
-	width: 80px;
-	height:120px;
-	border: 1px solid gray;
-	}
-	#content #tea_list #tea_info{
-	float: left;
-	width: 230px;
-	margin-top: 25px;
-	}
-	#content #tea_list #tea_info td{
-	text-align:left;
 	}
 	#content #under_list{
-	clear:both;
 	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
-	#content #under_list #close_button{
+	#content #under_list #ok_button{
 	float:right;
 	width: 45px;
 	}
-	#content #under_list #search_box{
-	clear:both;
-	width: 230px;
-	margin: 0 auto;
-	}
-	#content #under_list #page_button{
-	width: 150px;
-	margin: 0 auto;
+	#content #under_list #reject_button{
+	float:right;
+	width: 45px;
 	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -109,6 +104,7 @@
 			$('#header>img').css('cursor', 'pointer')
 		});
 	});
+    //테스트 주석
 </script>
 </head>
 <body>
@@ -129,68 +125,94 @@
 			</ul>
 		</div>
 		<div id="content">
-				<div id="sidebar">
+			<div id="sidebar">
 			<br/><br/><br/><br/>
-			<h3>강사관리</h3>
+			<h3>학생관리</h3>
 			<br/><br/>
+			<ul>
+				<li><a href="register.adm">학생등록</a></li>
+				<br/>
+				<li><a href="manage_stu.adm">수강생관리</a></li>
+			</ul>
 		</div>
 		<div id="real_content">
 			<br/>
 			<div id="page_name">
-				<h2>강사관리</h2>
+				<h2>학생출석</h2>
 			</div>
-			<br/><br/>
-			<div id="tea_list">
+			<div id=upper_content>
+				<div id="month_see">
+					<button type="button">관리페이지 보기</button>
+				</div>
+				<div id="month_ck">
+					<div><label>month</label></div>
+					<div>
+						<button><</button>
+						<label> 2019-07 </label>
+						<button>></button>
+					</div>
+				</div>
+					<div id="lecture_list">
+						<select name="lecture_name">
+						    <option value="JAVA">JAVA</option>
+						    <option value="WEB">WEB</option>
+						    <option value="DB">DB</option>
+						</select>
+					</div>
+			</div>
+			<div id="att_list">
 			<table>
 				<thead>
 					<tr>
-						<th>번호</th>
-						<th>강사정보</th>
-						<th>작성자</th>
-						<th>작성일</th>
+						<th>이름</th>
+						<th>1</th>
+						<th>2</th>
+						<th>3</th>
+						<th>4</th>
+						<th>5</th>
+						<th>6</th>
+						<th>7</th>
+						<th>8</th>
+						<th>9</th>
+						<th>10</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>1</td>
-						<td>
-							<div id="tea_pic">
-								<h3>강사사진</h3>
-							</div>
-							<table id="tea_info">
-								<tr>
-									<td>김코난 / JAVA</td>
-								</tr>
-								<tr>
-									<td>학력</td>
-								</tr>
-								<tr>
-									<td>세종대학교 컴공석사</td>
-								</tr>
-							</table>
-						</td>
-						<td>관리자</td>
-						<td>2019-07-02</td>
+						<td>홍길동</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>공결</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
+					</tr>
+					<tr>
+						<td>김영희</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>공결</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		<div id="under_list">
-			<div id="close_button">
-				<button type="button">삭제</button>
+			<div id="reject_button">
+				<button type="button">취소</button>
 			</div>
-			<div id="search_box">
-				<form action="register_list.adm">
-					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit">검색</button>
-				</form>
-			</div>
-			<div id="page_button">
-				<button><</button>
-				<button>1</button>
-				<button>2</button>
-				<button>3</button>
-				<button>></button>
+			<div id="ok_button">
+				<button type="button">확인</button>
 			</div>
 		</div>
 	</div>

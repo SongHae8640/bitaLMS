@@ -39,29 +39,45 @@
 				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
+		<div id="menu">
+			<ul>
+				<li class="topmenu"><a href="../attendance_S.jsp">출결관리</a>
+				<li><a href="../score_S.jsp">성적관리</a></li>
+				<li><a href="../assignment_S.jsp">과제관리</a></li>
+				<li><a href="../qna_S.jsp">1:1문의</a></li>
+			</ul>
+		</div>
 		<div id="content">
-			<h2>성적관리</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>이름</th>
-						<th>1차</th>
-						<th>2차</th>
-						<th>3차</th>
-					</tr>
-				</thead>
-				<thead>
-					<tr>
-						<th>홍길동</th>
-						<th>80</th>
-						<th>70</th>
-						<th>60</th>
-					</tr>
-				</thead>
-			</table>
-			<div>
-				<button onclick="location='qna_S/qnaadd_S.jsp'">이의신청</button>
-			</div>
+			<h1>1:1문의 등록</h1>
+			<form action="">
+				<div>
+					<label>제목</label> <input type="text" value="sub" />
+				</div>
+				<div>
+					<label>작성자</label> <input type="text" value="김코난" />
+				</div>
+				<div>
+					<label>날짜</label> <input type="text" value="day" />
+				</div>
+				<div>
+					<label>분류</label> <select name="" label="" value="성적문의">
+						<opt>
+						<option value="">성적문의</option>
+						<option value="">강사</option>
+						<option value="">행정</option>
+						</opt>
+					</select>
+				</div>
+				<div>
+					<label>내용</label>
+					<textarea name="" id="" cols="30" rows="10"></textarea>
+				</div>
+
+				<div>
+					<button type="submit">insert</button>
+					<button type="back">cancle</button>
+				</div>
+			</form>
 		</div>
 		<div id="footer">
 			<div>

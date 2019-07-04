@@ -71,5 +71,5 @@ public class LectureDto {
 		this.isClose = isClose;
 	}
 	
-	
+
 }

@@ -5,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -23,7 +25,21 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		$('#content>button').hide().eq(0).show().click(function() {
+			$('#content>button').show().eq(0).hide();
+		});
+		$('#sb').change(function(){
+			var state=$('#sb option:selected').val();
+			if(state=='day'){
+				alert('day');
+				$(location).attr('href', 'attendance_T.jsp')
+			}else if(state=='month'){
+				alert('month');
+				$(location).attr('href', 'month_attendance_T.jsp')
+			}
+		});
 	});
+	
 </script>
 </head>
 <body>
@@ -40,28 +56,39 @@
 			</ul>
 		</div>
 		<div id="content">
-			<h2>성적관리</h2>
-			<table>
+			<h2>월별 출석 현황</h2>
+			<select name="sb" id="sb">
+				<option value="" selected="selected">전체</option>
+				<option value="day" id="day">day</option>
+				<option value="month" id="month">month</option>
+			</select>
+			<table border="1">
 				<thead>
 					<tr>
 						<th>이름</th>
-						<th>1차</th>
-						<th>2차</th>
-						<th>3차</th>
+						<%
+							int i = 1;
+							for (i = 1; i <= 31; i++) {
+						%>
+						<td><%=i%>
+						<td>
+							<%
+								}
+							%>
+						
 					</tr>
 				</thead>
-				<thead>
+				<tbody>
 					<tr>
-						<th>홍길동</th>
-						<th>80</th>
-						<th>70</th>
-						<th>60</th>
+						<td>홍길동</td>
+						<td>출석</td>
+						<td>지각</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>출석</td>
 					</tr>
-				</thead>
+				</tbody>
 			</table>
-			<div>
-				<button onclick="location='qna_S/qnaadd_S.jsp'">이의신청</button>
-			</div>
 		</div>
 		<div id="footer">
 			<div>
@@ -74,6 +101,7 @@
 				</p>
 			</div>
 		</div>
+
 	</div>
 </body>
 </html>

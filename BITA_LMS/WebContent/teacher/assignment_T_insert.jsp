@@ -5,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -22,6 +24,9 @@
 		});
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
+		});
+		$('#content>button').hide().eq(0).show().click(function() {
+			$('#content>button').show().eq(0).hide();
 		});
 	});
 </script>
@@ -40,28 +45,27 @@
 			</ul>
 		</div>
 		<div id="content">
-			<h2>성적관리</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>이름</th>
-						<th>1차</th>
-						<th>2차</th>
-						<th>3차</th>
-					</tr>
-				</thead>
-				<thead>
-					<tr>
-						<th>홍길동</th>
-						<th>80</th>
-						<th>70</th>
-						<th>60</th>
-					</tr>
-				</thead>
-			</table>
-			<div>
-				<button onclick="location='qna_S/qnaadd_S.jsp'">이의신청</button>
-			</div>
+			<h2>과제 등록</h2>
+			<form action="assignment_T.jsp">
+				<div>
+					<label>제목</label> <input type="text">
+				</div>
+				<div>
+					<label>작성자</label> <input type="text">
+				</div>
+				<div>
+					<label>날짜</label> <input type="date">
+				</div>
+				<div>
+					<label>내용</label>
+					<textarea name="" id="" cols="30" rows="10">hello</textarea>
+				</div>
+
+				<div>
+					<button type="submit">등록</button>
+					<button onclick="location=''">삭제</button>
+				</div>
+			</form>
 		</div>
 		<div id="footer">
 			<div>
@@ -74,6 +78,7 @@
 				</p>
 			</div>
 		</div>
+
 	</div>
 </body>
 </html>
