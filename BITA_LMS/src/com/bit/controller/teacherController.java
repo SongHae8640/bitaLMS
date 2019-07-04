@@ -14,7 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import com.bit.model.AssignmentDto;
 import com.bit.model.AttendanceDto;
+import com.bit.model.QnaLDto;
 import com.bit.model.ScoreDto;
+import com.bit.model.SubmsissionDto;
 import com.bit.model.TeacherDao;
 import com.bit.model.UserDto;
 
@@ -60,13 +62,17 @@ public class TeacherController extends HttpServlet {
 					req.setAttribute("assignmentList", assignmentList);
 					rd = req.getRequestDispatcher("teacher/assignment_T.jsp");
 					
-					//detail 일때
-					int assignmentId = 1;	//글 리스트에서 idx로 assignmentId를 받아와서 사용(rownum)아님
-					AssignmentDto AssignmentBean = dao.getAssignmentDetail(assignmentId);
+//					//detail 일때
+//					int assignmentId = 1;	//글 리스트에서 idx로 assignmentId를 받아와서 사용(rownum)아님
+//					AssignmentDto AssignmentBean = dao.getAssignmentDetail(assignmentId);
+//					req.setAttribute("AssignmentBean", AssignmentBean);
+//					ArrayList<SubmsissionDto> submissionList = dao.getSubmissionList(assignmentId); 
+//					req.setAttribute("submissionList", submissionList);
 //					rd = req.getRequestDispatcher("teacher/assignment_T_detail.jsp");//디테일 주소
 					
 				} else if (path.equals("/qna.tea")) {
-					
+					ArrayList<QnaLDto> qnaLList = dao.getQnaLList(userBean.getUserId());
+					req.setAttribute("qnaLList", qnaLList);
 					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
 				
 				} else {

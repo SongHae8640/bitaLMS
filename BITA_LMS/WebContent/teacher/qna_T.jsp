@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.QnaLDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -44,6 +46,22 @@
 		</div>
 		<div id="content">
 			<h2>1:1문의</h2>
+			<a>번호, 제목, 작성자, 작성일, 답변여부, 분류</a>
+			<%
+			ArrayList<QnaLDto> qnaLList = (ArrayList<QnaLDto>)request.getAttribute("qnaLList");
+			for(QnaLDto bean : qnaLList){
+			%>			
+				<br>
+				<a><%=bean.getRowNum() %></a>, 
+				<a><%=bean.getTitle() %></a>, 
+				<a><%=bean.getStdName() %></a>, 
+				<a><%=bean.getWriteDate() %></a>, 
+				<a><%=bean.getIsRespon() %></a>, 
+				<a><%=bean.getType() %></a>, 
+			<%
+			}
+			%>
+			
 		</div>
 		<div id="footer">
 			<div>

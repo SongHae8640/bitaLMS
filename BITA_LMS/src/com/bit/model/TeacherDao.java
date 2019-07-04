@@ -190,9 +190,10 @@ public class TeacherDao {
 
 	public ArrayList<AssignmentDto> getAssignmentList(int lectureId) {
 		ArrayList<AssignmentDto> list = new ArrayList<AssignmentDto>();
-		String sql = "SELECT rownum,assignment_id,title,TO_CHAR(write_date,'yyyy-mm-dd') AS write_date  FROM assignment "
+		String sql = "SELECT row_number() OVER(ORDER BY write_date) num,assignment_id,title,"
+				+ "TO_CHAR(write_date,'yyyy-mm-dd') AS write_date  "
+				+ "FROM assignment "
 				+ "WHERE lecture_id =?";
-//				+ "ORDER BY write_date";	//이걸 쓰면 더 이상해 지네? 나중에 더미 데이터가 더 생기면 해볼것
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -200,7 +201,7 @@ public class TeacherDao {
 			rs = pstmt.executeQuery();
 			while(rs.next()){
 				AssignmentDto bean = new AssignmentDto();
-				bean.setRowNum(rs.getInt("rownum"));
+				bean.setRowNum(rs.getInt("num"));
 				bean.setAssignmentId(rs.getInt("assignment_id"));
 				bean.setTitle(rs.getString("title"));
 				bean.setWriteDate(rs.getString("write_date"));
@@ -223,19 +224,97 @@ public class TeacherDao {
 	
 	public AssignmentDto getAssignmentDetail(int assignmentId) {
 		AssignmentDto bean = new AssignmentDto();
-		String sql = "SELECT rownum,assignment_id,title,TO_CHAR(write_date,'yyyy-mm-dd') AS write_date  FROM assignment "
-				+ "WHERE lecture_id =?";
-
-		
+		String sql = "SELECT title, name,TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,content "
+				+ "FROM lectureUser lu "
+				+ "JOIN user01 u ON lu.user_id = u.user_id "
+				+ "JOIN assignment a ON a.lecture_id = lu.lecture_id "
+				+ "WHERE u.belong = 'teacher' AND a.assignment_id = ?";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, assignmentId);
 			rs = pstmt.executeQuery();
 			if(rs.next()){
-				bean.setRowNum(rs.getInt("rownum"));
-				bean.setAssignmentId(rs.getInt("assignment_id"));
 				bean.setTitle(rs.getString("title"));
+				bean.setWriter(rs.getString("name"));
 				bean.setWriteDate(rs.getString("write_date"));
+				bean.setContent(rs.getString("content"));
+				bean.setAssignmentId(assignmentId);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				if(pstmt!=null)pstmt.close();
+				if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return bean;
+	}
+
+	public ArrayList<SubmsissionDto> getSubmissionList(int assignmentId) {
+		ArrayList<SubmsissionDto> list = new ArrayList<SubmsissionDto>();
+		String sql = "SELECT row_number() OVER(ORDER BY submit_date) num, file_name,name as std_name ,"
+				+ "TO_CHAR(submit_date,'yyyy-mm-dd') as submit_date,is_check "
+				+ "FROM submission s JOIN user01 u ON s.std_id = u.user_id "
+				+ "WHERE assignment_id=?";
+		
+		try {
+			//getAssignmentDetail 에서 conn를 close 하기 때문에 새로 연결
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url,user,password);
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, assignmentId);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				SubmsissionDto bean = new SubmsissionDto();
+				bean.setRowNum(rs.getInt("num"));
+				bean.setFileName(rs.getString("file_name"));
+				bean.setStdName(rs.getString("std_name"));
+				bean.setSubmitDate(rs.getString("submit_date"));
+				bean.setIsCheck(rs.getString("is_check"));	//submission의 is_check 자료형이 char(1)이여서 여기서 오류가 날 수도?
+				list.add(bean);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				if(rs!=null)rs.close();
+				if(pstmt!=null)pstmt.close();
+				if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
+
+	public ArrayList<QnaLDto> getQnaLList(String teacherId) {
+		ArrayList<QnaLDto> list = new ArrayList<QnaLDto>();
+		String sql = "SELECT row_number() OVER(ORDER BY write_date) num, title, name as std_name,"
+				+ "TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,answer_content, type "
+				+ "FROM qna_l ql JOIN user01 u ON ql.std_id = u.user_id "
+				+ "WHERE responder_id = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, teacherId);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				QnaLDto bean = new QnaLDto();
+				bean.setRowNum(rs.getInt("num"));
+				bean.setTitle(rs.getString("title"));
+				bean.setStdName(rs.getString("std_name"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setIsRespon(rs.getString("answer_content"));	//이게 맞을련지?
+				bean.setType(rs.getString("type"));
+				list.add(bean);
 			}
 			
 		} catch (SQLException e) {
@@ -249,6 +328,7 @@ public class TeacherDao {
 				e.printStackTrace();
 			}
 		}
-		return bean;
+		
+		return list;
 	}
 }
