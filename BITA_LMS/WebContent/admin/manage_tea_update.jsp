@@ -63,27 +63,17 @@
 	#content #real_content #tea_detail table,th,td{
 	border: 1px solid gray;
 	}
-<<<<<<< HEAD
 	#tea_table1{
 	width:300px;
 	} 
 	#tea_table2{
-=======
-	#lec_table1{
-	width:450px;
-	}
-	#lec_table2{
->>>>>>> master
 	width:600px;
 	height:320px;
 	margin: 0 auto;
 	}
-<<<<<<< HEAD
 	#tea_table2 input{
 	width:160px;
 	}
-=======
->>>>>>> master
 	#content #under_list{
 	width: 600px;
 	height:95px;
@@ -122,13 +112,8 @@
 				} 
 			});
 		$('#list_btn').click(function(){
-<<<<<<< HEAD
 				location.replace('qna.adm'); 
 		});
-=======
-				location.replace('qna.adm'); } 
-			}); 
->>>>>>> master
 	});
 </script>
 </head>
@@ -154,10 +139,7 @@
 			<h3>강사관리</h3>
 			<br/><br/>
 		</div>
-<<<<<<< HEAD
 		<form name="send_tea" method="post" action="#">
-=======
->>>>>>> master
 		<div id="real_content">
 			<div id="page_name">
 				<h2>강사정보</h2>
@@ -170,19 +152,11 @@
 			<table id="tea_table1">
 					<tr>
 						<td>강사명</td>
-<<<<<<< HEAD
 						<td><input type="text" name="tea_name" placeholder="김코난"></td>
 					</tr>
 					<tr>
 						<td>학력</td>
 						<td><input type="text" name="tea_level" placeholder="세종대학교 컴퓨터공학 석사"></td>
-=======
-						<td><input type="text" name="tea_name" value="김코난"></td>
-					</tr>
-					<tr>
-						<td>학력</td>
-						<td><input type="text" name="tea_level" value="세종대학교 컴퓨터공학 석사"></td>
->>>>>>> master
 					</tr>
 			</table>
 			<table id="tea_table2">
@@ -192,7 +166,6 @@
 					<td>자격</td>
 				</tr>
 				<tr>
-<<<<<<< HEAD
 				<!-- 추가버튼누르면 빈칸 추가되면서 데이터 입력가능 -->
 					<td><input type="text" name="tea_career1" placeholder="회사명-개발내용"><button type="button" id="add_career1">+</button></td>
 					<td><input type="text" name="tea_career2" placeholder="책제목-출판사"><button type="button" id="add_career2">+</button></td>
@@ -207,22 +180,6 @@
 					<td colspan="2"><input type="text" name="tea_tel" placeholder="010-1234-5678"></td>
 				</tr>
 			</table>
-=======
-					<td><input type="text" name="tea_name" value="회사명-개발내용"></td>
-					<td>책제목-출판사</td>
-					<td>정처기</td>
-				</tr>
-				<tr>
-					<td>이메일</td>
-					<td colspan="2">kmkm@naver.com</td>
-				</tr>
-				<tr>
-					<td>연락처</td>
-					<td colspan="2">010-1234-5678</td>
-				</tr>
-			</table>
-			
->>>>>>> master
 	</div>
 		<div id="under_list">
 			<div id="list_button">
@@ -232,19 +189,12 @@
 				<button type="button" id="del_btn">삭제</button>
 			</div>
 			<div id="ans_button">
-<<<<<<< HEAD
 				<button type="submit">수정</button>
-=======
-				<button type="button">수정</button>
->>>>>>> master
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
 	</div>
-<<<<<<< HEAD
 	</form>
-=======
->>>>>>> master
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />
