@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="css/frame.css" />
+<link type="text/css" rel="stylesheet" href="/BITA_LMS/css/frame.css" />
 <style type="text/css">
 	#menu>ul {
 	width: 610px;
@@ -19,7 +19,7 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:160px;
+	top:243px;
 	height:700px;
 	width: 200px;
 	text-align:center;
@@ -39,8 +39,13 @@
 	width: 600px;
 	height:700px;
 	}
+	height:120px;
 	#content #real_content #lec_detail{
 	width: 600px;
+	}
+	#content #real_content #curri_thumb{
+	border: 1px solid gray;
+	width: 200x;
 	}
 	#content #real_content #lec_detail table,th,td{
 	border: 1px solid gray;
@@ -87,7 +92,7 @@
 	}
 	
 </style>
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -96,17 +101,17 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		$('#list_btn').click(function(){ 
+			location.href('manage_lec.amd');  
+			}); 
 		$('#del_btn').click(function(){
 			var result = confirm('정말 삭제하시겠습니까?'); 
 			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm'); } 
+				location.href('manage_lec.adm'); } 
 			else { 
 				//no-변동사항없음
 				} 
 			});
-		$('#list_btn').click(function(){
-				location.replace('qna.adm'); } 
-			}); 
 	});
 </script>
 </head>
