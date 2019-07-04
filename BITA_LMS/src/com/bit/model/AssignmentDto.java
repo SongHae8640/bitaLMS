@@ -56,5 +56,14 @@ public class AssignmentDto {
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
 	}
+	@Override
+	public String toString() {
+		return "AssignmentDto [title=" + title + ", writeDate=" + writeDate
+				+ ", situation=" + situation + ", writer=" + writer
+				+ ", content=" + content + ", assignmentId=" + assignmentId
+				+ ", lectureId=" + lectureId + ", rowNum=" + rowNum + "]";
+	}
+	
+	
 
 }

@@ -1,13 +1,11 @@
 package com.bit.model;
 
-import java.sql.Date;
-
 public class RegisterDto {
 	//번호 (제목제외) ID 이름 강좌 날짜
 	//제목은 name을 불러와서 프론트엔드에서 ***님의 수강신청을 붙여야함
 	int num;
 	String id,name,lecName,applyDate;
-	
+
 	public int getNum() {
 		return num;
 	}
@@ -23,8 +21,8 @@ public class RegisterDto {
 	public String getApplyDate() {
 		return applyDate;
 	}
-	public void setNum(int num) {
-		this.num = num;
+	public String getNumStd() {
+		return numStd;
 	}
 	public void setId(String id) {
 		this.id = id;
@@ -38,9 +36,12 @@ public class RegisterDto {
 	public void setApplyDate(String applyDate) {
 		this.applyDate = applyDate;
 	}
-	
-	
-	
+	public void setNumStd(String numStd) {
+		this.numStd = numStd;
+	}
+	public void setMaxStd(String maxStd) {
+		this.maxStd = maxStd;
+	}
 	
 	
 }

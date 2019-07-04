@@ -1,4 +1,4 @@
-<%@page import="javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar"%>
+﻿<%@page import="javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import="java.util.ArrayList,com.bit.model.AdminDao,com.bit.model.LectureDto,com.bit.model.RegisterDto"%>
 <%
@@ -19,7 +19,6 @@
 	margin: 0px auto;
 	}
 	#content{
-	border: 1px solid gray;
 	height:700px;
 	margin: 0 auto;
 	}
@@ -30,6 +29,7 @@
 	width: 200px;
 	text-align:center;
 	z-index: 1;
+	background-color: gray;
 	}
 	#content #sidebar ul li{
 	list-style: none;
@@ -61,19 +61,26 @@
 	}
 	#content #app_list{
 	clear:both;
-	width: 500px;
+	width: 600px;
 	height:500px;
 	margin: 0 auto;
 	text-align:center;
 	}
+	#content #app_list table{
+	width: 600px;
+	margin: 0 auto;
+	}
+	#content #app_list table,th,td{
+	border: 1px solid gray;
+	}
 	#content #under_list{
-	width: 500px;
+	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
 	#content #under_list #close_button{
 	float:right;
-	width: 100px;
+	width: 45px;
 	}
 	#content #under_list #search_box{
 	clear:both;
@@ -230,12 +237,21 @@
 									for(RegisterDto bean : registerList){
 					%>
 					<tr>
+<<<<<<< HEAD
 							<td><%=bean.getNum()%></td>
 							<td><a href="register_detail.adm?idx=<%=bean.getNum()%>"><%=bean.getName()%>님의 수강신청</a></td>
 							<td><%=bean.getId()%></td>
 							<td><%=bean.getName()%></td>
 							<td><%=bean.getLecName()%></td>
 							<td><%=bean.getApplyDate()%></td>
+=======
+						<td>1</td>
+						<td><a href="./register_detail.jsp">김경민님의 수강신청</a></td>
+						<td>rudals108</td>
+						<td>김경민</td>
+						<td>JAVA</td>
+						<td>2019-07-02</td>
+>>>>>>> master
 					</tr>
 							<%
 								}

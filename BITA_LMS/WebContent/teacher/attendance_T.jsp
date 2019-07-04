@@ -1,5 +1,3 @@
-<%@page import="com.bit.model.AttendanceDto"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -7,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 </style>
@@ -20,10 +20,18 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#header>img').click(function() {
-			location.href = 'main.tea'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
+		$('#sb').change(function(){
+			var state=$('#sb option:selected').val();
+			if(state=='day'){
+				alert('day');
+				$(location).attr('href', 'attendance_T.jsp')
+			}else if(state=='month'){
+				alert('month');
+				$(location).attr('href', 'month_attendance_T.jsp')
+			}
+		});
+		$('#content>button').hide().eq(0).show().click(function() {
+			$('#content>button').show().eq(0).hide();
 		});
 	});
 </script>
@@ -31,7 +39,7 @@
 <body>
 	<div>
 		<div id="header">
-			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -46,21 +54,35 @@
 		</div>
 		<div id="content">
 			<h2>출결관리</h2>
-			<a>출석!!</a>
-			<%
-			ArrayList<AttendanceDto> todayAttendanceList = (ArrayList<AttendanceDto>)request.getAttribute("todayAttendanceList");
-			if(todayAttendanceList !=null){
-				for(AttendanceDto bean : todayAttendanceList){
-					
-					%>
-					<br>
-					<a><%=bean.getDayTime() %></a>
-					<a><%=bean.getName() %></a>
-					<a><%=bean.getStatus() %></a>
-					<%
-				}
-			}
-			%>
+			<form action="">
+				<select name="sb" id="sb">
+					<option value="" selected="selected">전체</option>
+					<option value="day" id="day">day</option>
+					<option value="month" id="month">month</option>
+				</select>
+				<table>
+					<thead>
+						<tr>
+							<th>이름</th>
+							<th>버튼</th>
+							<th>상태</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>홍길동</td>
+							<input type="button" value="checkin"/>
+							<input type="button" value="checkout"/>
+						</tr>
+						<tr>
+							<td>김코난</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<button type="submit">제출</button>
+				</div>
+			</form>
 		</div>
 		<div id="footer">
 			<div>

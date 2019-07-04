@@ -5,9 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link
-	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -25,10 +23,15 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#header>img').click(function() {
-			location.href = 'main.stu'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
+		$('#ch').click(function(){
+			if($("#ch").prop("checked")){
+	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
+	            $("input[name=chk]").prop("checked",true);
+	            //클릭이 안되있으면
+	        }else{
+	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
+	            $("input[name=chk]").prop("checked",false);
+	        }
 		});
 	});
 </script>
@@ -36,14 +39,14 @@
 <body>
 	<div>
 		<div id="header">
-			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance_S.jsp">출결관리</a>
-				<li><a href="score_S.jsp">성적관리</a></li>
-				<li><a href="assignment_S.jsp">과제관리</a></li>
-				<li><a href="qna_S.jsp">1:1문의</a></li>
+				<li class="topmenu"><a href="attendance.stu">출결관리</a>
+				<li><a href="score.stu">성적관리</a></li>
+				<li><a href="assignment.stu">과제관리</a></li>
+				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
@@ -58,19 +61,19 @@
 						<th>작성일</th>
 						<th>답변여부</th>
 						<th>분류</th>
-						<th><input type="checkbox" name="ch1" /></th>
+						<th><input type="checkbox" name="ch1" id="ch"/></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 					<tr>
 						<td>1</td>
-						<td><a href="qnadetail.stu">sub</a></td>
+						<td><a href="qna_S/qnadetail_S.jsp">sub</a></td>
 						<td>name</td>
 						<td>day</td>
 						<td>vs</td>
 						<td>sort</td>
-						<th><input type="checkbox" name="ch2" /></th>
+						<th><input type="checkbox" name="chk" /></th>
 					</tr>
 				</tbody>
 				<tfooter>
@@ -88,7 +91,7 @@
 				</tfooter>
 			</table>
 			<div>
-				<form action="qnaadd.stu">
+				<form action="qna_S/qnaadd_S.jsp">
 					<button type="submit">등록</button>
 				</form>
 				<button type="">삭제</button>
