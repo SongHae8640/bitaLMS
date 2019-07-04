@@ -2,7 +2,6 @@ package com.bit.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,11 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.bit.model.AdminDao;
-import com.bit.model.AttendanceDto;
-import com.bit.model.LectureDto;
-import com.bit.model.RegisterDto;
-import com.bit.model.TeacherDao;
 import com.bit.model.UserDto;
 
 @WebServlet("*.adm")
@@ -30,18 +24,14 @@ public class AdminController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController :: path = " + path);
 		
-		//¼¼¼Ç ÀúÀå
+		//ì„¸ì…˜ ì €ì¥
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 				
-		
 		try {
 			if (userBean.getBelong().equals("admin")) {
-				AdminDao dao = new AdminDao();
-				
 				if (path.equals("/main.adm")) {
 					rd = req.getRequestDispatcher("admin/main_A.jsp");
-					
 				} else if (path.equals("/manage_lec.adm")) {
 					rd = req.getRequestDispatcher("admin/manage_lec.jsp");
 				} else if (path.equals("/manage_lec_detail.adm")) {
@@ -56,14 +46,15 @@ public class AdminController extends HttpServlet {
 					rd = req.getRequestDispatcher("admin/qna_A_detail.jsp");
 				} else if (path.equals("/register.adm")) {
 					ArrayList<LectureDto> LectureList = dao.getLecture();
-					//Ä¿³Ø¼Ç »õ·Î ÇÒ´ç (²÷°åÀ¸´Ï±î)
+					//ì»¤ë„¥ì…˜ ìƒˆë¡œ í• ë‹¹ (ëŠê²¼ìœ¼ë‹ˆê¹Œ)
 					
 					dao = new AdminDao();
 					
 					ArrayList<RegisterDto> RegisterList = dao.getRegister();
-					//¾îÆ®¸®ºäÆ®·Î ÀúÀåÇÏ°í jspÆäÀÌÁö¿¡¼­ getÀ¸·Î ºÒ·¯¿À±â
+					//ì–´íŠ¸ë¦¬ë·°íŠ¸ë¡œ ì €ì¥í•˜ê³  jspí˜ì´ì§€ì—ì„œ getìœ¼ë¡œ ë¶ˆëŸ¬ì˜¤ê¸°
 					req.setAttribute("RegisterList",RegisterList);
 					req.setAttribute("LectureList",LectureList);
+
 					rd = req.getRequestDispatcher("admin/register.jsp");
 				} else if (path.equals("/register_detail.adm")) {
 					int idx = Integer.parseInt(req.getParameter("idx"));
@@ -72,10 +63,10 @@ public class AdminController extends HttpServlet {
 					req.setAttribute("DetailRegister",RegisterDetail);
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
 				} else {
-					System.out.println("Á¸ÀçÇÏÁö¾Ê´ÂÆäÀÌÁö");
+					System.out.println("ì¡´ì¬í•˜ì§€ì•ŠëŠ”í˜ì´ì§€");
 				}
 			}else {
-				//teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
+				//teacherë‚˜ studentí˜ì´ì§€ë¡œ ì ‘ê·¼í•˜ë ¤ê³  í•˜ë©´ ê± ë³´ë‚´ë²„ë¦¼
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
@@ -94,7 +85,7 @@ public class AdminController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController :: path = " + path);
 		
-		//¼¼¼Ç ÀúÀå
+		//ì„¸ì…˜ ì €ì¥
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
@@ -102,13 +93,13 @@ public class AdminController extends HttpServlet {
 			rd = req.getRequestDispatcher("admin/register_detail.jsp");
 		} else if(path.equals("/register.adm")){
 			String param = (String) req.getParameter("param");
-			System.out.println(param+"³Ñ¾î¿Â°ª");
+			System.out.println(param+"ë„˜ì–´ì˜¨ê°’");
 			ArrayList<LectureDto> LectureList = dao.getLecture();
-			//Ä¿³Ø¼Ç »õ·Î ÇÒ´ç (²÷°åÀ¸´Ï±î)
+			//ì»¤ë„¥ì…˜ ìƒˆë¡œ í• ë‹¹ (ëŠê²¼ìœ¼ë‹ˆê¹Œ)
 			dao = new AdminDao();
 			System.out.println(userBean.getLecture_id());
 //			ArrayList<RegisterDto> RegisterList = dao.getRegister(lecidx);
-			//¾îÆ®¸®ºäÆ®·Î ÀúÀåÇÏ°í jspÆäÀÌÁö¿¡¼­ getÀ¸·Î ºÒ·¯¿À±â
+			//ì–´íŠ¸ë¦¬ë·°íŠ¸ë¡œ ì €ì¥í•˜ê³  jspí˜ì´ì§€ì—ì„œ getìœ¼ë¡œ ë¶ˆëŸ¬ì˜¤ê¸°
 //			req.setAttribute("RegisterList",RegisterList);
 			req.setAttribute("LectureList",LectureList);
 		}

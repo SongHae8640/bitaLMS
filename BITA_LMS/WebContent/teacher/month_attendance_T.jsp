@@ -28,7 +28,18 @@
 		$('#content>button').hide().eq(0).show().click(function() {
 			$('#content>button').show().eq(0).hide();
 		});
+		$('#sb').change(function(){
+			var state=$('#sb option:selected').val();
+			if(state=='day'){
+				alert('day');
+				$(location).attr('href', 'attendance_T.jsp')
+			}else if(state=='month'){
+				alert('month');
+				$(location).attr('href', 'month_attendance_T.jsp')
+			}
+		});
 	});
+	
 </script>
 </head>
 <body>
@@ -45,27 +56,39 @@
 			</ul>
 		</div>
 		<div id="content">
-			<h2>과제 등록</h2>
-			<form action="assignment_T.jsp">
-				<div>
-					<label>제목</label> <input type="text" name="title" id="title">
-				</div>
-				<div>
-					<label>작성자</label> <input type="text">
-				</div>
-				<div>
-					<label>날짜</label> <input type="date">
-				</div>
-				<div>
-					<label>내용</label>
-					<textarea name="" id="" cols="30" rows="10">hello</textarea>
-				</div>
-
-				<div>
-					<button type="submit">등록</button>
-					<button onclick="location=''">삭제</button>
-				</div>
-			</form>
+			<h2>월별 출석 현황</h2>
+			<select name="sb" id="sb">
+				<option value="" selected="selected">전체</option>
+				<option value="day" id="day">day</option>
+				<option value="month" id="month">month</option>
+			</select>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>이름</th>
+						<%
+							int i = 1;
+							for (i = 1; i <= 31; i++) {
+						%>
+						<td><%=i%>
+						<td>
+							<%
+								}
+							%>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>홍길동</td>
+						<td>출석</td>
+						<td>지각</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>출석</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 		<div id="footer">
 			<div>
