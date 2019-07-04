@@ -18,11 +18,6 @@ public class AdminDao {
 	PreparedStatement pstmt;
 	ResultSet rs;
 	
-	public static void main(String[] args) {
-		AdminDao dao = new AdminDao();
-		dao.getRegister();
-	}
-	
 	//생성자 호출할 때 커넥션 연결
 	public AdminDao(){
 		try {
@@ -36,6 +31,7 @@ public class AdminDao {
 	}
 	
 	//행정팀 강좌목록 불러오기
+	//싸그리 다 불러와서 필요한것만 뽑아서 쓰기
 	public ArrayList<LectureDto> getLecture() {
 		ArrayList<LectureDto> list = new ArrayList<LectureDto>();
 		
@@ -78,7 +74,9 @@ public class AdminDao {
 	//행정팀 학생관리 학생등록 목록 페이지
 	public ArrayList<RegisterDto> getRegister() {
 		
-		//번호 (제목제외) ID 이름 강좌 날짜 과정, 등록인원/최대인원, 소속을 불러와야함
+		ArrayList<RegisterDto> list = new ArrayList<RegisterDto>();
+		
+		//번호 (제목제외) ID 이름 강좌 날짜 소속을 불러와야함
 		//제목은 name을 불러와서 프론트엔드에서 ***님의 수강신청을 붙여야함
 		//조건은 콤보박스로 강좌명에 따라 화면표시
 		//그리고 어플라이한 사람만 보여야함 belong=before
@@ -129,9 +127,8 @@ public class AdminDao {
 	}
 	
 	//행정팀 학생관리 상세페이지
-	public ArrayList<RegisterDto> DetailRegister() {
+	public ArrayList<RegisterDto> DetailRegister(int idx) {
 		//선택된 학생 인자값으로 받아오기
-		
 		
 		String sql = "SELECT";
 		
@@ -163,5 +160,6 @@ public class AdminDao {
 	//행정팀 강사관리 목록페이지
 	
 	//행정팀 강사관리 상세페이지
-
+	
+	
 }

@@ -57,14 +57,19 @@ public class AdminController extends HttpServlet {
 				} else if (path.equals("/register.adm")) {
 					ArrayList<LectureDto> LectureList = dao.getLecture();
 					//커넥션 새로 할당 (끊겼으니까)
+					
 					dao = new AdminDao();
-					System.out.println(userBean.getLecture_id());
-					ArrayList<RegisterDto> RegisterList = dao.getRegister(1);
+					
+					ArrayList<RegisterDto> RegisterList = dao.getRegister();
 					//어트리뷰트로 저장하고 jsp페이지에서 get으로 불러오기
 					req.setAttribute("RegisterList",RegisterList);
 					req.setAttribute("LectureList",LectureList);
 					rd = req.getRequestDispatcher("admin/register.jsp");
 				} else if (path.equals("/register_detail.adm")) {
+					int idx = Integer.parseInt(req.getParameter("idx"));
+					ArrayList<RegisterDto> RegisterDetail = dao.DetailRegister(idx);
+					
+					req.setAttribute("DetailRegister",RegisterDetail);
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
 				} else {
 					System.out.println("존재하지않는페이지");
@@ -79,7 +84,7 @@ public class AdminController extends HttpServlet {
 		}
 
 	}
-	
+	/*
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -108,5 +113,6 @@ public class AdminController extends HttpServlet {
 			req.setAttribute("LectureList",LectureList);
 		}
 	}
+	*/
 
 }
