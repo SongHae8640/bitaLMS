@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.QnaLDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -64,16 +66,22 @@
 					</tr>
 				</thead>
 				<tbody>
+								<%
+			            ArrayList<QnaLDto> qnaLList = (ArrayList<QnaLDto>)request.getAttribute("qnaLList");
+			             for(QnaLDto bean : qnaLList){
+			          %>	
 					<tr>
-					<tr>
-						<td>1</td>
-						<td><a href="qna_S/qnadetail_S.jsp">sub</a></td>
-						<td>name</td>
-						<td>day</td>
-						<td>vs</td>
-						<td>sort</td>
-						<th><input type="checkbox" name="chk"/></th>
+						<td><%=bean.getRowNum() %></td>
+						<td><a href="qna_S/qnadetail_S.jsp"><%=bean.getTitle() %></a></td>
+						<td><%=bean.getStdName() %></td>
+						<td><%=bean.getWriteDate() %></td>
+						<td><%=bean.getIsRespon() %></td>
+						<td><%=bean.getType() %></td>
+						<td><input type="checkbox" name="chk"/></td>
 					</tr>
+          <%
+			      }
+			     %>
 				</tbody>
 				<tfooter>
 				<tr>
