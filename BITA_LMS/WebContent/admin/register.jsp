@@ -143,6 +143,7 @@
 			</div>
 			<div id="lecture_list">
 				<select name="lecture_name">
+					 <option value="ALL">전체보기</option>
 				    <option value="JAVA">JAVA</option>
 				    <option value="WEB">WEB</option>
 				    <option value="DB">DB</option>
