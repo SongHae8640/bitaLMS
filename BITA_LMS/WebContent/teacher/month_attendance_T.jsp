@@ -25,15 +25,21 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		$('#content>button').hide().eq(0).show().click(function() {
+			$('#content>button').show().eq(0).hide();
+		});
+		$('#sb').change(function(){
+			var state=$('#sb option:selected').val();
+			if(state=='day'){
+				alert('day');
+				$(location).attr('href', 'attendance_T.jsp')
+			}else if(state=='month'){
+				alert('month');
+				$(location).attr('href', 'month_attendance_T.jsp')
+			}
+		});
 	});
-	$('#content>form input').hide();
-	$('#content>form button').hide().eq(0).show();
-	$('#content>form button').eq(0).click(function() {
-		$('#content>form input').show().prev('span').hide();
-		$('#content>form input').show().eq(0).hide();
-		$('#content>form button').show().eq(0).hide();
-		$('#edit').text('수정페이지');
-	});
+	
 </script>
 </head>
 <body>
@@ -44,49 +50,46 @@
 		<div id="menu">
 			<ul>
 				<li class="topmenu"><a href="attendance.stu">출결관리</a>
-
-					<li><a href="score.stu">성적관리</a></li>
+				<li><a href="score.stu">성적관리</a></li>
 				<li><a href="assignment.stu">과제관리</a></li>
 				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
-<h2 id="edit">상세보기</h2>
-					<div id="content">
-		<form action="">
-			<div>
-				<label>제목</label> <span>sub</span> <input type="text" value="sub" />
-			</div>
-			<div>
-				<label>작성자</label> <span>name</span> <input type="text" value="김코난" />
-			</div>
-			<div>
-				<label>날짜</label> <span>date</span> <input type="text" value="date" />
-			</div>
-			<div>
-				<label>분류</label> <select name="" label="">
-					<opt>
-					<option value="">성적문의</option>
-					<option value="">강사</option>
-					<option value="">행정</option>
-					</opt>
-				</select>
-			</div>
-			<div>
-				<label>내용</label>
-				<textarea name="" id="" cols="30" rows="10">hello</textarea>
-			</div>
-
-			<div>
-				<button type="button">edit</button>
-				<button type="submit">edit</button>
-				<button type="reset">cancle</button>
-				<button type="button">back</button>
-			</div>
-		</form>
-		<div>
-			<textarea rows="10" cols="30"></textarea>
+		<div id="content">
+			<h2>월별 출석 현황</h2>
+			<select name="sb" id="sb">
+				<option value="" selected="selected">전체</option>
+				<option value="day" id="day">day</option>
+				<option value="month" id="month">month</option>
+			</select>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>이름</th>
+						<%
+							int i = 1;
+							for (i = 1; i <= 31; i++) {
+						%>
+						<td><%=i%>
+						<td>
+							<%
+								}
+							%>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>홍길동</td>
+						<td>출석</td>
+						<td>지각</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>출석</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />
@@ -98,7 +101,7 @@
 				</p>
 			</div>
 		</div>
-	</div>
 
-				</body>
+	</div>
+</body>
 </html>
