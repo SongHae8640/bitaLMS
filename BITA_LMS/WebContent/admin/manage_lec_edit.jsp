@@ -39,52 +39,64 @@
 	width: 600px;
 	height:700px;
 	}
+	#content #real_content #lec_detail{
+	width: 600px;
+	}
+	#content #real_content #lec_detail table,th,td{
+	border: 1px solid gray;
+	}
+	#lec_table1{
+	width:450px;
+	}
+	#lec_table2{
+	width:600px;
+	height:320px;
+	margin: 0 auto;
+	}
+	#content #real_content #lec_detail #qna_content {
+	width:600px;
+	}
+	#content #real_content #lec_detail #qna_content div{
+	clear:both;
+	width:300px;
+	}
+	#content #real_content #lec_detail #curri_thumb{
+	float: left;
+	width:100px;
+	height:140px;
+	border: 1px solid gray;
+	}
 	#content #page_name{
 	width: 120px;
 	margin: 0 auto;
 	text-align:center;
 	border: 1px solid gray;
 	}
-	#content #people_check{
-	float:right;
-	width: 130px;
-	}
-	#content #lecture_list{
-	clear:both;
-	float:right;
-	width: 55px;
-	}
-	#content #lec_lists{
+	#content #lec_detail{
 	clear:both;
 	width: 500px;
 	height:500px;
 	margin: 0 auto;
-	text-align:center;
-	}
-	#content #lec_list table,tr,th,td{
-	border:1px solid gray;
-	margin: 0 auto;
-	width: 600px;
-	text-align: center;
 	}
 	#content #under_list{
 	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
+	#content #under_list div{
+	width: 80px;
+	}
+	#content #under_list #list_button{
+	float: left;
+	}
+	#content #under_list #ans_button{
+	float: right;
+	}
 	#content #under_list #del_button{
-	float:right;
 	width: 45px;
+	float: right;
 	}
-	#content #under_list #search_box{
-	clear:both;
-	width: 230px;
-	margin: 0 auto;
-	}
-	#content #under_list #page_button{
-	width: 150px;
-	margin: 0 auto;
-	}
+	
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -95,18 +107,23 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#header>img').click(function() {
-			location.href = 'main.adm'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
-		});
+		$('#del_btn').click(function(){
+			var result = confirm('정말 삭제하시겠습니까?'); 
+			if(result) { //yes-해당수강신청삭제
+				location.replace('register.adm'); } 
+			else { 
+				//no-변동사항없음
+				} 
+			});
+		$('#list_btn').click(function(){
+				location.replace('qna.adm'); } 
+			});
 	});
 </script>
 </head>
 <body>
-	<div>
 		<div id="header">
-			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -121,56 +138,89 @@
 			</ul>
 		</div>
 		<div id="content">
-				<div id="sidebar">
+			<div id="sidebar">
 			<br/><br/><br/><br/>
 			<h3>강좌관리</h3>
 			<br/><br/>
 		</div>
 		<div id="real_content">
-			<br/>
 			<div id="page_name">
-				<h2>강좌관리</h2>
+				<h2>강좌상세</h2>
 			</div>
 			<br/><br/>
-			<div id="lec_list">
-			<table>
-				<thead>
+		<div id="lec_detail">
+			<div id="curri_thumb">
+				<h3>커리큘럼이미지</h3>
+			</div>
+			<table id="lec_table1">
 					<tr>
-						<th>번호</th>
-						<th>강좌명</th>
-						<th>강사명</th>
-						<th>개강일</th>
+						<td>강좌명</td>
+						<td><input type="text" name="lec_name" value="JAVA"></td>
 					</tr>
-				</thead>
-				<tbody>
 					<tr>
-						<td>1</td>
-						<td><a href="./manage_lec_detail.jsp">JAVA</a></td>
-						<td>김코난</td>
-						<td>2019-07-02</td>
+						<td>강사명</td>
+						<td>
+							<select name="tea_name">
+							    <option value="김코난">김코난</option>
+							    <option value="남도일">남도일</option>
+							    <option value="유미란">유미란</option>
+							</select>
+						</td>
 					</tr>
-				</tbody>
+					<tr>
+						<td>교육기간</td>
+						<td>
+						<input type="text" name="lec_start" value="2019-07-01">~ 
+						<input type="text" name="lec_end" value="2019-10-01">
+						</td>
+					</tr>
+					<tr>
+						<td>교육수준</td>
+						<td><input type="text" name="lec_level" value="3">수준</td>
+					</tr>
+					<tr>
+						<td>최대인원</td>
+						<td><input type="text" name="max_stu" value="30"></td>
+					</tr>
 			</table>
-		</div>
+			<table id="lec_table2">
+				<tr>
+					<td>
+						<label>진도율</label>
+						<progress value="20" max="100"></progress>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						강좌내용
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<textarea name="content" rows="6" cols="70">내용</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="curri_des">
+							<input type="file"id="lec_file"/>
+						</div>
+					</td> 
+				</tr>
+			</table>
+	</div>
 		<div id="under_list">
+			<div id="list_button">
+				<button type="button" id="list_btn">목록</button>
+			</div>
 			<div id="del_button">
 				<button type="button" id="del_btn">삭제</button>
 			</div>
-			<div id="search_box">
-				<form action="register_list.adm">
-					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit">검색</button>
-				</form>
-			</div>
-			<div id="page_button">
-				<button><</button>
-				<button>1</button>
-				<button>2</button>
-				<button>3</button>
-				<button>></button>
+			<div id="ans_button">
+				<button type="button">수정</button>
+			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
-	</div>
 	</div>
 		<div id="footer">
 			<div>

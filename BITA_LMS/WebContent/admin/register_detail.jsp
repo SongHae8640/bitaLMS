@@ -24,6 +24,7 @@
 	width: 200px;
 	text-align:center;
 	z-index: 1;
+	background-color: gray;
 	}
 	#content #sidebar ul li{
 	list-style: none;
@@ -43,9 +44,10 @@
 	}
 	#app_table{
 	width:600px;
+	margin: 0 auto;
 	}
 	#content #real_content #app_detail table,th,td{
-	border: 1px solid red; 
+	border: 1px solid gray; 
 	}
 	#content #real_content #app_detail #reg_form {
 	width:300px;
@@ -161,6 +163,7 @@
 			<div id="page_name">
 				<h2>학생등록</h2>
 			</div>
+				<br/><br/>
 		<div id="app_detail">
 			<table id="app_table">
 					<tr>

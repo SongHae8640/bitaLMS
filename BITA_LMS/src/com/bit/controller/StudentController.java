@@ -16,7 +16,7 @@ public class StudentController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("teacherController :: path = " + path);
+		System.out.println("StudentController :: path = " + path);
 		
 		//세션 저장
 		HttpSession session = req.getSession();

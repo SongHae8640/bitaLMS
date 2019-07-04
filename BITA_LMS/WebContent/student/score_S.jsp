@@ -65,7 +65,7 @@
 				</thead>
 			</table>
 			<div>
-				<button onclick="location='qnaadd.stu'">이의신청</button>
+				<button onclick="location='qna_S/qnaadd_S.jsp'">이의신청</button>
 			</div>
 		</div>
 		<div id="footer">
