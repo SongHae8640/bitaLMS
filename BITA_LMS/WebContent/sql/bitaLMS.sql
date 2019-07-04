@@ -1,27 +1,4 @@
-bitaLms.sql
-송
-j
 
-암
-유형
-SQL
-크기
-69KB (70,368바이트)
-사용된 저장용량
-609KB (623,300바이트)
-위치
-DB
-소유자
-나
-수정한 날짜
-오후 1:45, 나
-열어본 날짜
-오후 4:17, 나
-2019. 7. 2.에 Google Drive Web
-(으)로
-작성됨
-설명 추가
-뷰어가 다운로드할 수 있음
 DROP TABLE Attendance CASCADE CONSTRAINTS PURGE;
 
 
