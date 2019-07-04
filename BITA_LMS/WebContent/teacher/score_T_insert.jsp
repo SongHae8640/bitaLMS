@@ -19,10 +19,10 @@
 			$('.submenu').css('display', 'none')
 		});
 		$('#insert').click(function(){
-			$(location).attr('href', 'insert_score_T.jsp')
+			$(location).attr('href', 'score_T_insert.tea')
 		});
 		$('#cancle').click(function(){
-			$(location).attr('href', 'score_T.jsp')
+			$(location).attr('href', 'score_T.tea')
 		});
 		
 	});
@@ -46,7 +46,7 @@
 		</div>
 		<div id="content">
 			<h2>성적입력</h2>
-			<form action="score_T.jsp">
+			<form action="score_T_insert.tea">
 			<table border="1">
 				<thead>
 					<tr>

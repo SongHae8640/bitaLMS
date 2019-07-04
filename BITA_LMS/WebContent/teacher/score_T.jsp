@@ -19,10 +19,10 @@
 			$('.submenu').css('display', 'none')
 		});
 		$('#insert').click(function(){
-			$(location).attr('href', 'insert_score_T.jsp')
+			$(location).attr('href', 'score_T_insert.tea')
 		});
 		$('#edit').click(function(){
-			$(location).attr('href', 'edit_score_T.jsp')
+			$(location).attr('href', 'score_T_edit.tea')
 		});
 		
 	});

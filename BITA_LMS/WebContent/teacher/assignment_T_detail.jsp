@@ -48,14 +48,17 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance.stu">출결관리</a>
-				<li><a href="score.stu">성적관리</a></li>
-				<li><a href="assignment.stu">과제관리</a></li>
-				<li><a href="qna.stu">1:1문의</a></li>
+				<li class="topmenu"><a href="#">학생관리</a>
+					<ul class="submenu">
+						<li><a href="attendance.tea">출결관리</a></li>
+						<li><a href="score.tea">성적관리</a></li>
+						<li><a href="assignment.tea">과제관리</a></li>
+					</ul></li>
+				<li><a href="qna.tea">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
-			<form action="edit_assignment_T.jsp">
+			<form action="assignment_T_edit.tea">
 				<h2>과제 상세</h2>
 
 				<div>
@@ -73,11 +76,11 @@
 				</div>
 
 				<div>
-					<button onclick="location='../assignment_S.jsp'">과제목록</button>
+					<button onclick="location='assignment_S.tea'">과제목록</button>
 				</div>
 				<div>
 					<button type="submit">수정</button>
-					<button onclick="location='assignment_T.jsp'">삭제</button>
+					<button onclick="location='assignment_T_delete.tea'">삭제</button>
 				</div>
 				<table border="1">
 					<thead>
