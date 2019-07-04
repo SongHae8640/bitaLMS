@@ -7,7 +7,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 </style>
@@ -20,10 +22,15 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#header>img').click(function() {
-			location.href = 'main.tea'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
+		$('#ch').click(function(){
+			if($("#ch").prop("checked")){
+	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
+	            $("input[name=chk]").prop("checked",true);
+	            //클릭이 안되있으면
+	        }else{
+	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
+	            $("input[name=chk]").prop("checked",false);
+	        }
 		});
 	});
 </script>
@@ -31,7 +38,7 @@
 <body>
 	<div>
 		<div id="header">
-			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -46,22 +53,52 @@
 		</div>
 		<div id="content">
 			<h2>1:1문의</h2>
-			<a>번호, 제목, 작성자, 작성일, 답변여부, 분류</a>
-			<%
-			ArrayList<QnaLDto> qnaLList = (ArrayList<QnaLDto>)request.getAttribute("qnaLList");
-			for(QnaLDto bean : qnaLList){
-			%>			
-				<br>
-				<a><%=bean.getRowNum() %></a>, 
-				<a><%=bean.getTitle() %></a>, 
-				<a><%=bean.getStdName() %></a>, 
-				<a><%=bean.getWriteDate() %></a>, 
-				<a><%=bean.getIsRespon() %></a>, 
-				<a><%=bean.getType() %></a>, 
-			<%
-			}
-			%>
-			
+			<table border="1">
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th>답변여부</th>
+						<th>분류</th>
+						<th><input type="checkbox" name="ch1" id="ch"/></th>
+					</tr>
+				</thead>
+				<tbody>
+								<%
+			            ArrayList<QnaLDto> qnaLList = (ArrayList<QnaLDto>)request.getAttribute("qnaLList");
+			             for(QnaLDto bean : qnaLList){
+			          %>	
+					<tr>
+						<td><%=bean.getRowNum() %></td>
+						<td><a href="qna_S/qnadetail_S.jsp"><%=bean.getTitle() %></a></td>
+						<td><%=bean.getStdName() %></td>
+						<td><%=bean.getWriteDate() %></td>
+						<td><%=bean.getIsRespon() %></td>
+						<td><%=bean.getType() %></td>
+						<td><input type="checkbox" name="chk"/></td>
+					</tr>
+          <%
+			      }
+			     %>
+				</tbody>
+				<tfooter>
+				<tr>
+					<td><select name="" label="">
+							<opt>
+							<option value="">답변대기</option>
+							<option value="">답변완료</option>
+							</opt>
+					</select></td>
+					<td><input type="text" name="" id="" /></td>
+					<td><button>검색</button></td>
+				</tr>
+				</tfooter>
+			</table>
+			<div>
+				<button type="">삭제</button>
+			</div>
 		</div>
 		<div id="footer">
 			<div>
