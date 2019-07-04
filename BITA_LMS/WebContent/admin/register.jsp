@@ -87,7 +87,7 @@
 	margin: 0 auto;
 	}
 </style>
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -100,6 +100,14 @@
 			location.href = 'main.adm'
 		}).mouseenter(function(){
 			$('#header>img').css('cursor', 'pointer')
+		});
+		
+		$('#lecture_name').change(function() {
+			var state = $('#lecture_name option:selected').val();	//셀렉트박스 값 가져오기
+			var lec_info =$('#lec').text();
+			alert(lec_info);
+			//td잡기
+		
 		});
 	});
     //테스트 주석
@@ -142,8 +150,8 @@
 			<span>num_stu/max_stu</span>
 			</div>
 			<div id="lecture_list">
-				<select name="lecture_name">
-					 <option value="ALL">전체보기</option>
+				<select name="lecture_name" id="lecture_name">
+					 <option value="ALL"  selected="selected">전체보기</option>
 				    <option value="JAVA">JAVA</option>
 				    <option value="WEB">WEB</option>
 				    <option value="DB">DB</option>
@@ -164,11 +172,27 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><a href="./register_detail.jsp">김경민님의 수강신청</a></td>
+						<td><a href="manage_lec_detail.adm">김경민님의 수강신청</a></td>
 						<td>rudals108</td>
 						<td>김경민</td>
-						<td>JAVA</td>
+						<td id="lec">JAVA</td>
 						<td>2019-07-02</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td><a href="manage_lec_detail.adm">김코난님의 수강신청</a></td>
+						<td>rudals108</td>
+						<td>김코난</td>
+						<td>WEB</td>
+						<td>2019-07-09</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td><a href="manage_lec_detail.adm">남도일님의 수강신청</a></td>
+						<td>namnam123</td>
+						<td>남도일</td>
+						<td>DB</td>
+						<td>2019-07-20</td>
 					</tr>
 				</tbody>
 			</table>
