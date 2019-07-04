@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -138,7 +138,6 @@
 			<br/><br/>
 		</div>
 		<div id="real_content">
-			<br/>
 			<div id="page_name">
 				<h2>강좌상세</h2>
 			</div>

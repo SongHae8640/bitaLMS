@@ -18,10 +18,18 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#header>img').click(function() {
-			location.href = 'main.tea'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
+		$('#ch').click(function(){
+			if($('#ch').prop("checked")){
+				$("input[name=chk]").prop("checked",true);
+			}else{
+				$("input[name=chk]").prop("checked",false);
+			}
+		});
+		$('#insert').click(function(){
+			$(location).attr('href','insert_assignment_T.jsp');
+		});
+		$('#delete').click(function(){
+			$(location).attr('href','assignment_T.jsp');
 		});
 	});
 </script>
@@ -29,7 +37,7 @@
 <body>
 	<div>
 		<div id="header">
-			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -44,6 +52,37 @@
 		</div>
 		<div id="content">
 			<h2>과제관리</h2>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th><input type="checkbox" name="ch1" id="ch"/></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>2</td>
+						<td><a href="detail_assignment_T.jsp">8/2 과제</a></td>
+						<td>김강사</td>
+						<td>2019-08-02</td>
+						<td><input type="checkbox" name="chk"/></td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td><a href="detail_assignment_T.jsp">8/1 과제</a></td>
+						<td>김코난</td>
+						<td>2019-08-01</td>
+						<td><input type="checkbox" name="chk"/></td>
+					</tr>
+				</tbody>
+			</table>
+			<div>
+				<input type="button" id="insert" value="등록">
+				<input type="button" id="delete" value="삭제">
+			</div>
 		</div>
 		<div id="footer">
 			<div>

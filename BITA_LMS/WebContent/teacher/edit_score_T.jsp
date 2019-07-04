@@ -8,11 +8,6 @@
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
-#menu>ul {
-	width: 610px;
-	list-style-type: none;
-	margin: 0px auto;
-}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -23,6 +18,13 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		$('#insert').click(function(){
+			$(location).attr('href', 'insert_score_T.jsp')
+		});
+		$('#cancle').click(function(){
+			$(location).attr('href', 'score_T.jsp')
+		});
+		
 	});
 </script>
 </head>
@@ -33,35 +35,43 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance.stu">출결관리</a>
-				<li><a href="score.stu">성적관리</a></li>
-				<li><a href="assignment.stu">과제관리</a></li>
-				<li><a href="qna.stu">1:1문의</a></li>
+				<li class="topmenu"><a href="#">학생관리</a>
+					<ul class="submenu">
+						<li><a href="attendance.tea">출결관리</a></li>
+						<li><a href="score.tea">성적관리</a></li>
+						<li><a href="assignment.tea">과제관리</a></li>
+					</ul></li>
+				<li><a href="qna.tea">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
-			<h2>성적관리</h2>
-			<table>
+			<h2>성적입력</h2>
+			<form action="score_T.jsp">
+			<table border="1">
 				<thead>
 					<tr>
 						<th>이름</th>
 						<th>1차</th>
 						<th>2차</th>
 						<th>3차</th>
+						<th>평균</th>
 					</tr>
 				</thead>
 				<thead>
 					<tr>
-						<th>홍길동</th>
-						<th>80</th>
-						<th>70</th>
-						<th>60</th>
+						<td>홍길동</td>
+						<td><input type="text" value="90"/></td>
+						<td><input type="text" value="70"/></td>
+						<td><input type="text"></td>
+						<td>80</td>
 					</tr>
 				</thead>
 			</table>
 			<div>
-				<button onclick="location='qna_S/qnaadd_S.jsp'">이의신청</button>
+				<button type="submit">수정</button>
+				<input type="button" value="취소" id="cancle"/>
 			</div>
+			</form>
 		</div>
 		<div id="footer">
 			<div>

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -172,7 +172,6 @@
 						</td>
 					</tr>
 					<tr>
-						<td>교육수준</td>
 						<td><input type="text" name="lec_level" placeholder="3">수준</td>
 					</tr>
 					<tr>

@@ -34,15 +34,18 @@ public class AdminController extends HttpServlet {
 					rd = req.getRequestDispatcher("admin/main_A.jsp");
 				} else if (path.equals("/manage_lec.adm")) {
 					rd = req.getRequestDispatcher("admin/manage_lec.jsp");
+				} else if (path.equals("/manage_lec_detail.adm")) {
+					rd = req.getRequestDispatcher("admin/manage_lec_detail.jsp");
 				} else if (path.equals("/manage_stu.adm")) {
 					rd = req.getRequestDispatcher("admin/manage_stu.jsp");
 				} else if (path.equals("/manage_tea.adm")) {
 					rd = req.getRequestDispatcher("admin/manage_tea.jsp");
 				} else if (path.equals("/qna.adm")) {
 					rd = req.getRequestDispatcher("admin/qna_A.jsp");
+				} else if (path.equals("/qna_detail.adm")) {
+					rd = req.getRequestDispatcher("admin/qna_A_detail.jsp");
 				} else if (path.equals("/register.adm")) {
 					rd = req.getRequestDispatcher("admin/register.jsp");
-					
 				} else if (path.equals("/register_detail.adm")) {
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
 				} else {
