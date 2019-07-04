@@ -5,6 +5,7 @@ DELETE FROM TEACHER_INFO;
 DELETE FROM SCORE;
 DELETE FROM ASSIGNMENT;
 DELETE FROM SUBMISSION;
+DELETE FROM APPLY;
 
 --INSERT할때 자료명과 순서를 같이 넣어줄 것
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('tea1','1234', 'teacher1', '', '', '', 'teacher');
@@ -75,6 +76,13 @@ INSERT INTO submission(assignment_id, std_id,submit_date,file_name,is_check) VAL
 --null 을 넣으면 안되니까 질문 생성시 빈칸으로 해서 생성할것
 INSERT INTO qna_l(question_id,std_id, type, title, question_content, responder_id, answer_content, write_date) VALUES(1,'stu1','의의신청','성적문의 입니다(제목)','성적이 잘못 나온것 같습니다. 수정 해주세요.','tea1','네 그게 맞습니다 더 공부하세요.',SYSDATE);
 
+
+--행정팀 관리 더미데이터
+
+--학생 수강신청 더미데이터
+INSERT INTO apply(apply_date,apply_id,lecture_id,file_name,user_id) values (sysdate,1,1,'이력서','bef1');
+INSERT INTO apply(apply_date,apply_id,lecture_id,file_name,user_id) values (sysdate,2,2,'이력서','bef2');
+INSERT INTO apply(apply_date,apply_id,lecture_id,file_name,user_id) values (sysdate,3,3,'이력서','bef3');
 
 commit;
 
