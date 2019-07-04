@@ -5,16 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link
-	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
-#menu>ul {
-	width: 610px;
-	list-style-type: none;
-	margin: 0px auto;
-}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -25,9 +18,13 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#content>button').hide().eq(0).show().click(function() {
-			$('#content>button').show().eq(0).hide();
+		$('#insert').click(function(){
+			$(location).attr('href', 'insert_score_T.jsp')
 		});
+		$('#cancle').click(function(){
+			$(location).attr('href', 'score_T.jsp')
+		});
+		
 	});
 </script>
 </head>
@@ -38,33 +35,42 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance.stu">출결관리</a>
-				<li><a href="score.stu">성적관리</a></li>
-				<li><a href="assignment.stu">과제관리</a></li>
-				<li><a href="qna.stu">1:1문의</a></li>
+				<li class="topmenu"><a href="#">학생관리</a>
+					<ul class="submenu">
+						<li><a href="attendance.tea">출결관리</a></li>
+						<li><a href="score.tea">성적관리</a></li>
+						<li><a href="assignment.tea">과제관리</a></li>
+					</ul></li>
+				<li><a href="qna.tea">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
-			<h2>과제 등록</h2>
-			<form action="assignment_T.jsp">
-				<div>
-					<label>제목</label> <input type="text" name="title" id="title">
-				</div>
-				<div>
-					<label>작성자</label> <input type="text">
-				</div>
-				<div>
-					<label>날짜</label> <input type="date">
-				</div>
-				<div>
-					<label>내용</label>
-					<textarea name="" id="" cols="30" rows="10">hello</textarea>
-				</div>
-
-				<div>
-					<button type="submit">등록</button>
-					<button onclick="location=''">삭제</button>
-				</div>
+			<h2>성적입력</h2>
+			<form action="score_T.jsp">
+			<table border="1">
+				<thead>
+					<tr>
+						<th>이름</th>
+						<th>1차</th>
+						<th>2차</th>
+						<th>3차</th>
+						<th>평균</th>
+					</tr>
+				</thead>
+				<thead>
+					<tr>
+						<td>홍길동</td>
+						<td>90</td>
+						<td>70</td>
+						<td><input type="text"></td>
+						<td>80</td>
+					</tr>
+				</thead>
+			</table>
+			<div>
+				<button type="submit">확인</button>
+				<input type="button" value="취소" id="cancle"/>
+			</div>
 			</form>
 		</div>
 		<div id="footer">
@@ -78,7 +84,6 @@
 				</p>
 			</div>
 		</div>
-
 	</div>
 </body>
 </html>
