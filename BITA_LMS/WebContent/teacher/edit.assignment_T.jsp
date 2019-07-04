@@ -48,7 +48,7 @@
 			<h2>과제 등록</h2>
 			<form action="assignment_T.jsp">
 				<div>
-					<label>제목</label> <input type="text" name="title" id="title">
+					<label>제목</label> <input type="text">
 				</div>
 				<div>
 					<label>작성자</label> <input type="text">
@@ -58,7 +58,7 @@
 				</div>
 				<div>
 					<label>내용</label>
-					<textarea name="" id="" cols="30" rows="10">hello</textarea>
+					<textarea name="" id="" cols="30" rows="10"></textarea>
 				</div>
 
 				<div>

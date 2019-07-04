@@ -1,11 +1,10 @@
 package com.bit.model;
 
 public class RegisterDto {
-	//번호 (제목제외) ID 이름 강좌 날짜
+	//번호 (제목제외) ID 이름 강좌 날짜 과정, 등록인원/최대인원
 	//제목은 name을 불러와서 프론트엔드에서 ***님의 수강신청을 붙여야함
 	int num;
-	String id,name,lecName,applyDate;
-
+	String id,name,lecName,applyDate,numStd,maxStd;
 	public int getNum() {
 		return num;
 	}
@@ -23,6 +22,12 @@ public class RegisterDto {
 	}
 	public String getNumStd() {
 		return numStd;
+	}
+	public String getMaxStd() {
+		return maxStd;
+	}
+	public void setNum(int num) {
+		this.num = num;
 	}
 	public void setId(String id) {
 		this.id = id;
