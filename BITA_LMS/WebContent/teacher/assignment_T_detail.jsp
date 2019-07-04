@@ -18,9 +18,7 @@
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
 						$('.topmenu').mouseenter(function() {
 							$('.submenu').css('display', 'block')
 						});
@@ -34,16 +32,13 @@
 								$("input[name=chk]").prop("checked", false);
 							}
 						});
-						$("#serch")
-								.keyup(
-										function() {
-											var k = $(this).val();
-											$("table>tbody>tr").hide();
-											var temp = $("table>tbody>tr>td:nth-child(6n+2):contains('"
-													+ k + "')");
-											$(temp).parent().show();
-										});
-					});
+						$("#serch").keyup(function() {
+							var k = $(this).val();
+							$("table>tbody>tr").hide();
+							var temp = $("table>tbody>tr>td:nth-child(6n+2):contains('"+ k + "')");
+							$(temp).parent().show();
+						});
+	});
 </script>
 </head>
 <body>
