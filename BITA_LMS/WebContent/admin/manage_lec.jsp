@@ -22,8 +22,7 @@
 	top:243px;
 	height:700px;
 	width: 200px;
-	text-align:center;
-	z-index: 1;
+	text-align:center; 
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -86,7 +85,7 @@
 	margin: 0 auto;
 	}
 </style>
-<script type="text/javascript" src="/BITA_LMS/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -101,7 +100,20 @@
 			$('#header>img').css('cursor', 'pointer')
 		});
 		$('#reg_btn').click(function(){
-			location.href = 'manage_lec_detail.amd'
+			location.href = 'manage_lec_insert.adm'
+		});
+		$('#search_btn').click(function(){
+			var select_sub=$("#search_sub").val();
+			select_sub=select_sub.toUpperCase();
+			if(select_sub==""){
+				$("#lec_table>tbody>tr").show();
+				return false;
+			}else{
+				var temp = $("#lec_table>tbody>tr>td:nth-child(2):contains('" + select_sub+ "')");
+				$("#lec_table>tbody>tr").hide();
+	            $(temp).parent().show();
+	            return false;
+			}
 		});
 	});
 </script>
@@ -136,7 +148,7 @@
 			</div>
 			<br/><br/>
 			<div id="lec_list">
-			<table>
+			<table id="lec_table">
 				<thead>
 					<tr>
 						<th>번호</th>
@@ -148,9 +160,15 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><a href="./manage_lec_detail.jsp">JAVA</a></td>
+						<td><a href="manage_lec_detail.adm">JAVA</a></td>
 						<td>김코난</td>
-						<td>2019-07-02</td>
+						<td>2019-07-01</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td><a href="manage_lec_detail.adm">WEB</a></td>
+						<td>남도일</td>
+						<td>2019-08-01</td>
 					</tr>
 				</tbody>
 			</table>
@@ -160,9 +178,9 @@
 				<button type="button" id="reg_btn">등록</button>
 			</div>
 			<div id="search_box">
-				<form action="register_list.adm">
+				<form action="manage_lec.adm">
 					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit">검색</button>
+					<button type="submit" id="search_btn">검색</button>
 				</form>
 			</div>
 			<div id="page_button">

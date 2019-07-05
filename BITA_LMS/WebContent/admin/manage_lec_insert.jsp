@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="css/frame.css" />
+<link type="text/css" rel="stylesheet" href="/BITA_LMS/css/frame.css" />
 <style type="text/css">
 	#menu>ul {
 	width: 610px;
@@ -44,28 +44,35 @@
 	width: 600px;
 	height:700px;
 	}
-	#content #real_content #q_detail{
+	#content #real_content #lec_detail{
 	width: 600px;
 	}
-	#content #real_content #q_detail table{
-	width: 600px;
-	margin: 0 auto;
+	#content #real_content #lec_detail #curri_thumb{
+	float: left;
+	width:100px;
+	height:140px;
+	border: 1px solid gray;
+	margin-top: 5px;
 	}
-	#content #real_content #q_detail table,th,td{
+	#content #real_content #lec_detail table,th,td{
 	border: 1px solid gray;
 	}
-	#content #real_content #q_detail #submit{
-	width:145px;
-	float: right;
+	#lec_table1{
+	width:400px;
 	}
-	#content #real_content #q_detail #qna_content {
-	overflow:auto;
+	#lec_table1 input{
+	width:80px;
+	}
+	#lec_table2{
 	width:600px;
-	height:200px;
+	height:320px;
+	margin: 0 auto;
 	}
-	#qna_answer{
-	height:200px;
-	background-color: gray;
+	#content #lec_detail{
+	clear:both;
+	width: 500px;
+	height:500px;
+	margin: 0 auto;
 	}
 	#content #under_list{
 	width: 600px;
@@ -78,15 +85,17 @@
 	#content #under_list #list_button{
 	float: left;
 	}
-	#content #under_list #ans_button{
-	float: right;
-	}
 	#content #under_list #ok_button{
-	width: 43px;
 	float: right;
+	width: 45px;
 	}
+	#content #under_list #reject_button{
+	float: right;
+	width: 45px;
+	}
+	
 </style>
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -95,22 +104,18 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#del_btn').click(function(){
-			var result = confirm('정말 삭제하시겠습니까?'); 
-			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm'); } 
-			else { 
-				//no-변동사항없음
-				} 
-			});
 		$('#list_btn').click(function(){
-				location.replace('qna.adm'); } 
+			//목록으로
+			location.replace('manage_lec.adm');  
 			});
+		$('#reject_btn').click(function(){
+			//등록안할래==목록으로
+			location.replace('manage_lec.adm');   
+		});
 	});
 </script>
 </head>
 <body>
-	<div>
 		<div id="header">
 			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
@@ -129,56 +134,88 @@
 		<div id="content">
 			<div id="sidebar">
 			<br/><br/><br/><br/>
-			<h3>1:1문의</h3>
+			<h3>강좌관리</h3>
 			<br/><br/>
 		</div>
+		<form name="send_lec" method="post" action="manage_lec_insert.adm">
 		<div id="real_content">
-			<br/>
+		<br />
 			<div id="page_name">
-				<h2>1:1문의</h2>
+				<h2>강좌등록</h2>
 			</div>
 			<br/><br/>
-		<div id="q_detail">
-			<table>
+		<div id="lec_detail">
+			<div id="curri_thumb">
+				<h3>커리큘럼이미지</h3>
+			</div>
+			<table id="lec_table1">
 					<tr>
-						<th>제목</th>
-						<td>프린트사용가능한가요?</td>
+						<td>강좌명</td>
+						<td><input type="text" name="lec_name"></td>
 					</tr>
 					<tr>
-						<th>작성자</th>
-						<td>김코난</td>
-					</tr>
-					<tr>
-						<td colspan="2">
-						<div id="qna_content">
-							<div id="submit">
-								<span >작성일 2019-07-03</span>
-							</div>
-							<div>
-								<p>출력할게 있는데 프린트사용가능한가용?</p>
-							</div>
-						</div>
-						<div id="qna_answer">
-							<span>네 맘껏 사용하세요.</span>
-						</div>
+						<td>강사명</td>
+						<td>
+							<select name="tea_name">
+							    <option value="김코난">김코난</option>
+							    <option value="남도일">남도일</option>
+							    <option value="유미란">유미란</option>
+							</select>
 						</td>
 					</tr>
+					<tr>
+						<td>교육기간</td>
+						<td>
+						<input type="text" name="lec_start">
+						<input type="text" name="lec_end">
+						</td>
+					</tr>
+					<tr>
+						<td><input type="text" name="lec_level" >수준</td>
+					</tr>
+					<tr>
+						<td>최대인원</td>
+						<td><input type="text" name="max_stu"></td>
+					</tr>
 			</table>
-		</div>
+			<table id="lec_table2">
+				<tr>
+					<td>
+						<label>진도율</label>
+						<progress value="20" max="100"></progress>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<label>강의내용</label>
+						<div>
+						<textarea name="content" rows="6" cols="70"></textarea>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="curri_des">
+							<input type="file"id="lec_file"/>
+						</div>
+					</td> 
+				</tr>
+			</table>
+	</div>
 		<div id="under_list">
 			<div id="list_button">
 				<button type="button" id="list_btn">목록</button>
 			</div>
-			<div id="ok_button">
-				<button type="button" id="dok_btn">확인</button>
+			<div id="reject_button">
+				<button type="button" id="reject_btn">취소</button>
 			</div>
-			<div id="ans_button">
-				<button type="button">답변등록</button>
+			<div id="ok_button">
+				<button type="submit" id="ok_btn">확인</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
 	</div>
-	</div>
+	</form>
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />

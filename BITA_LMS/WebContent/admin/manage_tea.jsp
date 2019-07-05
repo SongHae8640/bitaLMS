@@ -19,11 +19,10 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:160px;
+	top:243px;
 	height:700px;
 	width: 200px;
 	text-align:center;
-	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -62,16 +61,20 @@
 	}
 	#content #tea_list #tea_pic{
 	float: left;
+	position:relative;
+	left:33px;
 	width: 80px;
 	height:120px;
 	border: 1px solid gray;
 	}
-	#content #tea_list #tea_info{
-	float: left;
+	#content #tea_list #tea_table tbody table{
+	float: right;
+	position:relative;
+	left:-30px;
 	width: 230px;
-	margin-top: 25px;
+	margin-top: 15px;
 	}
-	#content #tea_list #tea_info td{
+	#content #tea_list #tea_table tbody table td{
 	text-align:left;
 	}
 	#content #under_list{
@@ -94,7 +97,7 @@
 	margin: 0 auto;
 	}
 </style>
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -107,6 +110,18 @@
 			location.href = 'main.adm'
 		}).mouseenter(function(){
 			$('#header>img').css('cursor', 'pointer')
+		});
+		$('#search_btn').click(function(){
+			var select_sub=$("#search_sub").val();
+			if(select_sub==""){
+				$("#tea_table>tbody>tr").show();
+				return false;
+			}else{
+				var temp = $("#tea_table>tbody>tr>td:nth-child(3):contains('" + select_sub+ "')");
+				$("#tea_table>tbody>tr").hide();
+	            $(temp).parent().show();
+	            return false;
+			}
 		});
 	});
 </script>
@@ -141,7 +156,7 @@
 			</div>
 			<br/><br/>
 			<div id="tea_list">
-			<table>
+			<table id="tea_table">
 				<thead>
 					<tr>
 						<th>번호</th>
@@ -157,7 +172,7 @@
 							<div id="tea_pic">
 								<h3>강사사진</h3>
 							</div>
-							<table id="tea_info">
+							<table>
 								<tr>
 									<td>김코난 / JAVA</td>
 								</tr>
@@ -166,6 +181,27 @@
 								</tr>
 								<tr>
 									<td>세종대학교 컴공석사</td>
+								</tr>
+							</table>
+						</td>
+						<td>관리자</td>
+						<td>2019-07-02</td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>
+							<div id="tea_pic">
+								<h3>강사사진</h3>
+							</div>
+							<table id="tea_info">
+								<tr>
+									<td>남도일 / WEB</td>
+								</tr>
+								<tr>
+									<td>학력</td>
+								</tr>
+								<tr>
+									<td>아주대학교 컴공석사</td>
 								</tr>
 							</table>
 						</td>
@@ -182,7 +218,7 @@
 			<div id="search_box">
 				<form action="register_list.adm">
 					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit">검색</button>
+					<button type="submit" id="search_btn">검색</button>
 				</form>
 			</div>
 			<div id="page_button">

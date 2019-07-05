@@ -1,5 +1,10 @@
+﻿<%@page import="javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="java.util.ArrayList,com.bit.model.AdminDao,com.bit.model.LectureDto,com.bit.model.RegisterDto"%>
+<%
+	ArrayList<Integer> numStd = new ArrayList<Integer>();
+	ArrayList<Integer> maxStd = new ArrayList<Integer>();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,11 +24,10 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:160px;
+	top:243px;
 	height:700px;
 	width: 200px;
 	text-align:center;
-	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -90,6 +94,9 @@
 <script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		var numStd = $('#people_check>span')
+		numStd.hide();
+		$("#numStd").show();
 		$('.topmenu').mouseenter(function() {
 			$('.submenu').css('display', 'block')
 		});
@@ -101,19 +108,43 @@
 		}).mouseenter(function(){
 			$('#header>img').css('cursor', 'pointer')
 		});
-		
-		$('#lecture_name').change(function() {
-			var state = $('#lecture_name option:selected').val();	//셀렉트박스 값 가져오기
-			var lec_info =$('#lec').text();
-			alert(lec_info);
-			//td잡기
-		
-		});
+
+		$("select[name=lecture_name]").change(
+               function() {
+                  var k = $(this).children("option:selected").text();
+                  console.log(k);
+                  if(k=="전체"){
+                	  $("#register_change>tr").show();
+                	  numStd.hide();
+                	  $("#numStd").show();
+                  }
+                  else{
+	                  $("#register_change>tr").hide();
+	                  var temp = $("#register_change>tr>td:contains('"
+	                        + k + "')");
+	                  $(temp).parent().show();
+	                  
+	                  $('#people_check').find('span').each(function(idx, ele){
+	                	 var id = ($(this).attr('id'));
+	                	 console.log(id);
+	                	    if(id=="JAVA"){
+	                	    	numStd.hide();
+	                	    	$(this).show();
+	                	    	return false;
+	                	    }
+	                  });
+                  }
+         });
 	});
+	//var param = "test"
+	var param = $("#lecture_name option:selected").index($("#lecture_name option:selected"));
+	
+
     //테스트 주석
 </script>
 </head>
 <body>
+
 	<div>
 		<div id="header">
 			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
@@ -147,14 +178,44 @@
 				<h2>학생등록</h2>
 			</div>
 			<div id="people_check">
-			<span>num_stu/max_stu</span>
+			<%
+				ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("LectureList");
+				int num = 0,max=0;
+				if(lectureList !=null){
+					for(LectureDto bean : lectureList){
+						if(bean.getLectureID()>0){
+							num += bean.getNumStd();
+							max += bean.getMaxStd();
+						
+			%>
+			<span id="<%=bean.getName()%>"><%=bean.getNumStd()+"/"+bean.getMaxStd() %></span>
+			<!-- 아래 select에서 어떤 값을 선택했는지에 따라 바뀌는 값 -->
+			<!-- option 넘버에 따라 제이쿼리에서 이미 저장되어있는 numStd, maxStd를 해당 넘버의 값으로 변환 -->
+			
+			<%
+						}
+					}
+			%>
+			<span id="numStd"><%=num+"/"+max%></span>
+			<!--  <span>num_stu/max_stu</span>-->
 			</div>
 			<div id="lecture_list">
 				<select name="lecture_name" id="lecture_name">
-					 <option value="ALL"  selected="selected">전체보기</option>
-				    <option value="JAVA">JAVA</option>
-				    <option value="WEB">WEB</option>
-				    <option value="DB">DB</option>
+
+				<option value="" selected="selected">전체</option>
+				<%
+				for(LectureDto bean : lectureList){
+						if(bean.getLectureID()>0){
+				%>
+					<option value="" ><%=bean.getName()%></option>
+				<%
+						}
+					}
+				}
+				%>
+				    <!-- <option value="" >JAVA</option>
+				    <option value="학생" >WEB</option>
+				    <option value="회사원" >DB</option> -->
 				</select>
 			</div>
 			<div id="app_list">
@@ -169,31 +230,29 @@
 						<th>신청일</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="register_change">
+					
+					<%
+								ArrayList<RegisterDto> registerList = (ArrayList<RegisterDto>)request.getAttribute("RegisterList");
+								if(registerList !=null){
+									for(RegisterDto bean : registerList){
+					%>
 					<tr>
-						<td>1</td>
-						<td><a href="manage_lec_detail.adm">김경민님의 수강신청</a></td>
-						<td>rudals108</td>
-						<td>김경민</td>
-						<td id="lec">JAVA</td>
-						<td>2019-07-02</td>
+
+							<td><%=bean.getNum()%></td>
+							<td><a href="register_detail.adm?idx=<%=bean.getNum()%>"><%=bean.getName()%>님의 수강신청</a></td>
+							<td><%=bean.getId()%></td>
+							<td><%=bean.getName()%></td>
+							<td><%=bean.getLecName()%></td>
+							<td><%=bean.getApplyDate()%></td>
+
 					</tr>
-					<tr>
-						<td>2</td>
-						<td><a href="manage_lec_detail.adm">김코난님의 수강신청</a></td>
-						<td>rudals108</td>
-						<td>김코난</td>
-						<td>WEB</td>
-						<td>2019-07-09</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td><a href="manage_lec_detail.adm">남도일님의 수강신청</a></td>
-						<td>namnam123</td>
-						<td>남도일</td>
-						<td>DB</td>
-						<td>2019-07-20</td>
-					</tr>
+
+							<%
+								                        }
+								}
+							%>
+
 				</tbody>
 			</table>
 		</div>

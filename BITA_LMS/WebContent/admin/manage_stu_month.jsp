@@ -19,10 +19,11 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:243px;
+	top:160px;
 	height:700px;
 	width: 200px;
 	text-align:center;
+	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -32,58 +33,60 @@
 	text-decoration: none;
 	color: rgb(0,0,0);
 	}
-	#content #page_name{
-	width: 120px;
-	margin: 0 auto;
-	text-align:center;
-	border: 1px solid gray;
-	}
 	#content #real_content{
 	position:relative;
 	left:300px;
 	width: 600px;
 	height:700px;
 	}
-	#content #real_content #q_detail{
+	#content #page_name{
+	width: 120px;
+	margin: 0 auto;
+	text-align:center;
+	border: 1px solid gray;
+	}
+	#content #upper_content{
 	width: 600px;
 	}
-	#content #real_content #q_detail table{
+	#content #upper_content #month_see{
+	width: 130px;
+	float: left;
+	}
+	#content #upper_content #month_ck{
+	width: 200px;
+	margin: 0 auto;
+	text-align: center;
+	}
+	#content #upper_content #lecture_list{
+	float:right;
+	width: 55px;
+	}
+	#content #att_list{
+	clear:both;
+	width: 600px;
+	height:500px;
+	margin: 0 auto;
+	text-align:center;
+	}
+	#content #att_list table{
 	width: 600px;
 	margin: 0 auto;
 	}
-	#content #real_content #q_detail table,th,td{
+	#content #att_list table,th,td{
 	border: 1px solid gray;
-	}
-	#content #real_content #q_detail #submit{
-	width:145px;
-	float: right;
-	}
-	#content #real_content #q_detail #qna_content {
-	overflow:auto;
-	width:600px;
-	height:200px;
-	}
-	#qna_answer{
-	height:200px;
-	background-color: gray;
 	}
 	#content #under_list{
 	width: 600px;
 	height:95px;
 	margin: 0 auto;
 	}
-	#content #under_list div{
-	width: 80px;
-	}
-	#content #under_list #list_button{
-	float: left;
-	}
-	#content #under_list #ans_button{
-	float: right;
-	}
 	#content #under_list #ok_button{
-	width: 43px;
-	float: right;
+	float:right;
+	width: 45px;
+	}
+	#content #under_list #reject_button{
+	float:right;
+	width: 45px;
 	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -95,24 +98,19 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#del_btn').click(function(){
-			var result = confirm('정말 삭제하시겠습니까?'); 
-			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm'); } 
-			else { 
-				//no-변동사항없음
-				} 
-			});
-		$('#list_btn').click(function(){
-				location.replace('qna.adm'); } 
-			});
+		$('#header>img').click(function() {
+			location.href = 'main.adm'
+		}).mouseenter(function(){
+			$('#header>img').css('cursor', 'pointer')
+		});
 	});
+    //테스트 주석
 </script>
 </head>
 <body>
 	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -129,52 +127,92 @@
 		<div id="content">
 			<div id="sidebar">
 			<br/><br/><br/><br/>
-			<h3>1:1문의</h3>
+			<h3>학생관리</h3>
 			<br/><br/>
+			<ul>
+				<li><a href="register.adm">학생등록</a></li>
+				<br/>
+				<li><a href="manage_stu.adm">수강생관리</a></li>
+			</ul>
 		</div>
 		<div id="real_content">
 			<br/>
 			<div id="page_name">
-				<h2>1:1문의</h2>
+				<h2>학생출석</h2>
 			</div>
-			<br/><br/>
-		<div id="q_detail">
+			<div id=upper_content>
+				<div id="month_see">
+					<button type="button">관리페이지 보기</button>
+				</div>
+				<div id="month_ck">
+					<div><label>month</label></div>
+					<div>
+						<button><</button>
+						<label> 2019-07 </label>
+						<button>></button>
+					</div>
+				</div>
+					<div id="lecture_list">
+						<select name="lecture_name">
+						    <option value="JAVA">JAVA</option>
+						    <option value="WEB">WEB</option>
+						    <option value="DB">DB</option>
+						</select>
+					</div>
+			</div>
+			<div id="att_list">
 			<table>
+				<thead>
 					<tr>
-						<th>제목</th>
-						<td>프린트사용가능한가요?</td>
+						<th>이름</th>
+						<th>1</th>
+						<th>2</th>
+						<th>3</th>
+						<th>4</th>
+						<th>5</th>
+						<th>6</th>
+						<th>7</th>
+						<th>8</th>
+						<th>9</th>
+						<th>10</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>홍길동</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>공결</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
 					</tr>
 					<tr>
-						<th>작성자</th>
-						<td>김코난</td>
+						<td>김영희</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>공결</td>
+						<td>출석</td>
+						<td>출석</td>
+						<td>결석</td>
+						<td>출석</td>
+						<td>출석</td>
 					</tr>
-					<tr>
-						<td colspan="2">
-						<div id="qna_content">
-							<div id="submit">
-								<span >작성일 2019-07-03</span>
-							</div>
-							<div>
-								<p>출력할게 있는데 프린트사용가능한가용?</p>
-							</div>
-						</div>
-						<div id="qna_answer">
-							<span>네 맘껏 사용하세요.</span>
-						</div>
-						</td>
-					</tr>
+				</tbody>
 			</table>
 		</div>
 		<div id="under_list">
-			<div id="list_button">
-				<button type="button" id="list_btn">목록</button>
+			<div id="reject_button">
+				<button type="button">취소</button>
 			</div>
 			<div id="ok_button">
-				<button type="button" id="dok_btn">확인</button>
-			</div>
-			<div id="ans_button">
-				<button type="button">답변등록</button>
-			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
+				<button type="button">확인</button>
 			</div>
 		</div>
 	</div>
