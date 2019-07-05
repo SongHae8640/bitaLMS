@@ -1,7 +1,7 @@
 package com.bit.model;
 
 public class CalendarDto {
-	//½ÃÀÛ³¯Â¥, Á¾·á ³¯Â¥, Á¦¸ñ, ³»¿ë
+	//ì‹œìž‘ë‚ ì§œ, ì¢…ë£Œ ë‚ ì§œ, ì œëª©, ë‚´ìš©
 	int calendarId, lectureId;
 	String title, content, startDate, endDate;
 	

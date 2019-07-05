@@ -29,15 +29,15 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//들어오는 주소 확인하고 뒷주소만 저장하기
+		//����� �ּ� Ȯ���ϰ� ���ּҸ� �����ϱ�
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doGet) :: path = " + path);
 
-		//세션 저장
+		//���� ����
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//중복되는 RequestDispatcher
+		//�ߺ��Ǵ� RequestDispatcher
 		RequestDispatcher rd = null;
 
 		try {
@@ -68,7 +68,7 @@ public class TeacherController extends HttpServlet {
 
 				}else if (path.equals("/attendance.tea")) {
 					 ArrayList<AttendanceDto> todayAttendanceList = dao.getTodayAttendance(userBean.getLecture_id());
-					 //어트리뷰트로 저장하고 jsp페이지에서 get으로 불러오기
+					 //��Ʈ����Ʈ�� �����ϰ� jsp������� get��� �ҷ����
 					 req.setAttribute("todayAttendanceList",todayAttendanceList);
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 
@@ -81,7 +81,7 @@ public class TeacherController extends HttpServlet {
 					ArrayList<AssignmentDto> assignmentList = dao.getAssignmentList(userBean.getLecture_id());
 					req.setAttribute("assignmentList", assignmentList);
 					rd = req.getRequestDispatcher("teacher/assignment_T.jsp");
-					
+	
 				}else if (path.equals("/assignment_detail.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//글 리스트(또는 edit에서)에서 idx로 assignmentId를 받아와서 사용(rownum)아님
 					AssignmentDto AssignmentBean = dao.getAssignmentDetail(assignmentId);
@@ -95,6 +95,7 @@ public class TeacherController extends HttpServlet {
 					req.setAttribute("qnaLList", qnaLList);
 					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
 				
+
 				}else if (path.equals("/qna_detail.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//글 리스트(또는 edit에서)에서 idx로 assignmentId를 받아와서 사용(rownum)아님
 					QnaLDto QnaLBean = dao.QnaLDetail(assignmentId);
@@ -105,7 +106,7 @@ public class TeacherController extends HttpServlet {
 					System.out.println("존재하지 않는 페이지");
 				}
 			}else {
-				//teacher나 student페이지로 접근하려고 하면 걍 보내버림
+				//teacher�� student������� ����Ϸ�� �ϸ� �� ������
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
@@ -120,15 +121,15 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//들어오는 주소 확인하고 뒷주소만 저장하기
+		//����� �ּ� Ȯ���ϰ� ���ּҸ� �����ϱ�
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doPost) :: path = " + path);
 
-		//세션 저장
+		//���� ����
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//중복되는 RequestDispatcher
+		//�ߺ��Ǵ� RequestDispatcher
 		RequestDispatcher rd = null;
 		
 		//insert, edit, delete 의 결과 내용을 저장하는 result
@@ -139,6 +140,7 @@ public class TeacherController extends HttpServlet {
 			if (userBean.getBelong().equals("teacher")) {
 
 				TeacherDao dao = new TeacherDao();
+
 				if(path.equals("")){
 					
 				}else if(path.equals("/attendance_checkin.tea")){
@@ -184,7 +186,7 @@ public class TeacherController extends HttpServlet {
 					System.out.println("존재하지 않는 페이지");
 				}
 			}else {
-				//teacher나 student페이지로 접근하려고 하면 걍 보내버림
+				//teacher�� student������� ����Ϸ�� �ϸ� �� ������
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
