@@ -68,7 +68,7 @@
 					<tr>
 					<tr>
 						<td>1</td>
-						<td><a href="qna_S/qnadetail_S.jsp">sub</a></td>
+						<td><a href="qna_detail_S.jsp">sub</a></td>
 						<td>name</td>
 						<td>day</td>
 						<td>vs</td>
@@ -91,7 +91,7 @@
 				</tfooter>
 			</table>
 			<div>
-				<form action="qna_S/qnaadd_S.jsp">
+				<form action="qna_add_S.stu">
 					<button type="submit">등록</button>
 				</form>
 				<button type="">삭제</button>

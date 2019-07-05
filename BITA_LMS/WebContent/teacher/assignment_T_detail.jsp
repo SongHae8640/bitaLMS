@@ -18,25 +18,28 @@
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
-						$('.topmenu').mouseenter(function() {
+	$(document).ready(function(){
+						$('.topmenu').mouseenter(function(){
 							$('.submenu').css('display', 'block')
 						});
-						$('.topmenu').mouseleave(function() {
+						$('.topmenu').mouseleave(function(){
 							$('.submenu').css('display', 'none')
 						});
-						$('#ch').click(function() {
-							if ($('#ch').prop("checked")) {
+						$('#ch').click(function(){
+							if ($('#ch').prop("checked")){
 								$("input[name=chk]").prop("checked", true);
 							} else {
 								$("input[name=chk]").prop("checked", false);
 							}
 						});
-						$("#serch").keyup(function() {
+						$("#serch").keyup(function(){
 							var k = $(this).val();
 							$("table>tbody>tr").hide();
 							var temp = $("table>tbody>tr>td:nth-child(6n+2):contains('"+ k + "')");
 							$(temp).parent().show();
+						});
+						$('#delete').click(function(){
+							$(location).attr('href','assignment_delete_T.tea');
 						});
 	});
 </script>
@@ -58,7 +61,7 @@
 			</ul>
 		</div>
 		<div id="content">
-			<form action="assignment_T_edit.tea">
+			<form action="assignment_edit_T.tea">
 				<h2>과제 상세</h2>
 
 				<div>
@@ -76,11 +79,11 @@
 				</div>
 
 				<div>
-					<button onclick="location='assignment_S.tea'">과제목록</button>
+					<button onclick="location='assignment_T.tea'">과제목록</button>
 				</div>
 				<div>
 					<button type="submit">수정</button>
-					<button onclick="location='assignment_T_delete.tea'">삭제</button>
+					<input type="button" id="delete" value="삭제">
 				</div>
 				<table border="1">
 					<thead>
