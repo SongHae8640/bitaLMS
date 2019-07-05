@@ -17,12 +17,7 @@ public class AdminDao {
 	PreparedStatement pstmt;
 	ResultSet rs;
 	
-	public static void main(String[] args) {
-		AdminDao dao = new AdminDao();
-		dao.getRegister();
-	}
-	
-	//»ı¼ºÀÚ È£ÃâÇÒ ¶§ Ä¿³Ø¼Ç ¿¬°á
+	//ìƒì„±ì í˜¸ì¶œí•  ë•Œ ì»¤ë„¥ì…˜ ì—°ê²°
 	public AdminDao(){
 		try {
 			Class.forName(driver);
@@ -34,31 +29,105 @@ public class AdminDao {
 		}
 	}
 	
-	//ÇàÁ¤ÆÀ °­ÁÂ¸ñ·Ï ºÒ·¯¿À±â
+	//í–‰ì •íŒ€ ê°•ì¢Œëª©ë¡ ë¶ˆëŸ¬ì˜¤ê¸°
+	//ì‹¸ê·¸ë¦¬ ë‹¤ ë¶ˆëŸ¬ì™€ì„œ í•„ìš”í•œê²ƒë§Œ ë½‘ì•„ì„œ ì“°ê¸°
 	public ArrayList<LectureDto> getLecture() {
 		return null;
 	}
 	
-	//ÇàÁ¤ÆÀ ÇĞ»ı°ü¸® ÇĞ»ıµî·Ï ¸ñ·Ï ÆäÀÌÁö
+	//í–‰ì •íŒ€ í•™ìƒê´€ë¦¬ í•™ìƒë“±ë¡ ëª©ë¡ í˜ì´ì§€
 	public ArrayList<RegisterDto> getRegister() {
 		
-		//¹øÈ£ (Á¦¸ñÁ¦¿Ü) ID ÀÌ¸§ °­ÁÂ ³¯Â¥ °úÁ¤, µî·ÏÀÎ¿ø/ÃÖ´ëÀÎ¿ø, ¼Ò¼ÓÀ» ºÒ·¯¿Í¾ßÇÔ
-		//Á¦¸ñÀº nameÀ» ºÒ·¯¿Í¼­ ÇÁ·ĞÆ®¿£µå¿¡¼­ ***´ÔÀÇ ¼ö°­½ÅÃ»À» ºÙ¿©¾ßÇÔ
-		//Á¶°ÇÀº ÄŞº¸¹Ú½º·Î °­ÁÂ¸í¿¡ µû¶ó È­¸éÇ¥½Ã
-		//±×¸®°í ¾îÇÃ¶óÀÌÇÑ »ç¶÷¸¸ º¸¿©¾ßÇÔ belong=before
-		//¼öÁ¤Áß
-		String sql ="SELECT a.apply_id AS \"num\", u.name AS \"name\" ,u.id AS \"id\", l.name AS \"lecName\""
-				+ ", a.apply_date AS \"applyDate\", l.num_std AS \"numStd\", l.max_std AS \"maxStd\", u.belong AS \"belong\""
-				+ "FROM lecture as l "
-				+ "JOIN user01 as u "
-				+ "on a.user_id=u.user_id "
-				+ "JOIN apply as a "
-				+ "on a.lecture_id=l.lecture_id "
-				+ "WHERE a.lecture_id = ? AND "
-				+ "u.belong=\"before\""
-				+ "ORDER BY a.apply_date";
+		ArrayList<RegisterDto> list = new ArrayList<RegisterDto>();
+		
+		//ë²ˆí˜¸ (ì œëª©ì œì™¸) ID ì´ë¦„ ê°•ì¢Œ ë‚ ì§œ ì†Œì†ì„ ë¶ˆëŸ¬ì™€ì•¼í•¨
+		//ì œëª©ì€ nameì„ ë¶ˆëŸ¬ì™€ì„œ í”„ë¡ íŠ¸ì—”ë“œì—ì„œ ***ë‹˜ì˜ ìˆ˜ê°•ì‹ ì²­ì„ ë¶™ì—¬ì•¼í•¨
+		//ì¡°ê±´ì€ ì½¤ë³´ë°•ìŠ¤ë¡œ ê°•ì¢Œëª…ì— ë”°ë¼ í™”ë©´í‘œì‹œ
+		//ê·¸ë¦¬ê³  ì–´í”Œë¼ì´í•œ ì‚¬ëŒë§Œ ë³´ì—¬ì•¼í•¨ belong=before
+
+		//SELECT apply_id as "num", u.name AS "name" ,u.user_id AS "id", l.name AS "lecName", TO_CHAR(a.apply_date,'yyyymmdd') AS "applyDate", u.belong AS "belong" FROM apply a INNER JOIN user01 u on a.user_id=u.user_id INNER JOIN lecture l on l.lecture_id = a.lecture_id
+		//WHERE a.lecture_id = 1 ORDER BY a.apply_date;
+		String sql = "SELECT apply_id as \"num\", u.name as \"name\", u.user_id AS \"id\", l.name AS \"lecName\", "
+		+"TO_CHAR(a.apply_date,'yyyymmdd') AS \"applyDate\", u.belong AS \"belong\" "
+		+"FROM apply a INNER JOIN user01 u on a.user_id=u.user_id "
+		+"INNER JOIN lecture l on l.lecture_id = a.lecture_id "
+		+"ORDER BY apply_id desc";
+		//WHERE a.lecture_id = ? 
+		System.out.println(sql);
+		try {
+			pstmt = conn.prepareStatement(sql);
+//			pstmt.setInt(1, lectureId);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()){
+				RegisterDto bean = new RegisterDto();
+				bean.setApplyDate(rs.getString("applyDate"));
+				bean.setId(rs.getString("id"));
+				bean.setLecName(rs.getString("lecName"));
+				bean.setName(rs.getString("name"));
+				bean.setNum(rs.getInt("num"));
+				list.add(bean);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				if(rs!=null)rs.close();
+				if(pstmt!=null)pstmt.close();
+				if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	//í–‰ì •íŒ€ í•™ìƒê´€ë¦¬ ìˆ˜ê°•ìƒìœ¼ë¡œ ë“±ë¡
+	public int CheckRegister() {
+		//í•´ë‹¹ ê°’ë“¤ ì¸ìë¡œ ë°›ì•„ì™€ì„œ insert
+		
+		//ì œëŒ€ë¡œ ì „ì†¡ëëŠ”ì§€ ì•ˆëëŠ”ì§€ë§Œ intê°’ìœ¼ë¡œ ë¦¬í„´
+		return 0;
+	}
+	
+	//í–‰ì •íŒ€ í•™ìƒê´€ë¦¬ ìƒì„¸í˜ì´ì§€
+	public ArrayList<RegisterDto> DetailRegister(int idx) {
+		//ì„ íƒëœ í•™ìƒ ì¸ìê°’ìœ¼ë¡œ ë°›ì•„ì˜¤ê¸°
+		
+		String sql = "SELECT";
+
 		
 		System.out.println(sql);
 		return null;
 	}
+
+	
+	//í–‰ì •íŒ€ í•™ìƒê´€ë¦¬ ìƒì„¸í˜ì´ì§€ ìˆ˜ì •
+	public int UpdateRegister() {
+		//ì œëŒ€ë¡œ ì „ì†¡ëëŠ”ì§€ ì•ˆëëŠ”ì§€ë§Œ intê°’ìœ¼ë¡œ ë¦¬í„´
+		return 0;
+	}
+	
+	//í–‰ì •íŒ€ í•™ìƒê´€ë¦¬ ìƒì„¸í˜ì´ì§€ ì‚­ì œ
+	public int DeleteRegister() {
+		//ì œëŒ€ë¡œ ì „ì†¡ëëŠ”ì§€ ì•ˆëëŠ”ì§€ë§Œ intê°’ìœ¼ë¡œ ë¦¬í„´
+		return 0;
+	}
+	
+	//í–‰ì •íŒ€ ìˆ˜ê°•ìƒê´€ë¦¬ ëª©ë¡í˜•
+	
+	
+	//í–‰ì •íŒ€ ìˆ˜ê°•ìƒê´€ë¦¬ ì›”ë³„
+	
+	
+	//í–‰ì •íŒ€ ê°•ì¢Œê´€ë¦¬ ëª©ë¡í˜ì´ì§€
+	
+	//í–‰ì •íŒ€ ê°•ì¢Œê´€ë¦¬ ìƒì„¸í˜ì´ì§€
+	
+	//í–‰ì •íŒ€ ê°•ì‚¬ê´€ë¦¬ ëª©ë¡í˜ì´ì§€
+	
+	//í–‰ì •íŒ€ ê°•ì‚¬ê´€ë¦¬ ìƒì„¸í˜ì´ì§€
+	
+
 }
