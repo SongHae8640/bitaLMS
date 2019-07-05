@@ -29,8 +29,12 @@ public class UserDao {
 	}
 	
 	public UserDto login(String id, String pw){
-		String sql = "SELECT * FROM user01 u JOIN lectureUser l "
-				+ "ON u.user_id=l.user_id "
+		String sql = "SELECT u.user_Id AS user_id, password, u.name AS name, "
+				+ "email, phone_number, belong, l.name AS lectureName, "
+				+ "start_date,end_date,l.lecture_id AS lecture_id "
+				+ "FROM user01 u "
+				+ "JOIN lectureuser lu ON u.user_id = lu.user_id "
+				+ "JOIN lecture l ON lu.lecture_id = l.lecture_id "
 				+ "WHERE u.user_id=? AND u.password=?";
 		UserDto bean = new UserDto();
 		
@@ -42,11 +46,14 @@ public class UserDao {
 			
 			if(rs.next()){
 				bean.setUserId(rs.getString("user_id"));
-				bean.setPassword(rs.getString("password")); 
+				bean.setPassword(rs.getString("password")); ///지우는게 나을까? 보안상 좋진 않은듯. 나중에 필요하지 않으면 지울것
 				bean.setName(rs.getString("name"));
 				bean.setEmail(rs.getString("email"));
 				bean.setPhoneNumber(rs.getString("phone_number"));
 				bean.setBelong(rs.getString("belong"));
+				bean.setLectureName(rs.getString("lecture_name"));
+				bean.setStartDate(rs.getString("start_date"));
+				bean.setEndDate(rs.getString("end_date"));
 				bean.setLecture_id(rs.getInt("lecture_id"));
 			}
 		} catch (SQLException e) {

@@ -18,11 +18,11 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#insert').click(function(){
-			$(location).attr('href', 'insert_score_T.jsp')
+		$('#edit').click(function(){
+			$(location).attr('href', 'score_T.tea')
 		});
 		$('#cancle').click(function(){
-			$(location).attr('href', 'score_T.jsp')
+			$(location).attr('href', 'score_T.tea')
 		});
 		
 	});
@@ -68,7 +68,7 @@
 				</thead>
 			</table>
 			<div>
-				<button type="submit">수정</button>
+				<button type="submit" id="edit">수정</button>
 				<input type="button" value="취소" id="cancle"/>
 			</div>
 			</form>

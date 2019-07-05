@@ -18,25 +18,28 @@
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
-						$('.topmenu').mouseenter(function() {
+	$(document).ready(function(){
+						$('.topmenu').mouseenter(function(){
 							$('.submenu').css('display', 'block')
 						});
-						$('.topmenu').mouseleave(function() {
+						$('.topmenu').mouseleave(function(){
 							$('.submenu').css('display', 'none')
 						});
-						$('#ch').click(function() {
-							if ($('#ch').prop("checked")) {
+						$('#ch').click(function(){
+							if ($('#ch').prop("checked")){
 								$("input[name=chk]").prop("checked", true);
 							} else {
 								$("input[name=chk]").prop("checked", false);
 							}
 						});
-						$("#serch").keyup(function() {
+						$("#serch").keyup(function(){
 							var k = $(this).val();
 							$("table>tbody>tr").hide();
 							var temp = $("table>tbody>tr>td:nth-child(6n+2):contains('"+ k + "')");
 							$(temp).parent().show();
+						});
+						$('#delete').click(function(){
+							$(location).attr('href','assignment_delete_T.tea');
 						});
 	});
 </script>
@@ -48,14 +51,17 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance.stu">출결관리</a>
-				<li><a href="score.stu">성적관리</a></li>
-				<li><a href="assignment.stu">과제관리</a></li>
-				<li><a href="qna.stu">1:1문의</a></li>
+				<li class="topmenu"><a href="#">학생관리</a>
+					<ul class="submenu">
+						<li><a href="attendance.tea">출결관리</a></li>
+						<li><a href="score.tea">성적관리</a></li>
+						<li><a href="assignment.tea">과제관리</a></li>
+					</ul></li>
+				<li><a href="qna.tea">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
-			<form action="edit_assignment_T.jsp">
+			<form action="assignment_edit_T.tea">
 				<h2>과제 상세</h2>
 
 				<div>
@@ -73,11 +79,11 @@
 				</div>
 
 				<div>
-					<button onclick="location='../assignment_S.jsp'">과제목록</button>
+					<button onclick="location='assignment_T.tea'">과제목록</button>
 				</div>
 				<div>
 					<button type="submit">수정</button>
-					<button onclick="location='assignment_T.jsp'">삭제</button>
+					<input type="button" id="delete" value="삭제">
 				</div>
 				<table border="1">
 					<thead>

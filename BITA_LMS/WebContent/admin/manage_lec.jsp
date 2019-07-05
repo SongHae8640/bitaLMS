@@ -1,5 +1,5 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="java.util.ArrayList,com.bit.model.LectureDto"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -158,18 +158,22 @@
 					</tr>
 				</thead>
 				<tbody>
+				<%
+								ArrayList<LectureDto> LectureList = (ArrayList<LectureDto>)request.getAttribute("LectureList");
+								if(LectureList !=null){
+									for(LectureDto bean : LectureList){
+					%>
 					<tr>
-						<td>1</td>
-						<td><a href="manage_lec_detail.adm">JAVA</a></td>
-						<td>김코난</td>
-						<td>2019-07-01</td>
+							<td><%=bean.getLectureID()%></td>
+							<td><a href="manage_lec_detail.adm?idx=<%=bean.getLectureID()%>"><%=bean.getName()%></a></td>
+							<td><%=bean.getTeaName()%></td>
+							<td><%=bean.getStartDate()%></td>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td><a href="manage_lec_detail.adm">WEB</a></td>
-						<td>남도일</td>
-						<td>2019-08-01</td>
-					</tr>
+
+							<%
+								                        }
+								}
+							%>
 				</tbody>
 			</table>
 		</div>

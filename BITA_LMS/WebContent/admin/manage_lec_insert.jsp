@@ -31,7 +31,7 @@
 	#content #sidebar ul li a{
 	text-decoration: none;
 	color: rgb(0,0,0);
-	}
+  }
 	#content #page_name{
 	width: 120px;
 	margin: 0 auto;
@@ -68,6 +68,26 @@
 	height:320px;
 	margin: 0 auto;
 	}
+
+	#content #real_content #lec_detail #qna_content {
+	width:600px;
+	}
+	#content #real_content #lec_detail #qna_content div{
+	clear:both;
+	width:300px;
+	}
+	#content #real_content #lec_detail #curri_thumb{
+	float: left;
+	width:100px;
+	height:140px;
+	border: 1px solid gray;
+	}
+	#content #page_name{
+	width: 120px;
+	margin: 0 auto;
+	text-align:center;
+	border: 1px solid gray;
+	}
 	#content #lec_detail{
 	clear:both;
 	width: 500px;
@@ -95,7 +115,7 @@
 	}
 	
 </style>
-<script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -145,6 +165,7 @@
 			</div>
 			<br/><br/>
 		<div id="lec_detail">
+
 			<div id="curri_thumb">
 				<h3>커리큘럼이미지</h3>
 			</div>
@@ -176,6 +197,7 @@
 					<tr>
 						<td>최대인원</td>
 						<td><input type="text" name="max_stu"></td>
+
 					</tr>
 			</table>
 			<table id="lec_table2">

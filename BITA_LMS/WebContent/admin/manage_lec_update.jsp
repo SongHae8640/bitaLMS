@@ -68,6 +68,26 @@
 	height:320px;
 	margin: 0 auto;
 	}
+
+	#content #real_content #lec_detail #qna_content {
+	width:600px;
+	}
+	#content #real_content #lec_detail #qna_content div{
+	clear:both;
+	width:300px;
+	}
+	#content #real_content #lec_detail #curri_thumb{
+	float: left;
+	width:150px;
+	height:140px;
+	border: 1px solid gray;
+	}
+	#content #page_name{
+	width: 120px;
+	margin: 0 auto;
+	text-align:center;
+	border: 1px solid gray;
+	}
 	#content #lec_detail{
 	clear:both;
 	width: 500px;
@@ -95,7 +115,7 @@
 	}
 	
 </style>
-<script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -139,6 +159,7 @@
 		<form name="send_lec" method="post" action="manage_lec_edit.adm">
 		<div id="real_content">
 		<br />
+
 			<div id="page_name">
 				<h2>강좌수정</h2>
 			</div>
