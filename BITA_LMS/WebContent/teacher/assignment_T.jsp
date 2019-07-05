@@ -26,10 +26,10 @@
 			}
 		});
 		$('#insert').click(function(){
-			$(location).attr('href','insert_assignment_T.jsp');
+			$(location).attr('href','assignment_insert_T.tea');
 		});
 		$('#delete').click(function(){
-			$(location).attr('href','assignment_T.jsp');
+			$(location).attr('href','assignment_delete_T.tea');
 		});
 	});
 </script>

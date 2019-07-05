@@ -5,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -22,6 +24,13 @@
 		});
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
+		});
+		$('#ch').click(function() {
+			if ($('#ch').prop("checked")) {
+				$("input[name=chk]").prop("checked", true);
+			} else {
+				$("input[name=chk]").prop("checked", false);
+			}
 		});
 	});
 </script>
@@ -40,28 +49,57 @@
 			</ul>
 		</div>
 		<div id="content">
-			<h2>성적관리</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>이름</th>
-						<th>1차</th>
-						<th>2차</th>
-						<th>3차</th>
-					</tr>
-				</thead>
-				<thead>
-					<tr>
-						<th>홍길동</th>
-						<th>80</th>
-						<th>70</th>
-						<th>60</th>
-					</tr>
-				</thead>
-			</table>
+			<h2>과제 상세</h2>
+
 			<div>
-				<button onclick="location='qna_add_S.stu'">이의신청</button>
+				<label>제목</label> <span>8/2</span>
 			</div>
+			<div>
+				<label>작성자</label> <span>김강사</span>
+			</div>
+			<div>
+				<label>날짜</label> <span>date</span>
+			</div>
+			<div>
+				<label>내용</label>
+				<textarea name="" id="" cols="30" rows="10">hello</textarea>
+			</div>
+
+			<div>
+				<button onclick="assignment_S.stu">과제목록</button>
+			</div>
+
+			<form action="assignment_add_S.stu" method="post"
+				enctype="multipart/form-data" id="upload_form">
+				<table border="1">
+					<thead>
+						<tr>
+							<th>번호</th>
+							<th>제목</th>
+							<th>작성자</th>
+							<th>작성일</th>
+							<th>확인여부</th>
+							<th><input type="checkbox" name="" id="ch" /></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>2</td>
+							<td><a href="#">8/2 김코난 과제</a></td>
+							<td>김코난</td>
+							<td>2019-08-02</td>
+							<td>확인대기</td>
+							<td><input type="checkbox" name="chk" /></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="form-wrap">
+					<input name="__files[]" type="file" name="myfile" enctype="multipart/form-data">
+					<button type="submit">등록</button>
+					<button onclick="location='assignment_delete_S.stu'">삭제</button>
+				</div>
+
+			</form>
 		</div>
 		<div id="footer">
 			<div>

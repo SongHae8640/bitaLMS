@@ -28,6 +28,9 @@
 		$('#content>button').hide().eq(0).show().click(function() {
 			$('#content>button').show().eq(0).hide();
 		});
+		$('#delete').click(function(){
+			$(location).attr('href','assignment_delete_T.tea');
+		});
 	});
 </script>
 </head>
@@ -49,7 +52,7 @@
 		</div>
 		<div id="content">
 			<h2>과제 등록</h2>
-			<form action="assignment_T_insert.tea">
+			<form action="assignment_insert_T.tea">
 				<div>
 					<label>제목</label> <input type="text" name="title" id="title">
 				</div>
@@ -57,7 +60,7 @@
 					<label>작성자</label> <input type="text">
 				</div>
 				<div>
-					<label>날짜</label> <input type="date">
+					<label>날짜</label> 
 				</div>
 				<div>
 					<label>내용</label>
@@ -66,7 +69,7 @@
 
 				<div>
 					<button type="submit">등록</button>
-					<button onclick="location=''">삭제</button>
+					<input type="button" id="delete" value="삭제">
 				</div>
 			</form>
 		</div>
