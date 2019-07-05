@@ -36,11 +36,7 @@ public class StudentController extends HttpServlet {
 					req.setAttribute("calendarList",dao.getCalendarList(userBean.getLecture_id(), yearMonth));
 					
 					//main 좌측하단 정보 전달
-					req.setAttribute("attendanceBean", dao.getAttendance(userBean.getUserId())); 	//bean안에 상태, 입실 퇴실 정보, 시간이 있다
-					req.setAttribute("name", userBean.getName());
-					req.setAttribute("lectureName", userBean.getLectureName());
-					req.setAttribute("startDate", userBean.getStartDate());
-					req.setAttribute("endDate", userBean.getEndDate());
+					req.setAttribute("userBean", userBean);
 					
 					//main 우측 하단 정보 전달
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
@@ -53,10 +49,7 @@ public class StudentController extends HttpServlet {
 				} else if (path.equals("/attendance.stu")) {
 					//좌측 정보 전달
 					req.setAttribute("attendanceBean", dao.getAttendance(userBean.getUserId())); 	//bean안에 상태, 입실 퇴실 정보, 시간이 있다
-					req.setAttribute("name", userBean.getName());
-					req.setAttribute("lectureName", userBean.getLectureName());
-					req.setAttribute("startDate", userBean.getStartDate());
-					req.setAttribute("endDate", userBean.getEndDate());
+					req.setAttribute("userBean", userBean);
 					
 					//main 우측 하단 정보 전달
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
@@ -64,6 +57,7 @@ public class StudentController extends HttpServlet {
 					req.setAttribute("attendanceStatusList", dao.getAttendanceStatusList(userBean.getUserId()));
 					
 					rd = req.getRequestDispatcher("student/attendance_S.jsp");
+					
 				} else if (path.equals("/attendanceMonth.stu")) {
 					String yearMonth = req.getParameter("idx");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
 					req.setAttribute("attendanceMonthList", dao.getAttendanceMonthList(userBean.getUserId(), yearMonth));
@@ -79,8 +73,8 @@ public class StudentController extends HttpServlet {
 					
 				} else if (path.equals("/assignmentdetail.stu")) {
 					String assignmentId = req.getParameter("idx");	//목록화면에서 과제 번호를 가져올 것
-					req.setAttribute("assignmentDetail", dao.getAssignmentDetail(assignmentId));
-					req.setAttribute("submission", dao.getSubmission(assignmentId, userBean.getUserId()));
+					req.setAttribute("assignmentBean", dao.getAssignmentBean(assignmentId));
+					req.setAttribute("submissionBean", dao.getSubmissionBean(assignmentId, userBean.getUserId()));
 					
 					rd = req.getRequestDispatcher("student/assignment_S/assignmentdetail_S.jsp");
 					
@@ -145,7 +139,7 @@ public class StudentController extends HttpServlet {
 					String questionContent = req.getParameter("questionContent");
 					result = dao.insertQnaL(userBean.getUserId(),title,type, questionContent);		
 					rd = req.getRequestDispatcher("assignmentdetail.stu");	//과제 디테일 화면으로 이동, //굳이 rd로 이동해야하나?
-				}else if(path.equals("/qan_insert.stu")){
+				}else if(path.equals("/qan_update.stu")){
 					int qnaId = Integer.parseInt(req.getParameter("qnaId"));
 					String title = req.getParameter("title");
 					String type = req.getParameter("type");	///이것도 수정항수 있나??

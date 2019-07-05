@@ -33,105 +33,92 @@ public class AdminController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("AdminController :: path = " + path);
 
-		// ì„¸ì…˜ ì €ì¥
+		// ¼¼¼Ç ÀúÀå
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 
 		try {
-			// adminë§Œ ì ‘ê·¼ê°€ëŠ¥
+			// admin¸¸ Á¢±Ù°¡´É
 			if (userBean.getBelong().equals("admin")) {
 				AdminDao dao = new AdminDao();
 
 				if (path.equals("/main.adm")) {
-					// ë©”ì¸í˜ì´ì§€
-					UserDto bean = (UserDto) session.getAttribute("userBean");
-					ArrayList<CalendarDto> calendarList = dao.getMainCalendar();
-					req.setAttribute("calendarList", calendarList);
+					// ¸ŞÀÎÆäÀÌÁö
+					String month = req.getParameter("month");
+					req.setAttribute("calendarList", dao.getMainCalendar(month));
 					
 					dao = new AdminDao();
-					MainUserDto beanMain = dao.getMainUser(bean.getUserId());
-					req.setAttribute("beanMain", beanMain);
+					req.setAttribute("beanMain", dao.getMainUser(userBean.getUserId()));
 					rd = req.getRequestDispatcher("admin/main_A.jsp");
 
 				} else if (path.equals("/manage_lec.adm")) {
-					// ê°•ì¢Œê´€ë¦¬ ëª©ë¡ í˜ì´ì§€
-					ArrayList<LectureDto> LectureList = dao.getLecture();
-					req.setAttribute("LectureList", LectureList);
+					// °­ÁÂ°ü¸® ¸ñ·Ï ÆäÀÌÁö
+					req.setAttribute("LectureList", dao.getLecture());
 
 					rd = req.getRequestDispatcher("admin/manage_lec.jsp");
 				} else if (path.equals("/manage_lec_detail.adm")) {
-					// ê°•ì¢Œê´€ë¦¬ ìƒì„¸ í˜ì´ì§€
+					// °­ÁÂ°ü¸® »ó¼¼ ÆäÀÌÁö
 					int idx = Integer.parseInt(req.getParameter("idx"));
-					LectureDto LectureDetail = dao.detailLecture(idx);
-					req.setAttribute("LectureDetail", LectureDetail);
+					req.setAttribute("LectureDetail", dao.detailLecture(idx));
 
 					rd = req.getRequestDispatcher("admin/manage_lec_detail.jsp");
 				} else if (path.equals("/manage_stu.adm")) {
-					// ìˆ˜ê°•ìƒê´€ë¦¬ ëª©ë¡ í˜ì´ì§€(ëª©ë¡ë³„)
-					ArrayList<AttendanceDto> ManageStuList = dao.getManageStu();
-					req.setAttribute("ManageStuList", ManageStuList);
+					// ¼ö°­»ı°ü¸® ¸ñ·Ï ÆäÀÌÁö(¸ñ·Ïº°)
+					req.setAttribute("ManageStuList", dao.getManageStu());
 					
 					rd = req.getRequestDispatcher("admin/manage_stu.jsp");
 
 				} else if (path.equals("/manage_stu_month.adm")) {
-					// ìˆ˜ê°•ìƒê´€ë¦¬ ëª©ë¡ í˜ì´ì§€(ì›”ë³„)
-					ArrayList<AttendanceDto> ManageStuMonth = dao.getManageStuMonth();
-					req.setAttribute("ManageStuMonth", ManageStuMonth);
+					// ¼ö°­»ı°ü¸® ¸ñ·Ï ÆäÀÌÁö(¿ùº°)
+					req.setAttribute("ManageStuMonth", dao.getManageStuMonth());
 					
 					rd = req.getRequestDispatcher("admin/manage_stu_month.jsp");
 
 				} else if (path.equals("/manage_tea.adm")) {
-					// ê°•ì‚¬ê´€ë¦¬ ëª©ë¡ í˜ì´ì§€
-					ArrayList<TeacherDto> ManageTeaList = dao.getManageTea();
-					req.setAttribute("ManageTeaList", ManageTeaList);
+					// °­»ç°ü¸® ¸ñ·Ï ÆäÀÌÁö
+					req.setAttribute("ManageTeaList", dao.getManageTea());
 					
 					rd = req.getRequestDispatcher("admin/manage_tea.jsp");
 
 				} else if (path.equals("/manage_tea_detail.adm")) {
-					// ê°•ì‚¬ê´€ë¦¬ ìƒì„¸ í˜ì´ì§€
-					int idx = Integer.parseInt(req.getParameter("idx"));
-					TeacherDto bean = dao.detailManageTea(idx);
-					req.setAttribute("beanTea", bean);
+					// °­»ç°ü¸® »ó¼¼ ÆäÀÌÁö
+					//°­»ç ¸íÀ¸·Î Á¢±ÙÇØ¾ß ÇÏ±â ¶§¹®¿¡ user_idÀÇ ÀÚ·áÇüÀÎ StringÇüÀ¸·Î ¼öÁ¤
+					String userId = req.getParameter("idx");
+					req.setAttribute("beanTea", dao.detailManageTea(userId));
 					
 					rd = req.getRequestDispatcher("admin/manage_tea_detail.jsp");
 				} else if (path.equals("/qna.adm")) {
-					// íì—”ì—ì´ ëª©ë¡ í˜ì´ì§€
-					ArrayList<QnaLDto> QnaList = dao.getQnaList();
-					req.setAttribute("QnaList", QnaList);
+					// Å¥¿£¿¡ÀÌ ¸ñ·Ï ÆäÀÌÁö
+					req.setAttribute("QnaList", dao.getQnaList());
 					
 					rd = req.getRequestDispatcher("admin/qna_A.jsp");
 				} else if (path.equals("/qna_detail.adm")) {
-					// íì—”ì—ì´ ìƒì„¸ í˜ì´ì§€
+					// Å¥¿£¿¡ÀÌ »ó¼¼ ÆäÀÌÁö
 					int idx = Integer.parseInt(req.getParameter("idx"));
-					QnaLDto bean = dao.detailQnaList(idx);
-					req.setAttribute("beanQna", bean);
+					req.setAttribute("beanQna", dao.detailQnaList(idx));
 					
 					rd = req.getRequestDispatcher("admin/qna_A_detail.jsp");
 				} else if (path.equals("/register.adm")) {
-					// í•™ìƒë“±ë¡ ëª©ë¡í˜ì´ì§€
-					ArrayList<LectureDto> arrangeLecture = dao.arrangeLecture();
-					// ì»¤ë„¥ì…˜ ìƒˆë¡œ í• ë‹¹ (ëŠê²¼ìœ¼ë‹ˆê¹Œ)
-
+					// ÇĞ»ıµî·Ï ¸ñ·ÏÆäÀÌÁö
+					
+					// ¾îÆ®¸®ºäÆ®·Î ÀúÀåÇÏ°í jspÆäÀÌÁö¿¡¼­ getÀ¸·Î ºÒ·¯¿À±â
+					
+					req.setAttribute("RegisterList", dao.getRegister());
 					dao = new AdminDao();
-
-					ArrayList<RegisterDto> RegisterList = dao.getRegister();
-					// ì–´íŠ¸ë¦¬ë·°íŠ¸ë¡œ ì €ì¥í•˜ê³  jspí˜ì´ì§€ì—ì„œ getìœ¼ë¡œ ë¶ˆëŸ¬ì˜¤ê¸°
-					req.setAttribute("RegisterList", RegisterList);
-					req.setAttribute("arrangeLecture", arrangeLecture);
+					req.setAttribute("arrangeLecture", dao.arrangeLecture());
 					rd = req.getRequestDispatcher("admin/register.jsp");
 
 				} else if (path.equals("/register_detail.adm")) {
-					// í•™ìƒë“±ë¡ ìƒì„¸í˜ì´ì§€
+					// ÇĞ»ıµî·Ï »ó¼¼ÆäÀÌÁö
 					int idx = Integer.parseInt(req.getParameter("idx"));
-					RegisterDto RegisterDetail = dao.detailRegister(idx);
 
-					req.setAttribute("DetailRegister", RegisterDetail);
+					req.setAttribute("DetailRegister", dao.detailRegister(idx));
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
 				} else {
-					System.out.println("ì¡´ì¬í•˜ì§€ì•ŠëŠ”í˜ì´ì§€");
+					System.out.println("Á¸ÀçÇÏÁö¾Ê´ÂÆäÀÌÁö");
 				}
 			} else {
-				// teacherë‚˜ studentí˜ì´ì§€ë¡œ ì ‘ê·¼í•˜ë ¤ê³  í•˜ë©´ ê± ë³´ë‚´ë²„ë¦¼
+				// teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
@@ -148,55 +135,55 @@ public class AdminController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("AdminController :: path = " + path);
 		
-		//ì„¸ì…˜ ì €ì¥
+		//¼¼¼Ç ÀúÀå
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 				
 		
 		try {
-			//adminë§Œ ì ‘ê·¼ê°€ëŠ¥
+			//admin¸¸ Á¢±Ù°¡´É
 			if (userBean.getBelong().equals("admin")) {
 				AdminDao dao = new AdminDao();
 				if (path.equals("/manage_lec_update.adm")) {
-					//ê°•ì¢Œê´€ë¦¬ ìˆ˜ì • í˜ì´ì§€
+					//°­ÁÂ°ü¸® ¼öÁ¤ ÆäÀÌÁö
 //					LectureDto bean = (LectureDto) req.getParameterMap();
 //					dao.updateLecture(bean);
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_update.jsp");
 				}else if (path.equals("/manage_lec_insert.adm")) {
-					//ê°•ì¢Œê´€ë¦¬ ê°•ì¢Œ ì¶”ê°€ í˜ì´ì§€
+					//°­ÁÂ°ü¸® °­ÁÂ Ãß°¡ ÆäÀÌÁö
 					
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_insert.jsp");
 				} else if (path.equals("/manage_lec_delete.adm")) {
-					//ê°•ì¢Œê´€ë¦¬ ê°•ì¢Œ ì‚­ì œ (ê°€ìƒì˜ í˜ì´ì§€ ë°”ë¡œ ëŒë¦´ê±° ë”´ê³³ìœ¼ë¡œ)
+					//°­ÁÂ°ü¸® °­ÁÂ »èÁ¦ (°¡»óÀÇ ÆäÀÌÁö ¹Ù·Î µ¹¸±°Å µı°÷À¸·Î)
 					int idx = Integer.parseInt(req.getParameter("idx"));
 					int result = dao.deleteLecture(idx);
 					
 					rd = req.getRequestDispatcher("manage_lec_detail.adm");
 				} else if (path.equals("/manage_stu_month_update.adm")) {
-					// í•™ìƒê´€ë¦¬ ëª©ë¡ í˜ì´ì§€(ì›”ë³„) ìˆ˜ì •
+					// ÇĞ»ı°ü¸® ¸ñ·Ï ÆäÀÌÁö(¿ùº°) ¼öÁ¤
 					dao.getManageStuMonth();
 					
 					rd = req.getRequestDispatcher("manage_stu_month.adm");
 				} else if (path.equals("/manage_tea_insert.adm")) {
-					// ê°•ì‚¬ê´€ë¦¬ ê°•ì‚¬ ì¶”ê°€ í˜ì´ì§€
+					// °­»ç°ü¸® °­»ç Ãß°¡ ÆäÀÌÁö
 					rd = req.getRequestDispatcher("admin/manage_tea_insert.jsp");
 
 				} else if (path.equals("/manage_tea_update.adm")) {
-					// ê°•ì‚¬ê´€ë¦¬ ê°•ì‚¬ ìˆ˜ì • í˜ì´ì§€
+					// °­»ç°ü¸® °­»ç ¼öÁ¤ ÆäÀÌÁö
 					rd = req.getRequestDispatcher("admin/manage_tea_update.jsp");
 
 				} else if (path.equals("/manage_tea_insert.adm")) {
-					// ê°•ì‚¬ê´€ë¦¬ ê°•ì‚¬ ì¶”ê°€ í˜ì´ì§€
+					// °­»ç°ü¸® °­»ç Ãß°¡ ÆäÀÌÁö
 					rd = req.getRequestDispatcher("admin/manage_tea_insert.jsp");
 
 				} else if (path.equals("/qna_update.adm")) {
-					// íì—”ì—ì´ ë‹µë³€ë“±ë¡ í˜ì´ì§€
+					// Å¥¿£¿¡ÀÌ ´äº¯µî·Ï ÆäÀÌÁö
 					rd = req.getRequestDispatcher("admin/qna_A_update.jsp");
 
 				} else if (path.equals("/qna_delete.adm")) {
-					// íì—”ì—ì´ ì‚­ì œ í˜ì´ì§€
+					// Å¥¿£¿¡ÀÌ »èÁ¦ ÆäÀÌÁö
 					
 					rd = req.getRequestDispatcher("qna_detail.adm");
 				} 

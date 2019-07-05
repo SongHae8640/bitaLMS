@@ -68,7 +68,7 @@ public class StudentDao {
 		return null;
 	}
 
-	public SubmsissionDto getSubmission(String assignmentId, String userId) {
+	public SubmsissionDto getSubmissionBean(String assignmentId, String userId) {
 		// (과제) 제출 세부 내용을 리턴하는 메서드
 		
 		return null;
@@ -116,9 +116,10 @@ public class StudentDao {
 		return 0;
 	}
 
+	public AssignmentDto getAssignmentBean(String assignmentId) {
+		// 과제 객체를 리턴하는 메서드
+		return null;
+	}
 
-
-
-	
 
 }

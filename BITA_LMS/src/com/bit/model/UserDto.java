@@ -1,8 +1,9 @@
 package com.bit.model;
 
 public class UserDto {
-	String userId, password, name, email,phoneNumber,belong, lectureName,startDate,endDate;
-	int lecture_id;
+	private String userId, password, name, email,phoneNumber,belong, lectureName,startDate,endDate;
+	private int lecture_id;
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -62,13 +63,5 @@ public class UserDto {
 	}
 	public void setLecture_id(int lecture_id) {
 		this.lecture_id = lecture_id;
-	}
-	@Override
-	public String toString() {
-		return "UserDto [userId=" + userId + ", password=" + password
-				+ ", name=" + name + ", email=" + email + ", phoneNumber="
-				+ phoneNumber + ", belong=" + belong + ", lectureName="
-				+ lectureName + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", lecture_id=" + lecture_id + "]";
 	}
 }
