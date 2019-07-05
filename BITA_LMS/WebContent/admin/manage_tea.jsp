@@ -100,7 +100,7 @@
 <script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('.topmenu').mouseenter(function() {
+		$('.topmenu').mouseenter(function() {  
 			$('.submenu').css('display', 'block')
 		});
 		$('.topmenu').mouseleave(function() {
