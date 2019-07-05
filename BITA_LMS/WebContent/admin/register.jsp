@@ -180,7 +180,7 @@
 			</div>
 			<div id="people_check">
 			<%
-				ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("LectureList");
+				ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("arrangeLecture");
 				int num = 0,max=0;
 				if(lectureList !=null){
 					for(LectureDto bean : lectureList){

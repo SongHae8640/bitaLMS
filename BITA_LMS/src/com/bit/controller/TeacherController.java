@@ -29,15 +29,15 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//ë“¤ì–´ì˜¤ëŠ” ì£¼ì†Œ í™•ì¸í•˜ê³  ë’·ì£¼ì†Œë§Œ ì €ì¥í•˜ê¸°
+		//µé¾î¿À´Â ÁÖ¼Ò È®ÀÎÇÏ°í µŞÁÖ¼Ò¸¸ ÀúÀåÇÏ±â
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doGet) :: path = " + path);
 
-		//ì„¸ì…˜ ì €ì¥
+		//¼¼¼Ç ÀúÀå
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//ì¤‘ë³µë˜ëŠ” RequestDispatcher
+		//Áßº¹µÇ´Â RequestDispatcher
 		RequestDispatcher rd = null;
 
 		try {
@@ -48,7 +48,7 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/main_T.jsp");
 				} else if (path.equals("/attendance.tea")) {
 					 ArrayList<AttendanceDto> todayAttendanceList = dao.getTodayAttendance(userBean.getLecture_id());
-					 //ì–´íŠ¸ë¦¬ë·°íŠ¸ë¡œ ì €ì¥í•˜ê³  jspí˜ì´ì§€ì—ì„œ getìœ¼ë¡œ ë¶ˆëŸ¬ì˜¤ê¸°
+					 //¾îÆ®¸®ºäÆ®·Î ÀúÀåÇÏ°í jspÆäÀÌÁö¿¡¼­ getÀ¸·Î ºÒ·¯¿À±â
 					 req.setAttribute("todayAttendanceList",todayAttendanceList);
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 
@@ -62,13 +62,13 @@ public class TeacherController extends HttpServlet {
 					req.setAttribute("assignmentList", assignmentList);
 					rd = req.getRequestDispatcher("teacher/assignment_T.jsp");
 					
-//					//detail ì¼ë•Œ
-//					int assignmentId = 1;	//ê¸€ ë¦¬ìŠ¤íŠ¸ì—ì„œ idxë¡œ assignmentIdë¥¼ ë°›ì•„ì™€ì„œ ì‚¬ìš©(rownum)ì•„ë‹˜
+//					//detail ÀÏ¶§
+//					int assignmentId = 1;	//±Û ¸®½ºÆ®¿¡¼­ idx·Î assignmentId¸¦ ¹Ş¾Æ¿Í¼­ »ç¿ë(rownum)¾Æ´Ô
 //					AssignmentDto AssignmentBean = dao.getAssignmentDetail(assignmentId);
 //					req.setAttribute("AssignmentBean", AssignmentBean);
 //					ArrayList<SubmsissionDto> submissionList = dao.getSubmissionList(assignmentId); 
 //					req.setAttribute("submissionList", submissionList);
-//					rd = req.getRequestDispatcher("teacher/assignment_T_detail.jsp");//ë””í…Œì¼ ì£¼ì†Œ
+//					rd = req.getRequestDispatcher("teacher/assignment_T_detail.jsp");//µğÅ×ÀÏ ÁÖ¼Ò
 					
 					
 					
@@ -78,10 +78,10 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
 				
 				} else {
-					System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” í˜ì´ì§€");
+					System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ÆäÀÌÁö");
 				}
 			}else {
-				//teacherë‚˜ studentí˜ì´ì§€ë¡œ ì ‘ê·¼í•˜ë ¤ê³  í•˜ë©´ ê± ë³´ë‚´ë²„ë¦¼
+				//teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
@@ -96,23 +96,23 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//ë“¤ì–´ì˜¤ëŠ” ì£¼ì†Œ í™•ì¸í•˜ê³  ë’·ì£¼ì†Œë§Œ ì €ì¥í•˜ê¸°
+		//µé¾î¿À´Â ÁÖ¼Ò È®ÀÎÇÏ°í µŞÁÖ¼Ò¸¸ ÀúÀåÇÏ±â
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doPost) :: path = " + path);
 
-		//ì„¸ì…˜ ì €ì¥
+		//¼¼¼Ç ÀúÀå
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//ì¤‘ë³µë˜ëŠ” RequestDispatcher
+		//Áßº¹µÇ´Â RequestDispatcher
 		RequestDispatcher rd = null;
 
 		try {
 			if (userBean.getBelong().equals("teacher")) {
 
 				TeacherDao dao = new TeacherDao();
-				if (path.equals("/assignment.tea")) {//assignment insertì—ì„œ postë°©ì‹ìœ¼ë¡œ ë„˜ê²¼ì„ë•Œ
-					String title dao= req.getParameter("title");
+				if (path.equals("/assignment.tea")) {//assignment insert¿¡¼­ post¹æ½ÄÀ¸·Î ³Ñ°åÀ»¶§
+					String titledao= req.getParameter("title");
 					String content;
 					
 					
@@ -120,10 +120,10 @@ public class TeacherController extends HttpServlet {
 					 
 
 				}else {
-					System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” í˜ì´ì§€");
+					System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ÆäÀÌÁö");
 				}
 			}else {
-				//teacherë‚˜ studentí˜ì´ì§€ë¡œ ì ‘ê·¼í•˜ë ¤ê³  í•˜ë©´ ê± ë³´ë‚´ë²„ë¦¼
+				//teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);

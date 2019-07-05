@@ -27,33 +27,6 @@ public class TeacherDao {
 			e.printStackTrace();
 		}
 	}
-	
-	//이건 머지?
-	public int attendance(String id, String pw){
-		String sql = "select belong from bitauser where user_id=? and password=?";
-		int result =0;
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, id);
-			pstmt.setString(2, pw);
-			rs = pstmt.executeQuery();
-			if(rs.next()){
-				result= rs.getInt("num");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try {
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
 
 	///////////////////////////////////////////
 	//출석

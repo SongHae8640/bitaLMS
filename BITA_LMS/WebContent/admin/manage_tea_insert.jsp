@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="/BITA_LMS/css/frame.css" />
+<link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 	#menu>ul {
 	width: 610px;
@@ -19,7 +19,7 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:243px;
+	top:160px;
 	height:700px;
 	width: 200px;
 	text-align:center;
@@ -33,50 +33,46 @@
 	text-decoration: none;
 	color: rgb(0,0,0);
 	}
-	#content #real_content{
-	position:relative;
-	left:300px;
-	width: 600px;
-	height:700px;
-	}
-	#content #real_content #lec_detail{
-	width: 600px;
-	}
-	#content #real_content #lec_detail table,th,td{
-	border: 1px solid gray;
-	}
-	#lec_table1{
-	width:450px;
-	}
-	#lec_table2{
-	width:600px;
-	height:320px;
-	margin: 0 auto;
-	}
-	#content #real_content #lec_detail #qna_content {
-	width:600px;
-	}
-	#content #real_content #lec_detail #qna_content div{
-	clear:both;
-	width:300px;
-	}
-	#content #real_content #lec_detail #curri_thumb{
-	float: left;
-	width:150px;
-	height:140px;
-	border: 1px solid gray;
-	}
 	#content #page_name{
 	width: 120px;
 	margin: 0 auto;
 	text-align:center;
 	border: 1px solid gray;
 	}
-	#content #lec_detail{
+	#content #real_content{
+	position:relative;
+	left:300px;
+	width: 600px;
+	height:700px;
+	}
+	#content #tea_detail{
 	clear:both;
 	width: 500px;
 	height:500px;
 	margin: 0 auto;
+	}
+	#content #tea_detail #tea_pic{
+	float:left;
+	border: 1px solid gray;
+	width: 100px;
+	height:140px;
+	}
+	#content #real_content #tea_detail{
+	width: 600px;
+	}
+	#content #real_content #tea_detail table,th,td{
+	border: 1px solid gray;
+	}
+	#tea_table1{
+	width:300px;
+	} 
+	#tea_table2{
+	width:600px;
+	height:320px;
+	margin: 0 auto;
+	}
+	#tea_table2 input{
+	width:160px;
 	}
 	#content #under_list{
 	width: 600px;
@@ -89,16 +85,16 @@
 	#content #under_list #list_button{
 	float: left;
 	}
-	#content #under_list #ok_button{
+	#content #under_list #ans_button{
 	float: right;
 	}
-	#content #under_list #reject_button{
+	#content #under_list #del_button{
 	width: 45px;
 	float: right;
 	}
 	
 </style>
-<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -107,12 +103,16 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#list_btn').click(function(){ 
-			location.replace('manage_lec.adm');  
+		$('#del_btn').click(function(){
+			var result = confirm('정말 삭제하시겠습니까?'); 
+			if(result) { //yes-해당수강신청삭제
+				location.replace('register.adm'); } 
+			else { 
+				//no-변동사항없음
+				} 
 			});
-		$('#reject_btn').click(function(){
-			//원래글 디테일
-			location.replace('manage_lec_detail.adm');  
+		$('#list_btn').click(function(){
+				location.replace('qna.adm'); 
 		});
 	});
 </script>
@@ -136,72 +136,48 @@
 		<div id="content">
 			<div id="sidebar">
 			<br/><br/><br/><br/>
-			<h3>강좌관리</h3>
+			<h3>강사관리</h3>
 			<br/><br/>
 		</div>
-		<form name="send_lec" method="post" action="manage_lec_edit.adm">
+		<form name="send_tea" method="post" action="#">
 		<div id="real_content">
 			<div id="page_name">
-				<h2>강좌수정</h2>
+				<h2>강사정보</h2>
 			</div>
 			<br/><br/>
-		<div id="lec_detail">
-			<div id="curri_thumb">
-				<h3>커리큘럼이미지</h3>
+		<div id="tea_detail">
+			<div id="tea_pic">
+				<h3>강사이미지</h3>
 			</div>
-			<table id="lec_table1">
-					<tr>
-						<td>강좌명</td>
-						<td><input type="text" name="lec_name" placeholder="JAVA"></td>
-					</tr>
+			<table id="tea_table1">
 					<tr>
 						<td>강사명</td>
-						<td>
-							<select name="tea_name">
-							    <option value="김코난">김코난</option>
-							    <option value="남도일">남도일</option>
-							    <option value="유미란">유미란</option>
-							</select>
-						</td>
+						<td><input type="text" name="tea_name" placeholder="김코난"></td>
 					</tr>
 					<tr>
-						<td>교육기간</td>
-						<td>
-						<input type="text" name="lec_start" placeholder="2019-07-01">~ 
-						<input type="text" name="lec_end" placeholder="2019-10-01">
-						</td>
-					</tr>
-					<tr>
-						<td><input type="text" name="lec_level" placeholder="3">수준</td>
-					</tr>
-					<tr>
-						<td>최대인원</td>
-						<td><input type="text" name="max_stu" placeholder="30"></td>
+						<td>학력</td>
+						<td><input type="text" name="tea_level" placeholder="세종대학교 컴퓨터공학 석사"></td>
 					</tr>
 			</table>
-			<table id="lec_table2">
+			<table id="tea_table2">
 				<tr>
-					<td>
-						<label>진도율</label>
-						<progress value="20" max="100"></progress>
-					</td>
+					<td>경력사항</td>
+					<td>저서</td>
+					<td>자격</td>
 				</tr>
 				<tr>
-					<td>
-						강좌내용
-					</td>
+				<!-- 추가버튼누르면 빈칸 추가되면서 데이터 입력가능 -->
+					<td><input type="text" name="tea_career1" placeholder="회사명-개발내용"><button type="button" id="add_career1">+</button></td>
+					<td><input type="text" name="tea_career2" placeholder="책제목-출판사"><button type="button" id="add_career2">+</button></td>
+					<td><input type="text" name="tea_qul" placeholder="정처기"><button type="button" id="add_qul">+</button></td>
 				</tr>
 				<tr>
-					<td>
-						<textarea name="content" rows="6" cols="70">내용</textarea>
-					</td>
+					<td>이메일</td>
+					<td colspan="2"><input type="text" name="tea_mail" placeholder="kmkm@naver.com"></td>
 				</tr>
 				<tr>
-					<td>
-						<div id="curri_des">
-							<input type="file"id="lec_file"/>
-						</div>
-					</td> 
+					<td>연락처</td>
+					<td colspan="2"><input type="text" name="tea_tel" placeholder="010-1234-5678"></td>
 				</tr>
 			</table>
 	</div>
@@ -209,11 +185,11 @@
 			<div id="list_button">
 				<button type="button" id="list_btn">목록</button>
 			</div>
-			<div id="reject_button">
-				<button type="button" id="reject_btn">취소</button>
+			<div id="del_button">
+				<button type="button" id="del_btn">삭제</button>
 			</div>
-			<div id="ok_button">
-				<button type="submit" id="ok_btn">확인</button>
+			<div id="ans_button">
+				<button type="submit">수정</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>

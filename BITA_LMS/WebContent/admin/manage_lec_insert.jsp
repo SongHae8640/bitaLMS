@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -62,7 +62,7 @@
 	}
 	#content #real_content #lec_detail #curri_thumb{
 	float: left;
-	width:150px;
+	width:100px;
 	height:140px;
 	border: 1px solid gray;
 	}
@@ -98,7 +98,7 @@
 	}
 	
 </style>
-<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="/BITA_LMS/js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -107,13 +107,17 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#list_btn').click(function(){ 
-			location.replace('manage_lec.adm');  
+		$('#del_btn').click(function(){
+			var result = confirm('정말 삭제하시겠습니까?'); 
+			if(result) { //yes-해당수강신청삭제
+				location.replace('register.adm'); } 
+			else { 
+				//no-변동사항없음
+				} 
 			});
-		$('#reject_btn').click(function(){
-			//원래글 디테일
-			location.replace('manage_lec_detail.adm');  
-		});
+		$('#list_btn').click(function(){
+				location.replace('qna.adm');
+			});
 	});
 </script>
 </head>
@@ -139,13 +143,15 @@
 			<h3>강좌관리</h3>
 			<br/><br/>
 		</div>
-		<form name="send_lec" method="post" action="manage_lec_edit.adm">
+		<form name="send_lec" method="post" action="manage_lec_update.adm">
 		<div id="real_content">
+		<br/>
 			<div id="page_name">
-				<h2>강좌수정</h2>
+				<h2>강좌상세</h2>
 			</div>
 			<br/><br/>
 		<div id="lec_detail">
+		<div>
 			<div id="curri_thumb">
 				<h3>커리큘럼이미지</h3>
 			</div>
@@ -172,6 +178,7 @@
 						</td>
 					</tr>
 					<tr>
+						<td>교육수준</td>
 						<td><input type="text" name="lec_level" placeholder="3">수준</td>
 					</tr>
 					<tr>
@@ -213,7 +220,7 @@
 				<button type="button" id="reject_btn">취소</button>
 			</div>
 			<div id="ok_button">
-				<button type="submit" id="ok_btn">확인</button>
+				<button type="subit">확인</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
