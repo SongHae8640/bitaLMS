@@ -24,11 +24,10 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:160px;
+	top:243px;
 	height:700px;
 	width: 200px;
 	text-align:center;
-	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -92,7 +91,7 @@
 	margin: 0 auto;
 	}
 </style>
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var numStd = $('#people_check>span')
@@ -109,6 +108,7 @@
 		}).mouseenter(function(){
 			$('#header>img').css('cursor', 'pointer')
 		});
+
 		$("select[name=lecture_name]").change(
                function() {
                   var k = $(this).children("option:selected").text();
@@ -179,7 +179,7 @@
 			</div>
 			<div id="people_check">
 			<%
-				ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("LectureList");
+				ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("arrangeLecture");
 				int num = 0,max=0;
 				if(lectureList !=null){
 					for(LectureDto bean : lectureList){
@@ -201,6 +201,7 @@
 			</div>
 			<div id="lecture_list">
 				<select name="lecture_name" id="lecture_name">
+
 				<option value="" selected="selected">전체</option>
 				<%
 				for(LectureDto bean : lectureList){
@@ -237,26 +238,21 @@
 									for(RegisterDto bean : registerList){
 					%>
 					<tr>
-<<<<<<< HEAD
+
 							<td><%=bean.getNum()%></td>
 							<td><a href="register_detail.adm?idx=<%=bean.getNum()%>"><%=bean.getName()%>님의 수강신청</a></td>
 							<td><%=bean.getId()%></td>
 							<td><%=bean.getName()%></td>
 							<td><%=bean.getLecName()%></td>
 							<td><%=bean.getApplyDate()%></td>
-=======
-						<td>1</td>
-						<td><a href="./register_detail.jsp">김경민님의 수강신청</a></td>
-						<td>rudals108</td>
-						<td>김경민</td>
-						<td>JAVA</td>
-						<td>2019-07-02</td>
->>>>>>> master
+
 					</tr>
+
 							<%
-								}
+								                        }
 								}
 							%>
+
 				</tbody>
 			</table>
 		</div>

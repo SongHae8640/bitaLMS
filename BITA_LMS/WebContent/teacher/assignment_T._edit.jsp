@@ -28,6 +28,9 @@
 		$('#content>button').hide().eq(0).show().click(function() {
 			$('#content>button').show().eq(0).hide();
 		});
+		$('#delete').click(function(){
+			$(location).attr('href','assignment_delete_T.tea');
+		});
 	});
 </script>
 </head>
@@ -38,15 +41,18 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance.stu">출결관리</a>
-				<li><a href="score.stu">성적관리</a></li>
-				<li><a href="assignment.stu">과제관리</a></li>
-				<li><a href="qna.stu">1:1문의</a></li>
+				<li class="topmenu"><a href="#">학생관리</a>
+					<ul class="submenu">
+						<li><a href="attendance.tea">출결관리</a></li>
+						<li><a href="score.tea">성적관리</a></li>
+						<li><a href="assignment.tea">과제관리</a></li>
+					</ul></li>
+				<li><a href="qna.tea">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
 			<h2>과제 등록</h2>
-			<form action="assignment_T.jsp">
+			<form action="assignment_edit_T.tea">
 				<div>
 					<label>제목</label> <input type="text">
 				</div>
@@ -63,7 +69,7 @@
 
 				<div>
 					<button type="submit">등록</button>
-					<button onclick="location=''">삭제</button>
+					<input type="button" id="delete" value="삭제">
 				</div>
 			</form>
 		</div>
