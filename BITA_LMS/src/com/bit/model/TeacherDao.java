@@ -304,4 +304,84 @@ public class TeacherDao {
 		
 		return list;
 	}
+
+	public int insertAssignment(String title, String content, int lecture_id) {
+		// assignmnet_id 는 seq, write_date는 SYSDATE 로 INSERT
+		return 0;
+	}
+
+
+
+	public int editAssignment(String title, String content, String assingmentId) {
+		// assignmentId로 접근하고 title, content의 내용 수정
+		return 0;
+	}
+
+	public int getAssignmentDelete(int assignmentId) {
+		// 과제 번호로 해당 과제 삭제
+		return 0;
+	}
+
+	public QnaLDto QnaLDetail(int assignmentId) {
+		// 1:1문의로 해당 세부 내용 불러오기
+		
+		return null;
+	}
+
+	public int insertQnaLAnswer(String answerContent, String questionId) {
+		// 1:1문의에 answer_content(대답 내용) 추가하기(DB상에서는 qna_l에 있는 row UPDATE)
+		return 0;
+	}
+
+	public int insertAttendanceCheckin(String stdId) {
+		//출석에서 해당 학생의 checkin 시간을 SYSDATE로
+		
+		return 0;
+	}
+
+	public int updateAttendanceCheckout(String stdId) {
+		// 출석에서 해당  학생의 checkout 시간을 SYSDATE로 update
+		return 0;
+	}
+
+	public int insertCalendar(String startDate, String endDate, String title,
+			String content, int lecture_id) {
+		// lecture_id에 해당하는 일정 추가
+		///end_date에 어떤 값을 넣어야 할지 고민
+		return 0;
+	}
+
+	public ArrayList<CalendarDto> getCalendarList(int lecture_id, String yearMonth) {
+		//메인 화면에서 달력에 들어갈 일정 리스트를 가져오는 메서드
+		//yearMonth가 null이면(달력 월 이동으로 들어온 경우가 아닌 경우) sysdate로, null이 아니면 해당 년월로
+		return null;
+	}
+
+	public int getNumStu(int lecture_id) {
+		//해당 강좌의 학생 총원을 리턴하는 메서드
+		
+		return -1;
+	}
+
+	public int getCheckinNum(int lecture_id) {
+		// 해당 강좌의 체크인한 학생 수를 리턴하는 메서드
+		
+		return -1;
+	}
+
+	public int getSubmissionNum(int lecture_id) {
+		// 가장 최근의(??) 과제에서 제출 인원 수를 리턴하는 메서드 
+		
+		return -1;
+	}
+
+	public int getTotalDays(int lecture_id) {
+		// 총 수업 일 수 를 반환하는 메서드
+		return -1;
+	}
+
+	public int getProgressDays(int lecture_id) {
+		// SYS상황에서 진행한 수업 일 수를 반환하는 메서드
+		return -1;
+	}
 }

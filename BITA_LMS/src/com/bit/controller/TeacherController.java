@@ -29,30 +29,50 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//µé¾î¿À´Â ÁÖ¼Ò È®ÀÎÇÏ°í µŞÁÖ¼Ò¸¸ ÀúÀåÇÏ±â
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ È®ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Ö¼Ò¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doGet) :: path = " + path);
 
-		//¼¼¼Ç ÀúÀå
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//Áßº¹µÇ´Â RequestDispatcher
+		//ï¿½ßºï¿½ï¿½Ç´ï¿½ RequestDispatcher
 		RequestDispatcher rd = null;
 
 		try {
 			if (userBean.getBelong().equals("teacher")) {
 
 				TeacherDao dao = new TeacherDao();
+				///lecture_id ëŠ” ìì£¼ ì¨ì„œ ë³€ìˆ˜ë¡œ í•˜ë‚˜ ë¹¼ëŠ”ê²Œ ì¢‹ì„ ê²ƒ ê°™ìŒ
+				
 				if (path.equals("/main.tea")) {
+					String yearMonth = req.getParameter("idx");	///ë‹¬ë ¥ì˜ ì›” ì´ë™ì„ í• ë•Œ idxë¡œ ë…„ì›”ì„ ë°›ì•„ ì˜¬ê²ƒ
+					req.setAttribute("calendarList",dao.getCalendarList(userBean.getLecture_id(), yearMonth));
+					
+					//main ì¢Œì¸¡í•˜ë‹¨ ì •ë³´ ì „ë‹¬
+					///beanì„ í†µì§¸ ë³´ë‚´ëŠ”ê²Œ ë‚˜ìœ¼ë ¤ë‚˜? ì¼ë‹¨ ì´ë ‡ê²Œ í•˜ê² ìŠ´.
+					req.setAttribute("name", userBean.getName());
+					req.setAttribute("lectureName", userBean.getLectureName());
+					req.setAttribute("startDate", userBean.getStartDate());
+					req.setAttribute("endDate", userBean.getEndDate());
+					
+					//main ìš°ì¸¡ í•˜ë‹¨ ì •ë³´ ì „ë‹¬
+					req.setAttribute("numStu", dao.getNumStu(userBean.getLecture_id()));
+					req.setAttribute("checkinNum", dao.getCheckinNum(userBean.getLecture_id()));
+					req.setAttribute("assignmentNum", dao.getSubmissionList(userBean.getLecture_id()));
+					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
+					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLecture_id()));
+					
 					rd = req.getRequestDispatcher("teacher/main_T.jsp");
-				} else if (path.equals("/attendance.tea")) {
+
+				}else if (path.equals("/attendance.tea")) {
 					 ArrayList<AttendanceDto> todayAttendanceList = dao.getTodayAttendance(userBean.getLecture_id());
-					 //¾îÆ®¸®ºäÆ®·Î ÀúÀåÇÏ°í jspÆäÀÌÁö¿¡¼­ getÀ¸·Î ºÒ·¯¿À±â
+					 //ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ jspï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ getï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½
 					 req.setAttribute("todayAttendanceList",todayAttendanceList);
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 
-				} else if (path.equals("/score.tea")) {
+				}else if (path.equals("/score.tea")) {
 					ArrayList<ScoreDto> scoreList = dao.getScoreList(userBean.getLecture_id());
 					req.setAttribute("scoreList",scoreList);
 					rd = req.getRequestDispatcher("teacher/score_T.jsp");
@@ -61,27 +81,32 @@ public class TeacherController extends HttpServlet {
 					ArrayList<AssignmentDto> assignmentList = dao.getAssignmentList(userBean.getLecture_id());
 					req.setAttribute("assignmentList", assignmentList);
 					rd = req.getRequestDispatcher("teacher/assignment_T.jsp");
-					
-//					//detail ÀÏ¶§
-//					int assignmentId = 1;	//±Û ¸®½ºÆ®¿¡¼­ idx·Î assignmentId¸¦ ¹Ş¾Æ¿Í¼­ »ç¿ë(rownum)¾Æ´Ô
-//					AssignmentDto AssignmentBean = dao.getAssignmentDetail(assignmentId);
-//					req.setAttribute("AssignmentBean", AssignmentBean);
-//					ArrayList<SubmsissionDto> submissionList = dao.getSubmissionList(assignmentId); 
-//					req.setAttribute("submissionList", submissionList);
-//					rd = req.getRequestDispatcher("teacher/assignment_T_detail.jsp");//µğÅ×ÀÏ ÁÖ¼Ò
-					
-					
-					
-				} else if (path.equals("/qna.tea")) {
+	
+				}else if (path.equals("/assignment_detail.tea")) {
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//ê¸€ ë¦¬ìŠ¤íŠ¸(ë˜ëŠ” editì—ì„œ)ì—ì„œ idxë¡œ assignmentIdë¥¼ ë°›ì•„ì™€ì„œ ì‚¬ìš©(rownum)ì•„ë‹˜
+					AssignmentDto AssignmentBean = dao.getAssignmentDetail(assignmentId);
+					req.setAttribute("AssignmentBean", AssignmentBean);
+					ArrayList<SubmsissionDto> submissionList = dao.getSubmissionList(assignmentId); 
+					req.setAttribute("submissionList", submissionList);
+					rd = req.getRequestDispatcher("teacher/assignment_T_deatil.jsp");
+				
+				}else if (path.equals("/qna.tea")) {
 					ArrayList<QnaLDto> qnaLList = dao.getQnaLList(userBean.getUserId());
 					req.setAttribute("qnaLList", qnaLList);
 					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
 				
-				} else {
-					System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ÆäÀÌÁö");
+
+				}else if (path.equals("/qna_detail.tea")) {
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//ê¸€ ë¦¬ìŠ¤íŠ¸(ë˜ëŠ” editì—ì„œ)ì—ì„œ idxë¡œ assignmentIdë¥¼ ë°›ì•„ì™€ì„œ ì‚¬ìš©(rownum)ì•„ë‹˜
+					QnaLDto QnaLBean = dao.QnaLDetail(assignmentId);
+					req.setAttribute("QnaLBean", QnaLBean);
+					rd = req.getRequestDispatcher("teacher/qna_T_deatil.jsp");
+				
+				}else {
+					System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” í˜ì´ì§€");
 				}
 			}else {
-				//teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
+				//teacherï¿½ï¿½ studentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
@@ -96,34 +121,72 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//µé¾î¿À´Â ÁÖ¼Ò È®ÀÎÇÏ°í µŞÁÖ¼Ò¸¸ ÀúÀåÇÏ±â
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ È®ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Ö¼Ò¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doPost) :: path = " + path);
 
-		//¼¼¼Ç ÀúÀå
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//Áßº¹µÇ´Â RequestDispatcher
+		//ï¿½ßºï¿½ï¿½Ç´ï¿½ RequestDispatcher
 		RequestDispatcher rd = null;
+		
+		//insert, edit, delete ì˜ ê²°ê³¼ ë‚´ìš©ì„ ì €ì¥í•˜ëŠ” result
+		///ì–´ë–»ê²Œ ì‚¬ìš©í• ì§€ ì•„ì§ ë¯¸ì •
+		int result;
 
 		try {
 			if (userBean.getBelong().equals("teacher")) {
 
 				TeacherDao dao = new TeacherDao();
-				if (path.equals("/assignment.tea")) {//assignment insert¿¡¼­ post¹æ½ÄÀ¸·Î ³Ñ°åÀ»¶§
-					String titledao= req.getParameter("title");
-					String content;
-					
-					
-				} else if (path.equals("/")) {
-					 
 
-				}else {
-					System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ÆäÀÌÁö");
+				if(path.equals("")){
+					
+				}else if(path.equals("/attendance_checkin.tea")){
+					String stdId = (String)req.getParameter("idx");
+					result = dao.insertAttendanceCheckin(stdId);
+					rd = req.getRequestDispatcher("/attendance.tea");	//ë‹¤ì‹œ today ì¶œì„ ë¦¬ìŠ¤íŠ¸ë¡œ ì´ë™
+					
+				}else if(path.equals("/attendance_checkout.tea")){
+					String stdId = (String)req.getParameter("idx");
+					result = dao.updateAttendanceCheckout(stdId);
+					rd = req.getRequestDispatcher("/attendance.tea");	//ë‹¤ì‹œ today ì¶œì„ ë¦¬ìŠ¤íŠ¸ë¡œ ì´ë™
+					
+				}else if (path.equals("/assignment_insert.tea")) {//assignment insertì—ì„œ postë°©ì‹ìœ¼ë¡œ ë„˜ê²¼ì„ë•Œ
+					String title = req.getParameter("title");
+					String content = req.getParameter("content");
+					result = dao.insertAssignment(title, content,userBean.getLecture_id());	///esultë¥¼ ì–´ë–»ê²Œ ì‚¬ìš©í• ì§€ ë‚˜ì¤‘ì— ìƒê°
+					rd = req.getRequestDispatcher("/assignment.tea");	//ë¦¬ìŠ¤íŠ¸ í˜ì´ì§€ë¡œ
+					
+				} else if (path.equals("/assignment_edit.tea")) {
+					String title = req.getParameter("title");
+					String content = req.getParameter("content");
+					String assingmentId = req.getParameter("assignmentId");
+					result = dao.editAssignment(title,content,assingmentId);
+					rd = req.getRequestDispatcher("/assignment_detail.tea?idx="+assingmentId);	///ìˆ˜ì •í•œ í˜ì´ì§€ë¡œ
+				} else if (path.equals("/assignment_delete.tea")) {
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));
+					result = dao.getAssignmentDelete(assignmentId);
+					rd = req.getRequestDispatcher("teacher/assignment_T_.jsp");
+				
+				}else if (path.equals("/qnaAnswer_insert.tea")) {//qnaì—ì„œ ë‹µë³€ì„ ì…ë ¥ ë˜ëŠ” ìˆ˜ì •í• ë•Œ 
+					String answerContent = req.getParameter("answerContent");
+					String questionId = req.getParameter("questionId");
+					result = dao.insertQnaLAnswer(answerContent,questionId);
+					rd = req.getRequestDispatcher("/qna_detail.tea?idx="+questionId);	//ë¦¬ìŠ¤íŠ¸ í˜ì´ì§€ë¡œ
+				}else if(path.equals("/calendar_insert.tea")){
+					String startDate = req.getParameter("startDate");
+					String endDate = req.getParameter("endDate");
+					String title = req.getParameter("title");
+					String content = req.getParameter("content");
+					result = dao.insertCalendar(startDate, endDate, title, content, userBean.getLecture_id());
+				}
+				else {
+					System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” í˜ì´ì§€");
 				}
 			}else {
-				//teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
+				//teacherï¿½ï¿½ studentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
