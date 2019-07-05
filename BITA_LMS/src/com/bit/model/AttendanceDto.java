@@ -5,8 +5,7 @@ import java.sql.Date;
 public class AttendanceDto {
 	private String stdId,name,status,checkinTime,CheckoutTime, dayTime;
 	private int lectureId;
-	
-	
+
 	
 	public String getDayTime() {
 		return dayTime;

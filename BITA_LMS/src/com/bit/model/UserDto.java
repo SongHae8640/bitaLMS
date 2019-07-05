@@ -1,9 +1,15 @@
 package com.bit.model;
 
 public class UserDto {
-	private String userId, password, name, email,phoneNumber,belong, lectureName,startDate,endDate;
+	private String userId, password, name, email,phoneNumber,belong, lectureName,startDate,endDate,inflowPath;
 	private int lecture_id;
 	
+	public String getInflowPath() {
+		return inflowPath;
+	}
+	public void setInflowPath(String inflowPath) {
+		this.inflowPath = inflowPath;
+	}
 	public String getUserId() {
 		return userId;
 	}

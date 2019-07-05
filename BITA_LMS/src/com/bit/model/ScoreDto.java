@@ -5,7 +5,6 @@ public class ScoreDto {
 	private int firstScore, secondScore, thirdScore;
 	private double avgScore;
 	
-	
 	public String getName() {
 		return name;
 	}

@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 public class AdminDao {
 	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:xe";
+	String url = "jdbc:oracle:thin:@192.168.1.7:1521:xe";
 	String user = "bita";
 	String password = "bita";
 	
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;
-	
+
 	//생성자 호출할 때 커넥션 연결
 	public AdminDao(){
 		try {
@@ -32,9 +32,43 @@ public class AdminDao {
 	//메인페이지 달력 가져오기
 	//다 가져와서 목록까지 저장하고 있다가 뿌려주기
 	//제이쿼리로 숨겼다가 달력에 일 클릭하면 나타나는걸루
+	//월별 수강생관리 페이지 월은 ?idx=""로 받아오기
+	//제일 처음 접근일 때는 sysdate로 가져오기
+	//날짜이동버튼을 누르면 제이쿼리에서 2019-07에서 -1을 하든 +1을 하든 해서 idx값으로 넘겨주기
 	public ArrayList<CalendarDto> getMainCalendar(String yearMonth){
-		return null;
+		ArrayList<CalendarDto> list = new ArrayList<CalendarDto>();
+		
+		String sql = "";
+		if(month==null){
+			//int calendarId, lectureId;
+			//String title, content, startDate, endDate;
+			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=to_number(to_char(sysdate,'mm')";
+		}else{
+			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=?";
+		}
+			try {
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()){
+					CalendarDto bean = new CalendarDto();		
+					list.add(bean);
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				try {
+					if(rs!=null)rs.close();
+					if(pstmt!=null)pstmt.close();
+					if(conn!=null)conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return list;
 	}
+	
 	
 	//메인페이지 달력 상세 가져오기
 	//상세를 누르면 모달창이 생성되게
