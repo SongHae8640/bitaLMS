@@ -19,11 +19,10 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:160px;
+	top:243px;
 	height:700px;
 	width: 200px;
 	text-align:center;
-	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{

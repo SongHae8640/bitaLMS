@@ -19,11 +19,10 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:160px;
+	top:243px;
 	height:700px;
 	width: 200px;
 	text-align:center;
-	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -87,10 +86,11 @@
 	}
 	#content #under_list #ans_button{
 	float: right;
+	width: 45px;
 	}
 	#content #under_list #del_button{
-	width: 45px;
 	float: right;
+	width: 45px;
 	}
 	
 </style>
