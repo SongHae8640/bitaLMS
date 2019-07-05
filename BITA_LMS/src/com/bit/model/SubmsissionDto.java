@@ -1,9 +1,9 @@
 package com.bit.model;
 
 public class SubmsissionDto {
-	int rowNum,assignmentId;
-	String stdName,submitDate,fileName;
-	boolean isCheck;	//초기값은 false
+	private int rowNum,assignmentId;
+	private String stdName,submitDate,fileName;
+	private boolean isCheck;	//초기값은 false
 	
 	
 	public int getRowNum() {

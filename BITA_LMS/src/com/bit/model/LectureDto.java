@@ -1,9 +1,9 @@
 package com.bit.model;
 
 public class LectureDto {
-	int lectureID, numStd, totalDays, maxStd, lv;
-	String name, startDate, endDate, content, fileName, teaName;
-	boolean isClose; //초기값 false
+	private int lectureID, numStd, totalDays, maxStd, lv;
+	private String name, startDate, endDate, content, fileName, teaName;
+	private boolean isClose; //초기값 false
 
 	public String getTeaName() {
 		return teaName;

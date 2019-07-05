@@ -44,7 +44,8 @@ public class AdminController extends HttpServlet {
 
 				if (path.equals("/main.adm")) {
 					// 메인페이지
-					req.setAttribute("calendarList", dao.getMainCalendar());
+					String month = req.getParameter("month");
+					req.setAttribute("calendarList", dao.getMainCalendar(month));
 					
 					dao = new AdminDao();
 					req.setAttribute("beanMain", dao.getMainUser(userBean.getUserId()));
@@ -101,9 +102,9 @@ public class AdminController extends HttpServlet {
 					
 					// 어트리뷰트로 저장하고 jsp페이지에서 get으로 불러오기
 					
-					req.setAttribute("RegisterList", dao.arrangeLecture());
+					req.setAttribute("RegisterList", dao.getRegister());
 					dao = new AdminDao();
-					req.setAttribute("arrangeLecture", dao.getRegister());
+					req.setAttribute("arrangeLecture", dao.arrangeLecture());
 					rd = req.getRequestDispatcher("admin/register.jsp");
 
 				} else if (path.equals("/register_detail.adm")) {
