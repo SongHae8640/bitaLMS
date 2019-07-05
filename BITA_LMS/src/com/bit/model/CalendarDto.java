@@ -41,11 +41,5 @@ public class CalendarDto {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	@Override
-	public String toString() {
-		return "CalendarDto [calendarId=" + calendarId + ", lectureId="
-				+ lectureId + ", title=" + title + ", content=" + content
-				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
-	}
 
 }

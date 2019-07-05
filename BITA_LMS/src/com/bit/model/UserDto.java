@@ -70,12 +70,4 @@ public class UserDto {
 	public void setLecture_id(int lecture_id) {
 		this.lecture_id = lecture_id;
 	}
-	@Override
-	public String toString() {
-		return "UserDto [userId=" + userId + ", password=" + password
-				+ ", name=" + name + ", email=" + email + ", phoneNumber="
-				+ phoneNumber + ", belong=" + belong + ", lectureName="
-				+ lectureName + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", lecture_id=" + lecture_id + "]";
-	}
 }

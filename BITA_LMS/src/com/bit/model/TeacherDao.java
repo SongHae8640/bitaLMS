@@ -195,7 +195,7 @@ public class TeacherDao {
 		return list;
 	}
 	
-	public AssignmentDto getAssignmentDetail(int assignmentId) {
+	public AssignmentDto getAssignmentBean(int assignmentId) {
 		AssignmentDto bean = new AssignmentDto();
 		String sql = "SELECT title, name,TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,content "
 				+ "FROM lectureUser lu "
@@ -335,6 +335,8 @@ public class TeacherDao {
 
 	public int insertAttendanceCheckin(String stdId) {
 		//출석에서 해당 학생의 checkin 시간을 SYSDATE로
+		//checkin 할때 checkout 은 입력 x, 입력안하면 자동으로 null
+
 		
 		return 0;
 	}

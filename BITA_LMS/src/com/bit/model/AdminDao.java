@@ -35,7 +35,7 @@ public class AdminDao {
 	//월별 수강생관리 페이지 월은 ?idx=""로 받아오기
 	//제일 처음 접근일 때는 sysdate로 가져오기
 	//날짜이동버튼을 누르면 제이쿼리에서 2019-07에서 -1을 하든 +1을 하든 해서 idx값으로 넘겨주기
-	public ArrayList<CalendarDto> getMainCalendar(String month){
+	public ArrayList<CalendarDto> getMainCalendar(String yearMonth){
 		ArrayList<CalendarDto> list = new ArrayList<CalendarDto>();
 		
 		String sql = "";
@@ -72,19 +72,19 @@ public class AdminDao {
 	
 	//메인페이지 달력 상세 가져오기
 	//상세를 누르면 모달창이 생성되게
-	public CalendarDto detailMainCalendar(){
+	public CalendarDto detailMainCalendar(String calendarId){
 		return null;
 	}
 	
 	//메인페이지 달력 일정 추가하기
 	//추가를 누르면 추가모달창이 생성되게
-	public int insertMainCalendar(CalendarDto bean){
+	public int insertMainCalendar(CalendarDto calendarBean){
 		return 0;
 	}
 	
 	//메인페이지 달력 일정 수정하기
 	//수정을 누르면 상세 모달창은 숨겨지고 수정모달창이 생성되게
-	public int updateMainCalendar(CalendarDto bean){
+	public int updateMainCalendar(CalendarDto calendarBean){
 		return 0;
 	}
 	
@@ -170,7 +170,7 @@ public class AdminDao {
 	}
 	
 	//강좌 상세정보페이지
-	public LectureDto detailLecture(int idx) {
+	public LectureDto detailLecture(int lectureId) {
 		LectureDto bean = new LectureDto();
 		
 		//sql문 수정해야할 수도
@@ -179,7 +179,7 @@ public class AdminDao {
 
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, idx);
+			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()){
@@ -214,7 +214,7 @@ public class AdminDao {
 	//행정팀 강좌관리 강좌 추가 페이지(POST방식)
 	//넘어올 값 강좌명,강사명,교육기간(시작일,종료일),교육수준,최대인원,강좌내용,파일이름
 	//결과값 int로 전송되어 제대로 입력되었는지 확인 가능
-	public int insertLecture(LectureDto bean) {
+	public int insertLecture(LectureDto lectureBean) {
 		String sql = "";
 		return 0;
 	}
@@ -222,13 +222,13 @@ public class AdminDao {
 	//행정팀 강좌관리 강좌 수정 페이지(POST방식)
 	//넘어올 값 커리큘럼이미지,강좌명,강사명,교육기간,교육수준,최대인원,강좌내용,첨부파일을 수정가능
 	//결과값 int로 전송되어 제대로 입력되었는지 확인 가능
-	public int updateLecture(LectureDto bean) {
+	public int updateLecture(LectureDto lectureBean) {
 		String sql = "";
 		return 0;
 	}
 	
 	//행정팀 강좌관리 삭제 기능
-	public int deleteLecture(int idx) {
+	public int deleteLecture(int lectureId) {
 		//해당 idx값을 삭제
 		String sql = "";
 		return 0;
@@ -283,19 +283,19 @@ public class AdminDao {
 	}
 	
 	//행정팀 학생관리 학생등록 상세 페이지
-	public RegisterDto detailRegister(int idx) {
+	public RegisterDto detailRegister(int registerId) {
 		//학생목록에서 num를 idx로 받아 해당 num의 수강신청한 내용을 볼 수 있게
 		return null;
 	}
 	
 	//행정팀 학생관리 학생등록 상세페이지 삭제
-	public int deleteRegister(int idx) {
+	public int deleteRegister(int registerId) {
 		//제대로 전송됐는지 안됐는지만 int값으로 리턴
 		return 0;
 	}
 	
 	//행정팀 학생관리 수강생으로 등록(user테이블 update), 해당 user_id로 된 apply테이블의 정보를 삭제
-	public int updateRegister(String user_id) {
+	public int updateRegister(String userId) {
 		//해당 값들 인자로 받아와서 belong을 update
 		//제대로 전송됐는지 안됐는지만 int값으로 리턴
 		return 0;
@@ -313,7 +313,7 @@ public class AdminDao {
 	}
 	
 	//행정팀 수강생관리 월별수정
-	public int updateManageStuMonth(ArrayList<AttendanceDto> arr) {
+	public int updateManageStuMonth(ArrayList<AttendanceDto> attendanceList) {
 		//arraylist로 전부받아서 전부 수정?
 		return 0;
 	}
@@ -324,22 +324,24 @@ public class AdminDao {
 	}
 	
 	//행정팀 강사관리 상세
-	public TeacherDto detailManageTea(int idx) {
+	//강사 명으로 접근해야 하기 때문에 user_id의 자료형인 String형으로 수정
+	public TeacherDto detailManageTea(String userId) {
 		return null;
 	}
 	
 	//행정팀 강사관리 추가
-	public int insertManageTea(TeacherDto bean) {
+	public int insertManageTea(TeacherDto teacherBean) {
 		return 0;
 	}
 	
 	//행정팀 강사관리 수정
-	public int updateManageTea(TeacherDto bean) {
+	public int updateManageTea(TeacherDto teacherBean) {
 		return 0;
 	}
 	
 	//행정팀 강사관리 삭제
-	public int deleteManageTea(int idx) {
+	//강사 명으로 접근해야 하기 때문에 user_id의 자료형인 String형으로 수정
+	public int deleteManageTea(String userId) {
 		return 0;
 	}
 	
@@ -381,14 +383,14 @@ public class AdminDao {
 	}
 	
 	//행정팀 큐엔에이 상세
-	public QnaLDto detailQnaList(int idx) {
+	public QnaLDto detailQnaList(int qnaLId) {
 		return null;
 	}
 	
 	//행정팀 큐엔에이 삭제
 	//여러개삭제할때는 배열로 보내주면 됨
 	//그냥 하나일 수도 있고 하나면 배열에 하나만 들어있겠지
-	public int deleteQna(int[] idxs) {
+	public int deleteQna(int[] qnaLIdList) {
 		return 0;	
 	}
 	

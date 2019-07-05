@@ -41,14 +41,6 @@ public class SubmsissionDto {
 	}
 	public void setIsCheck(String isCheck) {
 		this.isCheck = isCheck.equals("1");
-	}
-	@Override
-	public String toString() {
-		return "SubmsissionDto [rowNum=" + rowNum + ", assignmentId="
-				+ assignmentId + ", stdName=" + stdName + ", submitDate="
-				+ submitDate + ", fileName=" + fileName + ", isCheck="
-				+ isCheck + "]";
-	}
-	
+	}	
 	
 }

@@ -1,7 +1,7 @@
 package com.bit.model;
 
 public class AssignmentDto {
-	//°úÁ¦ ¹øÈ£´Â ¾î¶»°Ô ÇØ¾ß ÇÏÁö?
+	//ê³¼ì œ ë²ˆí˜¸ëŠ” ì–´ë–»ê²Œ í•´ì•¼ í•˜ì§€?
 	private String title,writeDate, situation,writer,content;
 	private int assignmentId, lectureId , rowNum;
 	

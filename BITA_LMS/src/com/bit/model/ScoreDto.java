@@ -35,7 +35,4 @@ public class ScoreDto {
 	public void setAvgScore(double avgScore) {
 		this.avgScore = avgScore;
 	}
-	
-	
-
 }

@@ -33,12 +33,12 @@ public class AdminController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("AdminController :: path = " + path);
 
-		// 세션 저장
+		// ���� ����
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 
 		try {
-			// admin만 접근가능
+			// admin�� ��ٰ���
 			if (userBean.getBelong().equals("admin")) {
 				AdminDao dao = new AdminDao();
 
@@ -57,7 +57,7 @@ public class AdminController extends HttpServlet {
 
 					rd = req.getRequestDispatcher("admin/manage_lec.jsp");
 				} else if (path.equals("/manage_lec_detail.adm")) {
-					// 강좌관리 상세 페이지
+					// ���°� �� ������
 					int idx = Integer.parseInt(req.getParameter("idx"));
 					req.setAttribute("LectureDetail", dao.detailLecture(idx));
 
@@ -82,8 +82,8 @@ public class AdminController extends HttpServlet {
 
 				} else if (path.equals("/manage_tea_detail.adm")) {
 					// 강사관리 상세 페이지
-					int idx = Integer.parseInt(req.getParameter("idx"));
-					req.setAttribute("beanTea", dao.detailManageTea(idx));
+					String userId = req.getParameter("idx");
+					req.setAttribute("beanTea", dao.detailManageTea(userId));
 					
 					rd = req.getRequestDispatcher("admin/manage_tea_detail.jsp");
 				} else if (path.equals("/qna.adm")) {
@@ -92,7 +92,7 @@ public class AdminController extends HttpServlet {
 					
 					rd = req.getRequestDispatcher("admin/qna_A.jsp");
 				} else if (path.equals("/qna_detail.adm")) {
-					// 큐엔에이 상세 페이지
+					// ť������ �� ������
 					int idx = Integer.parseInt(req.getParameter("idx"));
 					req.setAttribute("beanQna", dao.detailQnaList(idx));
 					
@@ -108,16 +108,16 @@ public class AdminController extends HttpServlet {
 					rd = req.getRequestDispatcher("admin/register.jsp");
 
 				} else if (path.equals("/register_detail.adm")) {
-					// 학생등록 상세페이지
+					// �л��� ��������
 					int idx = Integer.parseInt(req.getParameter("idx"));
 
 					req.setAttribute("DetailRegister", dao.detailRegister(idx));
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
 				} else {
-					System.out.println("존재하지않는페이지");
+					System.out.println("�������ʴ�������");
 				}
 			} else {
-				// teacher나 student페이지로 접근하려고 하면 걍 보내버림
+				// teacher�� student������� ����Ϸ�� �ϸ� �� ������
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
@@ -134,55 +134,55 @@ public class AdminController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("AdminController :: path = " + path);
 		
-		//세션 저장
+		//���� ����
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 				
 		
 		try {
-			//admin만 접근가능
+			//admin�� ��ٰ���
 			if (userBean.getBelong().equals("admin")) {
 				AdminDao dao = new AdminDao();
 				if (path.equals("/manage_lec_update.adm")) {
-					//강좌관리 수정 페이지
+					//���°� ��� ������
 //					LectureDto bean = (LectureDto) req.getParameterMap();
 //					dao.updateLecture(bean);
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_update.jsp");
 				}else if (path.equals("/manage_lec_insert.adm")) {
-					//강좌관리 강좌 추가 페이지
+					//���°� ���� �߰� ������
 					
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_insert.jsp");
 				} else if (path.equals("/manage_lec_delete.adm")) {
-					//강좌관리 강좌 삭제 (가상의 페이지 바로 돌릴거 딴곳으로)
+					//���°� ���� ��� (������ ������ �ٷ� ������ ������)
 					int idx = Integer.parseInt(req.getParameter("idx"));
 					int result = dao.deleteLecture(idx);
 					
 					rd = req.getRequestDispatcher("manage_lec_detail.adm");
 				} else if (path.equals("/manage_stu_month_update.adm")) {
-					// 학생관리 목록 페이지(월별) 수정
+					// �л�� ��� ������(��) ���
 					dao.getManageStuMonth();
 					
 					rd = req.getRequestDispatcher("manage_stu_month.adm");
 				} else if (path.equals("/manage_tea_insert.adm")) {
-					// 강사관리 강사 추가 페이지
+					// ����� ���� �߰� ������
 					rd = req.getRequestDispatcher("admin/manage_tea_insert.jsp");
 
 				} else if (path.equals("/manage_tea_update.adm")) {
-					// 강사관리 강사 수정 페이지
+					// ����� ���� ��� ������
 					rd = req.getRequestDispatcher("admin/manage_tea_update.jsp");
 
 				} else if (path.equals("/manage_tea_insert.adm")) {
-					// 강사관리 강사 추가 페이지
+					// ����� ���� �߰� ������
 					rd = req.getRequestDispatcher("admin/manage_tea_insert.jsp");
 
 				} else if (path.equals("/qna_update.adm")) {
-					// 큐엔에이 답변등록 페이지
+					// ť������ �亯��� ������
 					rd = req.getRequestDispatcher("admin/qna_A_update.jsp");
 
 				} else if (path.equals("/qna_delete.adm")) {
-					// 큐엔에이 삭제 페이지
+					// ť������ ��� ������
 					
 					rd = req.getRequestDispatcher("qna_detail.adm");
 				} 
