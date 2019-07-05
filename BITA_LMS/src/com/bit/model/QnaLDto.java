@@ -1,9 +1,9 @@
 package com.bit.model;
 
 public class QnaLDto {
-	int rowNum;
-	String title,stdName,writeDate,questionContent,type,responName,answerContent;
-	boolean isRespon;	//초기값은 false
+	private int rowNum;
+	private String title,stdName,writeDate,questionContent,type,responName,answerContent;
+	private boolean isRespon;	//초기값은 false
 	
 	public int getRowNum() {
 		return rowNum;

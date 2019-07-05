@@ -1,9 +1,9 @@
 package com.bit.model;
 
 public class ScoreDto {
-	String name;
-	int firstScore, secondScore, thirdScore;
-	double avgScore;
+	private String name;
+	private int firstScore, secondScore, thirdScore;
+	private double avgScore;
 	
 	
 	public String getName() {
@@ -36,7 +36,4 @@ public class ScoreDto {
 	public void setAvgScore(double avgScore) {
 		this.avgScore = avgScore;
 	}
-	
-	
-
 }

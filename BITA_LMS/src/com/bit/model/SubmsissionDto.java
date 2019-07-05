@@ -1,9 +1,9 @@
 package com.bit.model;
 
 public class SubmsissionDto {
-	int rowNum,assignmentId;
-	String stdName,submitDate,fileName;
-	boolean isCheck;	//초기값은 false
+	private int rowNum,assignmentId;
+	private String stdName,submitDate,fileName;
+	private boolean isCheck;	//초기값은 false
 	
 	
 	public int getRowNum() {
@@ -41,14 +41,6 @@ public class SubmsissionDto {
 	}
 	public void setIsCheck(String isCheck) {
 		this.isCheck = isCheck.equals("1");
-	}
-	@Override
-	public String toString() {
-		return "SubmsissionDto [rowNum=" + rowNum + ", assignmentId="
-				+ assignmentId + ", stdName=" + stdName + ", submitDate="
-				+ submitDate + ", fileName=" + fileName + ", isCheck="
-				+ isCheck + "]";
-	}
-	
+	}	
 	
 }

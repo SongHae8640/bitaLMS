@@ -27,33 +27,6 @@ public class TeacherDao {
 			e.printStackTrace();
 		}
 	}
-	
-	//이건 머지?
-	public int attendance(String id, String pw){
-		String sql = "select belong from bitauser where user_id=? and password=?";
-		int result =0;
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, id);
-			pstmt.setString(2, pw);
-			rs = pstmt.executeQuery();
-			if(rs.next()){
-				result= rs.getInt("num");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try {
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
 
 	///////////////////////////////////////////
 	//출석
@@ -222,7 +195,7 @@ public class TeacherDao {
 		return list;
 	}
 	
-	public AssignmentDto getAssignmentDetail(int assignmentId) {
+	public AssignmentDto getAssignmentBean(int assignmentId) {
 		AssignmentDto bean = new AssignmentDto();
 		String sql = "SELECT title, name,TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,content "
 				+ "FROM lectureUser lu "
@@ -362,6 +335,8 @@ public class TeacherDao {
 
 	public int insertAttendanceCheckin(String stdId) {
 		//출석에서 해당 학생의 checkin 시간을 SYSDATE로
+		//checkin 할때 checkout 은 입력 x, 입력안하면 자동으로 null
+
 		
 		return 0;
 	}

@@ -1,9 +1,9 @@
 package com.bit.model;
 
 public class CalendarDto {
-	//½ÃÀÛ³¯Â¥, Á¾·á ³¯Â¥, Á¦¸ñ, ³»¿ë
-	int calendarId, lectureId;
-	String title, content, startDate, endDate;
+	//ì‹œìž‘ë‚ ì§œ, ì¢…ë£Œ ë‚ ì§œ, ì œëª©, ë‚´ìš©
+	private int calendarId, lectureId;
+	private String title, content, startDate, endDate;
 	
 	public int getCalendarId() {
 		return calendarId;
@@ -40,12 +40,6 @@ public class CalendarDto {
 	}
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
-	}
-	@Override
-	public String toString() {
-		return "CalendarDto [calendarId=" + calendarId + ", lectureId="
-				+ lectureId + ", title=" + title + ", content=" + content
-				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
 	}
 
 }
