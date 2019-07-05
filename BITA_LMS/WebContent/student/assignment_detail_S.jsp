@@ -5,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -64,10 +66,11 @@
 			</div>
 
 			<div>
-				<button onclick="assignment_S.stu'">과제목록</button>
+				<button onclick="assignment_S.stu">과제목록</button>
 			</div>
 
-			<form action="">
+			<form action="assignment_add_S.stu" method="post"
+				enctype="multipart/form-data" id="upload_form">
 				<table border="1">
 					<thead>
 						<tr>
@@ -76,7 +79,7 @@
 							<th>작성자</th>
 							<th>작성일</th>
 							<th>확인여부</th>
-							<th><input type="checkbox" name="" id="ch"/></th>
+							<th><input type="checkbox" name="" id="ch" /></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -90,10 +93,12 @@
 						</tr>
 					</tbody>
 				</table>
-				<div>
-					<button type="submit">추가</button>
+				<div class="form-wrap">
+					<input name="__files[]" type="file" name="myfile" enctype="multipart/form-data">
+					<button type="submit">등록</button>
 					<button onclick="location='assignment_delete_S.stu'">삭제</button>
 				</div>
+
 			</form>
 		</div>
 		<div id="footer">
