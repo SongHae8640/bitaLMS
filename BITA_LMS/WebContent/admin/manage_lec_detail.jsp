@@ -23,7 +23,6 @@
 	height:700px;
 	width: 200px;
 	text-align:center;
-	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -39,25 +38,8 @@
 	width: 600px;
 	height:700px;
 	}
-	height:120px;
 	#content #real_content #lec_detail{
-	width: 600px;
-	}
-	#content #real_content #curri_thumb{
-	border: 1px solid gray;
-	width: 200x;
-	}
-	#content #real_content #lec_detail table,th,td{
-	border: 1px solid gray;
-	}
-	#lec_table1{
-	width:450px;
-	float: right;
-	margin-top: 25px;
-	}
-	#lec_table2{
-	width:600px;
-	height:320px;
+	width: 600x;
 	margin: 0 auto;
 	}
 	#content #page_name{
@@ -66,16 +48,40 @@
 	text-align:center;
 	border: 1px solid gray;
 	}
-	#content #tea_detail{
-	clear:both;
-	width: 500px;
-	height:500px;
+	#content  #real_content #lec_detail{
+	width: 600px;
 	margin: 0 auto;
+	}
+	#lec_detail #lec_form1{
+	width: 360px;
+	margin: 0 auto;
+	}
+	#lec_detail #lec_form2{
+	width: 255px;
+	float: right;
+	}
+	#lec_form1 #curri_thumb{
+	margin-top:5px;
+	width:100px;
+	height:140px;
+	float: left;
+	border: 1px solid gray;
+	}
+	#lec_table1 {
+	float: right;
+	width: 255px;
+	}
+	#lec_table1 tr td{
+	border: 1px solid gray;
 	}
 	#content #under_list{
 	width: 600px;
 	height:95px;
 	margin: 0 auto;
+	}
+	#lec_form3{
+	overflow:auto;
+	width: 600px;
 	}
 	#content #under_list div{
 	width: 80px;
@@ -83,16 +89,17 @@
 	#content #under_list #list_button{
 	float: left;
 	}
-	#content #under_list #ans_button{
+	#content #under_list #edit_button{
 	float: right;
+	width: 45px;
 	}
 	#content #under_list #del_button{
-	width: 45px;
 	float: right;
+	width: 45px;
 	}
 	
 </style>
-<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -102,13 +109,16 @@
 			$('.submenu').css('display', 'none')
 		});
 		$('#list_btn').click(function(){ 
-			location.href('manage_lec.amd');  
+			location.href='manage_lec.adm'  
+			});
+		$('#edit_btn').click(function(){ 
+			location.href='manage_lec_update.adm'
 			}); 
 		$('#del_btn').click(function(){
 			var result = confirm('정말 삭제하시겠습니까?'); 
 			if(result) { //yes-해당수강신청삭제
-				location.href('manage_lec.adm'); } 
-			else { 
+				location.href='manage_lec.adm'; 
+			}else { 
 				//no-변동사항없음
 				} 
 			});
@@ -138,68 +148,75 @@
 			<br/><br/>
 		</div>
 		<div id="real_content">
+		<br />
 			<div id="page_name">
 				<h2>강좌상세</h2>
 			</div>
 			<br/><br/>
 		<div id="lec_detail">
-			<div id="curri_thumb">
-				<h3>커리큘럼이미지</h3>
+				<div id="lec_form1">
+					<div id="curri_thumb">
+						<h3>커리큘럼이미지</h3>
+					</div>
+					<div id="lec_form2">
+					<table id="lec_table1">
+							<tr>
+								<td>강좌명</td>
+								<td>JAVA</td>
+							</tr>
+							<tr>
+								<td>강사명</td>
+								<td>김코난</td>
+							</tr>
+							<tr>
+								<td>교육기간</td>
+								<td>2019-07-01 ~ 2019-10-01</td>
+							</tr>
+							<tr>
+								<td>교육수준</td>
+								<td>3수준</td>
+							</tr>
+							<tr>
+								<td>최대인원</td>
+								<td>30</td>
+							</tr>
+					</table>
+					</div>
+					</div>
+					<div id="lec_form3">
+				<table id="lec_table2">
+					<tr>
+						<td>
+							<label>진도율</label>
+							<progress value="20" max="100"></progress>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							강좌내용
+						</td>
+					</tr>
+					<tr>
+						<td>
+							응용소프트웨어 엔지니어링은 컴퓨터 프로그래밍 언어로 각 
+							업무에맞는 소프트웨어의 기능에 관한 설계, 구현 및 테스트를 
+							수행하고,사용자에게 배포하며, 버전관리를 통해 제품의 성능을 
+					 		향상시키고,서비스를 개선할 수 있는 인재양성을 목표로 한다.
+							데이터베이스 구현을 위하여 DBMS(Data Base Management System)
+							(DataBase Management Systems) 설치, 데이터베이스 생성, 데이
+							터베이스 오브젝트를 계획, 설계하고 구현하는 능력을 함양한다.
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div id="curri_des">
+								<h3>커리큘럼이미지</h3>			
+							</div>
+						</td>
+					</tr>
+				</table>
+				</div>
 			</div>
-			<table id="lec_table1">
-					<tr>
-						<td>강좌명</td>
-						<td>JAVA</td>
-					</tr>
-					<tr>
-						<td>강사명</td>
-						<td>김코난</td>
-					</tr>
-					<tr>
-						<td>교육기간</td>
-						<td>2019-07-01 ~ 2019-10-01</td>
-					</tr>
-					<tr>
-						<td>교육수준</td>
-						<td>3수준</td>
-					</tr>
-					<tr>
-						<td>최대인원</td>
-						<td>30</td>
-					</tr>
-			</table>
-			<table id="lec_table2">
-				<tr>
-					<td>
-						<label>진도율</label>
-						<progress value="20" max="100"></progress>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						강좌내용
-					</td>
-				</tr>
-				<tr>
-					<td>
-						응용소프트웨어 엔지니어링은 컴퓨터 프로그래밍 언어로 각 
-						업무에맞는 소프트웨어의 기능에 관한 설계, 구현 및 테스트를 
-						수행하고,사용자에게 배포하며, 버전관리를 통해 제품의 성능을 
-				 		향상시키고,서비스를 개선할 수 있는 인재양성을 목표로 한다.
-						데이터베이스 구현을 위하여 DBMS(Data Base Management System)
-						(DataBase Management Systems) 설치, 데이터베이스 생성, 데이
-						터베이스 오브젝트를 계획, 설계하고 구현하는 능력을 함양한다.
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div id="curri_des">
-							<h3>커리큘럼이미지</h3>			
-						</div>
-					</td>
-				</tr>
-			</table>
-	</div>
 		<div id="under_list">
 			<div id="list_button">
 				<button type="button" id="list_btn">목록</button>
@@ -207,8 +224,8 @@
 			<div id="del_button">
 				<button type="button" id="del_btn">삭제</button>
 			</div>
-			<div id="ans_button">
-				<button type="button">수정</button>
+			<div id="edit_button">
+				<button type="button" id="edit_btn">수정</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>

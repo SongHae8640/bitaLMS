@@ -19,11 +19,10 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:160px;
+	top:243px;
 	height:700px;
 	width: 200px;
 	text-align:center;
-	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -140,7 +139,7 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><a href="./qna_A_detail.jsp">프린트도 사용가능한가요?</a></td>
+						<td><a href="qna_detail.amd">프린트도 사용가능한가요?</a></td>
 						<td>김코난</td>
 						<td>2019-07-02</td>
 						<td>답변대기</td>

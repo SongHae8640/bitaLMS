@@ -23,7 +23,6 @@
 	height:700px;
 	width: 200px;
 	text-align:center;
-	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -32,6 +31,12 @@
 	#content #sidebar ul li a{
 	text-decoration: none;
 	color: rgb(0,0,0);
+	}
+	#content #page_name{
+	width: 120px;
+	margin: 0 auto;
+	text-align:center;
+	border: 1px solid gray;
 	}
 	#content #real_content{
 	position:relative;
@@ -42,17 +47,28 @@
 	#content #real_content #lec_detail{
 	width: 600px;
 	}
+	#content #real_content #lec_detail #curri_thumb{
+	float: left;
+	width:100px;
+	height:140px;
+	border: 1px solid gray;
+	margin-top: 5px;
+	}
 	#content #real_content #lec_detail table,th,td{
 	border: 1px solid gray;
 	}
 	#lec_table1{
-	width:450px;
+	width:400px;
+	}
+	#lec_table1 input{
+	width:80px;
 	}
 	#lec_table2{
 	width:600px;
 	height:320px;
 	margin: 0 auto;
 	}
+
 	#content #real_content #lec_detail #qna_content {
 	width:600px;
 	}
@@ -91,10 +107,11 @@
 	}
 	#content #under_list #ok_button{
 	float: right;
+	width: 45px;
 	}
 	#content #under_list #reject_button{
-	width: 45px;
 	float: right;
+	width: 45px;
 	}
 	
 </style>
@@ -141,6 +158,8 @@
 		</div>
 		<form name="send_lec" method="post" action="manage_lec_edit.adm">
 		<div id="real_content">
+		<br />
+
 			<div id="page_name">
 				<h2>강좌수정</h2>
 			</div>
@@ -167,16 +186,16 @@
 					<tr>
 						<td>교육기간</td>
 						<td>
-						<input type="text" name="lec_start" placeholder="2019-07-01">~ 
-						<input type="text" name="lec_end" placeholder="2019-10-01">
+						<input type="text" name="lec_start" value="2019-07-01">~ 
+						<input type="text" name="lec_end" value="2019-10-01">
 						</td>
 					</tr>
 					<tr>
-						<td><input type="text" name="lec_level" placeholder="3">수준</td>
+						<td><input type="text" name="lec_level" value="3">수준</td>
 					</tr>
 					<tr>
 						<td>최대인원</td>
-						<td><input type="text" name="max_stu" placeholder="30"></td>
+						<td><input type="text" name="max_stu" value="30"></td>
 					</tr>
 			</table>
 			<table id="lec_table2">
@@ -188,12 +207,10 @@
 				</tr>
 				<tr>
 					<td>
-						강좌내용
-					</td>
-				</tr>
-				<tr>
-					<td>
+					<label>강의내용</label>
+						<div>
 						<textarea name="content" rows="6" cols="70">내용</textarea>
+						</div>
 					</td>
 				</tr>
 				<tr>

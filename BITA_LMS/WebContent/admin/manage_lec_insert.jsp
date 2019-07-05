@@ -23,7 +23,6 @@
 	height:700px;
 	width: 200px;
 	text-align:center;
-	z-index: 1;
 	background-color: gray;
 	}
 	#content #sidebar ul li{
@@ -32,6 +31,12 @@
 	#content #sidebar ul li a{
 	text-decoration: none;
 	color: rgb(0,0,0);
+  }
+	#content #page_name{
+	width: 120px;
+	margin: 0 auto;
+	text-align:center;
+	border: 1px solid gray;
 	}
 	#content #real_content{
 	position:relative;
@@ -42,17 +47,28 @@
 	#content #real_content #lec_detail{
 	width: 600px;
 	}
+	#content #real_content #lec_detail #curri_thumb{
+	float: left;
+	width:100px;
+	height:140px;
+	border: 1px solid gray;
+	margin-top: 5px;
+	}
 	#content #real_content #lec_detail table,th,td{
 	border: 1px solid gray;
 	}
 	#lec_table1{
-	width:450px;
+	width:400px;
+	}
+	#lec_table1 input{
+	width:80px;
 	}
 	#lec_table2{
 	width:600px;
 	height:320px;
 	margin: 0 auto;
 	}
+
 	#content #real_content #lec_detail #qna_content {
 	width:600px;
 	}
@@ -91,14 +107,15 @@
 	}
 	#content #under_list #ok_button{
 	float: right;
+	width: 45px;
 	}
 	#content #under_list #reject_button{
-	width: 45px;
 	float: right;
+	width: 45px;
 	}
 	
 </style>
-<script type="text/javascript" src="/BITA_LMS/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -107,17 +124,14 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#del_btn').click(function(){
-			var result = confirm('정말 삭제하시겠습니까?'); 
-			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm'); } 
-			else { 
-				//no-변동사항없음
-				} 
-			});
 		$('#list_btn').click(function(){
-				location.replace('qna.adm');
+			//목록으로
+			location.replace('manage_lec.adm');  
 			});
+		$('#reject_btn').click(function(){
+			//등록안할래==목록으로
+			location.replace('manage_lec.adm');   
+		});
 	});
 </script>
 </head>
@@ -143,22 +157,22 @@
 			<h3>강좌관리</h3>
 			<br/><br/>
 		</div>
-		<form name="send_lec" method="post" action="manage_lec_update.adm">
+		<form name="send_lec" method="post" action="manage_lec_insert.adm">
 		<div id="real_content">
-		<br/>
+		<br />
 			<div id="page_name">
-				<h2>강좌상세</h2>
+				<h2>강좌등록</h2>
 			</div>
 			<br/><br/>
 		<div id="lec_detail">
-		<div>
+
 			<div id="curri_thumb">
 				<h3>커리큘럼이미지</h3>
 			</div>
 			<table id="lec_table1">
 					<tr>
 						<td>강좌명</td>
-						<td><input type="text" name="lec_name" placeholder="JAVA"></td>
+						<td><input type="text" name="lec_name"></td>
 					</tr>
 					<tr>
 						<td>강사명</td>
@@ -173,17 +187,17 @@
 					<tr>
 						<td>교육기간</td>
 						<td>
-						<input type="text" name="lec_start" placeholder="2019-07-01">~ 
-						<input type="text" name="lec_end" placeholder="2019-10-01">
+						<input type="text" name="lec_start">
+						<input type="text" name="lec_end">
 						</td>
 					</tr>
 					<tr>
-						<td>교육수준</td>
-						<td><input type="text" name="lec_level" placeholder="3">수준</td>
+						<td><input type="text" name="lec_level" >수준</td>
 					</tr>
 					<tr>
 						<td>최대인원</td>
-						<td><input type="text" name="max_stu" placeholder="30"></td>
+						<td><input type="text" name="max_stu"></td>
+
 					</tr>
 			</table>
 			<table id="lec_table2">
@@ -195,12 +209,10 @@
 				</tr>
 				<tr>
 					<td>
-						강좌내용
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<textarea name="content" rows="6" cols="70">내용</textarea>
+					<label>강의내용</label>
+						<div>
+						<textarea name="content" rows="6" cols="70"></textarea>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -220,7 +232,7 @@
 				<button type="button" id="reject_btn">취소</button>
 			</div>
 			<div id="ok_button">
-				<button type="subit">확인</button>
+				<button type="submit" id="ok_btn">확인</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
