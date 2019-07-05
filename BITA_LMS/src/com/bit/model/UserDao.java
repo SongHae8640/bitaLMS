@@ -69,4 +69,34 @@ public class UserDao {
 		}
 		return bean;
 	}
+	
+	public int insertUser(UserDto bean){
+		int result=0;
+		//user_id, password, name, email, phone, inflow_path, belong
+		String sql = "insert into user01"
+				+ "(user_id,password,name,email,phone,inflow_path,belong)"
+				+ " values(?,?,?,?,?,?,'ÇÐ»ý')";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bean.getUserId());
+			pstmt.setString(2, bean.getPassword());
+			pstmt.setString(3, bean.getName());
+			pstmt.setString(4, bean.getEmail());
+			pstmt.setString(5, bean.getPhoneNumber());
+			pstmt.setString(6, bean.getInflowPath());
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				if(pstmt!=null)pstmt.close();
+				if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
 }

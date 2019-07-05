@@ -2,8 +2,8 @@ package com.bit.model;
 
 public class CalendarDto {
 	//시작날짜, 종료 날짜, 제목, 내용
-	int calendarId, lectureId;
-	String title, content, startDate, endDate;
+	private int calendarId, lectureId;
+	private String title, content, startDate, endDate;
 	
 	public int getCalendarId() {
 		return calendarId;

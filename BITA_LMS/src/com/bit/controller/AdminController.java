@@ -44,88 +44,74 @@ public class AdminController extends HttpServlet {
 
 				if (path.equals("/main.adm")) {
 					// 메인페이지
-					UserDto bean = (UserDto) session.getAttribute("userBean");
-					ArrayList<CalendarDto> calendarList = dao.getMainCalendar();
-					req.setAttribute("calendarList", calendarList);
+					String month = req.getParameter("month");
+					req.setAttribute("calendarList", dao.getMainCalendar(month));
 					
 					dao = new AdminDao();
-					MainUserDto beanMain = dao.getMainUser(bean.getUserId());
-					req.setAttribute("beanMain", beanMain);
+					req.setAttribute("beanMain", dao.getMainUser(userBean.getUserId()));
 					rd = req.getRequestDispatcher("admin/main_A.jsp");
 
 				} else if (path.equals("/manage_lec.adm")) {
 					// 강좌관리 목록 페이지
-					ArrayList<LectureDto> LectureList = dao.getLecture();
-					req.setAttribute("LectureList", LectureList);
+					req.setAttribute("LectureList", dao.getLecture());
 
 					rd = req.getRequestDispatcher("admin/manage_lec.jsp");
 				} else if (path.equals("/manage_lec_detail.adm")) {
 					// 강좌관리 상세 페이지
 					int idx = Integer.parseInt(req.getParameter("idx"));
-					LectureDto LectureDetail = dao.detailLecture(idx);
-					req.setAttribute("LectureDetail", LectureDetail);
+					req.setAttribute("LectureDetail", dao.detailLecture(idx));
 
 					rd = req.getRequestDispatcher("admin/manage_lec_detail.jsp");
 				} else if (path.equals("/manage_stu.adm")) {
 					// 수강생관리 목록 페이지(목록별)
-					ArrayList<AttendanceDto> ManageStuList = dao.getManageStu();
-					req.setAttribute("ManageStuList", ManageStuList);
+					req.setAttribute("ManageStuList", dao.getManageStu());
 					
 					rd = req.getRequestDispatcher("admin/manage_stu.jsp");
 
 				} else if (path.equals("/manage_stu_month.adm")) {
 					// 수강생관리 목록 페이지(월별)
-					ArrayList<AttendanceDto> ManageStuMonth = dao.getManageStuMonth();
-					req.setAttribute("ManageStuMonth", ManageStuMonth);
+					req.setAttribute("ManageStuMonth", dao.getManageStuMonth());
 					
 					rd = req.getRequestDispatcher("admin/manage_stu_month.jsp");
 
 				} else if (path.equals("/manage_tea.adm")) {
 					// 강사관리 목록 페이지
-					ArrayList<TeacherDto> ManageTeaList = dao.getManageTea();
-					req.setAttribute("ManageTeaList", ManageTeaList);
+					req.setAttribute("ManageTeaList", dao.getManageTea());
 					
 					rd = req.getRequestDispatcher("admin/manage_tea.jsp");
 
 				} else if (path.equals("/manage_tea_detail.adm")) {
 					// 강사관리 상세 페이지
 					int idx = Integer.parseInt(req.getParameter("idx"));
-					TeacherDto bean = dao.detailManageTea(idx);
-					req.setAttribute("beanTea", bean);
+					req.setAttribute("beanTea", dao.detailManageTea(idx));
 					
 					rd = req.getRequestDispatcher("admin/manage_tea_detail.jsp");
 				} else if (path.equals("/qna.adm")) {
 					// 큐엔에이 목록 페이지
-					ArrayList<QnaLDto> QnaList = dao.getQnaList();
-					req.setAttribute("QnaList", QnaList);
+					req.setAttribute("QnaList", dao.getQnaList());
 					
 					rd = req.getRequestDispatcher("admin/qna_A.jsp");
 				} else if (path.equals("/qna_detail.adm")) {
 					// 큐엔에이 상세 페이지
 					int idx = Integer.parseInt(req.getParameter("idx"));
-					QnaLDto bean = dao.detailQnaList(idx);
-					req.setAttribute("beanQna", bean);
+					req.setAttribute("beanQna", dao.detailQnaList(idx));
 					
 					rd = req.getRequestDispatcher("admin/qna_A_detail.jsp");
 				} else if (path.equals("/register.adm")) {
 					// 학생등록 목록페이지
-					ArrayList<LectureDto> arrangeLecture = dao.arrangeLecture();
-					// 커넥션 새로 할당 (끊겼으니까)
-
-					dao = new AdminDao();
-
-					ArrayList<RegisterDto> RegisterList = dao.getRegister();
+					
 					// 어트리뷰트로 저장하고 jsp페이지에서 get으로 불러오기
-					req.setAttribute("RegisterList", RegisterList);
-					req.setAttribute("arrangeLecture", arrangeLecture);
+					
+					req.setAttribute("RegisterList", dao.getRegister());
+					dao = new AdminDao();
+					req.setAttribute("arrangeLecture", dao.arrangeLecture());
 					rd = req.getRequestDispatcher("admin/register.jsp");
 
 				} else if (path.equals("/register_detail.adm")) {
 					// 학생등록 상세페이지
 					int idx = Integer.parseInt(req.getParameter("idx"));
-					RegisterDto RegisterDetail = dao.detailRegister(idx);
 
-					req.setAttribute("DetailRegister", RegisterDetail);
+					req.setAttribute("DetailRegister", dao.detailRegister(idx));
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
 				} else {
 					System.out.println("존재하지않는페이지");

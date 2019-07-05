@@ -3,11 +3,9 @@ package com.bit.model;
 import java.sql.Date;
 
 public class AttendanceDto {
-	String stdId,name,status,checkinTime,CheckoutTime;
-	Date dayTime ;
-	int lectureId;
-	
-	
+	private String stdId,name,status,checkinTime,CheckoutTime;
+	private Date dayTime ;
+	private int lectureId;
 	
 	public Date getDayTime() {
 		return dayTime;
