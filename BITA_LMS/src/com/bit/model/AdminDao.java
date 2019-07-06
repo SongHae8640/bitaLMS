@@ -35,7 +35,7 @@ public class AdminDao {
 	//월별 수강생관리 페이지 월은 ?idx=""로 받아오기
 	//제일 처음 접근일 때는 sysdate로 가져오기
 	//날짜이동버튼을 누르면 제이쿼리에서 2019-07에서 -1을 하든 +1을 하든 해서 idx값으로 넘겨주기
-	public ArrayList<CalendarDto> getCalendarList(String yearMonth){
+	public ArrayList<CalendarDto> getCalendarMonthList(String yearMonth){
 		ArrayList<CalendarDto> list = new ArrayList<CalendarDto>();
 		
 		String sql = "";
@@ -67,6 +67,11 @@ public class AdminDao {
 				}
 			}
 			return list;
+	}
+	
+	public ArrayList<CalendarDto> getCalendarDayList(String yearMonthDay){
+		
+		return null;
 	}
 	
 	

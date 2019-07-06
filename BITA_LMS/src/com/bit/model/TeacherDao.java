@@ -345,9 +345,42 @@ public class TeacherDao {
 		return 0;
 	}
 
-	public ArrayList<CalendarDto> getCalendarList(int lectureId, String yearMonth) {
-		//���� ȭ�鿡�� �޷¿� �� ���� ����Ʈ�� �������� �޼���
-		//yearMonth�� null�̸�(�޷� �� �̵����� ���� ��찡 �ƴ� ���) sysdate��, null�� �ƴϸ� �ش� �����
+	public ArrayList<CalendarDto> getCalendarMonthList(int lectureId, String yearMonth){
+		ArrayList<CalendarDto> list = new ArrayList<CalendarDto>();
+		
+		String sql = "";
+		if(yearMonth==null){
+			//int calendarId, lectureId;
+			//String title, content, startDate, endDate;
+			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=to_number(to_char(sysdate,'mm')";
+		}else{
+			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=?";
+		}
+			try {
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()){
+					CalendarDto bean = new CalendarDto();		
+					list.add(bean);
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				try {
+					if(rs!=null)rs.close();
+					if(pstmt!=null)pstmt.close();
+					if(conn!=null)conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return list;
+	}
+	
+	public ArrayList<CalendarDto> getCalendarDayList(int lectureId, String yearMonthDay){
+		
 		return null;
 	}
 

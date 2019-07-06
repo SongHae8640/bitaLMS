@@ -33,74 +33,75 @@ public class AdminController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("AdminController :: path = " + path);
 
-		// 세션 가져오기
+		// �꽭�뀡 媛��졇�삤湲�
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 
 		try {
-			// admin�� ��ٰ���
+			// admin占쏙옙 占쏙옙鳴占쏙옙占�
 			if (userBean.getBelong().equals("admin")) {
 				AdminDao dao = new AdminDao();
 
 				if (path.equals("/main.adm")) {
-					// 메인페이지
+					// 硫붿씤�럹�씠吏�
 					String yearMonth = req.getParameter("yearMonth");
-					req.setAttribute("calendarList", dao.getCalendarList(yearMonth));
-					
+					String yearMonthDay = req.getParameter("yearMonthDay");
+					req.setAttribute("calendarMonthList", dao.getCalendarMonthList(yearMonth));
+					req.setAttribute("calendarDayList", dao.getCalendarDayList(yearMonthDay));
 					dao = new AdminDao();
 					req.setAttribute("beanMain", dao.getUser(userBean.getUserId()));
 					rd = req.getRequestDispatcher("admin/main_A.jsp");
 
 				} else if (path.equals("/manage_lec.adm")) {
-					// 강좌관리 목록 페이지
+					// 媛뺤쥖愿�由� 紐⑸줉 �럹�씠吏�
 					req.setAttribute("LectureList", dao.getLectureList());
 
 					rd = req.getRequestDispatcher("admin/manage_lec.jsp");
 				} else if (path.equals("/manage_lec_detail.adm")) {
-					// ���°� �� ������
+					// 占쏙옙占승곤옙 占쏙옙 占쏙옙占쏙옙占쏙옙
 					int lectureId = Integer.parseInt(req.getParameter("idx"));
 					req.setAttribute("lectureBean", dao.getLecture(lectureId));
 
 					rd = req.getRequestDispatcher("admin/manage_lec_detail.jsp");
 				} else if (path.equals("/manage_stu.adm")) {
-					// 수강생관리 목록 페이지(목록별)
+					// �닔媛뺤깮愿�由� 紐⑸줉 �럹�씠吏�(紐⑸줉蹂�)
 					req.setAttribute("manageStuList", dao.getManageStu());
 					
 					rd = req.getRequestDispatcher("admin/manage_stu.jsp");
 
 				} else if (path.equals("/manage_stu_month.adm")) {
-					// 수강생관리 목록 페이지(월별)
+					// �닔媛뺤깮愿�由� 紐⑸줉 �럹�씠吏�(�썡蹂�)
 					req.setAttribute("manageStuMonth", dao.getManageStuMonth());
 					
 					rd = req.getRequestDispatcher("admin/manage_stu_month.jsp");
 
 				} else if (path.equals("/manage_tea.adm")) {
-					// 강사관리 목록 페이지
+					// 媛뺤궗愿�由� 紐⑸줉 �럹�씠吏�
 					req.setAttribute("teacherList", dao.getTeacherList());
 					
 					rd = req.getRequestDispatcher("admin/manage_tea.jsp");
 
 				} else if (path.equals("/manage_tea_detail.adm")) {
-					// 강사관리 상세 페이지
+					// 媛뺤궗愿�由� �긽�꽭 �럹�씠吏�
 					String userId = req.getParameter("idx");
 					req.setAttribute("teacherBean", dao.getTeacher(userId));
 					
 					rd = req.getRequestDispatcher("admin/manage_tea_detail.jsp");
 				} else if (path.equals("/qna.adm")) {
-					// 큐엔에이 목록 페이지
+					// �걧�뿏�뿉�씠 紐⑸줉 �럹�씠吏�
 					req.setAttribute("qnaLList", dao.getQnaLList());
 					
 					rd = req.getRequestDispatcher("admin/qna_A.jsp");
 				} else if (path.equals("/qna_detail.adm")) {
-					// ť������ �� ������
+					// 큐占쏙옙占쏙옙占쏙옙 占쏙옙 占쏙옙占쏙옙占쏙옙
 					int qnlLId = Integer.parseInt(req.getParameter("idx"));
 					req.setAttribute("qnaLBean", dao.getQnaL(qnlLId));
 					
 					rd = req.getRequestDispatcher("admin/qna_A_detail.jsp");
 				} else if (path.equals("/register.adm")) {
-					// 학생등록 목록페이지
+					// �븰�깮�벑濡� 紐⑸줉�럹�씠吏�
 					
-					// 어트리뷰트로 저장하고 jsp페이지에서 get으로 불러오기
+					// �뼱�듃由щ럭�듃濡� ���옣�븯怨� jsp�럹�씠吏��뿉�꽌 get�쑝濡� 遺덈윭�삤湲�
 					
 					req.setAttribute("registerList", dao.getRegisterList());
 					dao = new AdminDao();
@@ -108,16 +109,16 @@ public class AdminController extends HttpServlet {
 					rd = req.getRequestDispatcher("admin/register.jsp");
 
 				} else if (path.equals("/register_detail.adm")) {
-					// �л��� ��������
+					// 占싻삼옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙
 					int applyId = Integer.parseInt(req.getParameter("idx"));
 
 					req.setAttribute("registerBea", dao.getRegister(applyId));
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
 				} else {
-					System.out.println("�������ʴ�������");
+					System.out.println("占쏙옙占쏙옙占쏙옙占십댐옙占쏙옙占쏙옙占쏙옙");
 				}
 			} else {
-				// teacher�� student������� ����Ϸ�� �ϸ� �� ������
+				// teacher占쏙옙 student占쏙옙占쏙옙占쏙옙占� 占쏙옙占쏙옙狗占쏙옙 占싹몌옙 占쏙옙 占쏙옙占쏙옙占쏙옙
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
@@ -134,58 +135,58 @@ public class AdminController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("AdminController :: path = " + path);
 		
-		//���� ����
+		//占쏙옙占쏙옙 占쏙옙占쏙옙
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 			
 		int result;
 		
 		try {
-			//admin�� ��ٰ���
+			//admin占쏙옙 占쏙옙鳴占쏙옙占�
 			if (userBean.getBelong().equals("admin")) {
 				AdminDao dao = new AdminDao();
 				if (path.equals("/manage_lec_update.adm")) {
-					//���°� ��� ������
+					//占쏙옙占승곤옙 占쏙옙占� 占쏙옙占쏙옙占쏙옙
 //					LectureDto bean = (LectureDto) req.getParameterMap(); ??
 //					dao.updateLecture(bean);
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_update.jsp");
 				}else if (path.equals("/manage_lec_insert.adm")) {
-					//강좌 생성
+					//媛뺤쥖 �깮�꽦
 					
 //					LectureDto lectureBean = (LectureDto) req.getParameter("idx");
 //					result = dao.insertLecture(lectureBean);
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_insert.jsp");
 				} else if (path.equals("/manage_lec_delete.adm")) {
-					//���°� ���� ��� (������ ������ �ٷ� ������ ������)
+					//占쏙옙占승곤옙 占쏙옙占쏙옙 占쏙옙占� (占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쌕뤄옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙)
 					int idx = Integer.parseInt(req.getParameter("idx"));
 					result = dao.deleteLecture(idx);
 					
 					rd = req.getRequestDispatcher("manage_lec_detail.adm");
 				} else if (path.equals("/manage_stu_month_update.adm")) {
-					// �л�� ��� ������(��) ���
+					// 占싻삼옙占� 占쏙옙占� 占쏙옙占쏙옙占쏙옙(占쏙옙) 占쏙옙占�
 					dao.getManageStuMonth();
 					
 					rd = req.getRequestDispatcher("manage_stu_month.adm");
 				} else if (path.equals("/manage_tea_insert.adm")) {
-					// ����� ���� �߰� ������
+					// 占쏙옙占쏙옙占� 占쏙옙占쏙옙 占쌩곤옙 占쏙옙占쏙옙占쏙옙
 					rd = req.getRequestDispatcher("admin/manage_tea_insert.jsp");
 
 				} else if (path.equals("/manage_tea_update.adm")) {
-					// ����� ���� ��� ������
+					// 占쏙옙占쏙옙占� 占쏙옙占쏙옙 占쏙옙占� 占쏙옙占쏙옙占쏙옙
 					rd = req.getRequestDispatcher("admin/manage_tea_update.jsp");
 
 				} else if (path.equals("/manage_tea_insert.adm")) {
-					// ����� ���� �߰� ������
+					// 占쏙옙占쏙옙占� 占쏙옙占쏙옙 占쌩곤옙 占쏙옙占쏙옙占쏙옙
 					rd = req.getRequestDispatcher("admin/manage_tea_insert.jsp");
 
 				} else if (path.equals("/qna_update.adm")) {
-					// ť������ �亯��� ������
+					// 큐占쏙옙占쏙옙占쏙옙 占썰변占쏙옙占� 占쏙옙占쏙옙占쏙옙
 					rd = req.getRequestDispatcher("admin/qna_A_update.jsp");
 
 				} else if (path.equals("/qna_delete.adm")) {
-					// ť������ ��� ������
+					// 큐占쏙옙占쏙옙占쏙옙 占쏙옙占� 占쏙옙占쏙옙占쏙옙
 					
 					rd = req.getRequestDispatcher("qna_detail.adm");
 				} 
