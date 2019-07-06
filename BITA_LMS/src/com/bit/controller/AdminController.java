@@ -33,7 +33,7 @@ public class AdminController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("AdminController :: path = " + path);
 
-		// ���� ����
+		// 세션 가져오기
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 
@@ -44,57 +44,57 @@ public class AdminController extends HttpServlet {
 
 				if (path.equals("/main.adm")) {
 					// 메인페이지
-					String month = req.getParameter("month");
-					req.setAttribute("calendarList", dao.getMainCalendar(month));
+					String yearMonth = req.getParameter("yearMonth");
+					req.setAttribute("calendarList", dao.getCalendarList(yearMonth));
 					
 					dao = new AdminDao();
-					req.setAttribute("beanMain", dao.getMainUser(userBean.getUserId()));
+					req.setAttribute("beanMain", dao.getUser(userBean.getUserId()));
 					rd = req.getRequestDispatcher("admin/main_A.jsp");
 
 				} else if (path.equals("/manage_lec.adm")) {
 					// 강좌관리 목록 페이지
-					req.setAttribute("LectureList", dao.getLecture());
+					req.setAttribute("LectureList", dao.getLectureList());
 
 					rd = req.getRequestDispatcher("admin/manage_lec.jsp");
 				} else if (path.equals("/manage_lec_detail.adm")) {
 					// ���°� �� ������
-					int idx = Integer.parseInt(req.getParameter("idx"));
-					req.setAttribute("LectureDetail", dao.detailLecture(idx));
+					int lectureId = Integer.parseInt(req.getParameter("idx"));
+					req.setAttribute("lectureBean", dao.getLecture(lectureId));
 
 					rd = req.getRequestDispatcher("admin/manage_lec_detail.jsp");
 				} else if (path.equals("/manage_stu.adm")) {
 					// 수강생관리 목록 페이지(목록별)
-					req.setAttribute("ManageStuList", dao.getManageStu());
+					req.setAttribute("manageStuList", dao.getManageStu());
 					
 					rd = req.getRequestDispatcher("admin/manage_stu.jsp");
 
 				} else if (path.equals("/manage_stu_month.adm")) {
 					// 수강생관리 목록 페이지(월별)
-					req.setAttribute("ManageStuMonth", dao.getManageStuMonth());
+					req.setAttribute("manageStuMonth", dao.getManageStuMonth());
 					
 					rd = req.getRequestDispatcher("admin/manage_stu_month.jsp");
 
 				} else if (path.equals("/manage_tea.adm")) {
 					// 강사관리 목록 페이지
-					req.setAttribute("ManageTeaList", dao.getManageTea());
+					req.setAttribute("teacherList", dao.getTeacherList());
 					
 					rd = req.getRequestDispatcher("admin/manage_tea.jsp");
 
 				} else if (path.equals("/manage_tea_detail.adm")) {
 					// 강사관리 상세 페이지
 					String userId = req.getParameter("idx");
-					req.setAttribute("beanTea", dao.detailManageTea(userId));
+					req.setAttribute("teacherBean", dao.getTeacher(userId));
 					
 					rd = req.getRequestDispatcher("admin/manage_tea_detail.jsp");
 				} else if (path.equals("/qna.adm")) {
 					// 큐엔에이 목록 페이지
-					req.setAttribute("QnaList", dao.getQnaList());
+					req.setAttribute("qnaLList", dao.getQnaLList());
 					
 					rd = req.getRequestDispatcher("admin/qna_A.jsp");
 				} else if (path.equals("/qna_detail.adm")) {
 					// ť������ �� ������
-					int idx = Integer.parseInt(req.getParameter("idx"));
-					req.setAttribute("beanQna", dao.detailQnaList(idx));
+					int qnlLId = Integer.parseInt(req.getParameter("idx"));
+					req.setAttribute("qnaLBean", dao.getQnaL(qnlLId));
 					
 					rd = req.getRequestDispatcher("admin/qna_A_detail.jsp");
 				} else if (path.equals("/register.adm")) {
@@ -102,16 +102,16 @@ public class AdminController extends HttpServlet {
 					
 					// 어트리뷰트로 저장하고 jsp페이지에서 get으로 불러오기
 					
-					req.setAttribute("RegisterList", dao.getRegister());
+					req.setAttribute("registerList", dao.getRegisterList());
 					dao = new AdminDao();
-					req.setAttribute("arrangeLecture", dao.arrangeLecture());
+					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
 					rd = req.getRequestDispatcher("admin/register.jsp");
 
 				} else if (path.equals("/register_detail.adm")) {
 					// �л��� ��������
-					int idx = Integer.parseInt(req.getParameter("idx"));
+					int applyId = Integer.parseInt(req.getParameter("idx"));
 
-					req.setAttribute("DetailRegister", dao.detailRegister(idx));
+					req.setAttribute("registerBea", dao.getRegister(applyId));
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
 				} else {
 					System.out.println("�������ʴ�������");
@@ -137,7 +137,8 @@ public class AdminController extends HttpServlet {
 		//���� ����
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
-				
+			
+		int result;
 		
 		try {
 			//admin�� ��ٰ���
@@ -145,19 +146,21 @@ public class AdminController extends HttpServlet {
 				AdminDao dao = new AdminDao();
 				if (path.equals("/manage_lec_update.adm")) {
 					//���°� ��� ������
-//					LectureDto bean = (LectureDto) req.getParameterMap();
+//					LectureDto bean = (LectureDto) req.getParameterMap(); ??
 //					dao.updateLecture(bean);
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_update.jsp");
 				}else if (path.equals("/manage_lec_insert.adm")) {
-					//���°� ���� �߰� ������
+					//강좌 생성
 					
+//					LectureDto lectureBean = (LectureDto) req.getParameter("idx");
+//					result = dao.insertLecture(lectureBean);
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_insert.jsp");
 				} else if (path.equals("/manage_lec_delete.adm")) {
 					//���°� ���� ��� (������ ������ �ٷ� ������ ������)
 					int idx = Integer.parseInt(req.getParameter("idx"));
-					int result = dao.deleteLecture(idx);
+					result = dao.deleteLecture(idx);
 					
 					rd = req.getRequestDispatcher("manage_lec_detail.adm");
 				} else if (path.equals("/manage_stu_month_update.adm")) {
