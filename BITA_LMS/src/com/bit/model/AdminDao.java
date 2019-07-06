@@ -323,6 +323,13 @@ public class AdminDao {
 		return 0;
 	}
 	
+	//행정팀 수강생 삭제, 강사 삭제
+	public int deleteUser(String userId) {
+		
+		
+		return -1;
+	}
+	
 	//행정팀 강사관리 목록
 	public ArrayList<TeacherDto> getTeacherList() {
 		return null;
