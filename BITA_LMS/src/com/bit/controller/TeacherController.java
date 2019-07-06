@@ -54,7 +54,7 @@ public class TeacherController extends HttpServlet {
 					req.setAttribute("userBean", userBean);
 					
 					//main 우측 하단 정보 전달
-					req.setAttribute("numStu", dao.getNumStu(userBean.getLecture_id()));
+					req.setAttribute("numStu", dao.getStuNum(userBean.getLecture_id()));
 					req.setAttribute("checkinNum", dao.getCheckinNum(userBean.getLecture_id()));
 					req.setAttribute("submissionNum", dao.getSubmissionNum(userBean.getLecture_id()));
 					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
@@ -77,7 +77,7 @@ public class TeacherController extends HttpServlet {
 	
 				}else if (path.equals("/assignment_detail.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//글 리스트(또는 edit에서)에서 idx로 assignmentId를 받아와서 사용(rownum)아님
-					req.setAttribute("AssignmentBean", dao.getAssignmentBean(assignmentId));
+					req.setAttribute("AssignmentBean", dao.getAssignment(assignmentId));
 					req.setAttribute("submissionList", dao.getSubmissionList(assignmentId));
 					rd = req.getRequestDispatcher("teacher/assignment_T_deatil.jsp");
 				
@@ -87,8 +87,8 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
 
 				}else if (path.equals("/qna_detail.tea")) {
-					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//글 리스트(또는 edit에서)에서 idx로 assignmentId를 받아와서 사용(rownum)아님
-					req.setAttribute("QnaLBean", dao.QnaLDetail(assignmentId));
+					int qnaLId = Integer.parseInt(req.getParameter("idx"));	//글 리스트(또는 edit에서)에서 idx로 assignmentId를 받아와서 사용(rownum)아님
+					req.setAttribute("QnaLBean", dao.getQnaL(qnaLId));
 					rd = req.getRequestDispatcher("teacher/qna_T_deatil.jsp");
 				
 				}else {
@@ -152,7 +152,7 @@ public class TeacherController extends HttpServlet {
 					String title = req.getParameter("title");
 					String content = req.getParameter("content");
 					String assingmentId = req.getParameter("assignmentId");
-					result = dao.editAssignment(title,content,assingmentId);
+					result = dao.updateAssignment(title,content,assingmentId);
 					rd = req.getRequestDispatcher("/assignment_detail.tea?idx="+assingmentId);	///수정한 페이지로
 				} else if (path.equals("/assignment_delete.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
@@ -161,8 +161,8 @@ public class TeacherController extends HttpServlet {
 				
 				}else if (path.equals("/qnaAnswer_insert.tea")) {//qna에서 답변을 입력 또는 수정할때 
 					String answerContent = req.getParameter("answerContent");
-					String questionId = req.getParameter("questionId");
-					result = dao.insertQnaLAnswer(answerContent,questionId);
+					int questionId = Integer.parseInt(req.getParameter("questionId"));
+					result = dao.updateQnaLAnswer(answerContent,questionId);
 					rd = req.getRequestDispatcher("/qna_detail.tea?idx="+questionId);	//리스트 페이지로
 				}else if(path.equals("/calendar_insert.tea")){
 					String startDate = req.getParameter("startDate");

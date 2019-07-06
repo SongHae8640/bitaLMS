@@ -29,9 +29,9 @@ public class TeacherDao {
 	}
 
 	///////////////////////////////////////////
-	//Ãâ¼®
+	//ï¿½â¼®
 
-	// °­ÁÂ¹øÈ£¸¦ ÆÄ¶ó¹ÌÅÍ·Î ÁÖ°í ÇĞ»ıÀÌ¸§, Ãâ¼®»óÅÂ, ³¯Â¥¸¦ ¸®ÅÏ ¹Ş´Â´Ù.
+	// ï¿½ï¿½ï¿½Â¹ï¿½È£ï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½Í·ï¿½ ï¿½Ö°ï¿½ ï¿½Ğ»ï¿½ï¿½Ì¸ï¿½, ï¿½â¼®ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ş´Â´ï¿½.
 	public ArrayList<AttendanceDto> getTodayAttendance(int lectureId) {
 		ArrayList<AttendanceDto> list = new ArrayList<AttendanceDto>();
 		String sql ="SELECT day_time,name,std_id,status,lecture_id "
@@ -49,7 +49,7 @@ public class TeacherDao {
 			while(rs.next()){
 				System.out.println("bean +1");
 				AttendanceDto bean = new AttendanceDto();
-				bean.setDayTime(rs.getDate("day_time"));
+				bean.setDayTime(rs.getString("day_time"));
 				bean.setName(rs.getString("name"));
 				bean.setStatus(rs.getString("status"));
 				bean.setLectureId(lectureId);
@@ -70,16 +70,9 @@ public class TeacherDao {
 		return list;
 	}
 	
-	//Ãâ°á°ü¸®(¸ñ·Ï)¿¡¼­ ÀúÀå ¹öÆ°À» Å¬¸¯ ÇßÀ»¶§ »ç¿ëµÇ´Â ¸Ş¼­µå
-	// ÇĞ»ıÀÇ Ãâ¼® Á¤º¸¸¦ db¿¡ ÀúÀåÇÑ´Ù.
-	public void setTodayAttendance(ArrayList<AttendanceDto> list) {
-		//°­»ç°¡ ÀúÀåÇÑ Ãâ¼® Á¤º¸¿Í ÇĞ»ıÀÇ Ãâ¼® Á¤º¸°¡ ´Ù¸¦¶§ ¾î¶»°Ô ÇÒÁö ¸ÂÃç¾ßÇÔ
-		//ex) °­»ç È­¸é¿¡´Â ¾Æ¹«°Íµµ ¾ÈÂïÇô ÀÖ¾î¼­ Áö°¢À» ´­·¶À¸³ª, µ¿±âÈ­ µÇ±â Àü ÇĞ»ıÀÌ Ãâ¼®À» ÂïÀº°æ¿ì µî
-		
-	}
 	
-	// °­ÁÂ¹øÈ£¿Í ¿ùÀ» ÆÄ¶ó¹ÌÅÍ·Î ÁÖ°í ÇĞ»ıÀÌ¸§, Ãâ¼®»óÅÂ, ³¯Â¥¸¦ ¸®ÅÏ ¹Ş´Â´Ù.
-	// Ãâ°á °ü¸®(¿ùº°) ÆäÀÌÁö¿¡¼­ º¸¿©Áö´Â 0000-00ÀÇ °ªÀ» yyyymm ÇüÅÂÀÇ ¹®ÀÚ¿­·Î ¹Ş´Â´Ù.
+	// ï¿½ï¿½ï¿½Â¹ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½Í·ï¿½ ï¿½Ö°ï¿½ ï¿½Ğ»ï¿½ï¿½Ì¸ï¿½, ï¿½â¼®ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ş´Â´ï¿½.
+	// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0000-00ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ yyyymm ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Ş´Â´ï¿½.
 	public ArrayList<AttendanceDto> getMonthAttendance(int lectureId, String yyyymm) {
 		ArrayList<AttendanceDto> list = new ArrayList<AttendanceDto>();
 		String sql ="SELECT name, status, day_time "
@@ -97,7 +90,7 @@ public class TeacherDao {
 			rs = pstmt.executeQuery();
 			while(rs.next()){
 				AttendanceDto bean = new AttendanceDto();
-				bean.setDayTime(rs.getDate("day_time"));
+				bean.setDayTime(rs.getString("day_time"));
 				bean.setName(rs.getString("name"));
 				bean.setStatus(rs.getString("stutus"));
 				list.add(bean);
@@ -117,13 +110,13 @@ public class TeacherDao {
 		return list;
 	}
 	
-	/// ÀÔ½Ç ¹öÆ°À» ´©¸£¸é ¹Ù·Î ÀÌº¥Æ®¸¦ ¹ß»ı ½ÃÅ³ °ÍÀÎÁö? µµ¿µÀÌÇüÀÌ¶ó ÀÌ¾ß±â ÇÒ°Í
+	/// ï¿½Ô½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ß»ï¿½ ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ ï¿½Ì¾ß±ï¿½ ï¿½Ò°ï¿½
 
 	
 	///////////////////////////////////////////
-	//¼ºÀû
+	//ï¿½ï¿½ï¿½ï¿½
 	
-	//°­ÁÂ¹øÈ£(lectureId)¿¡ ÇØ´çÇÏ´Â ÇĞ»ıµéÀÇ ¼ºÀûÀ» °¡Á®¿À´Â ¸Ş¼­µå
+	//ï¿½ï¿½ï¿½Â¹ï¿½È£(lectureId)ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½Ğ»ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¼ï¿½ï¿½ï¿½
 	public ArrayList<ScoreDto> getScoreList(int lectureId){
 		ArrayList<ScoreDto> list = new ArrayList<ScoreDto>();
 		String sql = "SELECT name, first_score, second_score,third_score,avg_score "
@@ -138,7 +131,7 @@ public class TeacherDao {
 			rs = pstmt.executeQuery();
 			while(rs.next()){
 				ScoreDto bean = new ScoreDto();
-				//º°ÄªÀ» Áö¾îÁà¾ß ÇÏ´ÂÁö Ã£¾Æº¸°í ´Ù½Ã ÇÒ°Í
+				//ï¿½ï¿½Äªï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ï¿½ï¿½ Ã£ï¿½Æºï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Ò°ï¿½
 				bean.setName(rs.getString("name"));
 				bean.setFirstScore(rs.getInt("first_score"));
 				bean.setSecondScore(rs.getInt("second_score"));
@@ -195,7 +188,7 @@ public class TeacherDao {
 		return list;
 	}
 	
-	public AssignmentDto getAssignmentBean(int assignmentId) {
+	public AssignmentDto getAssignment(int assignmentId) {
 		AssignmentDto bean = new AssignmentDto();
 		String sql = "SELECT title, name,TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,content "
 				+ "FROM lectureUser lu "
@@ -235,7 +228,7 @@ public class TeacherDao {
 				+ "WHERE assignment_id=?";
 		
 		try {
-			//getAssignmentDetail ¿¡¼­ conn¸¦ close ÇÏ±â ¶§¹®¿¡ »õ·Î ¿¬°á
+			//getAssignmentDetail ï¿½ï¿½ï¿½ï¿½ connï¿½ï¿½ close ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			Class.forName(driver);
 			conn = DriverManager.getConnection(url,user,password);
 			pstmt = conn.prepareStatement(sql);
@@ -247,7 +240,7 @@ public class TeacherDao {
 				bean.setFileName(rs.getString("file_name"));
 				bean.setStdName(rs.getString("std_name"));
 				bean.setSubmitDate(rs.getString("submit_date"));
-				bean.setIsCheck(rs.getString("is_check"));	//submissionÀÇ is_check ÀÚ·áÇüÀÌ char(1)ÀÌ¿©¼­ ¿©±â¼­ ¿À·ù°¡ ³¯ ¼öµµ?
+				bean.setIsCheck(rs.getString("is_check"));	//submissionï¿½ï¿½ is_check ï¿½Ú·ï¿½ï¿½ï¿½ï¿½ï¿½ char(1)ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½?
 				list.add(bean);
 			}
 			
@@ -285,7 +278,7 @@ public class TeacherDao {
 				bean.setTitle(rs.getString("title"));
 				bean.setStdName(rs.getString("std_name"));
 				bean.setWriteDate(rs.getString("write_date"));
-				bean.setIsRespon(rs.getString("answer_content"));	//ÀÌ°Ô ¸ÂÀ»·ÃÁö?
+				bean.setIsRespon(rs.getString("answer_content"));	//ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 				bean.setType(rs.getString("type"));
 				list.add(bean);
 			}
@@ -306,84 +299,84 @@ public class TeacherDao {
 	}
 
 	public int insertAssignment(String title, String content, int lecture_id) {
-		// assignmnet_id ´Â seq, write_date´Â SYSDATE ·Î INSERT
+		// assignmnet_id ï¿½ï¿½ seq, write_dateï¿½ï¿½ SYSDATE ï¿½ï¿½ INSERT
 		return 0;
 	}
 
 
 
-	public int editAssignment(String title, String content, String assingmentId) {
-		// assignmentId·Î Á¢±ÙÇÏ°í title, contentÀÇ ³»¿ë ¼öÁ¤
+	public int updateAssignment(String title, String content, String assingmentId) {
+		// assignmentIdï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ title, contentï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		return 0;
 	}
 
 	public int getAssignmentDelete(int assignmentId) {
-		// °úÁ¦ ¹øÈ£·Î ÇØ´ç °úÁ¦ »èÁ¦
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		return 0;
 	}
 
-	public QnaLDto QnaLDetail(int assignmentId) {
-		// 1:1¹®ÀÇ·Î ÇØ´ç ¼¼ºÎ ³»¿ë ºÒ·¯¿À±â
+	public QnaLDto getQnaL(int qnaLId) {
+		// 1:1ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 		return null;
 	}
 
-	public int insertQnaLAnswer(String answerContent, String questionId) {
-		// 1:1¹®ÀÇ¿¡ answer_content(´ë´ä ³»¿ë) Ãß°¡ÇÏ±â(DB»ó¿¡¼­´Â qna_l¿¡ ÀÖ´Â row UPDATE)
+	public int updateQnaLAnswer(String answerContent, int  qnaLId) {
+		// 1:1ë¬¸ì˜ì— ìˆëŠ” Answer update
 		return 0;
 	}
 
 	public int insertAttendanceCheckin(String stdId) {
-		//Ãâ¼®¿¡¼­ ÇØ´ç ÇĞ»ıÀÇ checkin ½Ã°£À» SYSDATE·Î
-		//checkin ÇÒ¶§ checkout Àº ÀÔ·Â x, ÀÔ·Â¾ÈÇÏ¸é ÀÚµ¿À¸·Î null
+		//attendance tableì— rowë¥¼ ìƒì„±í•˜ë©´ì„œ SYSDATE ê¸°ì¤€ìœ¼ë¡œ  ì…ì‹¤(checkin)ê°’ì„ ë„£ëŠ” ë©”ì„œë“œ 
 
 		
 		return 0;
 	}
 
 	public int updateAttendanceCheckout(String stdId) {
-		// Ãâ¼®¿¡¼­ ÇØ´ç  ÇĞ»ıÀÇ checkout ½Ã°£À» SYSDATE·Î update
+		// ï¿½â¼®ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½  ï¿½Ğ»ï¿½ï¿½ï¿½ checkout ï¿½Ã°ï¿½ï¿½ï¿½ SYSDATEï¿½ï¿½ update
 		return 0;
 	}
 
 	public int insertCalendar(String startDate, String endDate, String title,
-			String content, int lecture_id) {
-		// lecture_id¿¡ ÇØ´çÇÏ´Â ÀÏÁ¤ Ãß°¡
-		///end_date¿¡ ¾î¶² °ªÀ» ³Ö¾î¾ß ÇÒÁö °í¹Î
+			String content, int lectureId) {
+		// lecture_idï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
+		///end_dateï¿½ï¿½ ï¿½î¶² ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		return 0;
 	}
 
-	public ArrayList<CalendarDto> getCalendarList(int lecture_id, String yearMonth) {
-		//¸ŞÀÎ È­¸é¿¡¼­ ´Ş·Â¿¡ µé¾î°¥ ÀÏÁ¤ ¸®½ºÆ®¸¦ °¡Á®¿À´Â ¸Ş¼­µå
-		//yearMonth°¡ nullÀÌ¸é(´Ş·Â ¿ù ÀÌµ¿À¸·Î µé¾î¿Â °æ¿ì°¡ ¾Æ´Ñ °æ¿ì) sysdate·Î, nullÀÌ ¾Æ´Ï¸é ÇØ´ç ³â¿ù·Î
+	public ArrayList<CalendarDto> getCalendarList(int lectureId, String yearMonth) {
+		//ï¿½ï¿½ï¿½ï¿½ È­ï¿½é¿¡ï¿½ï¿½ ï¿½Ş·Â¿ï¿½ ï¿½ï¿½î°¥ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¼ï¿½ï¿½ï¿½
+		//yearMonthï¿½ï¿½ nullï¿½Ì¸ï¿½(ï¿½Ş·ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì°¡ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½) sysdateï¿½ï¿½, nullï¿½ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 		return null;
 	}
 
-	public int getNumStu(int lecture_id) {
-		//ÇØ´ç °­ÁÂÀÇ ÇĞ»ı ÃÑ¿øÀ» ¸®ÅÏÇÏ´Â ¸Ş¼­µå
+	public int getStuNum(int lectureId) {
+		//í•™ìƒìˆ˜ ë°˜í™˜ ë©”ì„œë“œ
 		
 		return -1;
 	}
 
-	public int getCheckinNum(int lecture_id) {
-		// ÇØ´ç °­ÁÂÀÇ Ã¼Å©ÀÎÇÑ ÇĞ»ı ¼ö¸¦ ¸®ÅÏÇÏ´Â ¸Ş¼­µå
+	public int getCheckinNum(int lectureId) {
+		// ì²´í¬ì¸(ì…ì‹¤)í•œ í•™ìƒìˆ˜ ë°˜í™˜ ë©”ì„œë“œ
 		
 		return -1;
 	}
 
-	public int getSubmissionNum(int lecture_id) {
-		// °¡Àå ÃÖ±ÙÀÇ(??) °úÁ¦¿¡¼­ Á¦Ãâ ÀÎ¿ø ¼ö¸¦ ¸®ÅÏÇÏ´Â ¸Ş¼­µå 
+	public int getSubmissionNum(int lectureId) {
+		// ê³¼ì œ ì œì¶œ(submission)í•œ í•™ìƒìˆ˜ ë°˜í™˜ ë©”ì„œë“œ
+		// ê°€ì¥ ìµœê·¼ì— ë‚¸ ê³¼ì œ(assingment)ì— ì œì¶œí•œ 
 		
 		return -1;
 	}
 
-	public int getTotalDays(int lecture_id) {
-		// ÃÑ ¼ö¾÷ ÀÏ ¼ö ¸¦ ¹İÈ¯ÇÏ´Â ¸Ş¼­µå
+	public int getTotalDays(int lectureId) {
+		//  í•´ë‹¹ ê°•ì¢Œì˜ ì´ì¼ìˆ˜ ë°˜í™˜ ë©”ì„œë“œ
 		return -1;
 	}
 
-	public int getProgressDays(int lecture_id) {
-		// SYS»óÈ²¿¡¼­ ÁøÇàÇÑ ¼ö¾÷ ÀÏ ¼ö¸¦ ¹İÈ¯ÇÏ´Â ¸Ş¼­µå
+	public int getProgressDays(int lectureId) {
+		// SYSDATE ê¸°ì¤€ìœ¼ë¡œ ìˆ˜ì—… ì§„í–‰ ì¼ìˆ˜ë¥¼ ë°˜í™˜í•˜ëŠ” ë©”ì„œë“œ
 		return -1;
 	}
 }
