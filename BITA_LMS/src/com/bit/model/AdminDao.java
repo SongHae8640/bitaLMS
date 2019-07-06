@@ -96,7 +96,7 @@ public class AdminDao {
 	//메인페이지 유저정보랑 신청현황 문의현황 가져오기
 	//신청현황은 그냥 신청온거(현재 apply테이블에 있는 로우 카운트수/apply_id의 max값)
 	//문의현황은 총문의수(count)-답변달린거/총문의수(count)
-	public MainUserDto getUser(String userId){
+	public UserDto getUser(String userId){
 		return null;
 	}
 	
