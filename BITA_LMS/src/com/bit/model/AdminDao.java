@@ -35,11 +35,11 @@ public class AdminDao {
 	//월별 수강생관리 페이지 월은 ?idx=""로 받아오기
 	//제일 처음 접근일 때는 sysdate로 가져오기
 	//날짜이동버튼을 누르면 제이쿼리에서 2019-07에서 -1을 하든 +1을 하든 해서 idx값으로 넘겨주기
-	public ArrayList<CalendarDto> getMainCalendar(String yearMonth){
+	public ArrayList<CalendarDto> getCalendarList(String yearMonth){
 		ArrayList<CalendarDto> list = new ArrayList<CalendarDto>();
 		
 		String sql = "";
-		if(month==null){
+		if(yearMonth==null){
 			//int calendarId, lectureId;
 			//String title, content, startDate, endDate;
 			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=to_number(to_char(sysdate,'mm')";
@@ -72,37 +72,37 @@ public class AdminDao {
 	
 	//메인페이지 달력 상세 가져오기
 	//상세를 누르면 모달창이 생성되게
-	public CalendarDto detailMainCalendar(String calendarId){
+	public CalendarDto getCalendar(String calendarId){
 		return null;
 	}
 	
 	//메인페이지 달력 일정 추가하기
 	//추가를 누르면 추가모달창이 생성되게
-	public int insertMainCalendar(CalendarDto calendarBean){
+	public int insertCalendar(CalendarDto calendarBean){
 		return 0;
 	}
 	
 	//메인페이지 달력 일정 수정하기
 	//수정을 누르면 상세 모달창은 숨겨지고 수정모달창이 생성되게
-	public int updateMainCalendar(CalendarDto calendarBean){
+	public int updateCalendar(CalendarDto calendarBean){
 		return 0;
 	}
 	
 	//메인페이지 달력 일정 삭제하기
-	public int deleteMainCalendar(int idx){
+	public int deleteCalendar(int idx){
 		return 0;
 	}
 	
 	//메인페이지 유저정보랑 신청현황 문의현황 가져오기
 	//신청현황은 그냥 신청온거(현재 apply테이블에 있는 로우 카운트수/apply_id의 max값)
 	//문의현황은 총문의수(count)-답변달린거/총문의수(count)
-	public MainUserDto getMainUser(String userId){
+	public MainUserDto getUser(String userId){
 		return null;
 	}
 	
 	//콤보박스 정렬 및 수강인원/최대인원 가져오기
 	//목록이나 상세에서는 조인이나 조건문을 통해 필요한 것들만 가져오게 되므로 따로 빼준다
-	public ArrayList<LectureDto> arrangeLecture() {
+	public ArrayList<LectureDto> getArrangeLectureList() {
 		ArrayList<LectureDto> list = new ArrayList<LectureDto>();
 		
 		String sql = "select lecture_id,name,num_std,max_std from lecture";
@@ -136,7 +136,7 @@ public class AdminDao {
 	
 	//행정팀 강좌목록 불러오기
 	//싸그리 다 불러와서 필요한것만 뽑아서 쓰기
-	public ArrayList<LectureDto> getLecture() {
+	public ArrayList<LectureDto> getLectureList() {
 		ArrayList<LectureDto> list = new ArrayList<LectureDto>();
 		
 		//번호/강좌명/강사명/개강일
@@ -170,7 +170,7 @@ public class AdminDao {
 	}
 	
 	//강좌 상세정보페이지
-	public LectureDto detailLecture(int lectureId) {
+	public LectureDto getLecture(int lectureId) {
 		LectureDto bean = new LectureDto();
 		
 		//sql문 수정해야할 수도
@@ -235,7 +235,7 @@ public class AdminDao {
 	}
 	
 	//행정팀 학생관리 학생등록 목록 페이지
-	public ArrayList<RegisterDto> getRegister() {
+	public ArrayList<RegisterDto> getRegisterList() {
 		
 		ArrayList<RegisterDto> list = new ArrayList<RegisterDto>();
 		
@@ -283,7 +283,7 @@ public class AdminDao {
 	}
 	
 	//행정팀 학생관리 학생등록 상세 페이지
-	public RegisterDto detailRegister(int registerId) {
+	public RegisterDto getRegister(int registerId) {
 		//학생목록에서 num를 idx로 받아 해당 num의 수강신청한 내용을 볼 수 있게
 		return null;
 	}
@@ -319,35 +319,35 @@ public class AdminDao {
 	}
 	
 	//행정팀 강사관리 목록
-	public ArrayList<TeacherDto> getManageTea() {
+	public ArrayList<TeacherDto> getTeacherList() {
 		return null;
 	}
 	
 	//행정팀 강사관리 상세
 	//강사 명으로 접근해야 하기 때문에 user_id의 자료형인 String형으로 수정
-	public TeacherDto detailManageTea(String userId) {
+	public TeacherDto getTeacher(String userId) {
 		return null;
 	}
 	
 	//행정팀 강사관리 추가
-	public int insertManageTea(TeacherDto teacherBean) {
+	public int insertTeacher(TeacherDto teacherBean) {
 		return 0;
 	}
 	
 	//행정팀 강사관리 수정
-	public int updateManageTea(TeacherDto teacherBean) {
+	public int updateTeacher(TeacherDto teacherBean) {
 		return 0;
 	}
 	
 	//행정팀 강사관리 삭제
 	//강사 명으로 접근해야 하기 때문에 user_id의 자료형인 String형으로 수정
-	public int deleteManageTea(String userId) {
+	public int deleteTeacher(String userId) {
 		return 0;
 	}
 	
 	//행정팀 큐엔에이 목록
 	//번호, 제목, 작성자, 작성일, 답변여부, 분류
-	public ArrayList<QnaLDto> getQnaList() {
+	public ArrayList<QnaLDto> getQnaLList() {
 		ArrayList<QnaLDto> list = new ArrayList<QnaLDto>();
 		String sql = "SELECT row_number() OVER(ORDER BY write_date) num, title, name as \"std_name\","
 				+ "TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,is_respon, type "
@@ -383,19 +383,19 @@ public class AdminDao {
 	}
 	
 	//행정팀 큐엔에이 상세
-	public QnaLDto detailQnaList(int qnaLId) {
+	public QnaLDto getQnaL(int qnaLId) {
 		return null;
 	}
 	
 	//행정팀 큐엔에이 삭제
 	//여러개삭제할때는 배열로 보내주면 됨
 	//그냥 하나일 수도 있고 하나면 배열에 하나만 들어있겠지
-	public int deleteQna(int[] qnaLIdList) {
+	public int deleteQnaL(int[] qnaLIdList) {
 		return 0;	
 	}
 	
 	//행정팀 큐엔에이 답변등록
-	public int updateQna(String answerContent) {
+	public int updateQnaL(String answerContent) {
 		return 0;
 	}
 
