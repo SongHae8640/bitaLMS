@@ -155,7 +155,7 @@ public class TeacherController extends HttpServlet {
 					String content = req.getParameter("content");
 					String assingmentId = req.getParameter("assignmentId");
 					result = dao.updateAssignment(title,content,assingmentId);
-					rd = req.getRequestDispatcher("/assignment_detail.tea?idx="+assingmentId);	///수정한 페이지로
+					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assingmentId);	///수정한 페이지로
 				} else if (path.equals("/assignment_delete.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
 					result = dao.getAssignmentDelete(assignmentId);

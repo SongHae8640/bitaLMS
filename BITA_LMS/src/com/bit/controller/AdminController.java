@@ -189,7 +189,11 @@ public class AdminController extends HttpServlet {
 					// 큐占쏙옙占쏙옙占쏙옙 占쏙옙占� 占쏙옙占쏙옙占쏙옙
 					
 					rd = req.getRequestDispatcher("qna_detail.adm");
-				} 
+				} else if(path.equals("/attendanceAll_insert.adm")) {
+					ArrayList<UserDto> stuList = dao.getStudentList();
+					result = dao.insertAttendanceAll(stuList);
+							
+				}
 			}
 		} catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");

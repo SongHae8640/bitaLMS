@@ -410,5 +410,30 @@ public class AdminDao {
 	public int updateQnaL(String answerContent) {
 		return 0;
 	}
+	
+	
+
+	
+	//매일(수업이 있는) 오전 6시 모든 학생의 출석 row를 생성
+	//checkin, checkout 모두 null
+	public int insertAttendanceAll(ArrayList<UserDto> stuList) {
+		
+		
+		return -1;
+	}
+	
+	//매일(수업이 있는) 오후 11시 모든 학생의 출석 상태를 수정
+	//checkinTime과 checkoutTime을 비교해서 출석,지각, 결석, 조퇴 중 하나로 변경
+	public int updateAttendanceAll(ArrayList<UserDto> stuList) {
+		
+		return -1;
+	}
+
+	//행정팀 출석 생성
+	public ArrayList<UserDto> getStudentList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 
 }
