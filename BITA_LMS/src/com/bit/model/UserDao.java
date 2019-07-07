@@ -46,7 +46,7 @@ public class UserDao {
 			
 			if(rs.next()){
 				bean.setUserId(rs.getString("user_id"));
-				bean.setPassword(rs.getString("password")); ///Áö¿ì´Â°Ô ³ªÀ»±î? º¸¾È»ó ÁÁÁø ¾ÊÀºµí. ³ªÁß¿¡ ÇÊ¿äÇÏÁö ¾ÊÀ¸¸é Áö¿ï°Í
+				bean.setPassword(rs.getString("password")); ///ï¿½ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½È»ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 				bean.setName(rs.getString("name"));
 				bean.setEmail(rs.getString("email"));
 				bean.setPhoneNumber(rs.getString("phone_number"));
@@ -70,12 +70,13 @@ public class UserDao {
 		return bean;
 	}
 	
+	//ê³„ì •ì„ ìƒì„±í•˜ëŠ” ë©”ì„œë“œ
 	public int insertUser(UserDto bean){
 		int result=0;
 		//user_id, password, name, email, phone, inflow_path, belong
 		String sql = "insert into user01"
 				+ "(user_id,password,name,email,phone,inflow_path,belong)"
-				+ " values(?,?,?,?,?,?,'ÇĞ»ı')";
+				+ " values(?,?,?,?,?,?,'ï¿½Ğ»ï¿½')";
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -99,4 +100,6 @@ public class UserDao {
 		}
 		return 0;
 	}
+
+	
 }

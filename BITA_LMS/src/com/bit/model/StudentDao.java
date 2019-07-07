@@ -1,123 +1,180 @@
 package com.bit.model;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class StudentDao {
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String url = "jdbc:oracle:thin:@192.168.1.7:1521:xe";
+	String user = "bita";
+	String password = "bita";
+	
+	Connection conn;
+	PreparedStatement pstmt;
+	ResultSet rs;
+	
+	public StudentDao(){
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url,user,password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 
-	public ArrayList<CalendarDto> getCalendarList(int lecture_id, String yearMonth) {
-		//ÀÏÁ¤ ¸®½ºÆ®¸¦ ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+	public ArrayList<CalendarDto> getCalendarMonthList(int lectureId, String yearMonth){
+		ArrayList<CalendarDto> list = new ArrayList<CalendarDto>();
+		
+		String sql = "";
+		if(yearMonth==null){
+			//int calendarId, lectureId;
+			//String title, content, startDate, endDate;
+			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=to_number(to_char(sysdate,'mm')";
+		}else{
+			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=?";
+		}
+			try {
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()){
+					CalendarDto bean = new CalendarDto();		
+					list.add(bean);
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				try {
+					if(rs!=null)rs.close();
+					if(pstmt!=null)pstmt.close();
+					if(conn!=null)conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return list;
+	}
+	
+	public ArrayList<CalendarDto> getCalendarDayList(int lectureId, String yearMonthDay){
 		
 		return null;
 	}
 
 	public AttendanceDto getAttendance(String userId) {
-		// ÇØ´ç ÇÐ»ýÀÇ Ãâ¼® Á¤º¸¸¦ ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+		// ï¿½Ø´ï¿½ ï¿½Ð»ï¿½ï¿½ï¿½ ï¿½â¼® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		
 		return null;
 	}
 
 	public int getTotalDays(int lecture_id) {
-		// ¼ö¾÷ ÃÑ ÀÏ ¼ö¸¦ ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		return -1;
 	}
 	public int getProgressDays(int lecture_id) {
-		// ¼ö¾÷ ÁøÇà ÇöÈ²À» ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È²ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		return -1;
 	}
 
 	public int getAttendanceDays(String userId) {
-		// Ãâ¼®ÇÑ ÀÏ¼ö¸¦ ¸®ÅÏÇÏ´Â ¸Þ¼­µå (Áö°¢ ¾Æ´Ô °ø°á Æ÷ÇÔ Ãâ¼®ÀÓ)
+		// ï¿½â¼®ï¿½ï¿½ ï¿½Ï¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½â¼®ï¿½ï¿½)
 		return -1;
 	}
 
 	public int getQnaNum(String userId) {
-		// ÇØ´ç ÇÐ»ýÀÌ Áú¹®ÇÑ qnaÀÇ °³¼ö¸¦ ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+		// ï¿½Ø´ï¿½ ï¿½Ð»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ qnaï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		
 		return -1;
 	}
 
 	public int[] getAttendanceStatusList(String userId) {
-		// ÀÔ½Ç, Áö°¢, Á¶Åð, ¿ÜÃâ, °á¼®À» intÇü ¹è¿­·Î ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+		// ï¿½Ô½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½á¼®ï¿½ï¿½ intï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		
 		return null;
 	}
 
 	public ArrayList<AttendanceDto> getAttendanceMonthList(String userId, String yearMonth) {
-		// ÇØ´ç ³â¿ù, »ç¿ëÀÚid ¿¡ ¸Â´Â Ãâ¼® Á¤º¸¸¦ list·Î ¸®ÅÏÇÏ´Â ¸Þ¼­µå
-		// ³¯Â¥, Ãâ¼® »óÅÂ, ÀÔ½Ç½Ã°£, Åð½Ç½Ã°£À» list·Î 
-		// yearMonth°¡ nullÀÌ¸é ¿À´Ã ±âÁØ ¿ù·Î Ã£À»°Í
+		// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½id ï¿½ï¿½ ï¿½Â´ï¿½ ï¿½â¼® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ listï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
+		// ï¿½ï¿½Â¥, ï¿½â¼® ï¿½ï¿½ï¿½ï¿½, ï¿½Ô½Ç½Ã°ï¿½, ï¿½ï¿½Ç½Ã°ï¿½ï¿½ï¿½ listï¿½ï¿½ 
+		// yearMonthï¿½ï¿½ nullï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ï¿½ï¿½
 		return null;
 	}
 
 	public ScoreDto getScoreBean(String userId) {
-		// °¢ ¼ºÀûÀº numberÇüÀÌÁö¸¸ Æò±ÕÀº ¼Ò¼ýÁ¡À¸·Î ÀÌ·ç¾îÁ® ÀÖ±â ¶§¹®¿¡ ,·Î ±¸ºÐµÇ´Â String ÇüÀ» ¹ÞÀ½
+		// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ numberï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ,ï¿½ï¿½ ï¿½ï¿½ï¿½ÐµÇ´ï¿½ String ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		
 		return null;
 	}
 
 	public ArrayList<AssignmentDto> getAssignmentList(int lecture_id) {
-		// °úÁ¦ ¸®½ºÆ®¸¦ ¸®ÅÏÇÏ´Â ¸Þ¼­µå
-		// ±Û ¹øÈ£, Á¦¸ñ, ³¯Â¥, È®ÀÎ ¿©ºÎ?? Èì 
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
+		// ï¿½ï¿½ ï¿½ï¿½È£, ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Â¥, È®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½?? ï¿½ï¿½ 
 		
 		return null;
 	}
 
 	public AssignmentDto getAssignmentDetail(String userId) {
-		// °úÁ¦ÀÇ »ó¼¼ Á¤º¸¸¦ ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		
 		return null;
 	}
 
 	public SubmsissionDto getSubmissionBean(String assignmentId, String userId) {
-		// (°úÁ¦) Á¦Ãâ ¼¼ºÎ ³»¿ëÀ» ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+		// (ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		
 		return null;
 	}
 
 	public int insertSubmission(int assignmentId, String userId) {
-		// (°úÁ¦) Á¦Ãâ ³»¿ëÀ» DB¿¡ Ãß°¡ÇÏ´Â ¸Þ¼­µå
+		// (ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DBï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		return -1;
 	}
 
 	public int deleteSubmission(int assignmentId, String userId) {
-		// (°úÁ¦) Á¦Ãâ ³»¿ëÀ» DB¿¡ Á¦°ÅÇÏ´Â ¸Þ¼­µå
+		// (ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DBï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		return 0;
 	}
 
 	public int updateSubmission(String assignmentId, String userId,
 			String fileName) {
-		// (°úÁ¦) Á¦Ãâ ÆÄÀÏ ³»¿ëÀ» º¯°æÇÏ´Â ¸Þ¼­µå
+		// (ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		return 0;
 	}
 
 	public ArrayList<QnaLDto> getQnaList(String userId) {
-		// QNA ¸®½ºÆ®¸¦ ¸®ÅÏÇÏ´Â ¸Þ¼­µå(userId ¿¡ ÇØ´çÇÏ´Â)
-		// ±Û ¹øÈ£, Á¦¸ñ, 
+		// QNA ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½(userId ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½)
+		// ï¿½ï¿½ ï¿½ï¿½È£, ï¿½ï¿½ï¿½ï¿½, 
 		return null;
 	}
 
 	public int insertQnaL(String userId, String title, String type,
 			String questionContent) {
-		// QnaLÀ» Ãß°¡ÇÏ´Â ¸Þ¼­µå. typeÀ» ÅëÇØ¼­ reponder_id¸¦ °áÁ¤
-		// ex) typeÀÌ '¼ºÀû'ÀÌ¸é responder_id¸¦ userId(std_id)¿¡ ÇØ´çÇÏ´Â °­»çÀÇ user_id·Î ³Ñ±è
-		/// responder_id¸¦ »èÁ¦ÇÏ°í typeÀ¸·Î¸¸µµ ±¸ºÐ °¡´ÉÇÒ µí ÀÌ¾ß±â ÇØº¸ÀÚ!!
+		// QnaLï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½. typeï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ reponder_idï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		// ex) typeï¿½ï¿½ 'ï¿½ï¿½ï¿½ï¿½'ï¿½Ì¸ï¿½ responder_idï¿½ï¿½ userId(std_id)ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ user_idï¿½ï¿½ ï¿½Ñ±ï¿½
+		/// responder_idï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ typeï¿½ï¿½ï¿½Î¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¾ß±ï¿½ ï¿½Øºï¿½ï¿½ï¿½!!
 		return 0;
 	}
 
 	public QnaLDto getQnaBean(String qnaId) {
-		// QanlBeanÀ» ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+		// QanlBeanï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		
 		return null;
 	}
 
 	public int updateQnaL(int qnaId, String title, String type,
 			String questionContent) {
-		// qna¸¦ ¼öÁ¤ÇÏ´Â ¸Þ¼­µå
+		// qnaï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		return 0;
 	}
 
 	public AssignmentDto getAssignmentBean(String assignmentId) {
-		// °úÁ¦ °´Ã¼¸¦ ¸®ÅÏÇÏ´Â ¸Þ¼­µå
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½
 		return null;
 	}
 

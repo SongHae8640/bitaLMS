@@ -32,8 +32,10 @@ public class StudentController extends HttpServlet {
 			if(userBean.getBelong().equals("student")){
 				StudentDao dao = new StudentDao();
 				if (path.equals("/main.stu")) {
-					String yearMonth = req.getParameter("idx");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
-					req.setAttribute("calendarList",dao.getCalendarList(userBean.getLecture_id(), yearMonth));
+					String yearMonth = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
+					String yearMonthDay = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
+					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonth));
+					req.setAttribute("calendarDayList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonthDay));
 					
 					//main 좌측하단 정보 전달
 					req.setAttribute("userBean", userBean);

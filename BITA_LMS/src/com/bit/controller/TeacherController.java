@@ -47,8 +47,10 @@ public class TeacherController extends HttpServlet {
 				///lecture_id 는 자주 써서 변수로 하나 빼는게 좋을 것 같음
 				
 				if (path.equals("/main.tea")) {
-					String yearMonth = req.getParameter("idx");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
-					req.setAttribute("calendarList",dao.getCalendarList(userBean.getLecture_id(), yearMonth));
+					String yearMonth = req.getParameter("yearMonth");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
+					String yearMonthDay = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
+					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonth));
+					req.setAttribute("calendarDayList",dao.getCalendarDayList(userBean.getLecture_id(), yearMonthDay));
 					
 					//main 좌측하단 정보 전달
 					req.setAttribute("userBean", userBean);
@@ -153,7 +155,7 @@ public class TeacherController extends HttpServlet {
 					String content = req.getParameter("content");
 					String assingmentId = req.getParameter("assignmentId");
 					result = dao.updateAssignment(title,content,assingmentId);
-					rd = req.getRequestDispatcher("/assignment_detail.tea?idx="+assingmentId);	///수정한 페이지로
+					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assingmentId);	///수정한 페이지로
 				} else if (path.equals("/assignment_delete.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
 					result = dao.getAssignmentDelete(assignmentId);

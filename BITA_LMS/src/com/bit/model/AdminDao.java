@@ -35,7 +35,7 @@ public class AdminDao {
 	//월별 수강생관리 페이지 월은 ?idx=""로 받아오기
 	//제일 처음 접근일 때는 sysdate로 가져오기
 	//날짜이동버튼을 누르면 제이쿼리에서 2019-07에서 -1을 하든 +1을 하든 해서 idx값으로 넘겨주기
-	public ArrayList<CalendarDto> getCalendarList(String yearMonth){
+	public ArrayList<CalendarDto> getCalendarMonthList(String yearMonth){
 		ArrayList<CalendarDto> list = new ArrayList<CalendarDto>();
 		
 		String sql = "";
@@ -67,6 +67,11 @@ public class AdminDao {
 				}
 			}
 			return list;
+	}
+	
+	public ArrayList<CalendarDto> getCalendarDayList(String yearMonthDay){
+		
+		return null;
 	}
 	
 	
@@ -318,6 +323,13 @@ public class AdminDao {
 		return 0;
 	}
 	
+	//행정팀 수강생 삭제, 강사 삭제
+	public int deleteUser(String userId) {
+		
+		
+		return -1;
+	}
+	
 	//행정팀 강사관리 목록
 	public ArrayList<TeacherDto> getTeacherList() {
 		return null;
@@ -398,5 +410,30 @@ public class AdminDao {
 	public int updateQnaL(String answerContent) {
 		return 0;
 	}
+	
+	
+
+	
+	//매일(수업이 있는) 오전 6시 모든 학생의 출석 row를 생성
+	//checkin, checkout 모두 null
+	public int insertAttendanceAll(ArrayList<UserDto> stuList) {
+		
+		
+		return -1;
+	}
+	
+	//매일(수업이 있는) 오후 11시 모든 학생의 출석 상태를 수정
+	//checkinTime과 checkoutTime을 비교해서 출석,지각, 결석, 조퇴 중 하나로 변경
+	public int updateAttendanceAll(ArrayList<UserDto> stuList) {
+		
+		return -1;
+	}
+
+	//행정팀 출석 생성
+	public ArrayList<UserDto> getStudentList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 
 }
