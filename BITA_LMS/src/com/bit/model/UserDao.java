@@ -1,4 +1,4 @@
-package com.bit.model;
+﻿package com.bit.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -46,7 +46,7 @@ public class UserDao {
 			
 			if(rs.next()){
 				bean.setUserId(rs.getString("user_id"));
-				bean.setPassword(rs.getString("password")); ///����°� ������? ���Ȼ� ���� ������. ���߿� �ʿ����� ������ �����
+				bean.setPassword(rs.getString("password")); ///지우는게 나을까? 보안상 좋진 않은듯. 나중에 필요하지 않으면 지울것
 				bean.setName(rs.getString("name"));
 				bean.setEmail(rs.getString("email"));
 				bean.setPhoneNumber(rs.getString("phone_number"));
@@ -76,7 +76,7 @@ public class UserDao {
 		//user_id, password, name, email, phone, inflow_path, belong
 		String sql = "insert into user01"
 				+ "(user_id,password,name,email,phone,inflow_path,belong)"
-				+ " values(?,?,?,?,?,?,'�л�')";
+				+ " values(?,?,?,?,?,?,'학생')";
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
