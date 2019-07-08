@@ -1,18 +1,11 @@
 package com.bit.model;
 
 public class RegisterDto {
-	//��ȣ (��������) ID �̸� ���� ��¥ ����, ����ο�/�ִ��ο�
-	//������ name�� �ҷ��ͼ� ����Ʈ���忡�� ***���� ������û�� �ٿ�����
-	private int num;
-	private String id,name,lecName,applyDate,numStd,maxStd;
-	public int getNum() {
-		return num;
-	}
-	public String getId() {
-		return id;
-	}
-	public String getName() {
-		return name;
+	private int rowNum;
+	private String userId,userName,lecName,applyDate,numStd,maxStd;
+	
+	public int getRowNum() {
+		return rowNum;
 	}
 	public String getLecName() {
 		return lecName;
@@ -26,14 +19,8 @@ public class RegisterDto {
 	public String getMaxStd() {
 		return maxStd;
 	}
-	public void setNum(int num) {
-		this.num = num;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public void setName(String name) {
-		this.name = name;
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
 	}
 	public void setLecName(String lecName) {
 		this.lecName = lecName;
@@ -46,6 +33,18 @@ public class RegisterDto {
 	}
 	public void setMaxStd(String maxStd) {
 		this.maxStd = maxStd;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 	
