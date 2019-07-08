@@ -1,4 +1,4 @@
-package com.bit.model;
+﻿package com.bit.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -173,9 +173,21 @@ public class StudentDao {
 		return 0;
 	}
 
+	public int deleteQnaL(String[] qnaId) {
+		//String으로 받아서 여기서 int로 변환?
+		// qna삭제 배열에 하나만 들어있으면 하나만삭제, 여러개면 여러개 삭제
+		return 0;
+	}
+
 	public AssignmentDto getAssignmentBean(String assignmentId) {
 		// ���� ��ü�� �����ϴ� �޼���
 		return null;
+	}
+
+	public int updateAttendance(String stuId) {
+		//일괄적으로 insert는 AM 6시, 출석마감은 PM 11시에 되는걸로
+		//학생이 출석버튼 클릭시 시간에 맞춰 출석 처리
+		return 0;
 	}
 
 

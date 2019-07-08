@@ -2,8 +2,35 @@ package com.bit.model;
 
 public class UserDto {
 	private String userId, password, name, email,phoneNumber,belong, lectureName,startDate,endDate,inflowPath;
+	private int applyTotal,applyNew,qnaTotal,qnaNew;
 	private int lecture_id;
 	
+	
+	
+	public int getApplyTotal() {
+		return applyTotal;
+	}
+	public void setApplyTotal(int applyTotal) {
+		this.applyTotal = applyTotal;
+	}
+	public int getApplyNew() {
+		return applyNew;
+	}
+	public void setApplyNew(int applyNew) {
+		this.applyNew = applyNew;
+	}
+	public int getQnaTotal() {
+		return qnaTotal;
+	}
+	public void setQnaTotal(int qnaTotal) {
+		this.qnaTotal = qnaTotal;
+	}
+	public int getQnaNew() {
+		return qnaNew;
+	}
+	public void setQnaNew(int qnaNew) {
+		this.qnaNew = qnaNew;
+	}
 	public String getInflowPath() {
 		return inflowPath;
 	}
