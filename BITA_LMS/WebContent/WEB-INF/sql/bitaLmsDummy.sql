@@ -1,4 +1,4 @@
-DELETE FROM USER01;
+﻿DELETE FROM USER01;
 DELETE FROM LECTURE;
 DELETE FROM LECTUREUSER;
 DELETE FROM TEACHER_INFO;
@@ -7,6 +7,8 @@ DELETE FROM ASSIGNMENT;
 DELETE FROM SUBMISSION;
 DELETE FROM QNA_L;
 DELETE FROM CALENDAR;
+DELETE FROM ATTACHED_FILE;
+DELETE FROM FILE_GROUP;
 
 --INSERT할때 자료명과 순서를 같이 넣어줄 것
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('tea1','1234', 'teacher1', '', '', '', 'teacher');
@@ -72,11 +74,12 @@ INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VA
 INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(3,'과제2','과제3 내용',1,SYSDATE);
 
 --Submission
-INSERT INTO submission(assignment_id, std_id,submit_date,file_name,is_check) VALUES(1,'stu1',SYSDATE,'파일명1.doc','0');
-INSERT INTO submission(assignment_id, std_id,submit_date,file_name,is_check) VALUES(1,'stu2',SYSDATE,'파일명2.doc','0');
-INSERT INTO submission(assignment_id, std_id,submit_date,file_name,is_check) VALUES(1,'stu3',SYSDATE,'파일명3.doc','0');
-INSERT INTO submission(assignment_id, std_id,submit_date,file_name,is_check) VALUES(2,'stu2',SYSDATE,'파일명4.doc','0');
-INSERT INTO submission(assignment_id, std_id,submit_date,file_name,is_check) VALUES(3,'stu2',SYSDATE,'파일명5.doc','0');
+INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(1,'stu1',SYSDATE,'0');
+INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(1,'stu2',SYSDATE,'0');
+INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(1,'stu3',SYSDATE,'0');
+INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(2,'stu2',SYSDATE,'0');
+INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(3,'stu2',SYSDATE,'0');
+
 
 --Qna_L
 --null 을 넣으면 안되니까 질문 생성시 빈칸으로 해서 생성할것
