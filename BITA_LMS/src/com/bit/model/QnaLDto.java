@@ -1,7 +1,7 @@
 package com.bit.model;
 
 public class QnaLDto {
-	private int rowNum;
+	private int rowNum,qnaLId;
 	private String title,stdName,writeDate,questionContent,type,responName,answerContent;
 	private boolean isRespon;	//초기값은 false
 	
@@ -62,5 +62,11 @@ public class QnaLDto {
 		}else{
 			this.isRespon = false;
 		}
+	}
+	public int getQnaLId() {
+		return qnaLId;
+	}
+	public void setQnaLId(int qnaLId) {
+		this.qnaLId = qnaLId;
 	}
 }

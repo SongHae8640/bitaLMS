@@ -100,11 +100,5 @@ public class LectureDto {
 	public void setIsClose(String isClose) {
 		this.isClose = isClose.equals("1");
 	}
-	
-	@Override
-	public String toString() {
-		return content+endDate+lectureID;
-		
-	}
 
 }
