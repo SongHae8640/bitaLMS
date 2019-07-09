@@ -26,12 +26,9 @@ public class HomeController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("HomeController :: path = " + path);
 		
-		// ¼¼¼Ç ÀúÀå
+		// ì„¸ì…˜ ì €ì¥
 		//HttpSession session = req.getSession();
 		//UserDto userBean = (UserDto) session.getAttribute("userBean");
-		
-		HomeDao daoHome = new HomeDao();
-		UserDao daoUser = new UserDao();
 		
 		if(path.equals("/main.home")){
 			rd = req.getRequestDispatcher("home/main_H.jsp");
@@ -68,46 +65,47 @@ public class HomeController extends HttpServlet {
 					resp.sendRedirect("home/login_H.jsp");
 				}
 			}catch(java.lang.NullPointerException e){
-					req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw¸¦ ´Ù½Ã È®ÀÎÇÏ¼¼¿ä');</script>");
+					req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pwë¥¼ ë‹¤ì‹œ í™•ì¸í•˜ì„¸ìš”');</script>");
 					doGet(req, resp);
 			}
 			
 		}else if(path.equals("/join.home")){
-			//getParamÀ¸·Î È¸¿ø°¡ÀÔ¿¡ ÇÊ¿äÇÑ ³»¿ë ÀúÀå
+			//getParamìœ¼ë¡œ íšŒì›ê°€ì…ì— í•„ìš”í•œ ë‚´ìš© ì²´í¬ ë° ì €ì¥
+			//ì „ë¶€ ì²´í¬ ì„±ê³µ ì‹œ ì €ì¥, í•˜ë‚˜ë¼ë„ ì•ˆ ë§ìœ¼ë©´ ë‹¤ì‹œ ëŒë ¤ë³´ë‚´ê¸°
 			
-			//useDto»ı¼º
+			//useDtoìƒì„±
 			UserDto userBean = new UserDto();
-//			userBean.setUserId(userId); °ª ÃÊ±âÈ­ (´Ù¸¥ °ªµéµµ)
+//			userBean.setUserId(userId); ê°’ ì´ˆê¸°í™” (ë‹¤ë¥¸ ê°’ë“¤ë„)
 			UserDao dao = new UserDao();
 			result = dao.insertUser(userBean);
 			
-			//Á¤»óÀûÀ¸·Î È¸¿ø °¡ÀÔ ‰çÀ¸¸é
+			//ì •ìƒì ìœ¼ë¡œ íšŒì› ê°€ì… Â‰í•œ ê²ƒë§Œ
 			if(result ==1) {
 				HttpSession session = req.getSession();
 				session.setAttribute("userBean", userBean);
 				resp.sendRedirect("home/login_H.jsp");
 			}else {
-				//result °ª¿¡ µû¶ó ¿À·ù ¸Ş¼¼Áö 
-				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw¸¦ ´Ù½Ã È®ÀÎÇÏ¼¼¿ä');</script>");
+				//result ê°’ì— ë”°ë¼ ì˜¤ë¥˜ ë©”ì„¸ì§€ 
+				req.setAttribute("msg", "<script type=\"text/javascript\">alert('resultê°’ì—ë”°ë¼ ë¬¸êµ¬ ë°”ê¾¸ê¸°');</script>");
 				doGet(req, resp);
 			}
 			
 		}else if(path.equals("apply.home")) {
-			//getParamÀ¸·Î ¼ö°­¿¡ ÇÊ¿äÇÑ ³»¿ë ÀúÀå
+			//getParamìœ¼ë¡œ ìˆ˜ê°•ì— í•„ìš”í•œ ë‚´ìš© ì €ì¥
 			
-			//useDto»ı¼º
+			//useDtoìƒì„±
 			ApplyDto applyBean = new ApplyDto();
-//			applyBean.setLectureId(lectureId); °ª ÃÊ±âÈ­ (´Ù¸¥ °ªµéµµ)
+//			applyBean.setLectureId(lectureId); ê°’ ì´ˆê¸°í™” (ë‹¤ë¥¸ ê°’ë“¤ë„)
 			HomeDao dao = new HomeDao();
 			result = dao.insertApply(applyBean);
 			
-			//Á¤»óÀûÀ¸·Î ¼ö°­½ÅÃ» ‰çÀ¸¸é
+			//ì •ìƒì ìœ¼ë¡œ ìˆ˜ê°•ì‹ ì²­ Â‰í•œ ê²ƒë§Œ
 			if(result ==1) {
-				HttpSession session = req.getSession();
-				resp.sendRedirect("home/main_H.jsp");
+				req.setAttribute("msg", "<script type=\"text/javascript\">alert('ìˆ˜ê°•ì‹ ì²­ì´ ì„±ê³µì ìœ¼ë¡œ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.');</script>");
+				doGet(req, resp);
 			}else {
-				//result °ª¿¡ µû¶ó ¿À·ù ¸Ş¼¼Áö 
-				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('´Ù½Ã È®ÀÎÇÏ¼¼¿ä');</script>");
+				//result ê°’ì— ë”°ë¼ ì˜¤ë¥˜ ë©”ì„¸ì§€ 
+				req.setAttribute("msg", "<script type=\"text/javascript\">alert('ë‹¤ì‹œ í™•ì¸í•˜ì„¸ìš”');</script>");
 				doGet(req, resp);
 			}
 		}

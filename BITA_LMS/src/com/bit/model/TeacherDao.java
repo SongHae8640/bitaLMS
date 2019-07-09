@@ -349,7 +349,7 @@ public class TeacherDao {
 		if(yearMonth==null){
 			//int calendarId, lectureId;
 			//String title, content, startDate, endDate;
-			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=to_number(to_char(sysdate,'mm')";
+			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=to_number(to_char(sysdate,'mm'))";
 		}else{
 			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=?";
 		}

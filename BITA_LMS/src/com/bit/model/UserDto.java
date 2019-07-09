@@ -1,9 +1,58 @@
 package com.bit.model;
 
 public class UserDto {
-	private String userId, password, name, email,phoneNumber,belong, lectureName,startDate,endDate,inflowPath;
-	private int lecture_id;
+	//Join
+	private String userId, password, name, email,phoneNumber,belong,inflowPath;
+	//LMS stu main
+	private String lectureName,startDate,endDate;
+	private int lectureId;
+	//admin main
+	private int applyTotal,applyNew,qnaTotal,qnaNew;
+	//admin manageStu
+	private int totalDays, attendanceDays, attendanceStatus;
 	
+	public int getTotalDays() {
+		return totalDays;
+	}
+	public int getAttendanceDays() {
+		return attendanceDays;
+	}
+	public int getAttendanceStatus() {
+		return attendanceStatus;
+	}
+	public void setTotalDays(int totalDays) {
+		this.totalDays = totalDays;
+	}
+	public void setAttendanceDays(int attendanceDays) {
+		this.attendanceDays = attendanceDays;
+	}
+	public void setAttendanceStatus(int attendanceStatus) {
+		this.attendanceStatus = attendanceStatus;
+	}
+	public int getApplyTotal() {
+		return applyTotal;
+	}
+	public void setApplyTotal(int applyTotal) {
+		this.applyTotal = applyTotal;
+	}
+	public int getApplyNew() {
+		return applyNew;
+	}
+	public void setApplyNew(int applyNew) {
+		this.applyNew = applyNew;
+	}
+	public int getQnaTotal() {
+		return qnaTotal;
+	}
+	public void setQnaTotal(int qnaTotal) {
+		this.qnaTotal = qnaTotal;
+	}
+	public int getQnaNew() {
+		return qnaNew;
+	}
+	public void setQnaNew(int qnaNew) {
+		this.qnaNew = qnaNew;
+	}
 	public String getInflowPath() {
 		return inflowPath;
 	}
@@ -37,9 +86,6 @@ public class UserDto {
 	public String getEndDate() {
 		return endDate;
 	}
-	public int getLecture_id() {
-		return lecture_id;
-	}
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
@@ -67,7 +113,10 @@ public class UserDto {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	public void setLecture_id(int lecture_id) {
-		this.lecture_id = lecture_id;
+	public int getLectureId() {
+		return lectureId;
+	}
+	public void setLectureId(int lectureId) {
+		this.lectureId = lectureId;
 	}
 }

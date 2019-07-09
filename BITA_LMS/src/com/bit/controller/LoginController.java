@@ -52,6 +52,7 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 		String id = req.getParameter("id");
 		String pw = req.getParameter("pw");
+		System.out.println(id+":"+pw);
 		
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login(id, pw);
@@ -75,7 +76,7 @@ public class LoginController extends HttpServlet {
 			resp.sendRedirect("main.stu");
 		}
 		}catch(java.lang.NullPointerException e){
-			req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
+			req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
 			doGet(req, resp);
 		}
 	}

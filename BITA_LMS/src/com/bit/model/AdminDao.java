@@ -266,10 +266,10 @@ public class AdminDao {
 			while(rs.next()){
 				RegisterDto bean = new RegisterDto();
 				bean.setApplyDate(rs.getString("applyDate"));
-				bean.setId(rs.getString("id"));
+				bean.setUserId(rs.getString("id"));
 				bean.setLecName(rs.getString("lecName"));
-				bean.setName(rs.getString("name"));
-				bean.setNum(rs.getInt("num"));
+				bean.setUserName(rs.getString("name"));
+				bean.setRowNum(rs.getInt("num"));
 				list.add(bean);
 			}
 			
@@ -308,23 +308,17 @@ public class AdminDao {
 	
 	
 	//행정팀 수강생관리 목록형
-	public ArrayList<AttendanceDto> getManageStu() {
+	public ArrayList<UserDto> getManageStu() {
 		return null;
 	}
 	
 	//행정팀 수강생관리 월별
-	public ArrayList<AttendanceDto> getManageStuMonth() {
+	public ArrayList<AttendanceDto> getManageStuMonth(String yyyymm) {
 		return null;
 	}
 	
-	//행정팀 수강생관리 월별수정
-	public int updateManageStuMonth(ArrayList<AttendanceDto> attendanceList) {
-		//arraylist로 전부받아서 전부 수정?
-		return 0;
-	}
-	
 	//행정팀 수강생 삭제, 강사 삭제
-	public int deleteUser(String userId) {
+	public int deleteUser(String[] userId) {
 		
 		
 		return -1;
@@ -351,18 +345,13 @@ public class AdminDao {
 		return 0;
 	}
 	
-	//행정팀 강사관리 삭제
-	//강사 명으로 접근해야 하기 때문에 user_id의 자료형인 String형으로 수정
-	public int deleteTeacher(String userId) {
-		return 0;
-	}
-	
 	//행정팀 큐엔에이 목록
 	//번호, 제목, 작성자, 작성일, 답변여부, 분류
 	public ArrayList<QnaLDto> getQnaLList() {
 		ArrayList<QnaLDto> list = new ArrayList<QnaLDto>();
 		String sql = "SELECT row_number() OVER(ORDER BY write_date) num, title, name as \"std_name\","
 				+ "TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,is_respon, type "
+				+ "FROM "
 				+ "WHERE type='행정'";
 		
 		try {
@@ -407,7 +396,7 @@ public class AdminDao {
 	}
 	
 	//행정팀 큐엔에이 답변등록
-	public int updateQnaL(String answerContent) {
+	public int updateQnaL(QnaLDto qnaLBean) {
 		return 0;
 	}
 	
@@ -431,8 +420,13 @@ public class AdminDao {
 
 	//행정팀 출석 생성
 	public ArrayList<UserDto> getStudentList() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	//출석업데이트
+	public int updateManageStuMonth(String yyyymm, String[] userId,
+			String[] status) {
+		return 0;
 	}
 	
 

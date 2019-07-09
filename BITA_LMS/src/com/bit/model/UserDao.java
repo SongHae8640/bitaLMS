@@ -10,6 +10,7 @@ import java.sql.SQLException;
 public class UserDao {
 	String driver = "oracle.jdbc.driver.OracleDriver";
 	String url = "jdbc:oracle:thin:@192.168.1.7:1521:xe";
+	//192.168.1.7
 	String user = "bita";
 	String password = "bita";
 	
@@ -30,14 +31,16 @@ public class UserDao {
 	
 	public UserDto login(String id, String pw){
 		String sql = "SELECT u.user_Id AS user_id, password, u.name AS name, "
-				+ "email, phone_number, belong, l.name AS lectureName, "
-				+ "start_date,end_date,l.lecture_id AS lecture_id "
-				+ "FROM user01 u "
+				+ "email, phone_number, belong"
+				+ ", l.name AS lectureName, "
+				+ "start_date,end_date,l.lecture_id AS lecture_id"
+				+ " FROM user01 u "
 				+ "JOIN lectureuser lu ON u.user_id = lu.user_id "
 				+ "JOIN lecture l ON lu.lecture_id = l.lecture_id "
 				+ "WHERE u.user_id=? AND u.password=?";
 		UserDto bean = new UserDto();
-		
+		System.out.println(id+"$$"+pw);
+		System.out.println(sql);
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
@@ -51,10 +54,10 @@ public class UserDao {
 				bean.setEmail(rs.getString("email"));
 				bean.setPhoneNumber(rs.getString("phone_number"));
 				bean.setBelong(rs.getString("belong"));
-				bean.setLectureName(rs.getString("lecture_name"));
-				bean.setStartDate(rs.getString("start_date"));
-				bean.setEndDate(rs.getString("end_date"));
-				bean.setLecture_id(rs.getInt("lecture_id"));
+//				bean.setLectureName(rs.getString("lectureName"));
+//				bean.setStartDate(rs.getString("start_date"));
+//				bean.setEndDate(rs.getString("end_date"));
+//				bean.setLecture_id(rs.getInt("lecture_id"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

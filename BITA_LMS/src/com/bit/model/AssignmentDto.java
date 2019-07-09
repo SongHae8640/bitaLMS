@@ -1,7 +1,6 @@
 package com.bit.model;
 
 public class AssignmentDto {
-	//과제 번호는 어떻게 해야 하지?
 	private String title,writeDate, situation,writer,content;
 	private int assignmentId, lectureId , rowNum;
 	

@@ -148,6 +148,11 @@ public class StudentController extends HttpServlet {
 					String questionContent = req.getParameter("questionContent");
 					result = dao.updateQnaL(qnaId ,title,type, questionContent);		
 					rd = req.getRequestDispatcher("assignmentdetail.stu");	//과제 디테일 화면으로 이동, //굳이 rd로 이동해야하나?
+				}else if(path.equals("/qan_delete.stu")){
+					String[] qnaId = req.getParameterValues("qnaId");
+					
+					result = dao.deleteQnaL(qnaId);		
+					rd = req.getRequestDispatcher("qna.stu");	//qna 목록 페이지로 이동이동해야하나?
 				}else {
 					System.out.println("존재하지 않는 페이지");
 				}
