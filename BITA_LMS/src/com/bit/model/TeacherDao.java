@@ -7,26 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class TeacherDao {
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@192.168.1.7:1521:xe";
-	String user = "bita";
-	String password = "bita";
-	
-	Connection conn;
-	PreparedStatement pstmt;
-	ResultSet rs;
-	
-	public TeacherDao(){
-		try {
-			Class.forName(driver);
-			conn = DriverManager.getConnection(url,user,password);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+public class TeacherDao extends Dao{
 
 	//번호 (제목제외) ID 이름 강좌 날짜 과정, 등록인원/최대인원
 	//제목은 name을 불러와서 프론트엔드에서 ***님의 수강신청을 붙여야함
@@ -40,6 +21,7 @@ public class TeacherDao {
 				+ "AND TO_CHAR(SYSDATE,'yyyymmdd')=TO_CHAR(a.day_time,'yyyymmdd')";
 		
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();
@@ -57,13 +39,7 @@ public class TeacherDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			try {
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnection();
 		}
 		return list;
 	}
@@ -82,6 +58,7 @@ public class TeacherDao {
 				+ "ORDER BY name";
 		
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, lectureId);
 			pstmt.setString(2, yyyymm);
@@ -97,13 +74,7 @@ public class TeacherDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			try {
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnection();
 		}
 		return list;
 	}
@@ -124,6 +95,7 @@ public class TeacherDao {
 				+ "ORDER BY u.name";
 		
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();
@@ -140,13 +112,7 @@ public class TeacherDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			try {
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnection();
 		}
 		return list;
 	}
@@ -159,6 +125,7 @@ public class TeacherDao {
 				+ "WHERE lecture_id =?";
 		
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();
@@ -174,13 +141,7 @@ public class TeacherDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			try {
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnection();
 		}
 		return list;
 	}
@@ -193,6 +154,7 @@ public class TeacherDao {
 				+ "JOIN assignment a ON a.lecture_id = lu.lecture_id "
 				+ "WHERE u.belong = 'teacher' AND a.assignment_id = ?";
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, assignmentId);
 			rs = pstmt.executeQuery();
@@ -207,12 +169,7 @@ public class TeacherDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			try {
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnection();
 		}
 		return bean;
 	}
@@ -225,9 +182,7 @@ public class TeacherDao {
 				+ "WHERE assignment_id=?";
 		
 		try {
-			//getAssignmentDetail 에서 conn를 close 하기 때문에 새로 연결
-			Class.forName(driver);
-			conn = DriverManager.getConnection(url,user,password);
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, assignmentId);
 			rs = pstmt.executeQuery();
@@ -243,16 +198,8 @@ public class TeacherDao {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}finally{
-			try {
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnection();
 		}
 		
 		return list;
@@ -266,6 +213,7 @@ public class TeacherDao {
 				+ "WHERE responder_id = ?";
 		
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, teacherId);
 			rs = pstmt.executeQuery();
@@ -283,13 +231,7 @@ public class TeacherDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			try {
-				if(rs!=null)rs.close();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			closeConnection();
 		}
 		
 		return list;
@@ -297,6 +239,9 @@ public class TeacherDao {
 
 	public int insertAssignment(String title, String content, int lecture_id) {
 		// assignmnet_id 는 seq, write_date는 SYSDATE 로 INSERT
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
@@ -304,34 +249,51 @@ public class TeacherDao {
 
 	public int updateAssignment(String title, String content, String assingmentId) {
 		// assignmentId로 접근하고 title, content의 내용 수정
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
 	public int deleteAssignment(int assignmentId) {
 		// 과제 번호로 해당 과제 삭제	
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
 	public QnaLDto getQnaL(int qnaLId) {
 		// 1:1문의로 해당 세부 내용 불러오기
+		openConnection();
+		
+		closeConnection();
 		
 		return null;
 	}
 
 	public int updateQnaLAnswer(String answerContent, int  qnaLId) {
 		// 1:1문의에 answer_content(대답 내용) 추가하기(DB상에서는 qna_l에 있는 row UPDATE)
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
 	public int insertAttendanceCheckin(String stdId) {
 		//attendance table에 row를 생성하면서 SYSDATE 기준으로  입실(checkin)값을 넣는 메서드 
 
+		openConnection();
 		
+		closeConnection();
 		return 0;
 	}
 
 	public int updateAttendanceCheckout(String stdId) {
 		// 출석에서 해당  학생의 checkout 시간을 SYSDATE로 update
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
@@ -339,6 +301,9 @@ public class TeacherDao {
 			String content, int lectureId) {
 		// lecture_id에 해당하는 일정 추가
 		///end_date에 어떤 값을 넣어야 할지 고민
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
@@ -354,6 +319,7 @@ public class TeacherDao {
 			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=?";
 		}
 			try {
+				openConnection();
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
 				
@@ -365,48 +331,56 @@ public class TeacherDao {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}finally{
-				try {
-					if(rs!=null)rs.close();
-					if(pstmt!=null)pstmt.close();
-					if(conn!=null)conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				closeConnection();
 			}
 			return list;
 	}
 	
 	public ArrayList<CalendarDto> getCalendarDayList(int lectureId, String yearMonthDay){
+		openConnection();
 		
+		closeConnection();
 		return null;
 	}
 
 	public int getStuNum(int lectureId) {
 		//학생수 반환 메서드
+		openConnection();
 		
+		closeConnection();
 		return -1;
 	}
 
 	public int getCheckinNum(int lectureId) {
 		// 체크인(입실)한 학생수 반환 메서드
+		openConnection();
 		
+		closeConnection();
 		return -1;
 	}
 
 	public int getSubmissionNum(int lectureId) {
 		// 과제 제출(submission)한 학생수 반환 메서드
 		// 가장 최근에 낸 과제(assingment)에 제출한 
+		openConnection();
 		
+		closeConnection();
 		return -1;
 	}
 
 	public int getTotalDays(int lectureId) {
 		//  해당 강좌의 총일수 반환 메서드
+		openConnection();
+		
+		closeConnection();
 		return -1;
 	}
 
 	public int getProgressDays(int lectureId) {
 		// SYSDATE 기준으로 수업 진행 일수를 반환하는 메서드
+		openConnection();
+		
+		closeConnection();
 		return -1;
 	}
 }
