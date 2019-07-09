@@ -6,7 +6,7 @@ DELETE FROM SCORE;
 DELETE FROM ASSIGNMENT;
 DELETE FROM SUBMISSION;
 DELETE FROM QNA_L;
-DELETE FROM CALENDER;
+DELETE FROM CALENDAR;
 
 --INSERT할때 자료명과 순서를 같이 넣어줄 것
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('tea1','1234', 'teacher1', '', '', '', 'teacher');
@@ -24,11 +24,11 @@ INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) 
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('bef3','1234', 'before3', '', '', '', 'before');
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('bef4','1234', 'before4', '', '', '', 'before');
 
-INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,file_name,is_close) values(-1,'직원',sysdate,sysdate,0,0,0,0,'content','filename','a');
-INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,file_name,is_close) values(0,'등록전',sysdate,sysdate,0,0,0,0,'content','filename','a');
-INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,file_name,is_close) values(1,'JAVA',sysdate,sysdate,60,0,30,3,'content','filename','a');
-INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,file_name,is_close) values(2,'DB',sysdate,sysdate,60,0,30,3,'content','filename','a');
-INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,file_name,is_close) values(3,'WEB',sysdate,sysdate,60,0,30,3,'content','filename','a');
+INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(-1,'직원',sysdate,sysdate,0,0,0,0,'content','0');
+INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(0,'등록전',sysdate,sysdate,0,0,0,0,'content','0');
+INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(1,'JAVA',sysdate,sysdate,60,0,30,3,'content','0');
+INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(2,'DB',sysdate,sysdate,60,0,30,3,'content','0');
+INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(3,'WEB',sysdate,sysdate,60,0,30,3,'content','0');
 
 --강좌를 입력할때 LectureUser 테이블에도 추가해줄것 
 INSERT INTO lectureUser(lecture_id, user_id) values(1,'tea1');
