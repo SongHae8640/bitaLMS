@@ -9,7 +9,7 @@ public class TeacherDto {
 	//테이블 user01, data_room, teacher_info 필요
 	//info_id, u.name(user_id=teacher_id같을때)
 	
-	private int infoId;
+	private int infoId, rowNum;
 	private String type,content,teacherId,name,lecName,email,phoneNumber,writer,writeDate;
 	public int getInfoId() {
 		return infoId;
@@ -70,6 +70,12 @@ public class TeacherDto {
 	}
 	public void setWriteDate(String writeDate) {
 		this.writeDate = writeDate;
+	}
+	public int getRowNum() {
+		return rowNum;
+	}
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
 	}
 	
 	

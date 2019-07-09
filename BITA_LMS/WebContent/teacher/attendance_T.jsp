@@ -71,11 +71,13 @@
 					<tbody>
 						<tr>
 							<td>홍길동</td>
-							<input type="button" value="checkin"/>
-							<input type="button" value="checkout"/>
+							<td><input type="button" value="checkin"/><input type="button" value="checkout"/></td>
+							<td></td>
 						</tr>
 						<tr>
 							<td>김코난</td>
+							<td><input type="button" value="checkin"/><input type="button" value="checkout"/></td>
+							<td></td>
 						</tr>
 					</tbody>
 				</table>

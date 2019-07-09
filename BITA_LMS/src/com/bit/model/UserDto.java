@@ -9,7 +9,8 @@ public class UserDto {
 	//admin main
 	private int applyTotal,applyNew,qnaTotal,qnaNew;
 	//admin manageStu
-	private int totalDays, attendanceDays, attendanceStatus;
+	private int rowNum, totalDays, attendanceDays;
+	private String attendanceStatus;
 	
 	public int getTotalDays() {
 		return totalDays;
@@ -17,7 +18,7 @@ public class UserDto {
 	public int getAttendanceDays() {
 		return attendanceDays;
 	}
-	public int getAttendanceStatus() {
+	public String getAttendanceStatus() {
 		return attendanceStatus;
 	}
 	public void setTotalDays(int totalDays) {
@@ -26,7 +27,7 @@ public class UserDto {
 	public void setAttendanceDays(int attendanceDays) {
 		this.attendanceDays = attendanceDays;
 	}
-	public void setAttendanceStatus(int attendanceStatus) {
+	public void setAttendanceStatus(String attendanceStatus) {
 		this.attendanceStatus = attendanceStatus;
 	}
 	public int getApplyTotal() {
@@ -119,4 +120,24 @@ public class UserDto {
 	public void setLectureId(int lectureId) {
 		this.lectureId = lectureId;
 	}
+	public int getRowNum() {
+		return rowNum;
+	}
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+	@Override
+	public String toString() {
+		return "UserDto [userId=" + userId + ", password=" + password
+				+ ", name=" + name + ", email=" + email + ", phoneNumber="
+				+ phoneNumber + ", belong=" + belong + ", inflowPath="
+				+ inflowPath + ", lectureName=" + lectureName + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", lectureId="
+				+ lectureId + ", applyTotal=" + applyTotal + ", applyNew="
+				+ applyNew + ", qnaTotal=" + qnaTotal + ", qnaNew=" + qnaNew
+				+ ", totalDays=" + totalDays + ", attendanceDays="
+				+ attendanceDays + ", attendanceStatus=" + attendanceStatus
+				+ "]";
+	}
+	
 }

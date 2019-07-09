@@ -45,14 +45,14 @@ public class AdminController extends HttpServlet {
 				if (path.equals("/main.adm")) {
 					// 메인페이지
 					//년월일 하나만 받아와서
-					String yearMonthDay = req.getParameter("yearMonthDay");
-					req.setAttribute("calendarMonthList", dao.getCalendarMonthList(yearMonthDay.substring(0, 6)));
-					//년월일 다 넣어주기
-					dao = new AdminDao();
-					req.setAttribute("calendarDayList", dao.getCalendarDayList(yearMonthDay));
-					dao = new AdminDao();
-					dao = new AdminDao();
-					req.setAttribute("userBean", dao.getUser(userBean.getUserId()));
+//					String yearMonthDay = req.getParameter("yearMonthDay");
+//					req.setAttribute("calendarMonthList", dao.getCalendarMonthList(yearMonthDay.substring(0, 6)));
+//					//년월일 다 넣어주기
+//					dao = new AdminDao();
+//					req.setAttribute("calendarDayList", dao.getCalendarDayList(yearMonthDay));
+//					dao = new AdminDao();
+//					dao = new AdminDao();
+//					req.setAttribute("userBean", dao.getUser(userBean.getUserId()));
 					rd = req.getRequestDispatcher("admin/main_A.jsp");
 
 				} else if (path.equals("/manage_lec.adm")) {
@@ -68,13 +68,21 @@ public class AdminController extends HttpServlet {
 					rd = req.getRequestDispatcher("admin/manage_lec_detail.jsp");
 				} else if (path.equals("/manage_stu.adm")) {
 					// 수강생관리 목록 페이지(목록별)
+					//콤보박스 정보
+					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
+					dao = new AdminDao();
+					
+					//학생목록 리스트정보
 					//userDto이용
 					req.setAttribute("userBean", dao.getManageStu());
-					
 					rd = req.getRequestDispatcher("admin/manage_stu.jsp");
 
 				} else if (path.equals("/manage_stu_month.adm")) {
 					// 수강생관리 목록 페이지(월별)
+					//콤보박스 정보
+					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
+					dao = new AdminDao();
+					
 					String yearMonth = req.getParameter("yearMonth");
 					req.setAttribute("manageStuMonth", dao.getManageStuMonth(yearMonth));
 					

@@ -69,8 +69,8 @@
 	text-align: center;
 }
 </style>
-
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -86,6 +86,7 @@
 		});
 	});
 </script>
+
 </head>
 <body>
 	<div>
@@ -106,9 +107,7 @@
 		</div>
 		<div id="content">
 			<div id="content_upper">
-				<div id="calender">
-					<h1>달력</h1>
-				</div>
+				<div id="calender"></div>
 			</div>
 			<div id="content_under">
 				<div id="myinfo">

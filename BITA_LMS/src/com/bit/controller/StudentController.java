@@ -34,8 +34,8 @@ public class StudentController extends HttpServlet {
 				if (path.equals("/main.stu")) {
 					String yearMonth = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
 					String yearMonthDay = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
-					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonth));
-					req.setAttribute("calendarDayList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonthDay));
+					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonth));
+					req.setAttribute("calendarDayList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonthDay));
 					
 					//main 좌측하단 정보 전달
 					req.setAttribute("userBean", userBean);
@@ -44,8 +44,8 @@ public class StudentController extends HttpServlet {
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
 					req.setAttribute("qnaNum", dao.getQnaNum(userBean.getUserId()));
 					///qna에서 new는 답변이 왔으나 자신이 확인하지 않은 수를 말하는 것인가??? 후
-					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
-					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLecture_id()));
+					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
+					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLectureId()));
 					
 					rd = req.getRequestDispatcher("student/main_S.jsp");
 				} else if (path.equals("/attendance.stu")) {
@@ -55,22 +55,22 @@ public class StudentController extends HttpServlet {
 					
 					//main 우측 하단 정보 전달
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
-					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
+					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
 					req.setAttribute("attendanceStatusList", dao.getAttendanceStatusList(userBean.getUserId()));
 					
-					rd = req.getRequestDispatcher("student/attendance_S.jsp");
+					rd = req.getRequestDispatcher("student/attendance_day_S.jsp");
 					
 				} else if (path.equals("/attendanceMonth.stu")) {
 					String yearMonth = req.getParameter("idx");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
 					req.setAttribute("attendanceMonthList", dao.getAttendanceMonthList(userBean.getUserId(), yearMonth));
-					rd = req.getRequestDispatcher("student/attendance_S_month.jsp");	//이거 추가해야함
+					rd = req.getRequestDispatcher("student/attendance_month_S.jsp");	//이거 추가해야함
 					
 				} else if (path.equals("/score.stu")) {
 					req.setAttribute("scoreBean", dao.getScoreBean(userBean.getUserId()));
 					rd = req.getRequestDispatcher("student/score_S.jsp");
 					
 				} else if (path.equals("/assignment.stu")) {
-					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLecture_id()));
+					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("student/assignment_S.jsp");
 					
 				} else if (path.equals("/assignmentdetail.stu")) {
@@ -153,6 +153,15 @@ public class StudentController extends HttpServlet {
 					
 					result = dao.deleteQnaL(qnaId);		
 					rd = req.getRequestDispatcher("qna.stu");	//qna 목록 페이지로 이동이동해야하나?
+				}else if(path.equals("/callAttendance.stu")){
+					//비동기 통신
+					//처음에는 아이디값으로 현재 stu의 출석상황 갖고 오기
+					String json = "{\"status\" : \"입실\" , \"name\" : \"도학생\" ,"
+							+ " \"checkinTime\" : \"15시35분\", \"class\" : \"JAVA\","
+							+ " \"startDate\" : \"2019-07-04\", \"endDate\" : \"2019-09-20\"}";
+					req.setAttribute("data", json);
+					//입실, 퇴실 버튼을 눌렀을 때는 출석입력하고 출석상황 갖고 오기
+					
 				}else {
 					System.out.println("존재하지 않는 페이지");
 				}

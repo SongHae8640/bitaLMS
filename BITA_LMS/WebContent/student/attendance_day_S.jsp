@@ -1,3 +1,4 @@
+<%@page import="java.sql.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,7 +17,7 @@
 	margin: 0px auto;
 }
 </style>
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -25,8 +26,8 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#content>button').hide().eq(0).show().click(function() {
-			$('#content>button').show().eq(0).hide();
+		$('#content button').hide().eq(0).show().click(function() {
+			$('#content button').show().eq(0).hide();
 		});
 	});
 </script>
@@ -34,7 +35,7 @@
 <body>
 	<div>
 		<div id="header">
-			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
@@ -45,9 +46,40 @@
 			</ul>
 		</div>
 		<div id="content">
-			<h2>메인</h2>
-			<button id="checkin">입실</button>
-			<button id="checkout">퇴실</button>
+			<h2>출석상황</h2>
+			<div id="content">
+				<form>
+					<table border="1">
+						<tr>
+							<td rowspan="3">사진</td>
+							<td><%=request.getAttribute("name")%></td>
+							<td rowspan="3">입실횟수</td>
+							<td rowspan="3">지각</td>
+							<td rowspan="3">조퇴</td>
+							<td rowspan="3">외출</td>
+							<td rowspan="3">결성</td>
+						</tr>
+						<tr>
+							<td>시간</td>
+						</tr>
+						<tr>
+							<td>
+							<button id="checkin">입실</button>
+							<button id="checkout">퇴실</button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"><label for="branch">강좌명 :</label> <span>JAVA 과정</span></td>
+							<td rowspan="2" colspan="5"><label for="today_q">문의현황 </label> <span> ?? / 30</span></td>
+						</tr>
+						<tr>
+							<td colspan="2"><label for="branch">강좌기간 :</label> <span>0000-00-00~0000-00-00</span></td>
+						</tr>
+
+					</table>
+				</form>
+				
+			</div>
 
 		</div>
 		<div id="footer">
@@ -61,7 +93,6 @@
 				</p>
 			</div>
 		</div>
-
 	</div>
 </body>
 </html>

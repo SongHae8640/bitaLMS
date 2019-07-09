@@ -1,5 +1,5 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="com.bit.model.LectureDto"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,7 +99,7 @@
 	}
 	
 </style>
-<script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -160,25 +160,29 @@
 					</div>
 					<div id="lec_form2">
 					<table id="lec_table1">
+					<%
+								LectureDto lectureBean = (LectureDto)request.getAttribute("lectureBean");
+								if(lectureBean !=null){
+					%>
 							<tr>
 								<td>강좌명</td>
-								<td>JAVA</td>
+								<td><%=lectureBean.getName() %></td>
 							</tr>
 							<tr>
 								<td>강사명</td>
-								<td>김코난</td>
+								<td><%=lectureBean.getTeaName() %></td>
 							</tr>
 							<tr>
 								<td>교육기간</td>
-								<td>2019-07-01 ~ 2019-10-01</td>
+								<td><%=lectureBean.getStartDate() %> ~ <%=lectureBean.getEndDate() %></td>
 							</tr>
 							<tr>
 								<td>교육수준</td>
-								<td>3수준</td>
+								<td><%=lectureBean.getLv() %>수준</td>
 							</tr>
 							<tr>
 								<td>최대인원</td>
-								<td>30</td>
+								<td><%=lectureBean.getMaxStd() %></td>
 							</tr>
 					</table>
 					</div>
@@ -188,7 +192,7 @@
 					<tr>
 						<td>
 							<label>진도율</label>
-							<progress value="20" max="100"></progress>
+							<progress value="<%=lectureBean.getProgressDays() %>" max="<%=lectureBean.getTotalDays()%>"></progress>
 						</td>
 					</tr>
 					<tr>
@@ -198,6 +202,8 @@
 					</tr>
 					<tr>
 						<td>
+						<%=lectureBean.getContent() %>
+						<!-- 
 							응용소프트웨어 엔지니어링은 컴퓨터 프로그래밍 언어로 각 
 							업무에맞는 소프트웨어의 기능에 관한 설계, 구현 및 테스트를 
 							수행하고,사용자에게 배포하며, 버전관리를 통해 제품의 성능을 
@@ -205,15 +211,19 @@
 							데이터베이스 구현을 위하여 DBMS(Data Base Management System)
 							(DataBase Management Systems) 설치, 데이터베이스 생성, 데이
 							터베이스 오브젝트를 계획, 설계하고 구현하는 능력을 함양한다.
+						 -->
 						</td>
 					</tr>
 					<tr>
 						<td>
 							<div id="curri_des">
-								<h3>커리큘럼이미지</h3>			
+								<img src="img/<%=lectureBean.getFileName()+".jpg"%>"/>	
 							</div>
 						</td>
 					</tr>
+					<%
+								}
+					%>
 				</table>
 				</div>
 			</div>

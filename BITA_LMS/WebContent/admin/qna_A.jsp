@@ -139,7 +139,7 @@
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><a href="qna_detail.adm">프린트도 사용가능한가요?</a></td>
+						<td><a href="qna_detail.amd">프린트도 사용가능한가요?</a></td>
 						<td>김코난</td>
 						<td>2019-07-02</td>
 						<td>답변대기</td>

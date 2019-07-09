@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="com.bit.model.RegisterDto"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -165,7 +165,47 @@
 				<br/><br/>
 		<div id="app_detail">
 			<table id="app_table">
+					<%
+								RegisterDto registerBean = (RegisterDto) request.getAttribute("registerBean");
+								if(registerBean !=null){
+					%>
 					<tr>
+						<th>제목</th>
+						<td><%=registerBean.getUserName() %>님의 수강신청</td>
+					</tr>
+					<tr>
+						<th>작성</th>
+						<td><%=registerBean.getUserId() %></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+						<div id="reg_form">
+							<div id="submit">
+								<span>제출일 <%=registerBean.getApplyDate() %></span>
+							</div>
+							<div>
+								<label>이름</label>
+								<span><%=registerBean.getUserName() %></span>
+							</div>
+							<div>
+								<label>강좌선택</label>
+								<span><%=registerBean.getLecName() %></span>
+							</div>
+							<div>
+								<label>연락처</label>
+								<span><%=registerBean.getPhoneNumber() %></span>
+							</div>
+							<div>
+								<label>파일첨부</label>
+								<a><%=registerBean.getFileName() %></a>
+							</div>
+						</div>
+						</td>
+					</tr>
+					<%
+								}
+					%>
+					<!--<tr>
 						<th>제목</th>
 						<td>김경민님의 수강신청</td>
 					</tr>
@@ -197,7 +237,7 @@
 							</div>
 						</div>
 						</td>
-					</tr>
+					</tr>  -->
 			</table>
 		</div>
 		<div id="under_list">

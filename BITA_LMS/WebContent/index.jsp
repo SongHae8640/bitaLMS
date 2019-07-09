@@ -96,7 +96,7 @@
 	</div>
 	<%
 		//ui를 깨지지 않게 하려면 항상 body 닫기 전에 넣는 것이 좋다. 로딩하다가 출력되기 때문
-		Object obj = request.getAttribute("errmsg");
+		Object obj = request.getAttribute("msg");
 		if (obj != null)
 			out.println(obj);
 	%>

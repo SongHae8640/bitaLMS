@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class UserDao {
 	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@192.168.1.7:1521:xe";
+	String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	//192.168.1.7
 	String user = "bita";
 	String password = "bita";
@@ -54,10 +54,10 @@ public class UserDao {
 				bean.setEmail(rs.getString("email"));
 				bean.setPhoneNumber(rs.getString("phone_number"));
 				bean.setBelong(rs.getString("belong"));
-//				bean.setLectureName(rs.getString("lectureName"));
-//				bean.setStartDate(rs.getString("start_date"));
-//				bean.setEndDate(rs.getString("end_date"));
-//				bean.setLecture_id(rs.getInt("lecture_id"));
+				bean.setLectureName(rs.getString("lectureName"));
+				bean.setStartDate(rs.getString("start_date"));
+				bean.setEndDate(rs.getString("end_date"));
+				bean.setLectureId(rs.getInt("lecture_id"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

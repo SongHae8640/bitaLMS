@@ -57,6 +57,7 @@ public class LoginController extends HttpServlet {
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login(id, pw);
 		
+		System.out.println(userBean.toString());
 		try{
 		if(userBean.getBelong().equals("teacher")){
 			//session

@@ -142,7 +142,7 @@
 			</div>
 			<div id=upper_content>
 				<div id="month_see">
-					<button type="button">관리페이지 보기</button>
+					<button type="button" onclick="location.href='manage_stu.adm'">관리페이지 보기</button>
 				</div>
 				<div id="month_ck">
 					<div><label>month</label></div>
