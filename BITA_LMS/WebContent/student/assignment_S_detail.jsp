@@ -5,7 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -14,9 +16,32 @@
 	margin: 0px auto;
 }
 </style>
+<%
+int i=1;
+%>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
+	var btn, file, xhr, formData;
+
 	$(document).ready(function() {
+		$('#upload').click(function() {
+
+			var input = document.querySelector('#myfile');
+			formData = new FormData();
+
+			formData.append('myfile', input.files[0]);
+			$.ajax({
+				url : 'upload.bit',
+				method : 'post',
+				data : formData,
+				contentType : false,
+				processData : false,
+				success : function() {
+					alert('업로드 성공');
+				}
+			});
+		});
+
 		$('.topmenu').mouseenter(function() {
 			$('.submenu').css('display', 'block')
 		});
@@ -30,6 +55,7 @@
 				$("input[name=chk]").prop("checked", false);
 			}
 		});
+
 	});
 </script>
 </head>
@@ -64,37 +90,41 @@
 			</div>
 
 			<div>
-				<button onclick="location='../assignment_S.jsp'">과제목록</button>
+				<button onclick="assignment_S.stu">과제목록</button>
+			</div>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th>확인여부</th>
+						<th><input type="checkbox" name="" id="ch" /></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>2</td>
+						<td><a href="#">8/2 김코난 과제</a></td>
+						<td>김코난</td>
+						<td>2019-08-02</td>
+						<td>확인대기</td>
+						<td><input type="checkbox" name="chk" /></td>
+					</tr>
+				</tbody>
+			</table>
+			<div>
+				<div>
+					<input type="file" id="myfile" />
+				</div>
+				<div>
+					<button id="upload">등록</button>
+				</div>
+				<button onclick="location='assignment_delete_S.stu'">삭제</button>
 			</div>
 
-			<form action="">
-				<table border="1">
-					<thead>
-						<tr>
-							<th>번호</th>
-							<th>제목</th>
-							<th>작성자</th>
-							<th>작성일</th>
-							<th>확인여부</th>
-							<th><input type="checkbox" name="" id="ch"/></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>2</td>
-							<td><a href="#">8/2 김코난 과제</a></td>
-							<td>김코난</td>
-							<td>2019-08-02</td>
-							<td>확인대기</td>
-							<td><input type="checkbox" name="chk" /></td>
-						</tr>
-					</tbody>
-				</table>
-				<div>
-					<button type="submit">추가</button>
-					<button onclick="location=''">삭제</button>
-				</div>
-			</form>
+
 		</div>
 		<div id="footer">
 			<div>

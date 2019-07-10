@@ -359,13 +359,40 @@ public class TeacherDao extends Dao{
 		return -1;
 	}
 
-	public int getSubmissionNum(int lectureId) {
+	public SubmsissionDto getSubmissionNum(int lectureId) {
 		// 과제 제출(submission)한 학생수 반환 메서드
-		// 가장 최근에 낸 과제(assingment)에 제출한 
+		// 가장 최근에 낸 과제(assingment)에 제출한
+		SubmsissionDto bean =new SubmsissionDto();
+		ArrayList<SubmsissionDto> list=new ArrayList<SubmsissionDto>();
 		openConnection();
+		String sql="SELECT row_number() OVER(ORDER BY write_date) num, title, name as std_name,"
+				+ "TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,answer_content, type "
+				+ "FROM qna_l ql JOIN user01 u ON ql.std_id = u.user_id "
+				+ "WHERE responder_id = ?";	//수정해야함 
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, "num");
+			rs=pstmt.executeQuery();
+			if(rs.next()){
+				/*
+				 * bean.setNum(rs.getInt("num")); bean.setSub(rs.getString("sub"));
+				 * bean.setUnum(rs.getInt("unum")); bean.setName(rs.getString("name"));
+				 * bean.setNalja(rs.getDate("nalja")); bean.setPay(rs.getInt("pay"));
+				 */			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				if(rs!=null)rs.close();
+				if(pstmt!=null)pstmt.close();
+				if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return bean;
 		
 		closeConnection();
-		return -1;
 	}
 
 	public int getTotalDays(int lectureId) {

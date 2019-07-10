@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,30 +19,37 @@
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-						$('.topmenu').mouseenter(function(){
+	$(document)
+			.ready(
+					function() {
+						$('.topmenu').mouseenter(function() {
 							$('.submenu').css('display', 'block')
 						});
-						$('.topmenu').mouseleave(function(){
+						$('.topmenu').mouseleave(function() {
 							$('.submenu').css('display', 'none')
 						});
-						$('#ch').click(function(){
-							if ($('#ch').prop("checked")){
+						$('#ch').click(function() {
+							if ($('#ch').prop("checked")) {
 								$("input[name=chk]").prop("checked", true);
 							} else {
 								$("input[name=chk]").prop("checked", false);
 							}
 						});
-						$("#serch").keyup(function(){
-							var k = $(this).val();
-							$("table>tbody>tr").hide();
-							var temp = $("table>tbody>tr>td:nth-child(6n+2):contains('"+ k + "')");
-							$(temp).parent().show();
-						});
-						$('#delete').click(function(){
-							$(location).attr('href','assignment_delete_T.tea');
-						});
-	});
+						$("#serch")
+								.keyup(
+										function() {
+											var k = $(this).val();
+											$("table>tbody>tr").hide();
+											var temp = $("table>tbody>tr>td:nth-child(6n+2):contains('"
+													+ k + "')");
+											$(temp).parent().show();
+										});
+						$('#delete').click(
+								function() {
+									$(location).attr('href',
+											'assignment_delete_T.tea');
+								});
+					});
 </script>
 </head>
 <body>
@@ -85,6 +93,7 @@
 					<button type="submit">수정</button>
 					<input type="button" id="delete" value="삭제">
 				</div>
+				<% String root=request.getContextPath(); %>
 				<table border="1">
 					<thead>
 						<tr>
@@ -97,22 +106,26 @@
 						</tr>
 					</thead>
 					<tbody>
+						<%	
+							ArrayList<SubmissionDto> list = null;
+							list = (ArrayList<SubmissionDto>) request.getAttribute("list");
+							if (list != null) {
+								for (SubmissionDto bean : list) {
+									//controller teacher,student 추가할것 
+						%>
 						<tr>
-							<td>2</td>
-							<td><a href="#">8/2 김코난 과제</a></td>
-							<td>김코난</td>
-							<td>2019-08-02</td>
-							<td>확인대기</td>
+							<td><%=bean.getRowNum %></td>
+							<td><a href="upload.bit?idx=<%=bean.getFileName() %>"><%=bean.getFileName() %></a></td>
+							<td><%=bean.getStdName() %></td>
+							<td><%=bean.getWriteDate %></td>
+							<td><%=bean.getIsCheck() %></td>
 							<td><input type="checkbox" name="chk" /></td>
 						</tr>
-						<tr>
-							<td>3</td>
-							<td><a href="#">8/2 콜롬보 과제</a></td>
-							<td>콜롬보</td>
-							<td>2019-08-02</td>
-							<td>확인대기</td>
-							<td><input type="checkbox" name="chk" /></td>
-						</tr>
+
+						<%
+							}
+							}
+						%>
 					</tbody>
 				</table>
 				<div>

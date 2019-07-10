@@ -146,6 +146,7 @@ public class StudentDao extends Dao{
 	public ArrayList<AssignmentDto> getAssignmentList(int lecture_id) {
 		openConnection();
 		
+		
 		closeConnection();
 		return null;
 	}
@@ -166,6 +167,31 @@ public class StudentDao extends Dao{
 
 	public int insertSubmission(int assignmentId, String userId) {
 		openConnection();
+		String sql="insert into Attached_File values(\"김코난\",\"파일그룹\",?,?,\"2019-08-01\",\"2019-08-02\",\"stu1\")"; //reg id?file group?
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, "file_id");//int로 받아야함
+			pstmt.setString(2, "file_group");
+			pstmt.setString(3, "original_name");
+			pstmt.setString(4, "file_name");
+			pstmt.setString(5, "file_extension");
+			pstmt.setString(6, "ref_date");
+			pstmt.setString(7, "reg_id");
+			int result=pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				if(pstmt!=null)pstmt.close();
+				if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
 		
 		closeConnection();
 		return -1;
