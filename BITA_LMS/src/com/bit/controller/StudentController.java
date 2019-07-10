@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.bit.model.QnaLDto;
 import com.bit.model.StudentDao;
 import com.bit.model.UserDto;
 
@@ -34,18 +35,14 @@ public class StudentController extends HttpServlet {
 				if (path.equals("/main.stu")) {
 					String yearMonth = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
 					String yearMonthDay = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
-					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonth));
-					req.setAttribute("calendarDayList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonthDay));
+//					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonth));
+//					req.setAttribute("calendarDayList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonthDay));
 					
 					//main 좌측하단 정보 전달
 					req.setAttribute("userBean", userBean);
 					
 					//main 우측 하단 정보 전달
-					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
-					req.setAttribute("qnaNum", dao.getQnaNum(userBean.getUserId()));
-					///qna에서 new는 답변이 왔으나 자신이 확인하지 않은 수를 말하는 것인가??? 후
-					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
-					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLecture_id()));
+					/// ajax로 전달 하겠다
 					
 					rd = req.getRequestDispatcher("student/main_S.jsp");
 				} else if (path.equals("/attendance.stu")) {
@@ -55,7 +52,7 @@ public class StudentController extends HttpServlet {
 					
 					//main 우측 하단 정보 전달
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
-					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
+					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
 					req.setAttribute("attendanceStatusList", dao.getAttendanceStatusList(userBean.getUserId()));
 					
 					rd = req.getRequestDispatcher("student/attendance_S.jsp");
@@ -70,7 +67,7 @@ public class StudentController extends HttpServlet {
 					rd = req.getRequestDispatcher("student/score_S.jsp");
 					
 				} else if (path.equals("/assignment.stu")) {
-					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLecture_id()));
+					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("student/assignment_S.jsp");
 					
 				} else if (path.equals("/assignmentdetail.stu")) {
@@ -136,10 +133,12 @@ public class StudentController extends HttpServlet {
 					result = dao.deleteSubmission(assignmentId, userBean.getUserId());		
 					rd = req.getRequestDispatcher("assignmentdetail.stu");	//과제 디테일 화면으로 이동, //굳이 rd로 이동해야하나?
 				}else if(path.equals("/qan_insert.stu")){
-					String title = req.getParameter("title");
-					String type = req.getParameter("type");
-					String questionContent = req.getParameter("questionContent");
-					result = dao.insertQnaL(userBean.getUserId(),title,type, questionContent);		
+					QnaLDto qnaLBean = new QnaLDto();
+					qnaLBean.setTitle(req.getParameter("title"));
+					qnaLBean.setType(req.getParameter("type"));
+					qnaLBean.setQuestionContent(req.getParameter("questionContent"));
+					qnaLBean.setStuId(userBean.getUserId());					
+					result = dao.insertQnaL(qnaLBean);		
 					rd = req.getRequestDispatcher("assignmentdetail.stu");	//과제 디테일 화면으로 이동, //굳이 rd로 이동해야하나?
 				}else if(path.equals("/qan_update.stu")){
 					int qnaId = Integer.parseInt(req.getParameter("qnaId"));
