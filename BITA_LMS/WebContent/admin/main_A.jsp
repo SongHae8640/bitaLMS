@@ -84,7 +84,28 @@
 		}).mouseenter(function(){
 			$('#header>img').css('cursor', 'pointer')
 		});
+		
+		updateData();
 	});
+	
+	function updateData(){
+		$.ajax({
+			type:"get",
+			url:"teacher/teacherStatus.jsp",
+			datatype : "json",
+			error :function(data){
+				var show="";
+				$.each(data, function(index,item){
+					console.log(item.name);
+					show+="<span>"+"지점:"+item.lecName+"</span><br>";
+					show+="<span>"+"소속:"+item.totalyDays+"</span><br>";
+					show+="<span>"+"신청 현황:"+getSubmission+"</span><br>";
+					show+="<span>"+"Q&A 문의:"+totalQnalNum+"</span><br>";
+					
+				});
+			}
+		});
+		
 </script>
 </head>
 <body>
