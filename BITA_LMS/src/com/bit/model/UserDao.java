@@ -33,13 +33,12 @@ public class UserDao {
 		String sql = "SELECT u.user_Id AS user_id, password, u.name AS name, "
 				+ "email, phone_number, belong"
 				+ ", l.name AS lectureName, "
-				+ "start_date,end_date,l.lecture_id AS lecture_id"
+				+ "to_char(start_date) as \"start_date\",to_char(end_date) as \"end_date\",l.lecture_id AS lecture_id"
 				+ " FROM user01 u "
 				+ "JOIN lectureuser lu ON u.user_id = lu.user_id "
 				+ "JOIN lecture l ON lu.lecture_id = l.lecture_id "
 				+ "WHERE u.user_id=? AND u.password=?";
 		UserDto bean = new UserDto();
-		System.out.println(id+"$$"+pw);
 		System.out.println(sql);
 		try {
 			pstmt = conn.prepareStatement(sql);

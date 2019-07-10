@@ -1,6 +1,7 @@
 package com.bit.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,7 +43,7 @@ public class StudentController extends HttpServlet {
 					
 					//main 우측 하단 정보 전달
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
-					req.setAttribute("qnaNum", dao.getQnaNum(userBean.getUserId()));
+					req.setAttribute("qnaNum", dao.getNewQnaLAnswerNum(userBean.getUserId()));
 					///qna에서 new는 답변이 왔으나 자신이 확인하지 않은 수를 말하는 것인가??? 후
 					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
 					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLectureId()));
@@ -85,9 +86,9 @@ public class StudentController extends HttpServlet {
 					rd = req.getRequestDispatcher("student/qna_S.jsp");
 				} else if (path.equals("/qna_detail.stu")) {
 					String qnaId = req.getParameter("idx");	//목록화면에서 과제 번호를 가져올 것
-					req.setAttribute("qnaBean", dao.getQnaBean(qnaId));
+					req.setAttribute("qnaBean", dao.getQna(qnaId));
 					rd = req.getRequestDispatcher("student/qna_S/qnadetail_S.jsp");
-				} else {
+				}else {
 					System.out.println("존재하지 않는 페이지");
 				}
 			}else {
@@ -153,15 +154,6 @@ public class StudentController extends HttpServlet {
 					
 					result = dao.deleteQnaL(qnaId);		
 					rd = req.getRequestDispatcher("qna.stu");	//qna 목록 페이지로 이동이동해야하나?
-				}else if(path.equals("/callAttendance.stu")){
-					//비동기 통신
-					//처음에는 아이디값으로 현재 stu의 출석상황 갖고 오기
-					String json = "{\"status\" : \"입실\" , \"name\" : \"도학생\" ,"
-							+ " \"checkinTime\" : \"15시35분\", \"class\" : \"JAVA\","
-							+ " \"startDate\" : \"2019-07-04\", \"endDate\" : \"2019-09-20\"}";
-					req.setAttribute("data", json);
-					//입실, 퇴실 버튼을 눌렀을 때는 출석입력하고 출석상황 갖고 오기
-					
 				}else {
 					System.out.println("존재하지 않는 페이지");
 				}
