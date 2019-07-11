@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import com.bit.model.AdminDao;
 import com.bit.model.AttendanceDto;
 import com.bit.model.CalendarDto;
@@ -70,7 +73,6 @@ public class AdminController extends HttpServlet {
 					// 수강생관리 목록 페이지(목록별)
 					//콤보박스 정보
 					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
-					dao = new AdminDao();
 					
 					//학생목록 리스트정보
 					//userDto이용
@@ -220,6 +222,12 @@ public class AdminController extends HttpServlet {
 					
 					rd = req.getRequestDispatcher("manage_lec.adm");
 				} else if (path.equals("/manage_stu_month_update.adm")) {
+					// 수강생관리 목록 페이지 삭제
+					String[] userId = req.getParameterValues("");
+					result = dao.deleteUser(userId);
+					
+					rd = req.getRequestDispatcher("manage_stu.adm");
+				} else if (path.equals("/manage_stu_month_update.adm")) {
 					// 수강생관리 목록 페이지(월별) 수정
 					String yyyymm = req.getParameter("");
 					String[] userId = req.getParameterValues("");
@@ -227,12 +235,6 @@ public class AdminController extends HttpServlet {
 					result = dao.updateManageStuMonth(yyyymm,userId,status);
 					
 					rd = req.getRequestDispatcher("manage_stu_month.adm?idx="+idx);
-				} else if (path.equals("/manage_stu_month_update.adm")) {
-					// 수강생관리 목록 페이지 삭제
-					String[] userId = req.getParameterValues("");
-					result = dao.deleteUser(userId);
-					
-					rd = req.getRequestDispatcher("manage_stu.adm");
 				} else if (path.equals("/manage_tea_insert.adm")) {
 					// 강사관리 강사 추가 페이지
 					TeacherDto teacherBean = new TeacherDto();
@@ -276,8 +278,24 @@ public class AdminController extends HttpServlet {
 				if(result==1){					
 					rd.forward(req, resp);
 				}else{
-					
+					System.out.println("결과값없음");
 				}
+				
+				//비동기 통신
+				if (path.equals("/manage_stu_month.adm")) {
+					resp.setContentType("text/html;charset=UTF-8");
+					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
+					// 수강생관리 목록 페이지(월별) 월 이동
+					String yyyymm = req.getParameter("yearMonth");
+					System.out.println(yyyymm);
+					yyyymm = yyyymm.replaceFirst("-", "");
+					System.out.println(yyyymm);
+					ArrayList<AttendanceDto> manageStuMonth = dao.getManageStuMonth(yyyymm);
+					PrintWriter out= resp.getWriter(); 
+					out.write(dao.getManageStuMonthJson(manageStuMonth)+"");
+					out.close();
+				} 
+				
 			}
 		} catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");

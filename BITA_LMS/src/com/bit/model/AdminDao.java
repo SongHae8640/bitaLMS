@@ -1,7 +1,11 @@
 package com.bit.model;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class AdminDao extends Dao {
 	
@@ -429,17 +433,15 @@ public class AdminDao extends Dao {
 		
 		if(yyyymm==null){
 			//null인 경우 sysdate로
+			
 		}else{
 			
 		}
-		String sql = "select ROW_NUMBER() OVER(ORDER BY lu.lecture_id, u.name) NUM, u.name as \"userName\", "
-				+ "l.total_days AS \"totalDays\", l.name as \"lecName\", a.status, t1.* "
-				+ "from user01 u inner join lectureuser lu on u.user_id = lu.user_id "
-				+ "inner join lecture l on l.lecture_id = lu.lecture_id "
-				+ "inner join attendance a on a.std_id=u.user_id "
-				+ "left join (SELECT std_id, count(status) as \"count\" FROM attendance "
-				+ "where status='출석' or status='공결' GROUP BY std_id) t1 on a.std_id=t1.std_id "
-				+ "where u.belong='student' and a.day_time>to_date(to_char(sysdate))";
+		String sql = "select u.name, a.std_id, to_char(a.day_time,'dd') as \"day\","
+				+ " a.status, l.name as \"lecName\" from attendance a inner join user01 u on u.user_id=a.std_id"
+				+ " inner join lecture l on a.lecture_id=l.lecture_id"
+				+ " where to_date(trunc(day_time,'mm'))=to_date(trunc(sysdate,'mm'))"
+				+ " order by u.name, a.day_time";
 		
 		System.out.println(sql);
 		try {
@@ -447,11 +449,13 @@ public class AdminDao extends Dao {
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()){
-				//번호/이름/총 출석 수/총 강좌일 수/출석상태/강좌
 				AttendanceDto bean = new AttendanceDto();
-				
+				bean.setName(rs.getString("name"));
+				bean.setLecName(rs.getString("lecName"));
+				bean.setStdId(rs.getString("std_id"));
+				bean.setDayTime(rs.getString("day"));
+				bean.setStatus(rs.getString("status"));
 				list.add(bean);
-				System.out.println(bean.toString());
 			}
 			
 		} catch (SQLException e) {
@@ -632,5 +636,22 @@ public class AdminDao extends Dao {
 		return 0;
 	}
 	
+	public String getManageStuMonthJson(ArrayList<AttendanceDto> list){
+		JSONArray jArray = new JSONArray();
+		if (list != null) { 
+            for (int i = 0; i < list.size(); i++) {
+                JSONObject jObject = new JSONObject();//배열 내에 들어갈 json
+                jObject.put("id", list.get(i).getStdId());
+                jObject.put("name", list.get(i).getName());
+                jObject.put("lecName", list.get(i).getLecName());
+                jObject.put("dayTime", list.get(i).getDayTime());
+                jObject.put("status", list.get(i).getStatus());
+                jArray.add(jObject);
+            }
+            System.out.println(jArray.toJSONString());
+		} 
+		
+		return jArray.toJSONString();
+	}
 
 }

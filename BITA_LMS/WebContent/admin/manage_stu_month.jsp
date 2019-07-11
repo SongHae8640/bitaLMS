@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList,com.bit.model.LectureDto"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,17 +64,17 @@
 	}
 	#content #att_list{
 	clear:both;
-	width: 600px;
 	height:500px;
 	margin: 0 auto;
 	text-align:center;
 	}
 	#content #att_list table{
-	width: 600px;
 	margin: 0 auto;
+	border-collapse: collapse;
 	}
 	#content #att_list table,th,td{
 	border: 1px solid gray;
+	border-collapse: collapse;
 	}
 	#content #under_list{
 	width: 600px;
@@ -88,10 +89,16 @@
 	float:right;
 	width: 45px;
 	}
+	#content #under_list #update_button{
+	float:right;
+	width: 45px;
+	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
+	var obj = null;
+	var yearMonth = $('#yearMonth').text();
+	$(document).ready(function() {	
 		$('.topmenu').mouseenter(function() {
 			$('.submenu').css('display', 'block')
 		});
@@ -103,8 +110,126 @@
 		}).mouseenter(function(){
 			$('#header>img').css('cursor', 'pointer')
 		});
+		
+		$('#ok_button').hide().next().hide();
+		ajaxCall();
+		
+		
+		$('#update_button').click(function(){
+			$('#att_list>table td').html
+		});
 	});
-    //테스트 주석
+	
+	var ajaxCall = function() {
+		//맨처음 데이터 가져올 때 & 월별 데이터 가져올때
+		$.when($.ajax({ 
+			url: "manage_stu_month.adm", 
+			dataType : 'json',
+			data : {yearMonth:$('#yearMonth').text()},
+			type: "post",
+			success: function(data){
+				obj = data;
+			},error : function(){
+                alert("통신실패");
+            }
+		})).done(function() {
+			var lastDay = ( new Date() ).getDate();
+			var thead = $('#att_list>table>thead>tr');
+			var tbody = $('#att_list>table>tbody');
+			thead.append("<th>이름</th>");
+			for(var i=1; i<=lastDay; i++){
+				thead.append("<th>"+i+"</th>");
+			}
+			thead.find().css("width", "100%");
+			var check = "";
+			var cnt = 0;
+			$.each(obj,function(key,value) {
+				if(key==0){
+					check = value.name;
+					tbody.append("<tr><th>"+value.name+"</th>"+'<input type="hidden" value="'+value.id+'" class="id"/>'+'<input type="hidden" value="'+value.lecName+'" class="lecture"/>'+"</tr>");
+					cnt++;
+				}else{
+					if(check==value.name){
+					}else{
+						check = value.name;
+						tbody.append("<tr><th>"+value.name+"</th>"+'<input type="hidden" value="'+value.id+'" class="id"/>'+'<input type="hidden" value="'+value.lecName+'" class="lecture"/>'+"</tr>");
+						cnt++;
+					}
+				}
+			});
+			for(var i=1; i<=cnt; i++){
+				for(var j=1; j<=lastDay; j++){
+					tbody.children().eq(i-1).append("<td></td>");
+				}
+			}
+			var num = 0;
+			$.each(obj,function(key,value) {
+				if(key==0){
+					check = value.name;
+					tbody.children().eq(0).children().eq(value.dayTime).text(value.status);
+					num++;
+				}else{
+					if(check!=value.name){
+						check = value.name;
+						tbody.children().eq(num).children().eq(value.dayTime).text(value.status);
+						num++;
+					}else{
+						num--;
+						tbody.children().eq(num).children().eq(value.dayTime).text(value.status);
+						num++;
+					}
+				}
+			});
+			
+			$("select[name=lecture_name]").change(
+		               function() {
+		                  var k = $("select[name=lecture_name]").children("option:selected").text();
+		                  if(k=="전체"){
+		                	  $('#att_list>table>tbody>tr').show();
+		                  }
+		                  else {
+			                 $("#att_list>table>tbody>tr").hide();
+			                 $('.lecture[value*='+k+']').parent().show();
+		                  }
+		     });
+		});
+	}
+	
+	var ajaxBtnCall = function() {
+		//수정 버튼을 눌렀을 때
+		var test = { "name" : "홍길동", "age" : 27, "address": "서울시", };
+		$.when($.ajax({
+			url: "callAttendanceBtn.test", 
+			dataType: "json", 
+			data: {btn:btn},
+			type: "post",
+			success: function(data){
+				
+			},error : function(){
+                alert("통신실패");
+            }
+		})).done(function() {
+			
+		});
+	}
+	
+	var ajaxMonthCall = function() {
+		//월이동 버튼을 눌렀을 때
+		var test = { "name" : "홍길동", "age" : 27, "address": "서울시", };
+		$.when($.ajax({
+			url: "callAttendanceBtn.test", 
+			dataType: "json", 
+			data: {btn:btn},
+			type: "post",
+			success: function(data){
+				
+			},error : function(){
+                alert("통신실패");
+            }
+		})).done(function() {
+			
+		});
+	}
 </script>
 </head>
 <body>
@@ -148,15 +273,25 @@
 					<div><label>month</label></div>
 					<div>
 						<button><</button>
-						<label> 2019-07 </label>
+						<label id="yearMonth">2019-07</label>
 						<button>></button>
 					</div>
 				</div>
 					<div id="lecture_list">
 						<select name="lecture_name">
-						    <option value="JAVA">JAVA</option>
-						    <option value="WEB">WEB</option>
-						    <option value="DB">DB</option>
+						    <option value="" selected="selected">전체</option>
+							<%
+							ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("arrangeLectureList");
+							if(lectureList !=null){
+							for(LectureDto bean : lectureList){
+									if(bean.getLectureID()>0){
+							%>
+								<option value="" ><%=bean.getName()%></option>
+							<%
+									}
+								}
+							}
+							%>
 						</select>
 					</div>
 			</div>
@@ -164,55 +299,23 @@
 			<table>
 				<thead>
 					<tr>
-						<th>이름</th>
-						<th>1</th>
-						<th>2</th>
-						<th>3</th>
-						<th>4</th>
-						<th>5</th>
-						<th>6</th>
-						<th>7</th>
-						<th>8</th>
-						<th>9</th>
-						<th>10</th>
+					<!-- 이름 및 날짜 th -->
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>홍길동</td>
-						<td>출석</td>
-						<td>결석</td>
-						<td>출석</td>
-						<td>출석</td>
-						<td>공결</td>
-						<td>출석</td>
-						<td>출석</td>
-						<td>결석</td>
-						<td>출석</td>
-						<td>출석</td>
-					</tr>
-					<tr>
-						<td>김영희</td>
-						<td>출석</td>
-						<td>결석</td>
-						<td>출석</td>
-						<td>출석</td>
-						<td>공결</td>
-						<td>출석</td>
-						<td>출석</td>
-						<td>결석</td>
-						<td>출석</td>
-						<td>출석</td>
-					</tr>
+				 
 				</tbody>
 			</table>
 		</div>
 		<div id="under_list">
+			<div id="ok_button">
+				<button type="button">확인</button>
+			</div>
 			<div id="reject_button">
 				<button type="button">취소</button>
 			</div>
-			<div id="ok_button">
-				<button type="button">확인</button>
+			<div id="update_button">
+				<button type="button">수정</button>
 			</div>
 		</div>
 	</div>

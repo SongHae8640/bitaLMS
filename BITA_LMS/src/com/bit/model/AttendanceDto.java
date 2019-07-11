@@ -3,7 +3,7 @@ package com.bit.model;
 import java.sql.Date;
 
 public class AttendanceDto {
-	private String stdId,name,status,checkinTime,CheckoutTime, dayTime;
+	private String stdId,name,status,checkinTime,CheckoutTime, dayTime, lecName;
 	private int lectureId;
 
 	
@@ -48,5 +48,11 @@ public class AttendanceDto {
 	}
 	public void setLectureId(int lectureId) {
 		this.lectureId = lectureId;
+	}
+	public String getLecName() {
+		return lecName;
+	}
+	public void setLecName(String lecName) {
+		this.lecName = lecName;
 	}
 }

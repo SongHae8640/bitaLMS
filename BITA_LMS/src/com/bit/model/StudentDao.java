@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.apache.catalina.startup.SetContextPropertiesRule;
+
 public class StudentDao extends Dao{
 
 	public ArrayList<CalendarDto> getCalendarMonthList(int lectureId, String yearMonth){
@@ -286,26 +288,39 @@ public class StudentDao extends Dao{
 
 	public int updateAttendance(String stuId,String check) {
 		//일괄적으로 insert는 AM 6시, 출석마감은 PM 11시에 되는걸로
+		System.out.println(check);
 		
 		String sql = "";
 		int result = 0;
 		if(check.equals("입실")){
-			sql = "UPDATE attendance SET status = '입실', checkin_time=sysdate WHERE stuId=?";
+			sql = "UPDATE attendance SET status = '입실', checkin_time=sysdate WHERE std_id = ? and to_char(day_time)=to_char(sysdate)";
 		}else if(check.equals("퇴실")){
-			sql = "UPDATE attendance SET status = '퇴실', checkout_time=sysdate WHERE stuId=?";
+			sql = "UPDATE attendance SET status = '퇴실', checkout_time=sysdate WHERE std_id = ? and to_char(day_time)=to_char(sysdate)";
 		}
 		
 		System.out.println(sql);
 		
 		try {
 			openConnection();
-			pstmt.setString(1, stuId);
+			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, stuId);
 			result = pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		}finally{
+			try {
+				conn.commit();
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			closeConnection();
 		}
 		return result;

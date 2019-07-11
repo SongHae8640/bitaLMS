@@ -45,7 +45,6 @@ body table td{
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	var id = $('#name').text();
-	var btn = $('#checkbtn').text();
 	
 	$(document).ready(function(){
 		ajaxCall();
@@ -64,7 +63,7 @@ body table td{
 				if(data.status!='null'){
 					$("#status").text(data.status);
 				}else{
-					$("#status").text('입실전');	
+					$("#status").text('입실전');
 				}
 				$(".smallCircle").eq(0).html('출석<br>'+data.출석);
 				$(".smallCircle").eq(1).html('지각<br>'+data.지각);
@@ -73,7 +72,7 @@ body table td{
 				$(".smallCircle").eq(4).html('결석<br>'+data.결석);
 				$("#name").text(data.name+"님");
 				if(data.checkinTime!='null'){
-					$("#checkTime").text("입실:"+data.checkinTime+" / "+"퇴실:"+data.checkoutTime);	
+					$("#checkTime").text("입실:"+data.checkinTime+" / "+"퇴실:");	
 					if(data.checkoutTime!='null'){
 						var temp = $("#checkTime").text()
 						$("#checkTime").text(temp+data.checkoutTime);	
@@ -88,17 +87,19 @@ body table td{
             }
 		})).done(function() {
 			if($('#status').text()=="입실전"){
-				$('#checkout').hide();
-			}else{
-				$('#checkout').show();
-				$('#checkin').hide();
+				$('#checkbtn').text('입실');
+			}else if($('#status').text()=="입실"){
+				$('#checkbtn').text('퇴실');
+			}else if($('#status').text()=="퇴실"){
+				$('#checkbtn').hide();
 			}
 		});
 	}
 	
 	var ajaxBtnCall = function() {
 		//var id = $('#name').text();
-		$.when($.ajax({ 
+		var btn = $('#checkbtn').text();
+		$.when($.ajax({
 			url: "callAttendanceBtn.test", 
 			dataType: "json", 
 			data: {btn:btn},
@@ -107,7 +108,7 @@ body table td{
 				if(data.status!='null'){
 					$("#status").text(data.status);
 					if(data.checkinTime!='null'){
-						$("#checkTime").text("입실:"+data.checkinTime+" / "+"퇴실:"+data.checkoutTime);	
+						$("#checkTime").text("입실:"+data.checkinTime+" / "+"퇴실:");	
 						if(data.checkoutTime!='null'){
 							var temp = $("#checkTime").text()
 							$("#checkTime").text(temp+data.checkoutTime);	

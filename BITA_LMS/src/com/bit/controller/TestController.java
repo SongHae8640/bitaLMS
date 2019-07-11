@@ -31,6 +31,7 @@ public class TestController extends HttpServlet {
 		UserDto userBean = dao.login("stu1", "1234");
 		
 		StudentDao sDao = new StudentDao();
+		String json = "";
 		
 		if(path.equals("/callAttendance.test")){
 			resp.setContentType("text/html;charset=UTF-8"); 
@@ -38,8 +39,7 @@ public class TestController extends HttpServlet {
 			System.out.println("post");
 			
 			String id = req.getParameter("id");
-			String json = "";
-			
+
 			//Student 출석상황에 필요한 정보 가져오기
 			
 			//입실/지각/퇴실 정보 등 status, 입퇴실시간(where오늘,시분만 가져오기),강좌명,강좌기간
@@ -59,27 +59,30 @@ public class TestController extends HttpServlet {
 					+ " ,\"attendanceDays\" : \""+attendanceDays+"\", \"totalDays\" : \""+totalDays+"\""
 					+ " ,\"출석\" : \""+statusNum[0]+"\", \"지각\" : \""+statusNum[1]+"\", \"조퇴\" : \""+statusNum[2]+"\", \"외출\" : \""+statusNum[3]+"\", \"결석\" : \""+statusNum[4]+"\"}";
 			//입실, 퇴실 버튼을 눌렀을 때는 출석입력하고 출석상황 갖고 오기
-			System.out.println(json);
-			PrintWriter out= resp.getWriter(); 
-			out.write(json);
-			out.close();
 		}else if(path.equals("/callAttendanceBtn.test")){
+			req.setCharacterEncoding("utf-8");
 			resp.setContentType("text/html;charset=UTF-8"); 
 			
 			System.out.println("btnpost");
 			
 			String btn = req.getParameter("btn");
 			System.out.println(btn);
-			String json = "";
 			
+			System.out.println(userBean.getUserId());
 			int result = sDao.updateAttendance(userBean.getUserId(), btn);
+			AttendanceDto AttendanceBean = null;
 			if(result<0){
 				System.out.println("오류");
+			}else{				
+				AttendanceBean = sDao.getAttendance(userBean.getUserId());
 			}
-			AttendanceDto AttendanceBean = sDao.getAttendance(userBean.getUserId());
 			json = "{\"status\" : \""+AttendanceBean.getStatus()+"\", "
 					+ " \"checkinTime\" : \""+AttendanceBean.getCheckinTime()+"\", \"checkoutTime\" : \""+AttendanceBean.getCheckoutTime()+"\"}";
 			
 		}
+		System.out.println(json);
+		PrintWriter out= resp.getWriter(); 
+		out.write(json);
+		out.close();
 	}
 }
