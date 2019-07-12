@@ -108,6 +108,7 @@
 			<div id="content_upper">
 				<div id="calender">
 					<h1>달력</h1>
+					<jsp:include page="call_calendar_A.jsp" flush="false"></jsp:include>
 				</div>
 			</div>
 			<div id="content_under">

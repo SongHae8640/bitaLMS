@@ -49,32 +49,32 @@ public class TeacherController extends HttpServlet {
 				if (path.equals("/main.tea")) {
 					String yearMonth = req.getParameter("yearMonth");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
 					String yearMonthDay = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
-					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonth));
-					req.setAttribute("calendarDayList",dao.getCalendarDayList(userBean.getLecture_id(), yearMonthDay));
+					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonth));
+					req.setAttribute("calendarDayList",dao.getCalendarDayList(userBean.getLectureId(), yearMonthDay));
 					
 					//main 좌측하단 정보 전달
 					req.setAttribute("userBean", userBean);
 					
 					//main 우측 하단 정보 전달
-					req.setAttribute("numStu", dao.getStuNum(userBean.getLecture_id()));
-					req.setAttribute("checkinNum", dao.getCheckinNum(userBean.getLecture_id()));
-					req.setAttribute("submissionNum", dao.getSubmissionNum(userBean.getLecture_id()));
-					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
-					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLecture_id()));
+					req.setAttribute("numStu", dao.getStuNum(userBean.getLectureId()));
+					req.setAttribute("checkinNum", dao.getCheckinNum(userBean.getLectureId()));
+					req.setAttribute("submissionNum", dao.getSubmissionNum(userBean.getLectureId()));
+					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
+					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLectureId()));
 					
 					rd = req.getRequestDispatcher("teacher/main_T.jsp");
 
 				}else if (path.equals("/attendance.tea")) {
 					 //��Ʈ����Ʈ�� �����ϰ� jsp������� get��� �ҷ����
-					 req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLecture_id()));
+					 req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 
 				}else if (path.equals("/score.tea")) {
-					req.setAttribute("scoreList",dao.getScoreList(userBean.getLecture_id()));
+					req.setAttribute("scoreList",dao.getScoreList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("teacher/score_T.jsp");
 					
 				} else if (path.equals("/assignment.tea")) {
-					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLecture_id()));
+					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("teacher/assignment_T.jsp");
 	
 				}else if (path.equals("/assignment_detail.tea")) {
@@ -147,7 +147,7 @@ public class TeacherController extends HttpServlet {
 				}else if (path.equals("/assignment_insert.tea")) {//assignment insert에서 post방식으로 넘겼을때
 					String title = req.getParameter("title");
 					String content = req.getParameter("content");
-					result = dao.insertAssignment(title, content,userBean.getLecture_id());	///result를 어떻게 사용할지 나중에 생각
+					result = dao.insertAssignment(title, content,userBean.getLectureId());	///result를 어떻게 사용할지 나중에 생각
 					rd = req.getRequestDispatcher("/assignment.tea");	//리스트 페이지로
 					
 				} else if (path.equals("/assignment_edit.tea")) {
@@ -158,7 +158,7 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assingmentId);	///수정한 페이지로
 				} else if (path.equals("/assignment_delete.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
-					result = dao.getAssignmentDelete(assignmentId);
+					result = dao.deleteAssignment(assignmentId);
 					rd = req.getRequestDispatcher("teacher/assignment_T_.jsp");
 				
 				}else if (path.equals("/qnaAnswer_insert.tea")) {//qna에서 답변을 입력 또는 수정할때 
@@ -171,7 +171,7 @@ public class TeacherController extends HttpServlet {
 					String endDate = req.getParameter("endDate");
 					String title = req.getParameter("title");
 					String content = req.getParameter("content");
-					result = dao.insertCalendar(startDate, endDate, title, content, userBean.getLecture_id());
+					result = dao.insertCalendar(startDate, endDate, title, content, userBean.getLectureId());
 				}
 				else {
 					System.out.println("존재하지 않는 페이지");

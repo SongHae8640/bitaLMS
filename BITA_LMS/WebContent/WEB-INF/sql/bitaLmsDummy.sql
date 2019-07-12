@@ -1,4 +1,4 @@
-ï»¿DELETE FROM USER01;
+DELETE FROM USER01;
 DELETE FROM LECTURE;
 DELETE FROM LECTUREUSER;
 DELETE FROM TEACHER_INFO;
@@ -10,7 +10,7 @@ DELETE FROM CALENDAR;
 DELETE FROM ATTACHED_FILE;
 DELETE FROM FILE_GROUP;
 
---INSERTí• ë•Œ ìë£Œëª…ê³¼ ìˆœì„œë¥¼ ê°™ì´ ë„£ì–´ì¤„ ê²ƒ
+--INSERTÇÒ¶§ ÀÚ·á¸í°ú ¼ø¼­¸¦ °°ÀÌ ³Ö¾îÁÙ °Í
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('tea1','1234', 'teacher1', '', '', '', 'teacher');
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('tea2','1234', 'teacher2', '', '', '', 'teacher');
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('tea3','1234', 'teacher3', '', '', '', 'teacher');
@@ -26,13 +26,13 @@ INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) 
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('bef3','1234', 'before3', '', '', '', 'before');
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('bef4','1234', 'before4', '', '', '', 'before');
 
-INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(-1,'ì§ì›',sysdate,sysdate,0,0,0,0,'content','0');
-INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(0,'ë“±ë¡ì „',sysdate,sysdate,0,0,0,0,'content','0');
+INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(-1,'Á÷¿ø',sysdate,sysdate,0,0,0,0,'content','0');
+INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(0,'µî·ÏÀü',sysdate,sysdate,0,0,0,0,'content','0');
 INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(1,'JAVA',sysdate,sysdate,60,0,30,3,'content','0');
 INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(2,'DB',sysdate,sysdate,60,0,30,3,'content','0');
 INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(3,'WEB',sysdate,sysdate,60,0,30,3,'content','0');
 
---ê°•ì¢Œë¥¼ ì…ë ¥í• ë•Œ LectureUser í…Œì´ë¸”ì—ë„ ì¶”ê°€í•´ì¤„ê²ƒ 
+--°­ÁÂ¸¦ ÀÔ·ÂÇÒ¶§ LectureUser Å×ÀÌºí¿¡µµ Ãß°¡ÇØÁÙ°Í 
 INSERT INTO lectureUser(lecture_id, user_id) values(1,'tea1');
 INSERT INTO lectureUser(lecture_id, user_id) values(2,'tea2');
 INSERT INTO lectureUser(lecture_id, user_id) values(3,'tea3');
@@ -48,20 +48,23 @@ INSERT INTO lectureUser(lecture_id, user_id) values(0,'bef2');
 INSERT INTO lectureUser(lecture_id, user_id) values(0,'bef3');
 INSERT INTO lectureUser(lecture_id, user_id) values(0,'bef4');
 
+--ÇĞ»ıÀÇ °­ÁÂ¸¦ ÀÔ·Â
+UPDATE 
 
---í•™ìƒ ì •ë³´ë¥¼ êµ¬í• ë•Œ 
+
+--ÇĞ»ı Á¤º¸¸¦ ±¸ÇÒ¶§ 
 --SELECT * FROM user01 u JOIN lectureUser l ON u.user_id=l.user_id WHERE u.user_id='tea1' AND u.password='1234';
 --SELECT * FROM user01 u JOIN lectureUser l ON u.user_id=l.user_id;
 
 --Teacher_info
-INSERT INTO teacher_info(info_id,type ,content,teacher_id) VALUES(1,'í•™ë ¥','00ëŒ€í•™ 00í•™ê³¼','tea1');
+INSERT INTO teacher_info(info_id,type ,content,teacher_id) VALUES(1,'ÇĞ·Â','00´ëÇĞ 00ÇĞ°ú','tea1');
 
 --Attendance
-INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture_id) VALUES(TO_DATE('20190701','YYYYMMDD'),'stu1',TO_DATE('20190701 09:00:11','YYYYMMDD HH24:MI:SS') ,TO_DATE('20190701 18:00:11','YYYYMMDD HH24:MI:SS') ,'ì¶œì„',1);
-INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture_id) VALUES(TO_DATE('20190703','YYYYMMDD'),'stu1',TO_DATE('20190703 09:00:11','YYYYMMDD HH24:MI:SS') ,TO_DATE('20190703 18:00:11','YYYYMMDD HH24:MI:SS') ,'ì¶œì„',1);
-INSERT INTO attendance(day_time,std_id,checkin_time,status,lecture_id) VALUES(TO_DATE('20190703','YYYYMMDD'),'stu2',TO_DATE('20190703 09:00:11','YYYYMMDD HH24:MI:SS') , 'ì¶œì„',1);
+INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture_id) VALUES(TO_DATE('20190701','YYYYMMDD'),'stu1',TO_DATE('20190701 09:00:11','YYYYMMDD HH24:MI:SS') ,TO_DATE('20190701 18:00:11','YYYYMMDD HH24:MI:SS') ,'Ãâ¼®',1);
+INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture_id) VALUES(TO_DATE('20190703','YYYYMMDD'),'stu1',TO_DATE('20190703 09:00:11','YYYYMMDD HH24:MI:SS') ,TO_DATE('20190703 18:00:11','YYYYMMDD HH24:MI:SS') ,'Ãâ¼®',1);
+INSERT INTO attendance(day_time,std_id,checkin_time,status,lecture_id) VALUES(TO_DATE('20190703','YYYYMMDD'),'stu2',TO_DATE('20190703 09:00:11','YYYYMMDD HH24:MI:SS') , 'Ãâ¼®',1);
 --Score
--- null ì´ë©´ ì•ˆë˜ë‹ˆê¹Œ -1ì„ ë„£ì–´ì„œ 0ì ê³¼ êµ¬ë¶„
+-- null ÀÌ¸é ¾ÈµÇ´Ï±î -1À» ³Ö¾î¼­ 0Á¡°ú ±¸ºĞ
 INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu1',90,90,90,90);
 INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu2',80,90,85,85);
 INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu3',80,80,80,80);
@@ -69,9 +72,10 @@ INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_sco
 INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu6',70,70,70,70);
 
 --Assignment
-INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(1,'ê³¼ì œ1','ê³¼ì œ1 ë‚´ìš©ì„ ì´ëŸ¬í•˜ë‹¤.',1,SYSDATE);
-INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(2,'ê³¼ì œ2','ê³¼ì œ2 ë‚´ìš©ì´ë‹¤.',1,SYSDATE);
-INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(3,'ê³¼ì œ2','ê³¼ì œ3 ë‚´ìš©',1,SYSDATE);
+INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(1,'°úÁ¦1','°úÁ¦1 ³»¿ëÀ» ÀÌ·¯ÇÏ´Ù.',1,SYSDATE);
+INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(2,'°úÁ¦2','°úÁ¦2 ³»¿ëÀÌ´Ù.',1,SYSDATE);
+INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(3,'°úÁ¦2','°úÁ¦3 ³»¿ë',1,SYSDATE);
+INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(assignment_id_seq.NEXTVAL,'°úÁ¦´Ù!!','°úÁ¦!! ³»¿ë!!',1,SYSDATE);
 
 --Submission
 INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(1,'stu1',SYSDATE,'0');
@@ -82,18 +86,19 @@ INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(3,'stu
 
 
 --Qna_L
---null ì„ ë„£ìœ¼ë©´ ì•ˆë˜ë‹ˆê¹Œ ì§ˆë¬¸ ìƒì„±ì‹œ ë¹ˆì¹¸ìœ¼ë¡œ í•´ì„œ ìƒì„±í• ê²ƒ
-INSERT INTO qna_l(question_id,std_id, type, title, question_content, responder_id, answer_content, write_date) VALUES(1,'stu1','ì˜ì˜ì‹ ì²­','ì„±ì ë¬¸ì˜ ì…ë‹ˆë‹¤(ì œëª©)','ì„±ì ì´ ì˜ëª» ë‚˜ì˜¨ê²ƒ ê°™ìŠµë‹ˆë‹¤. ìˆ˜ì • í•´ì£¼ì„¸ìš”.','tea1','ë„¤ ê·¸ê²Œ ë§ìŠµë‹ˆë‹¤ ë” ê³µë¶€í•˜ì„¸ìš”.',SYSDATE);
-INSERT INTO qna_l(question_id,std_id, type, title, question_content, responder_id, answer_content, write_date) VALUES(2,'stu2','ì„±ì ë¬¸ì˜','ì„±ì ë¬¸ì˜ ì…ë‹ˆë‹¤(ì œëª©)','ì„±ì ì´ ì˜ëª» ë‚˜ì˜¨ê²ƒ ê°™ìŠµë‹ˆë‹¤. ìˆ˜ì • í•´ì£¼ì„¸ìš”.','tea1','ë„¤ ê·¸ê²Œ ë§ìŠµë‹ˆë‹¤ ë” ê³µë¶€í•˜ì„¸ìš”.',SYSDATE);
-INSERT INTO qna_l(question_id,std_id, type, title, question_content, responder_id, answer_content, write_date) VALUES(3,'stu3','ê°•ì‚¬','ì„±ì ë¬¸ì˜ ì…ë‹ˆë‹¤(ì œëª©)','ì„±ì ì´ ì˜ëª» ë‚˜ì˜¨ê²ƒ ê°™ìŠµë‹ˆë‹¤. ìˆ˜ì • í•´ì£¼ì„¸ìš”.','tea1','ë„¤ ê·¸ê²Œ ë§ìŠµë‹ˆë‹¤ ë” ê³µë¶€í•˜ì„¸ìš”.',SYSDATE);
-INSERT INTO qna_l(question_id,std_id, type, title, question_content, responder_id, answer_content, write_date) VALUES(4,'stu1','í–‰ì •','ì„±ì ë¬¸ì˜ ì…ë‹ˆë‹¤(ì œëª©)','ì„±ì ì´ ì˜ëª» ë‚˜ì˜¨ê²ƒ ê°™ìŠµë‹ˆë‹¤. ìˆ˜ì • í•´ì£¼ì„¸ìš”.','admin','ë„¤ ê·¸ê²Œ ë§ìŠµë‹ˆë‹¤ ë” ê³µë¶€í•˜ì„¸ìš”.',SYSDATE);
+--null À» ³ÖÀ¸¸é ¾ÈµÇ´Ï±î Áú¹® »ı¼º½Ã ºóÄ­À¸·Î ÇØ¼­ »ı¼ºÇÒ°Í
+INSERT INTO qna_l(qnal_id,std_id, type, title, question_content, responder_id, answer_content, write_date, is_check) VALUES(1,'stu1','ÀÇÀÇ½ÅÃ»','¼ºÀû¹®ÀÇ ÀÔ´Ï´Ù(Á¦¸ñ)','¼ºÀûÀÌ Àß¸ø ³ª¿Â°Í °°½À´Ï´Ù. ¼öÁ¤ ÇØÁÖ¼¼¿ä.','tea1','³× ±×°Ô ¸Â½À´Ï´Ù ´õ °øºÎÇÏ¼¼¿ä.',SYSDATE,1);
+INSERT INTO qna_l(qnal_id,std_id, type, title, question_content, responder_id, answer_content, write_date, is_check) VALUES(2,'stu2','¼ºÀû¹®ÀÇ','¼ºÀû¹®ÀÇ ÀÔ´Ï´Ù(Á¦¸ñ)','¼ºÀûÀÌ Àß¸ø ³ª¿Â°Í °°½À´Ï´Ù. ¼öÁ¤ ÇØÁÖ¼¼¿ä.','tea1','³× ±×°Ô ¸Â½À´Ï´Ù ´õ °øºÎÇÏ¼¼¿ä.',SYSDATE,0);
+INSERT INTO qna_l(qnal_id,std_id, type, title, question_content, responder_id, answer_content, write_date, is_check) VALUES(3,'stu3','°­»ç','¼ºÀû¹®ÀÇ ÀÔ´Ï´Ù(Á¦¸ñ)','¼ºÀûÀÌ Àß¸ø ³ª¿Â°Í °°½À´Ï´Ù. ¼öÁ¤ ÇØÁÖ¼¼¿ä.','tea1','³× ±×°Ô ¸Â½À´Ï´Ù ´õ °øºÎÇÏ¼¼¿ä.',SYSDATE,0);
+INSERT INTO qna_l(qnal_id,std_id, type, title, question_content, responder_id, answer_content, write_date, is_check) VALUES(4,'stu1','ÇàÁ¤','¼ºÀû¹®ÀÇ ÀÔ´Ï´Ù(Á¦¸ñ)','¼ºÀûÀÌ Àß¸ø ³ª¿Â°Í °°½À´Ï´Ù. ¼öÁ¤ ÇØÁÖ¼¼¿ä.','admin','³× ±×°Ô ¸Â½À´Ï´Ù ´õ °øºÎÇÏ¼¼¿ä.',SYSDATE,1);
 
 --Calendar
-INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(1,'cal1', 'cal1 content', SYSDATE, SYSDATE,1);
-INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(2,'cal2', 'cal2 content', SYSDATE, SYSDATE,2);
-INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(3,'cal3', 'cal3 content', SYSDATE, SYSDATE,3);
-INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(4,'cal4', 'cal4 content', SYSDATE, SYSDATE,1);
-INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(5,'cal5', 'cal5 content', SYSDATE, SYSDATE,2);
-INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(6,'cal6', 'cal6 content', SYSDATE, SYSDATE,1);
+INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'java °³°­', '°³°­ÀÌ´Ù!', TO_DATE('2019-07-01 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-01 23:59:00','YYYY-MM-DD HH24:MI:SS'),1);
+INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'ÇĞ¿ø Á¡°Ë', '000ÁØºñ ÇÒ°Í', TO_DATE('2019-07-15 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-16 23:59:00','YYYY-MM-DD HH24:MI:SS'),2);
+INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'2Â÷ ¹ßÇ¥', '¹ßÇ¥ ±â´ëÇÏ°Ú½À´Ï´Ù.', TO_DATE('2019-07-16 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-17 23:59:00','YYYY-MM-DD HH24:MI:SS'),1);
+INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'web°³°­', '°³°­ÀÌ´Ù!', TO_DATE('2019-07-25 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-25 23:59:00','YYYY-MM-DD HH24:MI:SS'),3);
+INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'1Â÷ ½ÃÇè', 'java, sql ½ÃÇè ÀÖ½À´Ï´Ù.', TO_DATE('2019-07-25 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-26 23:59:00','YYYY-MM-DD HH24:MI:SS'),1);
+INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'DB¹İ Á¾°­', '¼ö°íÇÏ¼Ì½À´Ï´Ù.', TO_DATE('2019-07-30 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-30 23:59:00','YYYY-MM-DD HH24:MI:SS'),1);
+INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'Áßº¹!', '»ï°èÅÁ ¸ÔÀ¸·Î °©½Ã´Ù', TO_DATE('2019-07-27 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-27 23:59:00','YYYY-MM-DD HH24:MI:SS'),1);
 
 commit;

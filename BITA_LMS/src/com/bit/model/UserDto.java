@@ -11,6 +11,9 @@ public class UserDto {
 	//admin manageStu
 	private int totalDays, attendanceDays, attendanceStatus;
 	
+	
+	
+	
 	public int getTotalDays() {
 		return totalDays;
 	}
@@ -118,5 +121,11 @@ public class UserDto {
 	}
 	public void setLectureId(int lectureId) {
 		this.lectureId = lectureId;
+	}
+	
+	@Override
+	public String toString() {
+		return "UserDto [userId=" + userId + ", name=" + name + ", belong="
+				+ belong + ", lectureId=" + lectureId + "]";
 	}
 }
