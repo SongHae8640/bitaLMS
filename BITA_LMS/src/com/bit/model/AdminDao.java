@@ -430,22 +430,28 @@ public class AdminDao extends Dao {
 	public ArrayList<AttendanceDto> getManageStuMonth(String yyyymm) {
 		openConnection();
 		ArrayList<AttendanceDto> list = new ArrayList<AttendanceDto>();
-		
+		String sql="";
 		if(yyyymm==null){
 			//null인 경우 sysdate로
-			
+			sql = "select u.name, a.std_id, to_char(a.day_time,'dd') as \"day\","
+					+ " SUBSTR(a.status, 1, 1) as \"status\", l.name as \"lecName\" from attendance a inner join user01 u on u.user_id=a.std_id"
+					+ " inner join lecture l on a.lecture_id=l.lecture_id"
+					+ " where to_date(trunc(day_time,'mm'))=to_date(trunc(sysdate,'mm'))"
+					+ " order by u.name, a.day_time";
 		}else{
-			
+			sql = "select u.name, a.std_id, to_char(a.day_time,'dd') as \"day\","
+					+ " SUBSTR(a.status, 1, 1) as \"status\", l.name as \"lecName\" from attendance a inner join user01 u on u.user_id=a.std_id"
+					+ " inner join lecture l on a.lecture_id=l.lecture_id"
+					+ " where to_date(trunc(day_time,'mm'))=to_date(?)"
+					+ " order by u.name, a.day_time";
 		}
-		String sql = "select u.name, a.std_id, to_char(a.day_time,'dd') as \"day\","
-				+ " a.status, l.name as \"lecName\" from attendance a inner join user01 u on u.user_id=a.std_id"
-				+ " inner join lecture l on a.lecture_id=l.lecture_id"
-				+ " where to_date(trunc(day_time,'mm'))=to_date(trunc(sysdate,'mm'))"
-				+ " order by u.name, a.day_time";
 		
 		System.out.println(sql);
 		try {
 			pstmt = conn.prepareStatement(sql);
+			if(yyyymm!=null){
+				pstmt.setString(1, yyyymm+"-01");
+			}
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()){
@@ -633,7 +639,50 @@ public class AdminDao extends Dao {
 	//출석업데이트
 	public int updateManageStuMonth(String yyyymm, String[] userId,
 			String[] status) {
-		return 0;
+		int result = 0;
+		ArrayList<String> sql = new ArrayList<String>();
+		for(int i=0; i<status.length; i++){
+			if(!status[i].equals("#")){
+				if(status[i].equals("공")){
+					//만약 총 60개, 6명이면 10개당
+					int num = i/((status.length)/(userId.length));
+					int dayNum = i+1;
+					if(num!=0){
+						dayNum = (i+1)%(num*((status.length)/(userId.length)));						
+					}
+					System.out.println(userId[num]+""+status[i]);
+					sql.add("UPDATE attendance SET status = '공결' "
+							+ "WHERE std_id = '"+userId[num]+"' and "
+									+ "trunc(day_time,'dd')=trunc(to_date('"+yyyymm+"-"+dayNum+"'),'dd')");
+					System.out.println("UPDATE attendance SET status = '공결' "
+							+ "WHERE std_id = '"+userId[num]+"' and "
+									+ "trunc(day_time,'dd')=trunc(to_date('"+yyyymm+"-"+dayNum+"'),'dd')");
+				}
+			}
+		}
+		
+		try{
+			openConnection();
+			conn.setAutoCommit(false);
+			for(int i=0; i<sql.size(); i++){
+				pstmt = conn.prepareStatement(sql.get(i));
+				result += pstmt.executeUpdate();
+			}
+			
+			if(result>0){
+				conn.commit();				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			closeConnection();
+		}
+		return result;
 	}
 	
 	public String getManageStuMonthJson(ArrayList<AttendanceDto> list){

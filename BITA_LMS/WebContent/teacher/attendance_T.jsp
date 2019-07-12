@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList,com.bit.model.AttendanceDto"%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,16 +25,38 @@
 			var state=$('#sb option:selected').val();
 			if(state=='day'){
 				alert('day');
-				$(location).attr('href', 'attendance_T.jsp')
+				$(location).attr('href', 'attendance_T.tea')
 			}else if(state=='month'){
 				alert('month');
-				$(location).attr('href', 'month_attendance_T.jsp')
+				$(location).attr('href', 'month_attendance_T.tea')
 			}
 		});
 		$('#content>button').hide().eq(0).show().click(function() {
 			$('#content>button').show().eq(0).hide();
 		});
+		
+		$('.checkBtn').click(ajaxBtnCall);
+		//ajaxCall();
+		//setInterval(ajaxCall, 1000);
+		
 	});
+	var ajaxBtnCall = function() {
+		var btn = $('.checkBtn').val();
+		var id = $('.id').val();
+		$.when($.ajax({
+			url: "attendance_check.tea", 
+			dataType: "json", 
+			data: {btn:btn,id:id},
+			type: "post",
+			success: function(data){
+				window.location.reload()
+			},error : function(){
+                alert("통신실패");
+            }
+		})).done(function() {
+			//window.location.reload()
+		});
+	}
 </script>
 </head>
 <body>
@@ -54,6 +77,12 @@
 		</div>
 		<div id="content">
 			<h2>출결관리</h2>
+			<h4>
+			<%
+							ArrayList<AttendanceDto> todayAttendanceList = (ArrayList<AttendanceDto>)request.getAttribute("todayAttendanceList");
+						%>
+			<%=todayAttendanceList.get(0).getDayTime().substring(0,10) %>
+			</h4>
 			<form action="">
 				<select name="sb" id="sb">
 					<option value="" selected="selected">전체</option>
@@ -69,21 +98,32 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>홍길동</td>
-							<td><input type="button" value="checkin"/><input type="button" value="checkout"/></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>김코난</td>
-							<td><input type="button" value="checkin"/><input type="button" value="checkout"/></td>
-							<td></td>
-						</tr>
+					<%
+								if(todayAttendanceList !=null){
+									for(AttendanceDto bean : todayAttendanceList){
+					%>
+					<tr>
+						<td><%=bean.getName() %></td>
+						<td>
+						<%if(bean.getStatus()==null){ %>
+							<input type="button" value="checkin" class="checkBtn"/>
+						<%}else if(bean.getStatus().equals("입실")){ %>
+							<input type="button" value="checkout" class="checkBtn"/>
+						<%}%>
+						<input type="hidden"  class="id" value="<%=bean.getStdId() %>" />
+						</td>
+						<%if(bean.getStatus()!=null){ %>
+						<td id="status"><%=bean.getStatus() %></td>
+						<%}else{ %>
+						<td id="status"></td>
+						<%} %>
+					</tr>
+					<%
+									}
+								}
+					%>
 					</tbody>
 				</table>
-				<div>
-					<button type="submit">제출</button>
-				</div>
 			</form>
 		</div>
 		<div id="footer">

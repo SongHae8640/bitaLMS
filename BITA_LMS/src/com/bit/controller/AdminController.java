@@ -1,9 +1,15 @@
 ﻿package com.bit.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,8 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import jdk.nashorn.internal.runtime.JSONFunctions;
+import jdk.nashorn.internal.runtime.JSONListAdapter;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
 
 import com.bit.model.AdminDao;
 import com.bit.model.AttendanceDto;
@@ -227,15 +238,7 @@ public class AdminController extends HttpServlet {
 					result = dao.deleteUser(userId);
 					
 					rd = req.getRequestDispatcher("manage_stu.adm");
-				} else if (path.equals("/manage_stu_month_update.adm")) {
-					// 수강생관리 목록 페이지(월별) 수정
-					String yyyymm = req.getParameter("");
-					String[] userId = req.getParameterValues("");
-					String[] status = req.getParameterValues("");
-					result = dao.updateManageStuMonth(yyyymm,userId,status);
-					
-					rd = req.getRequestDispatcher("manage_stu_month.adm?idx="+idx);
-				} else if (path.equals("/manage_tea_insert.adm")) {
+				}else if (path.equals("/manage_tea_insert.adm")) {
 					// 강사관리 강사 추가 페이지
 					TeacherDto teacherBean = new TeacherDto();
 //					teacherBean.set어쩌구
@@ -281,19 +284,30 @@ public class AdminController extends HttpServlet {
 					System.out.println("결과값없음");
 				}
 				
+				resp.setContentType("text/html;charset=UTF-8");
 				//비동기 통신
 				if (path.equals("/manage_stu_month.adm")) {
-					resp.setContentType("text/html;charset=UTF-8");
 					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
 					// 수강생관리 목록 페이지(월별) 월 이동
 					String yyyymm = req.getParameter("yearMonth");
-					System.out.println(yyyymm);
-					yyyymm = yyyymm.replaceFirst("-", "");
 					System.out.println(yyyymm);
 					ArrayList<AttendanceDto> manageStuMonth = dao.getManageStuMonth(yyyymm);
 					PrintWriter out= resp.getWriter(); 
 					out.write(dao.getManageStuMonthJson(manageStuMonth)+"");
 					out.close();
+				} else if (path.equals("/manage_stu_month_update.adm")) {
+					// 수강생관리 목록 페이지(월별) 수정
+//					String yearMonth
+					String yyyymm = req.getParameter("nowDay");
+					String[] userId = req.getParameterValues("arrId");
+					String[] status = req.getParameterValues("arrStatus");					
+					System.out.println(yyyymm);
+					result = dao.updateManageStuMonth(yyyymm,userId,status);
+					if(result>0){
+						PrintWriter out= resp.getWriter(); 
+						out.write("{\"msg\":\"성공적으로 수정되었습니다\"}");
+						out.close();
+					}
 				} 
 				
 			}
