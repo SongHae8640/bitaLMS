@@ -30,11 +30,11 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//�뜝�룞�삕�뜝�룞�삕�뜝占� �뜝�뙇�눦�삕 �솗�뜝�룞�삕�뜝�떦怨ㅼ삕 �뜝�룞�삕�뜝�뙇�냼紐뚯삕 �뜝�룞�삕�뜝�룞�삕�뜝�떦源띿삕
+
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doGet) :: path = " + path);
 
-		//�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕
+
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
@@ -43,21 +43,19 @@ public class TeacherController extends HttpServlet {
 
 		try {
 			if (userBean.getBelong().equals("teacher")) {
-
 				TeacherDao dao = new TeacherDao();
 				///lecture_id 占쎈뮉 占쎌쁽雅뚳옙 占쎈쑅占쎄퐣 癰귨옙占쎈땾嚥∽옙 占쎈릭占쎄돌 �뜮�눖�뮉野껓옙 �넫�뿭�뱽 野껓옙 揶쏆늿�벉
 				
 				
 				if (path.equals("/main.tea")) {
-					String yearMonth = req.getParameter("yearMonth");	///占쎈뼎占쎌젾占쎌벥 占쎌뜞 占쎌뵠占쎈짗占쎌뱽 占쎈막占쎈르 idx嚥∽옙 占쎈�덌옙�뜞占쎌뱽 獄쏆룇釉� 占쎌궞野껓옙
-					String yearMonthDay = req.getParameter("yearMonthDay");	///占쎈뼎占쎌젾占쎌벥 占쎌뜞 占쎌뵠占쎈짗占쎌뱽 占쎈막占쎈르 idx嚥∽옙 占쎈�덌옙�뜞占쎌뱽 獄쏆룇釉� 占쎌궞野껓옙
-					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonth));
-					req.setAttribute("calendarDayList",dao.getCalendarDayList(userBean.getLectureId(), yearMonthDay));
 					
 					//main �넫�슣瑜ワ옙釉�占쎈뼊 占쎌젟癰귨옙 占쎌읈占쎈뼎
 					req.setAttribute("userBean", userBean);
 					
-					//main 占쎌뒭筌ο옙 占쎈릭占쎈뼊 占쎌젟癰귨옙 占쎌읈占쎈뼎
+
+					//main 우측 하단 정보 전달
+
+
 					req.setAttribute("numStu", dao.getStuNum(userBean.getLectureId()));
 					req.setAttribute("checkinNum", dao.getCheckinNum(userBean.getLectureId()));
 					req.setAttribute("submissionNum", dao.getSubmissionNum(userBean.getLectureId()));
@@ -67,10 +65,9 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/main_T.jsp");
 
 				}else if (path.equals("/attendance.tea")) {
-					 //�뜝�룞�삕�듃�뜝�룞�삕�뜝�룞�삕�듃�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�떦怨ㅼ삕 jsp�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝占� get�뜝�룞�삕�뜝占� �뜝��琉꾩삕�뜝�룞�삕�뜝占�
+
 					 req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
-
 				}else if (path.equals("/score.tea")) {
 					req.setAttribute("scoreList",dao.getScoreList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("teacher/score_T.jsp");
@@ -99,16 +96,23 @@ public class TeacherController extends HttpServlet {
 					int qnaLId = Integer.parseInt(req.getParameter("idx"));	//疫뀐옙 �뵳�딅뮞占쎈뱜(占쎌굢占쎈뮉 edit占쎈퓠占쎄퐣)占쎈퓠占쎄퐣 idx嚥∽옙 assignmentId�몴占� 獄쏆룇釉섓옙占쏙옙苑� 占쎄텢占쎌뒠(rownum)占쎈툡占쎈뻷
 					req.setAttribute("QnaLBean", dao.getQnaL(qnaLId));
 					rd = req.getRequestDispatcher("teacher/qna_T_deatil.jsp");
-				
-				}else {
-					System.out.println("鈺곕똻�삺占쎈릭筌욑옙 占쎈륫占쎈뮉 占쎈읂占쎌뵠筌욑옙");
+
+				}
+				if (path.equals("/attendance.tea")) {
+					//처음 출석상태를 전부 뽑아오기
+					//이름,버튼,상태
+					req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
+					rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
+				}
+				if(rd!=null){
+					rd.forward(req, resp);
 				}
 			}else {
-				//teacher�뜝�룞�삕 student�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝占� �뜝�룞�삕�뜝�룞�삕�떁�뜝�룞�삕 �뜝�떦紐뚯삕 �뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕
+
 				req.getRequestDispatcher("login.bit");
 			}
-			rd.forward(req, resp);
 		} catch (java.lang.NullPointerException e) {
+//			e.printStackTrace();
 			resp.sendRedirect("login.bit");
 		}
 
@@ -119,21 +123,19 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//�뜝�룞�삕�뜝�룞�삕�뜝占� �뜝�뙇�눦�삕 �솗�뜝�룞�삕�뜝�떦怨ㅼ삕 �뜝�룞�삕�뜝�뙇�냼紐뚯삕 �뜝�룞�삕�뜝�룞�삕�뜝�떦源띿삕
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doPost) :: path = " + path);
 
-		//�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		System.out.println(userBean.toString());
 		
-		//�뜝�뙥釉앹삕�뜝�떎�뙋�삕 RequestDispatcher
+
 		RequestDispatcher rd = null;
 		
-		//insert, edit, delete 占쎌벥 野껉퀗�궢 占쎄땀占쎌뒠占쎌뱽 占쏙옙占쎌삢占쎈릭占쎈뮉 result
-		///占쎈선占쎈섯野껓옙 占쎄텢占쎌뒠占쎈막筌욑옙 占쎈툡筌욑옙 沃섎챷�젟
-		int result;
+		//insert, edit, delete 의 결과 내용을 저장하는 result
+		///어떻게 사용할지 아직 미정
+		int result = 0;
 
 		try {
 			if (userBean.getBelong().equals("teacher")) {
@@ -142,16 +144,8 @@ public class TeacherController extends HttpServlet {
 
 				if(path.equals("")){
 					
-				}else if(path.equals("/attendance_checkin.tea")){
-					String stdId = (String)req.getParameter("idx");
-					result = dao.insertAttendanceCheckin(stdId);
-					rd = req.getRequestDispatcher("/attendance.tea");	//占쎈뼄占쎈뻻 today �빊�뮇苑� �뵳�딅뮞占쎈뱜嚥∽옙 占쎌뵠占쎈짗
-					
-				}else if(path.equals("/attendance_checkout.tea")){
-					String stdId = (String)req.getParameter("idx");
-					result = dao.updateAttendanceCheckout(stdId);
-					rd = req.getRequestDispatcher("/attendance.tea");	//占쎈뼄占쎈뻻 today �빊�뮇苑� �뵳�딅뮞占쎈뱜嚥∽옙 占쎌뵠占쎈짗
-					
+
+				
 				}else if (path.equals("/assignment_insert.tea")) {//assignment insert占쎈퓠占쎄퐣 post獄쎻뫗�뻼占쎌몵嚥∽옙 占쎄퐜野껋눘�뱽占쎈르
 					
 
@@ -161,10 +155,10 @@ public class TeacherController extends HttpServlet {
 					assignmentBean.setContent(req.getParameter("content"));
 					assignmentBean.setLectureId(userBean.getLectureId());
 					assignmentBean.setWriter(userBean.getUserId());
-					result=dao.insertAssignment(assignmentBean);
+					result=dao.insertAssignment(assignmentBean);///result를 어떻게 사용할지 나중에 생각
 					
-					rd = req.getRequestDispatcher("/assignment_detail.tea?idx=");	//�뵳�딅뮞占쎈뱜 占쎈읂占쎌뵠筌욑옙嚥∽옙
-//					rd = req.getRequestDispatcher("/assignment_detail.tea?idx");	//�뵳�딅뮞占쎈뱜 占쎈읂占쎌뵠筌욑옙嚥∽옙
+					rd = req.getRequestDispatcher("/assignment_detail.tea?idx=");	//리스트 페이지로
+
 					
 				} else if (path.equals("/assignment_edit.tea")) {
 					String title = req.getParameter("title");
@@ -174,7 +168,7 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assignmentId);	///占쎈땾占쎌젟占쎈립 占쎈읂占쎌뵠筌욑옙嚥∽옙
 				} else if (path.equals("/assignment_delete.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
-					result = dao.getAssignmentDelete(assignmentId);
+					result = dao.deleteAssignment(assignmentId);
 					rd = req.getRequestDispatcher("teacher/assignment_T_.jsp");
 				
 				}else if (path.equals("/qnaAnswer_insert.tea")) {//qna占쎈퓠占쎄퐣 占쎈뼗癰귨옙占쎌뱽 占쎌뿯占쎌젾 占쎌굢占쎈뮉 占쎈땾占쎌젟占쎈막占쎈르 
@@ -189,14 +183,32 @@ public class TeacherController extends HttpServlet {
 					String content = req.getParameter("content");
 					result = dao.insertCalendar(startDate, endDate, title, content, userBean.getLectureId());
 				}
-				else {
-					System.out.println("鈺곕똻�삺占쎈릭筌욑옙 占쎈륫占쎈뮉 占쎈읂占쎌뵠筌욑옙");
+
+				if(result>0){
+					rd.forward(req, resp);					
+				}
+				
+				//비동기 통신
+				if(path.equals("/attendance_check.tea")){
+					//버튼값에 따라서 update를 다르게 수행
+					String stdId = req.getParameter("id");
+					String btn = req.getParameter("btn");
+					System.out.println(stdId+":"+btn);
+					result = dao.updateAttendance(stdId,btn);
+					
+					if(result>0){
+						PrintWriter out= resp.getWriter(); 
+						out.write("{\"msg\":\"성공적으로 수정되었습니다\"}");
+						out.close();
+					}
+				}else {
+					System.out.println("존재하지 않는 페이지");
+
 				}
 			}else {
 				//teacher�뜝�룞�삕 student�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝占� �뜝�룞�삕�뜝�룞�삕�떁�뜝�룞�삕 �뜝�떦紐뚯삕 �뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕
 				req.getRequestDispatcher("login.bit");
 			}
-			rd.forward(req, resp);
 		} catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
 		}

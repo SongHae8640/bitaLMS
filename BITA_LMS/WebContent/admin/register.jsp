@@ -179,7 +179,7 @@
 			</div>
 			<div id="people_check">
 			<%
-				ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("arrangeLecture");
+				ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("arrangeLectureList");
 				int num = 0,max=0;
 				if(lectureList !=null){
 					for(LectureDto bean : lectureList){
@@ -233,16 +233,16 @@
 				<tbody id="register_change">
 					
 					<%
-								ArrayList<RegisterDto> registerList = (ArrayList<RegisterDto>)request.getAttribute("RegisterList");
+								ArrayList<RegisterDto> registerList = (ArrayList<RegisterDto>)request.getAttribute("registerList");
 								if(registerList !=null){
 									for(RegisterDto bean : registerList){
 					%>
 					<tr>
 
-							<td><%=bean.getNum()%></td>
-							<td><a href="register_detail.adm?idx=<%=bean.getNum()%>"><%=bean.getName()%>님의 수강신청</a></td>
-							<td><%=bean.getId()%></td>
-							<td><%=bean.getName()%></td>
+							<td><%=bean.getRowNum()%></td>
+							<td><a href="register_detail.adm?idx=<%=bean.getRowNum()%>"><%=bean.getUserName()%>님의 수강신청</a></td>
+							<td><%=bean.getUserId()%></td>
+							<td><%=bean.getUserName()%></td>
 							<td><%=bean.getLecName()%></td>
 							<td><%=bean.getApplyDate()%></td>
 

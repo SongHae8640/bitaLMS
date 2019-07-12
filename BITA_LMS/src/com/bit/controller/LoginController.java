@@ -23,13 +23,16 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		HttpSession session = req.getSession();
+		System.out.println("LoginController(doGet) :: ");
 		
 			if(path.equals("/login.bit")||path.equals("/index.bit")){
-				//�α����������� ������ ���������� ���ٰ���
+
+				//로그인페이지는 세션이 없을때에만 접근가능
 				if(session.getAttribute("userBean") == null){
 					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
 					rd.forward(req, resp);
-				//�̹� �α����� �� �Ŀ��� �α׾ƿ��� �ؾ����� ��α����� �� �� �ִ�.
+				//이미 로그인을 한 후에는 로그아웃을 해야지만 재로그인을 할 수 있다.
+
 				}else{
 					UserDto userBean = (UserDto) session.getAttribute("userBean");
 					if(userBean.getBelong().equals("teacher")){
@@ -52,17 +55,19 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 		String id = req.getParameter("id");
 		String pw = req.getParameter("pw");
-		System.out.println(id+":"+pw);
 		
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login(id, pw);
 		
+		System.out.println("LoginController(doPost) :: userBean="+userBean.toString());
 		try{
 		if(userBean.getBelong().equals("teacher")){
 			//session
 			HttpSession session = req.getSession();
 			session.setAttribute("userBean", userBean);
-//			session.setMaxInactiveInterval(5*60);	//���߿� �α��� ����ð��� ����Ҷ� ���, param�� ������ ��
+
+//			session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
+
 			resp.sendRedirect("main.tea");
 		}else if(userBean.getBelong().equals("admin")){
 			HttpSession session = req.getSession();
@@ -76,7 +81,9 @@ public class LoginController extends HttpServlet {
 			resp.sendRedirect("main.stu");
 		}
 		}catch(java.lang.NullPointerException e){
-			req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pw�� �ٽ� Ȯ���ϼ���');</script>");
+
+			req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
+
 			doGet(req, resp);
 		}
 	}

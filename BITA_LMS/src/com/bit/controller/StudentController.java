@@ -1,6 +1,7 @@
 package com.bit.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,7 +26,7 @@ public class StudentController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("StudentController :: path = " + path);
 		
-		//���� ����
+		//占쏙옙占쏙옙 占쏙옙占쏙옙
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
@@ -33,34 +34,36 @@ public class StudentController extends HttpServlet {
 			if(userBean.getBelong().equals("student")){
 				StudentDao dao = new StudentDao();
 				if (path.equals("/main.stu")) {
-					String yearMonth = req.getParameter("yearMonthDay");	///�޷��� �� �̵��� �Ҷ� idx�� ����� �޾� �ð�
-					String yearMonthDay = req.getParameter("yearMonthDay");	///�޷��� �� �̵��� �Ҷ� idx�� ����� �޾� �ð�
-//					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonth));
-//					req.setAttribute("calendarDayList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonthDay));
+					String yearMonth = req.getParameter("yearMonthDay");	
+					String yearMonthDay = req.getParameter("yearMonthDay");	
+
 					
-					//main �����ϴ� ���� ����
+					//main 
 					req.setAttribute("userBean", userBean);
 					
-					//main ���� �ϴ� ���� ����
-					/// ajax�� ���� �ϰڴ�
+
+					//main 우측 하단 정보 전달
+
 					
 					rd = req.getRequestDispatcher("student/main_S.jsp");
 				} else if (path.equals("/attendance.stu")) {
-					//���� ���� ����
-					req.setAttribute("attendanceBean", dao.getAttendance(userBean.getUserId())); 	//bean�ȿ� ����, �Խ� ��� ����, �ð��� �ִ�
+					//占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙
+					req.setAttribute("attendanceBean", dao.getAttendance(userBean.getUserId())); 	
 					req.setAttribute("userBean", userBean);
 					
-					//main ���� �ϴ� ���� ����
+					//main 占쏙옙占쏙옙 占싹댐옙 占쏙옙占쏙옙 占쏙옙占쏙옙
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
 					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
 					req.setAttribute("attendanceStatusList", dao.getAttendanceStatusList(userBean.getUserId()));
 					
-					rd = req.getRequestDispatcher("student/attendance_S.jsp");
+					rd = req.getRequestDispatcher("student/attendance_day_S.jsp");
 					
 				} else if (path.equals("/attendanceMonth.stu")) {
-					String yearMonth = req.getParameter("idx");	///�޷��� �� �̵��� �Ҷ� idx�� ����� �޾� �ð�
+					String yearMonth = req.getParameter("idx");	
 					req.setAttribute("attendanceMonthList", dao.getAttendanceMonthList(userBean.getUserId(), yearMonth));
-					rd = req.getRequestDispatcher("student/attendance_S_month.jsp");	//�̰� �߰��ؾ���
+
+					rd = req.getRequestDispatcher("student/attendance_month_S.jsp");	//이거 추가해야함
+
 					
 				} else if (path.equals("/score.stu")) {
 					req.setAttribute("scoreBean", dao.getScoreBean(userBean.getUserId()));
@@ -72,10 +75,10 @@ public class StudentController extends HttpServlet {
 			
 					
 				} else if (path.equals("/assignment_detail.stu")) {
-					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//���ȭ�鿡�� ���� ��ȣ�� ������ ��
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//占쏙옙占싫�옙涌∽옙占 占쏙옙占쏙옙 占쏙옙호占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙
 					req.setAttribute("assignmentBean", dao.getAssignment(assignmentId));
 					System.out.println("dao.getAssignmentBean(assignmentId)");
-					req.setAttribute("submissionBean", dao.getSubmission(assignmentId, userBean.getUserId())); //dto수정
+					req.setAttribute("submissionBean", dao.getSubmission(assignmentId, userBean.getUserId())); //dto�
 					System.out.println("dao.getSubmissionBean(assignmentId, userBean.getUserId())");
 					rd = req.getRequestDispatcher("student/assignment_S_detail.jsp");
 					
@@ -83,14 +86,16 @@ public class StudentController extends HttpServlet {
 					req.setAttribute("qnaList", dao.getQnaList(userBean.getUserId()));
 					rd = req.getRequestDispatcher("student/qna_S.jsp");
 				} else if (path.equals("/qna_detail.stu")) {
-					String qnaId = req.getParameter("idx");	//���ȭ�鿡�� ���� ��ȣ�� ������ ��
-					req.setAttribute("qnaBean", dao.getQnaBean(qnaId));
+
+					String qnaId = req.getParameter("idx");	//목록화면에서 과제 번호를 가져올 것
+					req.setAttribute("qnaBean", dao.getQna(qnaId));
 					rd = req.getRequestDispatcher("student/qna_S/qnadetail_S.jsp");
-				} else {
-					System.out.println("�������� �ʴ� ������");
+				}else {
+					System.out.println("존재하지 않는 페이지");
+
 				}
 			}else {
-				//teacher�� student�������� �����Ϸ��� �ϸ� �� ��������
+				//teacher占쏙옙 student占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싹뤄옙占쏙옙 占싹몌옙 占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
@@ -108,12 +113,12 @@ public class StudentController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("StudentController :: path = " + path);
 		
-		//���� ����
+		//占쏙옙占쏙옙 占쏙옙占쏙옙
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//insert, edit, delete �� ��� ������ �����ϴ� result
-		///��� ������� ���� ����
+		//insert, edit, delete 占쏙옙 占쏙옙占 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싹댐옙 result
+		///占쏘떻占쏙옙 占쏙옙占쏙옙占쏙옙占 占쏙옙占쏙옙 占쏙옙占쏙옙
 		int result;
 		
 		try {
@@ -124,16 +129,16 @@ public class StudentController extends HttpServlet {
 				}else if(path.equals("/submission_insert.stu")){
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
 					result = dao.insertSubmission(assignmentId, userBean.getUserId());		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//���� ������ ȭ������ �̵�, //���� rd�� �̵��ؾ��ϳ�?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
 				}else if(path.equals("/submission_update.stu")){
 					String assignmentId = req.getParameter("idx");	
-					String fileName = req.getParameter("fileName");	//�������������� ������ ��
+					String fileName = req.getParameter("fileName");	//占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙
 					result = dao.updateSubmission(assignmentId, userBean.getUserId() , fileName);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//���� ������ ȭ������ �̵�, //���� rd�� �̵��ؾ��ϳ�?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
 				}else if(path.equals("/submission_delete.stu")){
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
 					result = dao.deleteSubmission(assignmentId, userBean.getUserId());		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//���� ������ ȭ������ �̵�, //���� rd�� �̵��ؾ��ϳ�?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
 				}else if(path.equals("/qan_insert.stu")){
 					QnaLDto qnaLBean = new QnaLDto();
 					qnaLBean.setTitle(req.getParameter("title"));
@@ -141,24 +146,24 @@ public class StudentController extends HttpServlet {
 					qnaLBean.setQuestionContent(req.getParameter("questionContent"));
 					qnaLBean.setStuId(userBean.getUserId());					
 					result = dao.insertQnaL(qnaLBean);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//���� ������ ȭ������ �̵�, //���� rd�� �̵��ؾ��ϳ�?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
 				}else if(path.equals("/qan_update.stu")){
 					int qnaId = Integer.parseInt(req.getParameter("qnaId"));
 					String title = req.getParameter("title");
-					String type = req.getParameter("type");	///�̰͵� �����׼� �ֳ�??
+					String type = req.getParameter("type");	///占싱것듸옙 占쏙옙占쏙옙占쌓쇽옙 占쌍놂옙??
 					String questionContent = req.getParameter("questionContent");
 					result = dao.updateQnaL(qnaId ,title,type, questionContent);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//���� ������ ȭ������ �̵�, //���� rd�� �̵��ؾ��ϳ�?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
 				}else if(path.equals("/qan_delete.stu")){
 					String[] qnaId = req.getParameterValues("qnaId");
 					
 					result = dao.deleteQnaL(qnaId);		
-					rd = req.getRequestDispatcher("qna.stu");	//qna ��� �������� �̵��̵��ؾ��ϳ�?
+					rd = req.getRequestDispatcher("qna.stu");	//qna 占쏙옙占 占쏙옙占쏙옙占쏙옙占쏙옙 占싱듸옙占싱듸옙占쌔억옙占싹놂옙?
 				}else {
-					System.out.println("�������� �ʴ� ������");
+					System.out.println("占쏙옙占쏙옙占쏙옙占쏙옙 占십댐옙 占쏙옙占쏙옙占쏙옙");
 				}
 			}else {
-				//teacher�� student�������� �����Ϸ��� �ϸ� �� ��������
+				//teacher占쏙옙 student占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싹뤄옙占쏙옙 占싹몌옙 占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
