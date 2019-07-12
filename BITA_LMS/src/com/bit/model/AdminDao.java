@@ -325,7 +325,7 @@ public class AdminDao extends Dao {
 		//학생목록에서 num를 idx로 받아 해당 num의 수강신청한 내용을 볼 수 있게
 		//제목/작성자아이디/제출일/이름/강좌/연락처/파일
 		openConnection();
-		String sql = "SELECT u.name as \"name\", u.user_id AS \"id\", l.name AS \"lecName\", "
+		String sql = "SELECT u.name as \"name\", u.user_id AS \"id\", l.name AS \"lecName\", a.apply_id, "
 				+"TO_CHAR(a.apply_date,'yyyy-mm-dd') AS \"applyDate\", a.file_name, u.phone_number "
 				+"FROM apply a INNER JOIN user01 u on a.user_id=u.user_id "
 				+"INNER JOIN lecture l on l.lecture_id = a.lecture_id "
@@ -342,6 +342,7 @@ public class AdminDao extends Dao {
 			
 			if(rs.next()){
 				bean.setApplyDate(rs.getString("applyDate"));
+				bean.setApplyId(rs.getInt("apply_id"));
 				bean.setUserId(rs.getString("id"));
 				bean.setLecName(rs.getString("lecName"));
 				bean.setUserName(rs.getString("name"));
@@ -360,26 +361,35 @@ public class AdminDao extends Dao {
 	}
 	
 	//행정팀 학생관리 학생등록 상세페이지 삭제
-	public int deleteRegister(int registerId) {
-		openConnection();
+	public int deleteRegister(int ApplyId) {
 		//제대로 전송됐는지 안됐는지만 int값으로 리턴
+		int result = 0;
+		String sql = "delete from apply where apply_id=?";
+		
 		try{
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, ApplyId);
+			result = pstmt.executeUpdate();
 			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}finally{
 			closeConnection();
 		}
-		return 0;
+		return result;
 	}
 	
 	//행정팀 학생관리 수강생으로 등록(user테이블 update), 해당 user_id로 된 apply테이블의 정보를 삭제
 	//등록 후 목록으로 바로
+	//2019-07-12 완료
 	public int updateRegister(String userId,String lecName) {
 		int result = 1;
 		int lecture_id = 999999999;
 		//해당 값들 인자로 받아와서 user01에서 belong을 update
 		//lectureuser에서 lecture_id 업데이트
 		//apply table 해당 학생 아이디의 apply 삭제
-		String sql = "select lecture_id from lecture where name=?";
+		String sql = "select lecture_id from lecture where name=? and num_std<max_std";
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -396,7 +406,8 @@ public class AdminDao extends Dao {
 		
 		String sql1 = "update user01 set belong='student' where user_id=?";
 		String sql2 = "update lectureUser set lecture_id = ? where user_id=?";
-		String sql3 = "delete from apply where user_id=?";
+		String sql3 = "update lecture set num_std = num_std+1 where lecture_id=?";
+		String sql4 = "delete from apply where user_id=?";
 		
 		//제대로 전송됐는지 안됐는지만 int값으로 리턴
 		try {
@@ -410,17 +421,18 @@ public class AdminDao extends Dao {
 			pstmt.setString(2, userId);
 			pstmt.addBatch();
 			pstmt = conn.prepareStatement(sql3);
+			pstmt.setInt(1, lecture_id);
+			pstmt.addBatch();
+			//계속 4번째 쿼리가 실행안돼서 한번 더 넣어줌
+			pstmt.executeBatch();
+
+			pstmt = conn.prepareStatement(sql4);
 			pstmt.setString(1, userId);
 			pstmt.addBatch();
-			int[] results = pstmt.executeBatch();
-			for(int i=0; i<results.length; i++){
-				result *= results[i];
-			}
+			pstmt.executeBatch();
 			
 			pstmt.clearBatch();
-			if(result>0){
-                conn.commit();
-			}
+            conn.commit();
 			
 		} catch (SQLException e) {
 			try {
@@ -537,14 +549,17 @@ public class AdminDao extends Dao {
 	
 	//행정팀 수강생 삭제, 강사 삭제
 	public int deleteUser(String[] userId) {
-		openConnection();
+		String sql = "delete from user01 where user_id=?";
+		int result = 0;
+		
 		try{
+			openConnection();
 			
 		}finally{
 			closeConnection();
 		}
 		
-		return -1;
+		return result;
 	}
 	
 	//행정팀 강사관리 목록

@@ -254,12 +254,6 @@ public class AdminController extends HttpServlet {
 					
 					rd = req.getRequestDispatcher("manage_tea_detail.adm?idx="+idx);
 
-				} else if (path.equals("/manage_tea_delete.adm")) {
-					// 강사관리 강사 삭제 페이지
-					String[] userId = req.getParameterValues("");
-					result = dao.deleteUser(userId);
-					rd = req.getRequestDispatcher("manage_tea.adm");
-
 				} else if (path.equals("/qna_update.adm")) {
 					// 큐엔에이 답변등록 페이지
 					String answerContent = req.getParameter("");
@@ -285,12 +279,20 @@ public class AdminController extends HttpServlet {
 						result = dao.updateRegister(id,lecName);
 					}
 					resp.sendRedirect("register.adm");
+				} else if (path.equals("/register_delete.adm")){
+					// 수강신청페이지 삭제
+					int applyId = Integer.parseInt(req.getParameter("applyId"));
+					result = dao.deleteRegister(applyId);
+					if(result>0){
+						resp.sendRedirect("register.adm");
+					}
+				} else if (path.equals("/user_delete.adm")){
+					// 학생 및 강사 삭제
+					
 				}
 				
 				if(rd!=null){					
 					rd.forward(req, resp);
-				}else{
-					System.out.println("결과값없음");
 				}
 				
 				resp.setContentType("text/html;charset=UTF-8");

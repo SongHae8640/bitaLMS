@@ -55,7 +55,7 @@
 					show +="<span>"+"수업 진행 일 수  : "+item.progressDays+"</span><br>";
 				})
 					
-                $("#status").html(show) ;
+                $("#statusGroup").html(show) ;
             }
              
         });
@@ -89,7 +89,7 @@
 			<div id = "attendance"></div>
 				<jsp:include page="../call_attendance_S.jsp" flush="false"/>
 			
-			<div id = "status">
+			<div id = "statusGroup">
 				여기!
 			</div>
 		</div>
