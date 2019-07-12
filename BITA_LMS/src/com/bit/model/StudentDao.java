@@ -385,9 +385,6 @@ public class StudentDao extends Dao{
 		return result;
 	}
 
-	public int insertQnaL(QnaLDto qnaLBean) {
-		return 0;
-	}
 
 
 }

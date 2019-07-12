@@ -20,8 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
-import jdk.nashorn.internal.runtime.JSONFunctions;
-import jdk.nashorn.internal.runtime.JSONListAdapter;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
