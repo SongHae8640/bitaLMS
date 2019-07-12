@@ -25,7 +25,7 @@ public class TestController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("testController :: path = " + path);
+		System.out.println("testController(post) :: path = " + path);
 		
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login("stu1", "1234");
@@ -35,10 +35,6 @@ public class TestController extends HttpServlet {
 		
 		if(path.equals("/callAttendance.test")){
 			resp.setContentType("text/html;charset=UTF-8"); 
-			
-			System.out.println("post");
-			
-			String id = req.getParameter("id");
 
 			//Student 출석상황에 필요한 정보 가져오기
 			

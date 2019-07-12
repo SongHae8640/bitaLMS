@@ -79,6 +79,20 @@
 	#content #con_form2 div[type=button]{
 	margin: 0 auto;
 	}
+	#header>#login_btn{
+	top:-75px;
+	right:15px;
+	position:absolute;
+	float:right;
+	cursor: pointer;
+	}
+	#header>#logout_btn{
+	top:-75px;
+	right:15px;
+	position:absolute;
+	float:right;
+	cursor: pointer;
+	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="js/jquery.bxslider.js"></script>
@@ -119,12 +133,62 @@
 		$("#Lms_login").click(function(){
 			window.open('login.bit');
 		});
+		//로그인 클릭&엔터시 데이터 submit
+		$('input').keypress(function (e) {
+		 var key = e.which;
+		 if(key == 13)  // the enter key code
+		  {
+		    $('#signin_btn').click();
+		    return false;  
+		  }
+		});
+		$("#signin_btn").click(function(){
+			var id = $("#id").val();
+            var pw = $("#pw").val();
+ 
+            if (id == "") {
+                alert("아이디를 입력해주세요");
+                $("#id").focus();
+                return;
+            }
+            if (pw == "") {
+                alert("비밀번호를 입력해주세요");
+                $("#pw").focus();
+                return;
+            }
+            //비동기 ajax 방식으로 데이터 주고 받기
+            var data = "id=" + id + "&pw=" + pw;
+            
+            $.ajax({
+                type : "post",
+                data : data,
+                url : "/BITA_LMS/login.home",
+                success : function(value) {
+                	alert("통신 성공");					//로그인 성공 시 위에 환영문구 뜸
+                	console.log(value);
+                	$('#login_btn').remove();
+                	$('#header').append(value);
+                	$('#myModal').hide();
+                	location.href = 'main.home';		//회원가입페이지에서 로그인하면 메인화면으로 이동
+                },
+                error : function(){
+                	alert("통신 실패");
+                }
+            
+		});
+           
+	});
 	}); 
 </script>
 </head>
 <body>
 	<div id="header">
-			<a href="#" id="login_btn">login</a> 
+			<%
+			if(session.getAttribute("userBean")==null){ 
+			%>
+			<a href="#" id="login_btn">login</a>
+			<%} 
+			%>
 			<img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
@@ -195,9 +259,8 @@
 				</div>
 				<div>
 					<label>연락처</label>
-					<input type="text"name="tel1"> -
-               		<input type="text" name="tel2"> -
-               		<input type="text" name="tel3">
+						<input type="tel"name="tel" placeholder="00*-000*-00000"
+						pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" /> 
 				</div>
 				<div>
 					<label>유입경로</label>
@@ -243,16 +306,14 @@
 		 	 <div id="wrap1"> 
 	 		<a href="#"><img alt="exit" id="exit" src="img/exit_btn.png" /></a>
 		 	<img alt="logo" id="log_logo" src="img/logo.jpg" />
-			<form action="#" id="sendlogin" name="sendlogin" method="POST">
 		 	 	<div id="wrap2">
 				    <input type="text" id="id" name="id" placeholder=" ID"/>
 				    <input type="password" id="pw" name="pw" placeholder=" PASSWORD" />
 			    </div>
 			    <div id="wrap3">
-			    	<button type="submit">sign in</button>
+			    	<button type="submit" id="signin_btn">sign in</button>
 			    	<p>아직 계정이 없으십니까?&nbsp;&nbsp;<a href="join.home">가입하기</a></p>
 			    </div>
- 			</form>
 		     </div>
 	     </div>
 	    </div>
@@ -268,7 +329,11 @@
 				</p>
 			</div>
 		</div>
-</body>
-</html>
+<%
+	//ui를 깨지지 않게 하려면 항상 body 닫기 전에 넣는 것이 좋다. 로딩하다가 출력되기 때문
+	Object obj = request.getAttribute("errmsg");
+	if (obj != null)
+	out.println(obj);
+%>
 	</body>
 </html>

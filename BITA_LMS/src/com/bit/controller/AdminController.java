@@ -19,13 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import jdk.nashorn.internal.runtime.JSONFunctions;
-import jdk.nashorn.internal.runtime.JSONListAdapter;
+
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
+
 
 import com.bit.model.AdminDao;
 import com.bit.model.AttendanceDto;
@@ -39,47 +39,46 @@ import com.bit.model.UserDto;
 
 @WebServlet("*.adm")
 public class AdminController extends HttpServlet {
+	String json = "";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("AdminController :: path = " + path);
+		System.out.println("AdminController(doGet) :: path = " + path);
 
 		// 세션 저장
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
+		//System.out.println("AdminController(doGet) :: userBean="+userBean.toString());
 
 		try {
+			//로그인이 안된 접속자 일때( session에 userBean이 없는경우
+			if(userBean == null){
+				resp.sendRedirect("login.bit");
+			}
+			
 			// admin만 접근가능
 			if (userBean.getBelong().equals("admin")) {
 				AdminDao dao = new AdminDao();
-
 				if (path.equals("/main.adm")) {
 					// 메인페이지
-					//년월일 하나만 받아와서
-//					String yearMonthDay = req.getParameter("yearMonthDay");
-//					req.setAttribute("calendarMonthList", dao.getCalendarMonthList(yearMonthDay.substring(0, 6)));
-//					//년월일 다 넣어주기
-//					dao = new AdminDao();
-//					req.setAttribute("calendarDayList", dao.getCalendarDayList(yearMonthDay));
-//					dao = new AdminDao();
-//					dao = new AdminDao();
-//					req.setAttribute("userBean", dao.getUser(userBean.getUserId()));
 					rd = req.getRequestDispatcher("admin/main_A.jsp");
-
-				} else if (path.equals("/manage_lec.adm")) {
+					rd.forward(req, resp);
+				}else if (path.equals("/manage_lec.adm")) {
 					// 강좌관리 목록 페이지
 					req.setAttribute("LectureList", dao.getLectureList());
 
 					rd = req.getRequestDispatcher("admin/manage_lec.jsp");
+					rd.forward(req, resp);
 				} else if (path.equals("/manage_lec_detail.adm")) {
 					// 강좌관리 상세 페이지
 					int lectureId = Integer.parseInt(req.getParameter("idx"));
 					req.setAttribute("lectureBean", dao.getLecture(lectureId));
 
 					rd = req.getRequestDispatcher("admin/manage_lec_detail.jsp");
+					rd.forward(req, resp);
 				} else if (path.equals("/manage_stu.adm")) {
 					// 수강생관리 목록 페이지(목록별)
 					//콤보박스 정보
@@ -89,7 +88,7 @@ public class AdminController extends HttpServlet {
 					//userDto이용
 					req.setAttribute("userBean", dao.getManageStu());
 					rd = req.getRequestDispatcher("admin/manage_stu.jsp");
-
+					rd.forward(req, resp);
 				} else if (path.equals("/manage_stu_month.adm")) {
 					// 수강생관리 목록 페이지(월별)
 					//콤보박스 정보
@@ -100,30 +99,33 @@ public class AdminController extends HttpServlet {
 					req.setAttribute("manageStuMonth", dao.getManageStuMonth(yearMonth));
 					
 					rd = req.getRequestDispatcher("admin/manage_stu_month.jsp");
-
+					rd.forward(req, resp);
 				} else if (path.equals("/manage_tea.adm")) {
 					// 강사관리 목록 페이지
 					req.setAttribute("teacherList", dao.getTeacherList());
 					
 					rd = req.getRequestDispatcher("admin/manage_tea.jsp");
-
+					rd.forward(req, resp);
 				} else if (path.equals("/manage_tea_detail.adm")) {
 					// 강사관리 상세 페이지
 					String userId = req.getParameter("idx");
 					req.setAttribute("teacherBean", dao.getTeacher(userId));
 					
 					rd = req.getRequestDispatcher("admin/manage_tea_detail.jsp");
+					rd.forward(req, resp);
 				} else if (path.equals("/qna.adm")) {
 					// 큐엔에이 목록 페이지
 					req.setAttribute("qnaLList", dao.getQnaLList());
 					
 					rd = req.getRequestDispatcher("admin/qna_A.jsp");
+					rd.forward(req, resp);
 				} else if (path.equals("/qna_detail.adm")) {
 					// 큐엔에이 상세 페이지
 					int qnlLId = Integer.parseInt(req.getParameter("idx"));
 					req.setAttribute("qnaLBean", dao.getQnaL(qnlLId));
 					
 					rd = req.getRequestDispatcher("admin/qna_A_detail.jsp");
+					rd.forward(req, resp);
 				} else if (path.equals("/register.adm")) {
 					// 학생등록 목록페이지
 					
@@ -133,38 +135,61 @@ public class AdminController extends HttpServlet {
 					dao = new AdminDao();
 					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
 					rd = req.getRequestDispatcher("admin/register.jsp");
-
+					rd.forward(req, resp);
 				} else if (path.equals("/register_detail.adm")) {
 					// 학생등록 상세페이지
 					int applyId = Integer.parseInt(req.getParameter("idx"));
 
 					req.setAttribute("registerBean", dao.getRegister(applyId));
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
+					rd.forward(req, resp);
 				}  else if (path.equals("/manage_lec_update.adm")) {
 					//강좌관리 수정 페이지
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_update.jsp");
+					rd.forward(req, resp);
 				}else if (path.equals("/manage_lec_insert.adm")) {
 					//강좌관리 입력 페이지
 					
 					rd = req.getRequestDispatcher("admin/manage_lec_insert.jsp");
+					rd.forward(req, resp);
 				} else if (path.equals("/manage_tea_insert.adm")) {
 					// 강사관리 강사 추가 페이지
 					rd = req.getRequestDispatcher("admin/manage_tea_insert.jsp");
-
+					rd.forward(req, resp);
 				} else if (path.equals("/manage_tea_update.adm")) {
 					// 강사관리 강사 수정 페이지
 					rd = req.getRequestDispatcher("admin/manage_tea_update.jsp");
-
-				} else {
-					System.out.println("존재하지않는페이지");
+					rd.forward(req, resp);
 				}
+				
+				
+				//ajax 방식 ( rd를 사요하지 않음)
+				else if(path.equals("/callCalendar.adm")) {
+					//json으로 보낼때 한글 깨짐 방지
+					resp.setContentType("text/html;charset=UTF-8");
+					
+					// calendar 가져와야 함
+					System.out.println();
+					String yearMonthDay = "2019-07-10";
+					String yearMonth = yearMonthDay.substring(0,7);
+					
+					JSONArray calendarMonthListJson = dao.getCalendarMonthListJson(yearMonth);
+					PrintWriter out = resp.getWriter();
+					out.write(calendarMonthListJson.toJSONString());
+					out.close();
+				}else {
+					System.out.println("존재하지않는페이지");
+				}	
 			} else {
 				// teacher나 student페이지로 접근하려고 하면 걍 보내버림
-				req.getRequestDispatcher("login.bit");
+				resp.sendRedirect("login.bit");
 			}
-			rd.forward(req, resp);
 		} catch (java.lang.NullPointerException e) {
+			System.out.println(e);
+			resp.sendRedirect("login.bit");
+		}catch (java.lang.IllegalStateException e) {
+			System.out.println(e);
 			resp.sendRedirect("login.bit");
 		}
 
@@ -175,7 +200,7 @@ public class AdminController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("AdminController :: path = " + path);
+		System.out.println("AdminController(doPost) :: path = " + path);
 		
 		//세션 저장
 		HttpSession session = req.getSession();
@@ -319,11 +344,48 @@ public class AdminController extends HttpServlet {
 						out.write("{\"msg\":\"성공적으로 수정되었습니다\"}");
 						out.close();
 					}
+				}// calendar insert 페이지
+		    else if (path.equals("/calendar_insert.adm")) {
+					CalendarDto calendarBean = new CalendarDto();
+					calendarBean.setLectureId(Integer.parseInt(req.getParameter("lectureId")));	//강사기준!! 행정에서는 따로 파라미터 가져와서 설정하게 해야함
+					calendarBean.setStartDate(req.getParameter("startDate")+" 00:00:00");
+					calendarBean.setEndDate(req.getParameter("endDate")+" 23:59:00");
+					calendarBean.setTitle(req.getParameter("title"));
+					calendarBean.setContent(req.getParameter("content"));
+					System.out.println(calendarBean.toString());
+					result = dao.insertCalendar(calendarBean);
+					System.out.println("result = "+result);
+				}else if(path.equals("/calendar_update.adm")){
+					CalendarDto calendarBean = new CalendarDto();
+					calendarBean.setCalendarId(Integer.parseInt(req.getParameter("calendarId")));
+					calendarBean.setTitle(req.getParameter("title"));
+					calendarBean.setLectureId(Integer.parseInt(req.getParameter("lectureId")));
+					calendarBean.setLectureName(req.getParameter("lectureName"));	///update에서는 빼도 되는 부분. 정보 이동 확을을 위해 추가함
+					calendarBean.setStartDate(req.getParameter("startDate").replaceAll("T", " "));
+					calendarBean.setEndDate(req.getParameter("endDate").replaceAll("T", " "));
+					calendarBean.setContent(req.getParameter("content"));
+					System.out.println(calendarBean.toString());
+					result = dao.updateCalendar(calendarBean);
+					System.out.println("result = "+result);
+				}else if(path.equals("/calendar_delete.adm")){
+					result = dao.deleteCalendar(Integer.parseInt(req.getParameter("calendar_id")));
+					System.out.println("result = "+result);
 				} 
 				
+
+				
+				
+				
+				//정상적으로 CUD(create, update, delete) 했을때
+				if(result ==1){
+					
+				}
 			}
 		} catch (java.lang.NullPointerException e) {
+			System.out.println(e);
 			resp.sendRedirect("login.bit");
 		}
 	}
+
+
 }

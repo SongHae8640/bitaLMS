@@ -1,3 +1,4 @@
+<%@page import="com.bit.model.UserDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -10,11 +11,6 @@
 <link type="text/css" rel="stylesheet" href="css/loginframe_H.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.bxslider.css" />
 <style type="text/css">
-
-* {
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
 	#menu>ul {
 	width: 760px; 
 	list-style-type: none;
@@ -77,6 +73,23 @@
 	#content #con_form2 div[type=button]{
 	margin: 0 auto;
 	}
+<<<<<<< HEAD
+	#header>#login_btn{
+	top:-75px;
+	right:15px;
+	position:absolute;
+	float:right;
+	cursor: pointer;
+	}
+	#header>#logout_btn{
+	top:-75px;
+	right:15px;
+	position:absolute;
+	float:right;
+	cursor: pointer;
+	}
+=======
+>>>>>>> master
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="js/jquery.bxslider.js"></script>
@@ -117,12 +130,106 @@
 		$("#Lms_login").click(function(){
 			window.open('login.bit');
 		});
-	}); 
+		//로그인 클릭&엔터시 데이터 submit
+		$('input').keypress(function (e) {
+		 var key = e.which;
+		 if(key == 13)  // the enter key code
+		  {
+			 $('#signin_btn').click();
+		    return false;  
+		  }
+		});
+		$("#signin_btn").on('click',function(){
+			var id = $("#id").val();
+            var pw = $("#pw").val();
+ 
+            if (id == "") {
+                alert("아이디를 입력해주세요");
+                $("#id").focus();
+                return;
+            }
+            if (pw == "") {
+                alert("비밀번호를 입력해주세요");
+                $("#pw").focus();
+                return;
+            }
+            //비동기 ajax 방식으로 데이터 주고 받기 방버버
+            var data = "id=" + id + "&pw=" + pw;
+            
+            $.ajax({
+                type : "post",
+                data : data,
+                url : "/BITA_LMS/login.home",
+                success : function(value) {
+                	console.log("통신 성공");				//로그인 성공 시 위에 환영문구 뜸
+                	console.log(value);
+                	$('#login_btn').remove();
+                	$('#header').append(value);
+                	$('#myModal').hide();
+                	location.reload();
+                	 
+                },
+                error : function(){
+                	console.log("통신 실패");
+                }
+            
+		});
+            
+	});
+		$("#logout_btn").on('click',function(){
+            //세션 끊기
+            $.ajax({
+                type : "post",
+                url : "/BITA_LMS/logout.home",
+                success : function(value) {
+                	console.log("통신 성공2");				//로그아웃 하러감
+                	console.log(value);
+                	$('#logout_btn').remove();
+                	$('#my_name').remove();
+                	$('#header').append(value);
+                	location.reload();
+                	 
+                },
+                error : function(){
+                	console.log("통신 실패2");
+                }
+            
+		});
+    });
+	$("#apply_btn").on("click",function(e){
+		var my_name = $("#my_name").text();      
+		//로그인 됐을 때 안됐을 때 나누기
+		if(my_name==""){
+		  	 alert("로그인해주세요");
+		  	 return false;
+		  	location.reload();
+		}    
+		else if(my_name!=""){
+	      if(name==""){
+	        //삭제먼저하고 생성
+	        $("#name_div>span").remove();   
+	        $("#name_div").append("<span>내용을 입력해주세요</span>");
+	        return;
+	      }else{
+	        $("#name_div>span").remove();
+	      } 
+		}
+	});  
+});   
+
 </script>
 </head>
 <body>
 	<div id="header">
-			<a href="#" id="login_btn">login</a> 
+			<%
+			if(session.getAttribute("userBean")==null){ %>
+			<a href="#" id="login_btn">login</a>
+			<%	
+				}else{ 	
+			%> <a href="#" id="logout_btn">logout</a>
+			<span id="my_name"><%=((UserDto)session.getAttribute("userBean")).getName() %></span>
+			<span>님 환영합니다.</span>
+			<%	} %>
 			<img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
@@ -160,30 +267,30 @@
 			<div><span>수강신청</span></div>
 		</div>
 		<div id="con_form1">
-		<form method="post" action="join.home">
+		<form action="apply.home"method="post"enctype="multipart/form-data">
 			<div id="con_form2">
 				<div>
-					<div>
+					<div id="name_div">
 						<label>이름</label>
-						<input type="text" name="name" placeholder="내용을 입력해주세요" />
+						<input type="text" name="name" id="name" placeholder="내용을 입력해주세요" />
 					</div>
-					<div>
+					<div id="lecture_div">
 						<label>강좌선택</label>
-				              <select name="lec_select">
-				                 <option value="JAVA">JAVA</option>
-				                 <option value="WEB">WEB</option>
-				                 <option value="DB">DB</option>
+				              <select name="lecture_Id">
+				              	<option value="0" selected>-</option> 
+				                <option value="1">JAVA</option>
+				                <option value="2">DB</option>
+				                <option value="3">WEB</option>
 				         	</select>
 					</div>
-					<div>
+					<div id="tel_div">
 						<label>연락처</label>
-						<input type="text"name="tel1"> -
-	               		<input type="text" name="tel2"> -
-	               		<input type="text" name="tel3">
+						<input type="tel"name="tel" id="tel" placeholder="00*-000*-00000"
+						pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" /> 
 					</div>
 					<div id="file_upload">
 						<label>파일첨부</label>
-						<input type="file"id="user_apply"/>
+						<input type="file" name="user_apply" id="user_apply"/>
 					</div>
 					<div>
 						<label>약관동의</label>
@@ -200,11 +307,13 @@
 							접수기간동안 1회에 한하여 수강료가 동일할 경우 과목 변경 가능하며, 6일후 정원마감과 상관없이 모든과목의 수강생모집을 종료합니다.
 						</p>
 						</div>
-   						<div><input type="checkbox" name="agree" id="agree"> 개인정보 수집 및 이용에 동의합니다.</div> 
-					<div>
-						<button type="submit">확인</button>&nbsp;&nbsp;
-						<button type="button">취소</button>
-					</div>
+   						<div id="agree_div">
+   						<input type="checkbox" name="agree" id="agree"> 개인정보 수집 및 이용에 동의합니다.
+   						</div> 
+						<div>
+						<button type="submit" id="apply_btn">확인</button>&nbsp;&nbsp;
+						<button type="button" id="f">취소</button>
+						</div>
 				</div> 
 			</div>
 			</div>
@@ -215,16 +324,14 @@
 		 	 <div id="wrap1"> 
 	 		<a href="#"><img alt="exit" id="exit" src="img/exit_btn.png" /></a>
 		 	<img alt="logo" id="log_logo" src="img/logo.jpg" />
-			<form action="#" id="sendlogin" name="sendlogin" method="POST">
 		 	 	<div id="wrap2">
 				    <input type="text" id="id" name="id" placeholder=" ID"/>
 				    <input type="password" id="pw" name="pw" placeholder=" PASSWORD" />
 			    </div>
 			    <div id="wrap3">
-			    	<button type="submit">sign in</button>
+			    	<button type="button" id="signin_btn">sign in</button>
 			    	<p>아직 계정이 없으십니까?&nbsp;&nbsp;<a href="join.home">가입하기</a></p>
 			    </div>
- 			</form>
 		     </div>
 	     </div>
 	    </div>
@@ -240,7 +347,13 @@
 				</p>
 			</div>
 		</div>
-</body>
-</html>
+<%
+	//ui를 깨지지 않게 하려면 항상 body 닫기 전에 넣는 것이 좋다. 로딩하다가 출력되기 때문
+	Object obj = request.getAttribute("errmsg");
+	if (obj != null)
+	out.println(obj);
+	else
+	out.println(obj);
+%>
 	</body>
 </html>
