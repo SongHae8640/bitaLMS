@@ -1,3 +1,6 @@
+<%@page import="com.bit.model.SubmsissionDto"%>
+<%@page import="com.bit.model.AssignmentDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -5,7 +8,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -14,9 +19,32 @@
 	margin: 0px auto;
 }
 </style>
+<%
+	int i = 1;
+%>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
+	var btn, file, xhr, formData;
+
 	$(document).ready(function() {
+		$('#upload').click(function() {
+
+			var input = document.querySelector('#myfile');
+			formData = new FormData();
+
+			formData.append('myfile', input.files[0]);
+			$.ajax({
+				url : 'upload.bit',
+				method : 'post',
+				data : formData,
+				contentType : false,
+				processData : false,
+				success : function() {
+					alert('업로드 성공');
+				}
+			});
+		});
+
 		$('.topmenu').mouseenter(function() {
 			$('.submenu').css('display', 'block')
 		});
@@ -30,6 +58,7 @@
 				$("input[name=chk]").prop("checked", false);
 			}
 		});
+
 	});
 </script>
 </head>
@@ -48,53 +77,72 @@
 		</div>
 		<div id="content">
 			<h2>과제 상세</h2>
+<% 
+					AssignmentDto bean_a=(AssignmentDto)request.getAttribute("AssignmentBean");
+					
+				%>
+				<div>
+					<label>제목</label> <span><%=bean_a.getTitle() %></span>
+				</div>
+				<div>
+					<label>작성자</label> <span><%=bean_a.getWriter() %></span>
+				</div>
+				<div>
+					<label>날짜</label> <span><%=bean_a.getWriteDate() %></span>
+				</div>
+				<div>
+					<label>내용</label>
+					<span><%=bean_a.getContent() %></span>
+				</div>
 
-			<div>
-				<label>제목</label> <span>8/2</span>
-			</div>
-			<div>
-				<label>작성자</label> <span>김강사</span>
-			</div>
-			<div>
-				<label>날짜</label> <span>date</span>
-			</div>
-			<div>
-				<label>내용</label>
-				<textarea name="" id="" cols="30" rows="10">hello</textarea>
-			</div>
-
-			<div>
-				<button onclick="location='../assignment_S.jsp'">과제목록</button>
-			</div>
-
-			<form action="">
-				<table border="1">
-					<thead>
+				<div>
+					<button onclick="location='assignment.tea'">과제목록</button>
+				</div>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+						<th>확인여부</th>
+						<th><input type="checkbox" name="" id="ch" /></th>
+					</tr>
+				</thead>
+				<tbody>
+					<%	
+							
+						ArrayList<SubmsissionDto> list=(ArrayList<SubmsissionDto>)request.getAttribute("submissionList");
+						for(SubmsissionDto bean_s : list){
+							System.out.println("bean_s="+bean_s);
+							
+						%>
 						<tr>
-							<th>번호</th>
-							<th>제목</th>
-							<th>작성자</th>
-							<th>작성일</th>
-							<th>확인여부</th>
-							<th><input type="checkbox" name="" id="ch"/></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>2</td>
-							<td><a href="#">8/2 김코난 과제</a></td>
-							<td>김코난</td>
-							<td>2019-08-02</td>
-							<td>확인대기</td>
+							<td><%=bean_s.getRowNum() %></td>
+							<td><a href="#"><%=bean_s.getFileName() %></a></td>
+							<td><%=bean_s.getStdName() %></td>
+							<td><%=bean_s.getSubmitDate() %></td>
+							<td><%=bean_s.getIsCheck() %></td>
 							<td><input type="checkbox" name="chk" /></td>
 						</tr>
-					</tbody>
-				</table>
+
+						<%
+						}
+							
+						%>
+				</tbody>
+			</table>
+			<div>
 				<div>
-					<button type="submit">추가</button>
-					<button onclick="location=''">삭제</button>
+					<input type="file" id="myfile" />
 				</div>
-			</form>
+				<div>
+					<button id="upload">등록</button>
+				</div>
+				<button onclick="location='assignment_delete_S.stu'">삭제</button>
+			</div>
+
+
 		</div>
 		<div id="footer">
 			<div>
