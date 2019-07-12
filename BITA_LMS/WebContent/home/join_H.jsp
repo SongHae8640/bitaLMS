@@ -121,7 +121,6 @@
 		});
 		$("#login_btn").click(function(){
 			$('#myModal').show();
-			
 		});
 		$("#exit").click(function(){
             $('#myModal').hide();
@@ -259,7 +258,6 @@
 			         	</select>
 				</div>
 				<div>
-					<label>연락처</label>
 					<label>연락처</label>
 						<input type="tel"name="tel" placeholder="00*-000*-00000"
 						pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" /> 

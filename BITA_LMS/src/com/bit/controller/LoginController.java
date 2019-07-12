@@ -23,9 +23,10 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		HttpSession session = req.getSession();
+		System.out.println("LoginController(doGet) :: ");
 		
 			if(path.equals("/login.bit")||path.equals("/index.bit")){
-				//·Î±×ÀÎÆäÀÌÁö´Â ¼¼¼ÇÀÌ ¾øÀ»¶§¿¡¸¸ Á¢±Ù°¡´É
+				//ë¡œê·¸ì¸í˜ì´ì§€ëŠ” ì„¸ì…˜ì´ ì—†ì„ë•Œì—ë§Œ ì ‘ê·¼ê°€ëŠ¥
 				if(session.getAttribute("userBean") != null){
 					session.invalidate();
 					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
@@ -34,7 +35,7 @@ public class LoginController extends HttpServlet {
 				if(session.getAttribute("userBean") == null){
 					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
 					rd.forward(req, resp);
-				//ÀÌ¹Ì ·Î±×ÀÎÀ» ÇÑ ÈÄ¿¡´Â ·Î±×¾Æ¿ôÀ» ÇØ¾ßÁö¸¸ Àç·Î±×ÀÎÀ» ÇÒ ¼ö ÀÖ´Ù.
+				//ï¿½ì” èª˜ï¿½ æ¿¡ì’“ë ‡ï¿½ì”¤ï¿½ì“£ ï¿½ë¸³ ï¿½ì‘ï¿½ë¿‰ï¿½ë’— æ¿¡ì’“ë ‡ï¿½ë¸˜ï¿½ìï¿½ì“£ ï¿½ë¹ï¿½ë¹ï§ï¿½ï§ï¿½ ï¿½ì˜±æ¿¡ì’“ë ‡ï¿½ì”¤ï¿½ì“£ ï¿½ë¸· ï¿½ë‹” ï¿½ì—³ï¿½ë–.
 				}else{
 					UserDto userBean = (UserDto) session.getAttribute("userBean");
 					if(userBean.getBelong().equals("teacher")){
@@ -57,17 +58,17 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 		String id = req.getParameter("id");
 		String pw = req.getParameter("pw");
-		System.out.println(id+":"+pw);
 		
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login(id, pw);
 		
+		System.out.println("LoginController(doPost) :: userBean="+userBean.toString());
 		try{
 		if(userBean.getBelong().equals("teacher")){
 			//session
 			HttpSession session = req.getSession();
 			session.setAttribute("userBean", userBean);
-//			session.setMaxInactiveInterval(5*60);	//³ªÁß¿¡ ·Î±×ÀÎ ¸¸·á½Ã°£À» »ç¿ëÇÒ¶§ »ç¿ë, paramÀÇ ´ÜÀ§´Â ÃÊ
+//			session.setMaxInactiveInterval(5*60);	//ï¿½êµ¹ä»¥ë¬’ë¿‰ æ¿¡ì’“ë ‡ï¿½ì”¤ ï§ëš®ì¦ºï¿½ë–†åª›ê¾©ì“£ ï¿½ê¶—ï¿½ìŠœï¿½ë¸·ï¿½ë¸£ ï¿½ê¶—ï¿½ìŠœ, paramï¿½ì“½ ï¿½ë–’ï¿½ìï¿½ë’— ç¥ï¿½
 			resp.sendRedirect("main.tea");
 		}else if(userBean.getBelong().equals("admin")){
 			HttpSession session = req.getSession();
@@ -81,7 +82,7 @@ public class LoginController extends HttpServlet {
 			resp.sendRedirect("main.stu");
 		}
 		}catch(java.lang.NullPointerException e){
-			req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pw¸¦ ´Ù½Ã È®ÀÎÇÏ¼¼¿ä');</script>");
+			req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pwç‘œï¿½ ï¿½ë–ï¿½ë–† ï¿½ì†—ï¿½ì”¤ï¿½ë¸¯ï¿½ê½­ï¿½ìŠ‚');</script>");
 			doGet(req, resp);
 		}
 	}

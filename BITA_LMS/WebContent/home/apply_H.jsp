@@ -73,6 +73,7 @@
 	#content #con_form2 div[type=button]{
 	margin: 0 auto;
 	}
+<<<<<<< HEAD
 	#header>#login_btn{
 	top:-75px;
 	right:15px;
@@ -87,6 +88,8 @@
 	float:right;
 	cursor: pointer;
 	}
+=======
+>>>>>>> master
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="js/jquery.bxslider.js"></script>
@@ -132,7 +135,7 @@
 		 var key = e.which;
 		 if(key == 13)  // the enter key code
 		  {
-		    $('#signin_btn').click();
+			 $('#signin_btn').click();
 		    return false;  
 		  }
 		});
@@ -198,7 +201,8 @@
 		//로그인 됐을 때 안됐을 때 나누기
 		if(my_name==""){
 		  	 alert("로그인해주세요");
-		  	 return;
+		  	 return false;
+		  	location.reload();
 		}    
 		else if(my_name!=""){
 	      if(name==""){
@@ -212,6 +216,7 @@
 		}
 	});  
 });   
+
 </script>
 </head>
 <body>
@@ -219,7 +224,8 @@
 			<%
 			if(session.getAttribute("userBean")==null){ %>
 			<a href="#" id="login_btn">login</a>
-			<%	}else{ 	
+			<%	
+				}else{ 	
 			%> <a href="#" id="logout_btn">logout</a>
 			<span id="my_name"><%=((UserDto)session.getAttribute("userBean")).getName() %></span>
 			<span>님 환영합니다.</span>

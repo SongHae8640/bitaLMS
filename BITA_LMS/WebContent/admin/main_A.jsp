@@ -69,8 +69,8 @@
 	text-align: center;
 }
 </style>
-
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -105,8 +105,10 @@
 				});
 			}
 		});
+	}
 		
 </script>
+
 </head>
 <body>
 	<div>
@@ -129,6 +131,7 @@
 			<div id="content_upper">
 				<div id="calender">
 					<h1>달력</h1>
+					<jsp:include page="call_calendar_A.jsp" flush="false"></jsp:include>
 				</div>
 			</div>
 			<div id="content_under">

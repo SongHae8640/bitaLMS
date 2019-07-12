@@ -3,7 +3,6 @@
   <display-name>BITA_LMS</display-name>
   <welcome-file-list>
     <welcome-file>index.bit</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
     <welcome-file>login.bit</welcome-file>
   </welcome-file-list>
 </web-app>
