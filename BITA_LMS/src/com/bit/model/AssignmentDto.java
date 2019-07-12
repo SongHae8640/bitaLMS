@@ -4,6 +4,10 @@ public class AssignmentDto {
 	private String title,writeDate, situation,writer,content;
 	private int assignmentId, lectureId , rowNum;
 	
+	public AssignmentDto() {
+		
+	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -53,4 +57,14 @@ public class AssignmentDto {
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
 	}
+
+	@Override
+	public String toString() {
+		return "AssignmentDto [title=" + title + ", writeDate=" + writeDate
+				+ ", situation=" + situation + ", writer=" + writer
+				+ ", content=" + content + ", assignmentId=" + assignmentId
+				+ ", lectureId=" + lectureId + ", rowNum=" + rowNum + "]";
+	}
+	
+	
 }

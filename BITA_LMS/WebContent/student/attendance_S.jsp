@@ -53,6 +53,9 @@
 						<th><input type="checkbox" name="ch1" /></th>
 					</tr>
 				</thead>
+				<tbody>
+					
+				</tbody>
 			</table>
 		</div>
 		<div id="footer">

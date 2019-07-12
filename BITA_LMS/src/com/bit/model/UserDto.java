@@ -123,11 +123,11 @@ public class UserDto {
 	public void setLectureId(int lectureId) {
 		this.lectureId = lectureId;
 	}
+
 	public int getRowNum() {
 		return rowNum;
 	}
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
-	}
-
+  }
 }
