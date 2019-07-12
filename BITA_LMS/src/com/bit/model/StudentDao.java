@@ -138,26 +138,71 @@ public class StudentDao extends Dao{
 
 	public ScoreDto getScoreBean(String userId) {
 		openConnection();
-		
+	
 		closeConnection();
 		return null;
 	}
 
-	public ArrayList<AssignmentDto> getAssignmentList(int lecture_id) {
-		openConnection();
-		
-		closeConnection();
-		return null;
+	public ArrayList<AssignmentDto> getAssignmentList(int lectureId) {
+		ArrayList<AssignmentDto> list = new ArrayList<AssignmentDto>();
+		String sql = "SELECT row_number() OVER(ORDER BY write_date) num,assignment_id,title,"
+				+ "TO_CHAR(write_date,'yyyy-mm-dd') AS write_date  "
+				+ "FROM assignment " + "WHERE lecture_id =?";
+
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, lectureId);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				AssignmentDto bean = new AssignmentDto();
+//				SubmsissionDto bean_s=new SubmsissionDto();
+				bean.setRowNum(rs.getInt("num"));
+				bean.setAssignmentId(rs.getInt("assignment_id"));
+				bean.setTitle(rs.getString("title"));
+				bean.setWriteDate(rs.getString("write_date"));
+//				bean_s.setIsCheck(rs.getString("is_check"));
+				list.add(bean);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection();
+		}
+		return list;
 	}
 
-	public AssignmentDto getAssignmentDetail(String userId) {
-		openConnection();
+	public AssignmentDto getAssignment(int assignmentId) {
+		AssignmentDto bean = new AssignmentDto();
+		String sql = "SELECT title, name,TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,content "
+				+ "FROM lectureUser lu "
+				+ "JOIN user01 u ON lu.user_id = u.user_id "
+				+ "JOIN assignment a ON a.lecture_id = lu.lecture_id "
+				+ "WHERE u.belong = 'teacher' AND a.assignment_id = ?";
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, assignmentId);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bean.setTitle(rs.getString("title"));
+				bean.setWriter(rs.getString("name"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setContent(rs.getString("content"));
+				bean.setAssignmentId(Integer.parseInt(rs.getString("user_id")));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection();
+		}
 		
-		closeConnection();
-		return null;
+		return bean;
 	}
 
-	public SubmsissionDto getSubmissionBean(String assignmentId, String userId) {
+	public SubmsissionDto getSubmissionBean(int assignmentId, String userId) {
 		openConnection();
 		
 		closeConnection();
@@ -166,8 +211,25 @@ public class StudentDao extends Dao{
 
 	public int insertSubmission(int assignmentId, String userId) {
 		openConnection();
-		
-		closeConnection();
+		String sql="insert into Attached_File values(\"김코난\",\"파일그룹\",?,?,\"2019-08-01\",\"2019-08-02\",\"stu1\")"; //reg id?file group?
+
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, "file_id");//int로 받아야함
+			pstmt.setString(2, "file_group");
+			pstmt.setString(3, "original_name");
+			pstmt.setString(4, "file_name");
+			pstmt.setString(5, "file_extension");
+			pstmt.setString(6, "ref_date");
+			pstmt.setString(7, "reg_id");
+			int result=pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			closeConnection();
+		}
 		return -1;
 	}
 
@@ -225,12 +287,6 @@ public class StudentDao extends Dao{
 		return 0;
 	}
 
-	public AssignmentDto getAssignmentBean(String assignmentId) {
-		openConnection();
-		
-		closeConnection();
-		return null;
-	}
 
 	public int updateAttendance(String stuId) {
 		//일괄적으로 insert는 AM 6시, 출석마감은 PM 11시에 되는걸로
@@ -239,6 +295,11 @@ public class StudentDao extends Dao{
 		openConnection();
 		
 		closeConnection();
+		return 0;
+	}
+
+	public int insertQnaL(QnaLDto qnaLBean) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 

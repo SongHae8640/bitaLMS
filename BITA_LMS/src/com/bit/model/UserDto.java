@@ -119,4 +119,19 @@ public class UserDto {
 	public void setLectureId(int lectureId) {
 		this.lectureId = lectureId;
 	}
+	@Override
+	public String toString() {
+		return "UserDto [userId=" + userId + ", password=" + password
+				+ ", name=" + name + ", email=" + email + ", phoneNumber="
+				+ phoneNumber + ", belong=" + belong + ", inflowPath="
+				+ inflowPath + ", lectureName=" + lectureName + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", lectureId="
+				+ lectureId + ", applyTotal=" + applyTotal + ", applyNew="
+				+ applyNew + ", qnaTotal=" + qnaTotal + ", qnaNew=" + qnaNew
+				+ ", totalDays=" + totalDays + ", attendanceDays="
+				+ attendanceDays + ", attendanceStatus=" + attendanceStatus
+				+ "]";
+	}
+	
+	
 }

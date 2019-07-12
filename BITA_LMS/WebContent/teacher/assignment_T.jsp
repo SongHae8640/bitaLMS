@@ -1,3 +1,6 @@
+<%@page import="com.bit.model.UserDto"%>
+<%@page import="com.bit.model.AssignmentDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -26,10 +29,11 @@
 			}
 		});
 		$('#insert').click(function(){
-			$(location).attr('href','assignment_insert_T.tea');
+			alert('hi');
+			window.location.href='assignment_insert.tea';
 		});
 		$('#delete').click(function(){
-			$(location).attr('href','assignment_delete_T.tea');
+			$(location).attr('href','assignment_T_delete.tea');
 		});
 	});
 </script>
@@ -63,20 +67,25 @@
 					</tr>
 				</thead>
 				<tbody>
+					<%
+						ArrayList<AssignmentDto> list=(ArrayList<AssignmentDto>)request.getAttribute("assignmentList");
+							for(AssignmentDto bean : list){
+								System.out.println("bean"+bean.toString());
+								UserDto userBean = (UserDto) session.getAttribute("userBean");
+								System.out.println("userBean"+userBean.toString());
+								
+					%>
 					<tr>
-						<td>2</td>
-						<td><a href="detail_assignment_T.jsp">8/2 과제</a></td>
-						<td>김강사</td>
-						<td>2019-08-02</td>
-						<td><input type="checkbox" name="chk"/></td>
+						<td><%=bean.getRowNum()%></td>
+						<td><a href="assignment_detail.tea?idx=<%=bean.getAssignmentId()%>"><%=bean.getTitle()%></a></td>
+						<td><%=userBean.getUserId()%></td>
+						<td><%=bean.getWriteDate()%></td>
+						<td><input type="checkbox" name="chk" id="chk" /></td>
 					</tr>
-					<tr>
-						<td>1</td>
-						<td><a href="detail_assignment_T.jsp">8/1 과제</a></td>
-						<td>김코난</td>
-						<td>2019-08-01</td>
-						<td><input type="checkbox" name="chk"/></td>
-					</tr>
+					<%
+						}
+					%>
+					
 				</tbody>
 			</table>
 			<div>

@@ -461,5 +461,22 @@ public class AdminDao extends Dao{
 		return 0;
 	}
 	
+	//Qna 갯수 반환하는 메서드
+	public int getQnaLNum(String userId){
+
+		openConnection();
+		
+		closeConnection();
+		return -1;
+	}
+	//등록생 수 반환하는 메서드
+	public int getRegisterNum(String userId){
+		
+		openConnection();
+		
+		closeConnection();
+		return -1;
+	}
+	
 
 }

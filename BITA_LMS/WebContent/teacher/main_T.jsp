@@ -18,7 +18,30 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		
+		updateData();
 	});
+	
+	function updateData(){
+		$.ajax({
+			type:"get",
+			url:"teacher/teacherStatus.jsp",
+			datatype : "json",
+			error :function(data){
+				var show="";
+				$.each(data, function(index,item){
+					console.log(item.name);
+					show+="<span>"+"강좌 명:"+item.lecName+"</span><br>";
+					show+="<span>"+"강좌 기간:"+item.totalyDays+"</span><br>";
+					show+="<span>"+"Q&A 문의:"+totalQnalNum+"</span><br>";
+					show+="<span>"+"과제 현황:"+getSubmission+"</span><br>";
+					show+="<span>"+"수업 진행 현황:"+progessDays+"</span><br>";
+					
+				});
+			}
+		});
+	}
+	
 </script>
 </head>
 <body>
@@ -39,6 +62,12 @@
 		</div>
 		<div id="content">
 			<h2>메인</h2>
+			<div id = "calendar">
+			
+			</div>
+			<div id = "status">
+				여기!
+			</div>
 		</div>
 		<div id="footer">
 			<div>

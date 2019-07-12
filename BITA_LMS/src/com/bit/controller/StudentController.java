@@ -25,7 +25,7 @@ public class StudentController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("StudentController :: path = " + path);
 		
-		//¼¼¼Ç ÀúÀå
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
@@ -33,24 +33,24 @@ public class StudentController extends HttpServlet {
 			if(userBean.getBelong().equals("student")){
 				StudentDao dao = new StudentDao();
 				if (path.equals("/main.stu")) {
-					String yearMonth = req.getParameter("yearMonthDay");	///´Þ·ÂÀÇ ¿ù ÀÌµ¿À» ÇÒ¶§ idx·Î ³â¿ùÀ» ¹Þ¾Æ ¿Ã°Í
-					String yearMonthDay = req.getParameter("yearMonthDay");	///´Þ·ÂÀÇ ¿ù ÀÌµ¿À» ÇÒ¶§ idx·Î ³â¿ùÀ» ¹Þ¾Æ ¿Ã°Í
+					String yearMonth = req.getParameter("yearMonthDay");	///ï¿½Þ·ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½Ò¶ï¿½ idxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾ï¿½ ï¿½Ã°ï¿½
+					String yearMonthDay = req.getParameter("yearMonthDay");	///ï¿½Þ·ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½Ò¶ï¿½ idxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾ï¿½ ï¿½Ã°ï¿½
 //					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonth));
 //					req.setAttribute("calendarDayList",dao.getCalendarMonthList(userBean.getLectureId(), yearMonthDay));
 					
-					//main ÁÂÃøÇÏ´Ü Á¤º¸ Àü´Þ
+					//main ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 					req.setAttribute("userBean", userBean);
 					
-					//main ¿ìÃø ÇÏ´Ü Á¤º¸ Àü´Þ
-					/// ajax·Î Àü´Þ ÇÏ°Ú´Ù
+					//main ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+					/// ajaxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï°Ú´ï¿½
 					
 					rd = req.getRequestDispatcher("student/main_S.jsp");
 				} else if (path.equals("/attendance.stu")) {
-					//ÁÂÃø Á¤º¸ Àü´Þ
-					req.setAttribute("attendanceBean", dao.getAttendance(userBean.getUserId())); 	//bean¾È¿¡ »óÅÂ, ÀÔ½Ç Åð½Ç Á¤º¸, ½Ã°£ÀÌ ÀÖ´Ù
+					//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+					req.setAttribute("attendanceBean", dao.getAttendance(userBean.getUserId())); 	//beanï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Ô½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½
 					req.setAttribute("userBean", userBean);
 					
-					//main ¿ìÃø ÇÏ´Ü Á¤º¸ Àü´Þ
+					//main ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
 					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
 					req.setAttribute("attendanceStatusList", dao.getAttendanceStatusList(userBean.getUserId()));
@@ -58,9 +58,9 @@ public class StudentController extends HttpServlet {
 					rd = req.getRequestDispatcher("student/attendance_S.jsp");
 					
 				} else if (path.equals("/attendanceMonth.stu")) {
-					String yearMonth = req.getParameter("idx");	///´Þ·ÂÀÇ ¿ù ÀÌµ¿À» ÇÒ¶§ idx·Î ³â¿ùÀ» ¹Þ¾Æ ¿Ã°Í
+					String yearMonth = req.getParameter("idx");	///ï¿½Þ·ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½Ò¶ï¿½ idxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾ï¿½ ï¿½Ã°ï¿½
 					req.setAttribute("attendanceMonthList", dao.getAttendanceMonthList(userBean.getUserId(), yearMonth));
-					rd = req.getRequestDispatcher("student/attendance_S_month.jsp");	//ÀÌ°Å Ãß°¡ÇØ¾ßÇÔ
+					rd = req.getRequestDispatcher("student/attendance_S_month.jsp");	//ï¿½Ì°ï¿½ ï¿½ß°ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½
 					
 				} else if (path.equals("/score.stu")) {
 					req.setAttribute("scoreBean", dao.getScoreBean(userBean.getUserId()));
@@ -69,26 +69,28 @@ public class StudentController extends HttpServlet {
 				} else if (path.equals("/assignment.stu")) {
 					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("student/assignment_S.jsp");
+			
 					
-				} else if (path.equals("/assignmentdetail.stu")) {
-					String assignmentId = req.getParameter("idx");	//¸ñ·ÏÈ­¸é¿¡¼­ °úÁ¦ ¹øÈ£¸¦ °¡Á®¿Ã °Í
-					req.setAttribute("assignmentBean", dao.getAssignmentBean(assignmentId));
-					req.setAttribute("submissionBean", dao.getSubmissionBean(assignmentId, userBean.getUserId()));
-					
-					rd = req.getRequestDispatcher("student/assignment_S/assignmentdetail_S.jsp");
+				} else if (path.equals("/assignment_detail.stu")) {
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//ï¿½ï¿½ï¿½È­ï¿½é¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+					req.setAttribute("assignmentBean", dao.getAssignment(assignmentId));
+					System.out.println("dao.getAssignmentBean(assignmentId)");
+					req.setAttribute("submissionBean", dao.getSubmission(assignmentId, userBean.getUserId())); //dtoìˆ˜ì •
+					System.out.println("dao.getSubmissionBean(assignmentId, userBean.getUserId())");
+					rd = req.getRequestDispatcher("student/assignment_S_detail.jsp");
 					
 				} else if (path.equals("/qna.stu")) {
 					req.setAttribute("qnaList", dao.getQnaList(userBean.getUserId()));
 					rd = req.getRequestDispatcher("student/qna_S.jsp");
 				} else if (path.equals("/qna_detail.stu")) {
-					String qnaId = req.getParameter("idx");	//¸ñ·ÏÈ­¸é¿¡¼­ °úÁ¦ ¹øÈ£¸¦ °¡Á®¿Ã °Í
+					String qnaId = req.getParameter("idx");	//ï¿½ï¿½ï¿½È­ï¿½é¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 					req.setAttribute("qnaBean", dao.getQnaBean(qnaId));
 					rd = req.getRequestDispatcher("student/qna_S/qnadetail_S.jsp");
 				} else {
-					System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ÆäÀÌÁö");
+					System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 				}
 			}else {
-				//teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
+				//teacherï¿½ï¿½ studentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
@@ -106,12 +108,12 @@ public class StudentController extends HttpServlet {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("StudentController :: path = " + path);
 		
-		//¼¼¼Ç ÀúÀå
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//insert, edit, delete ÀÇ °á°ú ³»¿ëÀ» ÀúÀåÇÏ´Â result
-		///¾î¶»°Ô »ç¿ëÇÒÁö ¾ÆÁ÷ ¹ÌÁ¤
+		//insert, edit, delete ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ result
+		///ï¿½î¶»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		int result;
 		
 		try {
@@ -122,16 +124,16 @@ public class StudentController extends HttpServlet {
 				}else if(path.equals("/submission_insert.stu")){
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
 					result = dao.insertSubmission(assignmentId, userBean.getUserId());		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µðÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½, //ï¿½ï¿½ï¿½ï¿½ rdï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ø¾ï¿½ï¿½Ï³ï¿½?
 				}else if(path.equals("/submission_update.stu")){
 					String assignmentId = req.getParameter("idx");	
-					String fileName = req.getParameter("fileName");	//¼öÁ¤ÆäÀÌÁö¿¡¼­ °¡Á®¿Ã °Í
+					String fileName = req.getParameter("fileName");	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 					result = dao.updateSubmission(assignmentId, userBean.getUserId() , fileName);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µðÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½, //ï¿½ï¿½ï¿½ï¿½ rdï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ø¾ï¿½ï¿½Ï³ï¿½?
 				}else if(path.equals("/submission_delete.stu")){
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
 					result = dao.deleteSubmission(assignmentId, userBean.getUserId());		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µðÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½, //ï¿½ï¿½ï¿½ï¿½ rdï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ø¾ï¿½ï¿½Ï³ï¿½?
 				}else if(path.equals("/qan_insert.stu")){
 					QnaLDto qnaLBean = new QnaLDto();
 					qnaLBean.setTitle(req.getParameter("title"));
@@ -139,24 +141,24 @@ public class StudentController extends HttpServlet {
 					qnaLBean.setQuestionContent(req.getParameter("questionContent"));
 					qnaLBean.setStuId(userBean.getUserId());					
 					result = dao.insertQnaL(qnaLBean);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µðÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½, //ï¿½ï¿½ï¿½ï¿½ rdï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ø¾ï¿½ï¿½Ï³ï¿½?
 				}else if(path.equals("/qan_update.stu")){
 					int qnaId = Integer.parseInt(req.getParameter("qnaId"));
 					String title = req.getParameter("title");
-					String type = req.getParameter("type");	///ÀÌ°Íµµ ¼öÁ¤Ç×¼ö ÀÖ³ª??
+					String type = req.getParameter("type");	///ï¿½Ì°Íµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½×¼ï¿½ ï¿½Ö³ï¿½??
 					String questionContent = req.getParameter("questionContent");
 					result = dao.updateQnaL(qnaId ,title,type, questionContent);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µðÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½, //ï¿½ï¿½ï¿½ï¿½ rdï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ø¾ï¿½ï¿½Ï³ï¿½?
 				}else if(path.equals("/qan_delete.stu")){
 					String[] qnaId = req.getParameterValues("qnaId");
 					
 					result = dao.deleteQnaL(qnaId);		
-					rd = req.getRequestDispatcher("qna.stu");	//qna ¸ñ·Ï ÆäÀÌÁö·Î ÀÌµ¿ÀÌµ¿ÇØ¾ßÇÏ³ª?
+					rd = req.getRequestDispatcher("qna.stu");	//qna ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ìµï¿½ï¿½Ø¾ï¿½ï¿½Ï³ï¿½?
 				}else {
-					System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ÆäÀÌÁö");
+					System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 				}
 			}else {
-				//teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
+				//teacherï¿½ï¿½ studentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				req.getRequestDispatcher("login.bit");
 			}
 			rd.forward(req, resp);
