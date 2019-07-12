@@ -23,6 +23,7 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		HttpSession session = req.getSession();
+		System.out.println("LoginController(doGet) :: ");
 		
 			if(path.equals("/login.bit")||path.equals("/index.bit")){
 				//로그인페이지는 세션이 없을때에만 접근가능
@@ -52,11 +53,11 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 		String id = req.getParameter("id");
 		String pw = req.getParameter("pw");
-		System.out.println(id+":"+pw);
 		
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login(id, pw);
 		
+		System.out.println("LoginController(doPost) :: userBean="+userBean.toString());
 		try{
 		if(userBean.getBelong().equals("teacher")){
 			//session
