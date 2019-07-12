@@ -24,7 +24,6 @@ body {
 	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
 	font-size: 14px;
 }
-
 #calendar {
 	max-width: 900px;
 	margin: 0 auto;
@@ -42,7 +41,6 @@ body {
 	});
 	document.addEventListener('DOMContentLoaded', function() {
 		var calendarEl = document.getElementById('calendar');
-
 		var calendar = new FullCalendar.Calendar(calendarEl, {
 			plugins : [ 'interaction', 'dayGrid' ],
 			defaultDate : '2019-06-12',
@@ -93,7 +91,6 @@ body {
 				start : '2019-06-28'
 			} ]
 		});
-
 		calendar.render();
 	});
 </script>
@@ -102,7 +99,7 @@ body {
 	
 	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>

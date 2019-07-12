@@ -46,11 +46,31 @@ public class StudentDao extends Dao{
 	}
 
 	public AttendanceDto getAttendance(String userId) {
-		openConnection();
+		//Student 출석상황에 필요한 정보 가져오기
+		//입실/지각/퇴실 정보 등 status, 입퇴실시간(where오늘,시분만 가져오기)
+		AttendanceDto bean = new AttendanceDto();
+		String sql = "select status,to_char(checkin_time,'hh24:mi') as \"checkinTime\","
+				+ "to_char(checkout_time,'hh24:mi') as \"checkoutTime\" from attendance"
+				+ " where to_char(day_time)=to_char(sysdate) and std_id=?";
 		
-		closeConnection();
-		
-		return null;
+		System.out.println(sql);
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				bean.setStatus(rs.getString("status"));
+				bean.setCheckinTime(rs.getString("checkinTime"));
+				bean.setCheckoutTime(rs.getString("checkoutTime"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return bean;
 	}
 
 	public int getTotalDays(int lectureId) {
@@ -167,10 +187,42 @@ public class StudentDao extends Dao{
 	}
 
 	public int[] getAttendanceStatusList(String userId) {
-		openConnection();
-		
-		closeConnection();
-		return null;
+		//결석 공결 외출 조퇴 지각 출석
+		int[] statusList = new int[5];
+		String sql = "select status, count(*) as \"count\""
+				+ " from attendance "
+				+ "where std_id=? group by status";
+		System.out.println(sql);
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			int cnt = 0;
+			while(rs.next()){
+				//출석 지각 조퇴 외출 결석
+				String temp = rs.getString("status");
+				if(temp!=null){
+					if(temp.equals("결석")){
+						statusList[4] = rs.getInt("count");
+					}else if(temp.equals("외출")){
+						statusList[3] = rs.getInt("count");
+					}else if(temp.equals("조퇴")){
+						statusList[2] = rs.getInt("count");
+					}else if(temp.equals("지각")){
+						statusList[1] = rs.getInt("count");
+					}else if(temp.equals("공결")||temp.equals("출석")){
+						statusList[0] += rs.getInt("count");
+					}
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return statusList;
 	}
 
 	public ArrayList<AttendanceDto> getAttendanceMonthList(String userId, String yearMonth) {
@@ -261,7 +313,8 @@ public class StudentDao extends Dao{
 		return result;
 	}
 
-	public QnaLDto getQnaBean(String qnaId) {
+
+	public QnaLDto getQna(String qnaId) {
 		openConnection();
 		
 		closeConnection();
@@ -292,13 +345,47 @@ public class StudentDao extends Dao{
 		return null;
 	}
 
-	public int updateAttendance(String stuId) {
+	public int updateAttendance(String stuId,String check) {
 		//일괄적으로 insert는 AM 6시, 출석마감은 PM 11시에 되는걸로
-		//학생이 출석버튼 클릭시 시간에 맞춰 출석 처리
+		System.out.println(check);
 		
-		openConnection();
+		String sql = "";
+		int result = 0;
+		if(check.equals("입실")){
+			sql = "UPDATE attendance SET status = '입실', checkin_time=sysdate WHERE std_id = ? and to_char(day_time)=to_char(sysdate)";
+		}else if(check.equals("퇴실")){
+			sql = "UPDATE attendance SET status = '퇴실', checkout_time=sysdate WHERE std_id = ? and to_char(day_time)=to_char(sysdate)";
+		}
 		
-		closeConnection();
+		System.out.println(sql);
+		
+		try {
+			openConnection();
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, stuId);
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally{
+			try {
+				conn.commit();
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			closeConnection();
+		}
+		return result;
+	}
+
+	public int insertQnaL(QnaLDto qnaLBean) {
 		return 0;
 	}
 

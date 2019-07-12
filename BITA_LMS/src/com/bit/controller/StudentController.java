@@ -1,6 +1,7 @@
 package com.bit.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,7 +43,6 @@ public class StudentController extends HttpServlet {
 					req.setAttribute("userBean", userBean);
 					
 					//main 우측 하단 정보 전달
-					/// ajax로 전달 하겠다
 					
 					rd = req.getRequestDispatcher("student/main_S.jsp");
 				} else if (path.equals("/attendance.stu")) {
@@ -55,12 +55,12 @@ public class StudentController extends HttpServlet {
 					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
 					req.setAttribute("attendanceStatusList", dao.getAttendanceStatusList(userBean.getUserId()));
 					
-					rd = req.getRequestDispatcher("student/attendance_S.jsp");
+					rd = req.getRequestDispatcher("student/attendance_day_S.jsp");
 					
 				} else if (path.equals("/attendanceMonth.stu")) {
 					String yearMonth = req.getParameter("idx");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
 					req.setAttribute("attendanceMonthList", dao.getAttendanceMonthList(userBean.getUserId(), yearMonth));
-					rd = req.getRequestDispatcher("student/attendance_S_month.jsp");	//이거 추가해야함
+					rd = req.getRequestDispatcher("student/attendance_month_S.jsp");	//이거 추가해야함
 					
 				} else if (path.equals("/score.stu")) {
 					req.setAttribute("scoreBean", dao.getScoreBean(userBean.getUserId()));
@@ -82,9 +82,9 @@ public class StudentController extends HttpServlet {
 					rd = req.getRequestDispatcher("student/qna_S.jsp");
 				} else if (path.equals("/qna_detail.stu")) {
 					String qnaId = req.getParameter("idx");	//목록화면에서 과제 번호를 가져올 것
-					req.setAttribute("qnaBean", dao.getQnaBean(qnaId));
+					req.setAttribute("qnaBean", dao.getQna(qnaId));
 					rd = req.getRequestDispatcher("student/qna_S/qnadetail_S.jsp");
-				} else {
+				}else {
 					System.out.println("존재하지 않는 페이지");
 				}
 			}else {

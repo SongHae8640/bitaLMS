@@ -9,8 +9,9 @@ DELETE FROM QNA_L;
 DELETE FROM CALENDAR;
 DELETE FROM ATTACHED_FILE;
 DELETE FROM FILE_GROUP;
+DELETE FROM APPLY;
 
---INSERT할때 자료명과 순서를 같이 넣어줄 것
+--INSERT�Ҷ� �ڷ��� �� ���� �־��� ��
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('tea1','1234', 'teacher1', '', '', '', 'teacher');
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('tea2','1234', 'teacher2', '', '', '', 'teacher');
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('tea3','1234', 'teacher3', '', '', '', 'teacher');
@@ -26,13 +27,13 @@ INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) 
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('bef3','1234', 'before3', '', '', '', 'before');
 INSERT INTO user01(user_id,password,name,email,phone_number,inflow_path,belong) values('bef4','1234', 'before4', '', '', '', 'before');
 
-INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(-1,'직원',sysdate,sysdate,0,0,0,0,'content','0');
+INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(-1,'행정',sysdate,sysdate,0,0,0,0,'content','0');
 INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(0,'등록전',sysdate,sysdate,0,0,0,0,'content','0');
 INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(1,'JAVA',sysdate,sysdate,60,0,30,3,'content','0');
 INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(2,'DB',sysdate,sysdate,60,0,30,3,'content','0');
 INSERT INTO lecture(lecture_id,name,start_date,end_date,total_days,num_std,max_std,lv,content,is_close) values(3,'WEB',sysdate,sysdate,60,0,30,3,'content','0');
 
---강좌를 입력할때 LectureUser 테이블에도 추가해줄것 
+--���� �Է��Ҷ� LectureUser ���̺��� �߰����ٰ� 
 INSERT INTO lectureUser(lecture_id, user_id) values(1,'tea1');
 INSERT INTO lectureUser(lecture_id, user_id) values(2,'tea2');
 INSERT INTO lectureUser(lecture_id, user_id) values(3,'tea3');
@@ -52,19 +53,19 @@ INSERT INTO lectureUser(lecture_id, user_id) values(0,'bef4');
 UPDATE 
 
 
---학생 정보를 구할때 
+--�л� ����� ���Ҷ� 
 --SELECT * FROM user01 u JOIN lectureUser l ON u.user_id=l.user_id WHERE u.user_id='tea1' AND u.password='1234';
 --SELECT * FROM user01 u JOIN lectureUser l ON u.user_id=l.user_id;
 
 --Teacher_info
-INSERT INTO teacher_info(info_id,type ,content,teacher_id) VALUES(1,'학력','00대학 00학과','tea1');
+INSERT INTO teacher_info(info_id,type ,content,teacher_id) VALUES(1,'자격증','정보처리기사','tea1');
 
 --Attendance
-INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture_id) VALUES(TO_DATE('20190701','YYYYMMDD'),'stu1',TO_DATE('20190701 09:00:11','YYYYMMDD HH24:MI:SS') ,TO_DATE('20190701 18:00:11','YYYYMMDD HH24:MI:SS') ,'출석',1);
-INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture_id) VALUES(TO_DATE('20190703','YYYYMMDD'),'stu1',TO_DATE('20190703 09:00:11','YYYYMMDD HH24:MI:SS') ,TO_DATE('20190703 18:00:11','YYYYMMDD HH24:MI:SS') ,'출석',1);
-INSERT INTO attendance(day_time,std_id,checkin_time,status,lecture_id) VALUES(TO_DATE('20190703','YYYYMMDD'),'stu2',TO_DATE('20190703 09:00:11','YYYYMMDD HH24:MI:SS') , '출석',1);
+INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture_id) VALUES(TO_DATE('20190701','YYYYMMDD'),'stu1',TO_DATE('20190701 09:00:11','YYYYMMDD HH24:MI:SS') ,TO_DATE('20190701 18:00:11','YYYYMMDD HH24:MI:SS') ,'�⼮',1);
+INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture_id) VALUES(TO_DATE('20190703','YYYYMMDD'),'stu1',TO_DATE('20190703 09:00:11','YYYYMMDD HH24:MI:SS') ,TO_DATE('20190703 18:00:11','YYYYMMDD HH24:MI:SS') ,'�⼮',1);
+INSERT INTO attendance(day_time,std_id,checkin_time,status,lecture_id) VALUES(TO_DATE('20190703','YYYYMMDD'),'stu2',TO_DATE('20190703 09:00:11','YYYYMMDD HH24:MI:SS') , '�⼮',1);
 --Score
--- null 이면 안되니까 -1을 넣어서 0점과 구분
+-- null �̸� �ȵǴϱ� -1� �־ 0��� ����
 INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu1',90,90,90,90);
 INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu2',80,90,85,85);
 INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu3',80,80,80,80);
@@ -72,6 +73,7 @@ INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_sco
 INSERT INTO score(lecture_id,std_id,first_score,second_score,third_score,avg_score) VALUES(1,'stu6',70,70,70,70);
 
 --Assignment
+
 INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(1,'과제1','과제1 내용을 이러하다.',1,SYSDATE);
 INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(2,'과제2','과제2 내용이다.',1,SYSDATE);
 INSERT INTO assignment(assignment_id, title, content, lecture_id, write_date) VALUES(3,'과제2','과제3 내용',1,SYSDATE);
@@ -100,5 +102,9 @@ INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_
 INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'1차 시험', 'java, sql 시험 있습니다.', TO_DATE('2019-07-25 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-26 23:59:00','YYYY-MM-DD HH24:MI:SS'),1);
 INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'DB반 종강', '수고하셨습니다.', TO_DATE('2019-07-30 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-30 23:59:00','YYYY-MM-DD HH24:MI:SS'),1);
 INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) VALUES(calendar_id_seq.NEXTVAL,'중복!', '삼계탕 먹으로 갑시다', TO_DATE('2019-07-27 00:00:00','YYYY-MM-DD HH24:MI:SS'), TO_DATE('2019-07-27 23:59:00','YYYY-MM-DD HH24:MI:SS'),1);
- 
+
+--apply
+INSERT INTO apply(apply_date,apply_id,lecture_id,user_id,file_id) VALUES(sysdate,1,1,'bef1',1);
+INSERT INTO apply(apply_date,apply_id,lecture_id,user_id,file_id) VALUES(sysdate,2,1,'bef2',2);
+INSERT INTO apply(apply_date,apply_id,lecture_id,user_id,file_id) VALUES(sysdate,3,1,'bef3',3);
 commit;

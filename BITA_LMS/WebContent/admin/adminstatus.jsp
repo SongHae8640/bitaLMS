@@ -18,7 +18,7 @@
 	System.out.println();	
 	
 	point = "비트교육센터 안양지점";
-	belong = dao.getBelong(userBean.getUserId()); 
+	belong = dao.getBelong(userBean.getUserId());
 	applyList=dao_a.getRegisterNum(userBean.getUserId());	
 	totalQnaLNum=dao_a.getQnaLNum(userBean.getUserId());
 	
