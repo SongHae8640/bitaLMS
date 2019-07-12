@@ -1,18 +1,18 @@
 package com.bit.model;
 
 public class QnaLDto {
-	private int rowNum;				//bbsí˜•ì‹ìœ¼ë¡œ ë³¼ë•Œ ê¸€ ë²ˆí˜¸
-	private int qnaLId;				//qanLì˜ ê³ ìœ  id
-	private int isCheck;			//ì§ˆë¬¸ìê°€ ë‹µë³€ ì™”ìŒì„ í™•ì¸í•˜ë©´ 1, ë‹µë³€ì´ ì™”ëŠ”ë° í™•ì¸ì„ ì•ˆí•˜ë©´ 0, ë‹µë³€ì´ ì•ˆì™”ìœ¼ë©´ null;
-	private String stuId;			//ì§ˆë¬¸ì id (User01.user_id)
-	private String stdName;			//ì§ˆë¬¸ì name(User01.name)
-	private String title;			//ì§ˆë¬¸ ì œëª©
-	private String writeDate;		//ì‘ì„±ì¼
-	private String questionContent;	//ì§ˆë¬¸ ë‚´ìš©
-	private String type;			//ì§ˆë¬¸ ì¢…ë¥˜
-	private String responderId;		//ë‹µë³€ì id(User01.user_id)
-	private String responderName;	//ë‹µë³€ì name(User01.name)
-	private String answerContent;	//ë‹µë³€ ë‚´ìš©
+	private int rowNum;				//bbsÇü½ÄÀ¸·Î º¼¶§ ±Û ¹øÈ£
+	private int qnaLId;				//qanLÀÇ °íÀ¯ id
+	private int isCheck;			//Áú¹®ÀÚ°¡ ´äº¯ ¿ÔÀ½À» È®ÀÎÇÏ¸é 1, ´äº¯ÀÌ ¿Ô´Âµ¥ È®ÀÎÀ» ¾ÈÇÏ¸é 0, ´äº¯ÀÌ ¾È¿ÔÀ¸¸é null;
+	private String stuId;			//Áú¹®ÀÚ id (User01.user_id)
+	private String stdName;			//Áú¹®ÀÚ name(User01.name)
+	private String title;			//Áú¹® Á¦¸ñ
+	private String writeDate;		//ÀÛ¼ºÀÏ
+	private String questionContent;	//Áú¹® ³»¿ë
+	private String type;			//Áú¹® Á¾·ù
+	private String responderId;		//´äº¯ÀÚ id(User01.user_id)
+	private String responderName;	//´äº¯ÀÚ name(User01.name)
+	private String answerContent;	//´äº¯ ³»¿ë
 	
 	
 	public int getRowNum() {

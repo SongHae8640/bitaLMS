@@ -79,6 +79,7 @@ INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(1,'stu
 INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(1,'stu3',SYSDATE,'0');
 INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(2,'stu2',SYSDATE,'0');
 INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(3,'stu2',SYSDATE,'0');
+INSERT INTO submission(assignment_id, std_id,submit_date,is_check) VALUES(3,'stu2',SYSDATE,'264');
 
 
 --Qna_L

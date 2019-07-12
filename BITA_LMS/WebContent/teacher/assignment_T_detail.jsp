@@ -1,4 +1,3 @@
-﻿
 <%@page import="com.bit.model.SubmsissionDto"%>
 <%@page import="com.bit.model.AssignmentDto"%>
 <%@page import="java.util.ArrayList"%>
@@ -113,26 +112,24 @@
 					</thead>
 					<tbody>
 						<%	
-
-							ArrayList<SubmissionDto> list = null;
-							list = (ArrayList<SubmissionDto>) request.getAttribute("list");
-							if (list != null) {
-								for (SubmissionDto bean : list) {
-									//controller teacher,student 추가할것 
+							
+						ArrayList<SubmsissionDto> list=(ArrayList<SubmsissionDto>)request.getAttribute("submissionList");
+						for(SubmsissionDto bean_s : list){
+							System.out.println("bean_s="+bean_s);
+							
 						%>
 						<tr>
-							<td><%=bean.getRowNum %></td>
-							<td><a href="upload.bit?idx=<%=bean.getFileName() %>"><%=bean.getFileName() %></a></td>
-							<td><%=bean.getStdName() %></td>
-							<td><%=bean.getWriteDate %></td>
-							<td><%=bean.getIsCheck() %></td>
+							<td><%=bean_s.getRowNum() %></td>
+							<td><a href="#"><%=bean_s.getFileName() %></a></td>
+							<td><%=bean_s.getStdName() %></td>
+							<td><%=bean_s.getSubmitDate() %></td>
+							<td><%=bean_s.getIsCheck() %></td>
 							<td><input type="checkbox" name="chk" /></td>
 						</tr>
 
 						<%
-
-							}
-
+						}
+							
 						%>
 					</tbody>
 				</table>

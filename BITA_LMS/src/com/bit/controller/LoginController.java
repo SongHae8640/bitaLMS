@@ -15,7 +15,7 @@ import com.bit.model.UserDao;
 import com.bit.model.UserDto;
 
 
-@WebServlet("*.bit")
+@WebServlet("/login.bit")
 public class LoginController extends HttpServlet {
 	
 	@Override
@@ -25,11 +25,11 @@ public class LoginController extends HttpServlet {
 		HttpSession session = req.getSession();
 		
 			if(path.equals("/login.bit")||path.equals("/index.bit")){
-				//·Î±×ÀÎÆäÀÌÁö´Â ¼¼¼ÇÀÌ ¾øÀ»¶§¿¡¸¸ Á¢±Ù°¡´É
+				//ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù°ï¿½ï¿½ï¿½
 				if(session.getAttribute("userBean") == null){
 					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
 					rd.forward(req, resp);
-				//ÀÌ¹Ì ·Î±×ÀÎÀ» ÇÑ ÈÄ¿¡´Â ·Î±×¾Æ¿ôÀ» ÇØ¾ßÁö¸¸ Àç·Î±×ÀÎÀ» ÇÒ ¼ö ÀÖ´Ù.
+				//ï¿½Ì¹ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ä¿ï¿½ï¿½ï¿½ ï¿½Î±×¾Æ¿ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½.
 				}else{
 					UserDto userBean = (UserDto) session.getAttribute("userBean");
 					if(userBean.getBelong().equals("teacher")){
@@ -62,7 +62,7 @@ public class LoginController extends HttpServlet {
 			//session
 			HttpSession session = req.getSession();
 			session.setAttribute("userBean", userBean);
-//			session.setMaxInactiveInterval(5*60);	//³ªÁß¿¡ ·Î±×ÀÎ ¸¸·á½Ã°£À» »ç¿ëÇÒ¶§ »ç¿ë, paramÀÇ ´ÜÀ§´Â ÃÊ
+//			session.setMaxInactiveInterval(5*60);	//ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ ï¿½ï¿½ï¿½, paramï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 			resp.sendRedirect("main.tea");
 		}else if(userBean.getBelong().equals("admin")){
 			HttpSession session = req.getSession();
@@ -76,7 +76,7 @@ public class LoginController extends HttpServlet {
 			resp.sendRedirect("main.stu");
 		}
 		}catch(java.lang.NullPointerException e){
-			req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pw¸¦ ´Ù½Ã È®ÀÎÇÏ¼¼¿ä');</script>");
+			req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pwï¿½ï¿½ ï¿½Ù½ï¿½ È®ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½');</script>");
 			doGet(req, resp);
 		}
 	}
