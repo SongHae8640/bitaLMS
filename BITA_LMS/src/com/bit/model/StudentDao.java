@@ -143,6 +143,7 @@ public class StudentDao extends Dao{
 		return null;
 	}
 
+
 	public ArrayList<AssignmentDto> getAssignmentList(int lectureId) {
 		ArrayList<AssignmentDto> list = new ArrayList<AssignmentDto>();
 		String sql = "SELECT row_number() OVER(ORDER BY write_date) num,assignment_id,title,"
@@ -171,6 +172,7 @@ public class StudentDao extends Dao{
 			closeConnection();
 		}
 		return list;
+
 	}
 
 	public AssignmentDto getAssignment(int assignmentId) {
@@ -228,8 +230,10 @@ public class StudentDao extends Dao{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
+
 			closeConnection();
 		}
+
 		return -1;
 	}
 

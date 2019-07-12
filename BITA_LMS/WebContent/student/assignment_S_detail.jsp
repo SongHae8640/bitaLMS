@@ -1,4 +1,4 @@
-<%@page import="com.bit.model.SubmsissionDto"%>
+﻿<%@page import="com.bit.model.SubmsissionDto"%>
 <%@page import="com.bit.model.AssignmentDto"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -19,9 +19,7 @@
 	margin: 0px auto;
 }
 </style>
-<%
-	int i = 1;
-%>
+
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	var btn, file, xhr, formData;
@@ -95,9 +93,11 @@
 					<span><%=bean_a.getContent() %></span>
 				</div>
 
+
 				<div>
 					<button onclick="location='assignment.tea'">과제목록</button>
 				</div>
+
 			<table border="1">
 				<thead>
 					<tr>
@@ -110,6 +110,7 @@
 					</tr>
 				</thead>
 				<tbody>
+
 					<%	
 							
 						ArrayList<SubmsissionDto> list=(ArrayList<SubmsissionDto>)request.getAttribute("submissionList");
@@ -139,6 +140,7 @@
 				<div>
 					<button id="upload">등록</button>
 				</div>
+
 				<button onclick="location='assignment_delete_S.stu'">삭제</button>
 			</div>
 
