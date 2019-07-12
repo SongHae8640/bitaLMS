@@ -1,7 +1,10 @@
 ﻿package com.bit.model;
 
-import java.sql.ResultSet;
+
+
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
@@ -14,37 +17,38 @@ public class AdminDao extends Dao {
 	//제이쿼리로 숨겼다가 달력에 일 클릭하면 나타나는걸루
 	//월별 수강생관리 페이지 월은 ?idx=""로 받아오기
 	//제일 처음 접근일 때는 sysdate로 가져오기
-	//날짜이동버튼을 누르면 제이쿼리에서 2019-07에서 -1을 하든 +1을 하든 해서 idx값으로 넘겨주기
-	public ArrayList<CalendarDto> getCalendarMonthList(String yearMonth){
-		openConnection();
-		
-		ArrayList<CalendarDto> list = new ArrayList<CalendarDto>();
-		
-		String sql = "";
-		if(yearMonth==null){
-			//int calendarId, lectureId;
-			//String title, content, startDate, endDate;
-			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=to_number(to_char(sysdate,'mm'))";
-		}else{
-			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=?";
-		}
-			
+	//날짜이동버튼을 누르면 제이쿼리에서 2019-07에서 -1을 하든 +1을 하든 해서 idx값으로 넘겨주기	
+	public JSONArray getCalendarMonthListJson(String yearMonth) {
+		JSONArray jArray = new JSONArray();
+		String sql = "SELECT c.calendar_id, c.lecture_id, c.title, c.content,l.name, "
+				+ "TO_CHAR(c.start_date,'YYYY-MM-DD HH24:MI:SS') as \"start_date\" ,TO_CHAR(c.end_date,'YYYY-MM-DD HH24:MI:SS') as \"end_date\" "
+				+ "FROM calendar c JOIN lecture l ON c.lecture_id = l.lecture_id "
+				+ "WHERE TO_CHAR(c.start_date,'YYYY-MM') = ?";	
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-				
+			pstmt.setString(1, yearMonth);
+			rs = pstmt.executeQuery();	
 			while(rs.next()){
-				CalendarDto bean = new CalendarDto();		
-				list.add(bean);
+				CalendarDto bean = new CalendarDto();
+				bean.setCalendarId(rs.getInt("calendar_id"));
+				bean.setLectureId(rs.getInt("lecture_id"));
+				bean.setTitle(rs.getString("title"));
+				bean.setContent(rs.getString("content"));
+				bean.setStartDate(rs.getString("start_date").replaceAll(" ", "T"));
+				bean.setEndDate(rs.getString("end_date").replaceAll(" ", "T"));
+				bean.setLectureName(rs.getString("name"));
+				jArray.add(bean.getJsonObject());
 			}
 				
 		} catch (SQLException e) {
-				e.printStackTrace();
+			System.out.println(e);
+		}catch (NullPointerException e) {
+			System.out.println(e);
 		}finally{
 			closeConnection();
 		}
-		return list;
+		return jArray;
 	}
 	
 	public ArrayList<CalendarDto> getCalendarDayList(String yearMonthDay){
@@ -74,9 +78,22 @@ public class AdminDao extends Dao {
 	//메인페이지 달력 일정 추가하기
 	//추가를 누르면 추가모달창이 생성되게
 	public int insertCalendar(CalendarDto calendarBean){
-		openConnection();
-		try{
-			
+		String sql ="INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_id) "
+				+ "VALUES(calendar_id_seq.NEXTVAL,?, ?, TO_DATE(?,'YYYY-MM-DD HH24:MI:SS'), TO_DATE(?,'YYYY-MM-DD HH24:MI:SS'),?)";
+		int result = -1;
+					
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, calendarBean.getTitle());
+			pstmt.setString(2, calendarBean.getContent());
+			pstmt.setString(3, calendarBean.getStartDate());
+			pstmt.setString(4, calendarBean.getEndDate());
+			pstmt.setInt(5, calendarBean.getLectureId());	
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+				e.printStackTrace();
+
 		}finally{
 			closeConnection();
 		}
@@ -86,20 +103,47 @@ public class AdminDao extends Dao {
 	//메인페이지 달력 일정 수정하기
 	//수정을 누르면 상세 모달창은 숨겨지고 수정모달창이 생성되게
 	public int updateCalendar(CalendarDto calendarBean){
-		openConnection();
-		try{
+		String sql =" UPDATE calendar "
+				+ "SET title=?, content=?,  "
+				+ "start_date= TO_DATE(?,'YYYY-MM-DD HH24:MI:SS'), "
+				+ "end_date = TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
+				+ "WHERE calendar_id = ?";
+		int result = -1;
+		System.out.println(sql);
+					
+		try {
 			
+			openConnection();
+			System.out.println("openConnection");
+			pstmt = conn.prepareStatement(sql); 
+			System.out.println("prepareStatement");
+			pstmt.setString(1, calendarBean.getTitle());
+			pstmt.setString(2, calendarBean.getContent());
+			pstmt.setString(3, calendarBean.getStartDate());
+			pstmt.setString(4, calendarBean.getEndDate());
+			pstmt.setInt(5, calendarBean.getCalendarId());	
+			result = pstmt.executeUpdate();
+			System.out.println("executeUpdate");
+		} catch (SQLException e) {
+				e.printStackTrace();
 		}finally{
 			closeConnection();
 		}
-		return 0;
+		return result;
 	}
 	
 	//메인페이지 달력 일정 삭제하기
-	public int deleteCalendar(int idx){
-		openConnection();
-		try{
-			
+	public int deleteCalendar(int calendarId){
+		String sql ="DELETE FROM Calendar WHERE calendar_id = ?";
+		int result = -1;
+					
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, calendarId);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+				e.printStackTrace();
 		}finally{
 			closeConnection();
 		}

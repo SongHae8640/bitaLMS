@@ -99,10 +99,23 @@ public class StudentDao extends Dao{
 	}
 	public int getProgressDays(int lectureId) {
 		// 진행중인 수업 일 수를 반환하는 메서드
-		openConnection();
+		String sql = "SELECT TRUNC(sysdate)-TRUNC(start_date) as\"progressDays\" FROM lecture WHERE lecture_id = ?";
+		int progressDays = -1;
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, lectureId);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				progressDays = rs.getInt("progressDays");
+			}
 		
-		closeConnection();
-		return -1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return progressDays;
 	}
 
 	public int getAttendanceDays(String userId) {
@@ -118,7 +131,7 @@ public class StudentDao extends Dao{
 			if(rs.next()){
 				attendanceDays = rs.getInt("attendanceDays");
 			}
-			
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
@@ -129,17 +142,48 @@ public class StudentDao extends Dao{
 
 	public int getNewQnaLAnswerNum(String userId) {
 		// 답변이 달렸으나 학생이 확인하지 않은 QnaL의 개수를 반환 하는 메서드
-		openConnection();
+		String sql = "SELECT count(*) as\"newQnaLAnswerNum\" FROM qna_l "
+				+ "WHERE answer_content is not null "
+				+ "AND is_check = 0 "
+				+ "AND std_id = ?";
+		int newQnaLAnswerNum = -1;
 		
-		closeConnection();
-		return -1;
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				newQnaLAnswerNum = rs.getInt("newQnaLAnswerNum");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return newQnaLAnswerNum;
 	}
 	public int getTotalQnaLNum(String userId){
 		//학생이 QnaL에 올린 문의의 개수를 반환하는 메서드
-		openConnection();
+		String sql = "SELECT count(*) as\"totalQnaLNum\" FROM qna_l WHERE std_id = ?";
 		
-		closeConnection();
-		return -1;
+		int totalQnaLNum = -1;
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				totalQnaLNum = rs.getInt("totalQnaLNum");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return totalQnaLNum;
 	}
 
 	public int[] getAttendanceStatusList(String userId) {
@@ -245,12 +289,28 @@ public class StudentDao extends Dao{
 		return null;
 	}
 
-	public int insertQnaL(String userId, String title, String type,
-			String questionContent) {
-		openConnection();
+	//학생이 질문을 올리는 메서드
+	//answer_content는 입력 하지 않기 때문에 null(이후에 answer_content가 not null 이고 is_check가 0인걸로 new를 확인)
+	public int insertQnaL(QnaLDto qnaLBean) {
+		String sql = "INSERT INTO qna_l(qnal_id,std_id, type, title, question_content, responder_id, write_date, is_check) "
+				+ "VALUES(qnal_id_seq.nextval,?,?,?,?,?,SYSDATE,0)";
+		int result = -1;
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, qnaLBean.getStuId());
+			pstmt.setString(2, qnaLBean.getType());
+			pstmt.setString(3, qnaLBean.getTitle());
+			pstmt.setString(4, qnaLBean.getQuestionContent());
+			pstmt.setString(5, qnaLBean.getResponderId());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
 		
-		closeConnection();
-		return 0;
+		return result;
 	}
 
 

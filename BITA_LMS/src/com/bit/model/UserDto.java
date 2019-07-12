@@ -12,6 +12,9 @@ public class UserDto {
 	private int rowNum, totalDays, attendanceDays;
 	private String attendanceStatus;
 	
+	
+	
+	
 	public int getTotalDays() {
 		return totalDays;
 	}
@@ -126,18 +129,5 @@ public class UserDto {
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
 	}
-	@Override
-	public String toString() {
-		return "UserDto [userId=" + userId + ", password=" + password
-				+ ", name=" + name + ", email=" + email + ", phoneNumber="
-				+ phoneNumber + ", belong=" + belong + ", inflowPath="
-				+ inflowPath + ", lectureName=" + lectureName + ", startDate="
-				+ startDate + ", endDate=" + endDate + ", lectureId="
-				+ lectureId + ", applyTotal=" + applyTotal + ", applyNew="
-				+ applyNew + ", qnaTotal=" + qnaTotal + ", qnaNew=" + qnaNew
-				+ ", totalDays=" + totalDays + ", attendanceDays="
-				+ attendanceDays + ", attendanceStatus=" + attendanceStatus
-				+ "]";
-	}
-	
+
 }
