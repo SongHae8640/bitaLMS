@@ -7,8 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class TeacherDao extends Dao {
-	
+
+public class TeacherDao extends Dao{
 	//번호 (제목제외) ID 이름 강좌 날짜 과정, 등록인원/최대인원
 	//이름,버튼(jquery에서),상태,아이디(hidden) where 오늘 날짜일때, 강좌아이디가 해당 아이디일 때
 	public ArrayList<AttendanceDto> getTodayAttendance(int lectureId) {
@@ -240,6 +240,9 @@ public class TeacherDao extends Dao {
 
 	public int insertAssignment(String title, String content, int lecture_id) {
 		// assignmnet_id 는 seq, write_date는 SYSDATE 로 INSERT
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
@@ -247,25 +250,38 @@ public class TeacherDao extends Dao {
 
 	public int updateAssignment(String title, String content, String assingmentId) {
 		// assignmentId로 접근하고 title, content의 내용 수정
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
 	public int deleteAssignment(int assignmentId) {
 		// 과제 번호로 해당 과제 삭제	
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
 	public QnaLDto getQnaL(int qnaLId) {
 		// 1:1문의로 해당 세부 내용 불러오기
+		openConnection();
+		
+		closeConnection();
 		
 		return null;
 	}
 
 	public int updateQnaLAnswer(String answerContent, int  qnaLId) {
 		// 1:1문의에 answer_content(대답 내용) 추가하기(DB상에서는 qna_l에 있는 row UPDATE)
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
+<<<<<<< HEAD
 	public int updateAttendance(String stdId, String btn) {
 		int result = 0;
 		String sql="";
@@ -289,12 +305,16 @@ public class TeacherDao extends Dao {
 		}
 		
 		return result;
+
 	}
 
 	public int insertCalendar(String startDate, String endDate, String title,
 			String content, int lectureId) {
 		// lecture_id에 해당하는 일정 추가
 		///end_date에 어떤 값을 넣어야 할지 고민
+		openConnection();
+		
+		closeConnection();
 		return 0;
 	}
 
@@ -310,6 +330,7 @@ public class TeacherDao extends Dao {
 			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=?";
 		}
 			try {
+				openConnection();
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
 				
@@ -321,48 +342,56 @@ public class TeacherDao extends Dao {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}finally{
-				try {
-					if(rs!=null)rs.close();
-					if(pstmt!=null)pstmt.close();
-					if(conn!=null)conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				closeConnection();
 			}
 			return list;
 	}
 	
 	public ArrayList<CalendarDto> getCalendarDayList(int lectureId, String yearMonthDay){
+		openConnection();
 		
+		closeConnection();
 		return null;
 	}
 
 	public int getStuNum(int lectureId) {
 		//학생수 반환 메서드
+		openConnection();
 		
+		closeConnection();
 		return -1;
 	}
 
 	public int getCheckinNum(int lectureId) {
 		// 체크인(입실)한 학생수 반환 메서드
+		openConnection();
 		
+		closeConnection();
 		return -1;
 	}
 
 	public int getSubmissionNum(int lectureId) {
 		// 과제 제출(submission)한 학생수 반환 메서드
 		// 가장 최근에 낸 과제(assingment)에 제출한 
+		openConnection();
 		
+		closeConnection();
 		return -1;
 	}
 
 	public int getTotalDays(int lectureId) {
 		//  해당 강좌의 총일수 반환 메서드
+		openConnection();
+		
+		closeConnection();
 		return -1;
 	}
 
 	public int getProgressDays(int lectureId) {
 		// SYSDATE 기준으로 수업 진행 일수를 반환하는 메서드
+		openConnection();
+		
+		closeConnection();
 		return -1;
 	}
 }

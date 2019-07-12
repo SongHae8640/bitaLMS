@@ -6,12 +6,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="css/frame.css" />
-<link href='css/main.css' rel='stylesheet' />
-<link href='css/dayGrid/main.css' rel='stylesheet' />
-<script src='js/main.js'></script>
-<script src='js/interaction/main.js'></script>
-<script src='js/dayGrid/main.js'></script>
+<link type="text/css" rel="stylesheet" href="../css/frame.css" />
+<link href='../packages/core/main.css' rel='stylesheet' />
+<link href='../packages/daygrid/main.css' rel='stylesheet' />
+<script src='../packages/core/main.js'></script>
+<script src='../packages/interaction/main.js'></script>
+<script src='../packages/daygrid/main.js'></script>
 <style type="text/css">
 #menu>ul {
 	width: 610px;
@@ -29,7 +29,7 @@ body {
 	margin: 0 auto;
 }
 </style>
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {

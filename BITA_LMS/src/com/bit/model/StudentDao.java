@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.apache.catalina.startup.SetContextPropertiesRule;
-
 public class StudentDao extends Dao{
 
 	public ArrayList<CalendarDto> getCalendarMonthList(int lectureId, String yearMonth){
@@ -48,6 +46,7 @@ public class StudentDao extends Dao{
 	}
 
 	public AttendanceDto getAttendance(String userId) {
+<<<<<<< HEAD
 		//Student 출석상황에 필요한 정보 가져오기
 		//입실/지각/퇴실 정보 등 status, 입퇴실시간(where오늘,시분만 가져오기)
 		AttendanceDto bean = new AttendanceDto();
@@ -255,7 +254,8 @@ public class StudentDao extends Dao{
 		return 0;
 	}
 
-	public QnaLDto getQna(String qnaId) {
+
+	public QnaLDto getQnaBean(String qnaId) {
 		openConnection();
 		
 		closeConnection();

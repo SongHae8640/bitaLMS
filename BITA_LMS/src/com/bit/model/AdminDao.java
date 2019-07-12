@@ -1,4 +1,4 @@
-package com.bit.model;
+﻿package com.bit.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,27 +28,29 @@ public class AdminDao extends Dao {
 		}else{
 			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=?";
 		}
-			try {
-				pstmt = conn.prepareStatement(sql);
-				rs = pstmt.executeQuery();
+			
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
 				
-				while(rs.next()){
-					CalendarDto bean = new CalendarDto();		
-					list.add(bean);
-				}
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}finally{
-				closeConnection();
+			while(rs.next()){
+				CalendarDto bean = new CalendarDto();		
+				list.add(bean);
 			}
-			return list;
+				
+		} catch (SQLException e) {
+				e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return list;
 	}
 	
 	public ArrayList<CalendarDto> getCalendarDayList(String yearMonthDay){
-		openConnection();
+		
 		try{
-			
+			openConnection();
 		}finally{
 			closeConnection();
 		}
@@ -65,6 +67,7 @@ public class AdminDao extends Dao {
 		}finally{
 			closeConnection();
 		}
+
 		return null;
 	}
 	
@@ -126,6 +129,7 @@ public class AdminDao extends Dao {
 		String sql = "select lecture_id,name,num_std,max_std from lecture";
 		
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
@@ -157,6 +161,7 @@ public class AdminDao extends Dao {
 		String sql = "select l.lecture_id,l.name,u.name as \"teaName\",TO_CHAR(start_date,'yyyymmdd') as \"startDate\" from lecture l JOIN lectureuser lu on lu.lecture_id=l.lecture_id JOIN user01 u on u.user_id=lu.user_id where u.belong='teacher'";
 		
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
@@ -198,6 +203,7 @@ public class AdminDao extends Dao {
 		System.out.println(sql);
 
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, lectureId);
 			pstmt.setInt(2, lectureId);
@@ -290,6 +296,7 @@ public class AdminDao extends Dao {
 		
 		System.out.println(sql);
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 //			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();
@@ -561,6 +568,7 @@ public class AdminDao extends Dao {
 				+ "WHERE type='행정'";
 		
 		try {
+			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while(rs.next()){
@@ -624,15 +632,18 @@ public class AdminDao extends Dao {
 	//매일(수업이 있는) 오전 6시 모든 학생의 출석 row를 생성
 	//checkin, checkout 모두 null
 	public int insertAttendanceAll(ArrayList<UserDto> stuList) {
+		openConnection();
 		
-		
+		closeConnection();
 		return -1;
 	}
 	
 	//매일(수업이 있는) 오후 11시 모든 학생의 출석 상태를 수정
 	//checkinTime과 checkoutTime을 비교해서 출석,지각, 결석, 조퇴 중 하나로 변경
 	public int updateAttendanceAll(ArrayList<UserDto> stuList) {
+		openConnection();
 		
+		closeConnection();
 		return -1;
 	}
 
