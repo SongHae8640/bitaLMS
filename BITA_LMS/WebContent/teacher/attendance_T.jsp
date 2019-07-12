@@ -34,6 +34,12 @@
 		$('#content>button').hide().eq(0).show().click(function() {
 			$('#content>button').show().eq(0).hide();
 		});
+		var yearMonth = new Date();
+		if(yearMonth.getMonth()*1<10){
+			yearMonth = $('#yearMonth').text(yearMonth.getFullYear()+"-0"+(yearMonth.getMonth()+1)+"-"+yearMonth.getDate());
+		}else{
+			yearMonth = $('#yearMonth').text(yearMonth.getFullYear()+"-"+(yearMonth.getMonth()+1)+"-"+yearMonth.getDate());			
+		}
 		
 		$('.checkBtn').click(ajaxBtnCall);
 		//ajaxCall();
@@ -77,11 +83,11 @@
 		</div>
 		<div id="content">
 			<h2>출결관리</h2>
-			<h4>
+			<h4 id="yearMonth">
 			<%
-							ArrayList<AttendanceDto> todayAttendanceList = (ArrayList<AttendanceDto>)request.getAttribute("todayAttendanceList");
-						%>
-			<%=todayAttendanceList.get(0).getDayTime().substring(0,10) %>
+			ArrayList<AttendanceDto> todayAttendanceList = (ArrayList<AttendanceDto>)request.getAttribute("todayAttendanceList");
+			if(todayAttendanceList !=null){
+			%>
 			</h4>
 			<form action="">
 				<select name="sb" id="sb">
@@ -99,7 +105,7 @@
 					</thead>
 					<tbody>
 					<%
-								if(todayAttendanceList !=null){
+								
 									for(AttendanceDto bean : todayAttendanceList){
 					%>
 					<tr>

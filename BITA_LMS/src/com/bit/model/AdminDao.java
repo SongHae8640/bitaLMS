@@ -326,7 +326,6 @@ public class AdminDao extends Dao {
 		//제목/작성자아이디/제출일/이름/강좌/연락처/파일
 		openConnection();
 		String sql = "SELECT u.name as \"name\", u.user_id AS \"id\", l.name AS \"lecName\", "
-				//filename을 filenumber로 바꿔야
 				+"TO_CHAR(a.apply_date,'yyyy-mm-dd') AS \"applyDate\", a.file_name, u.phone_number "
 				+"FROM apply a INNER JOIN user01 u on a.user_id=u.user_id "
 				+"INNER JOIN lecture l on l.lecture_id = a.lecture_id "
@@ -373,16 +372,73 @@ public class AdminDao extends Dao {
 	}
 	
 	//행정팀 학생관리 수강생으로 등록(user테이블 update), 해당 user_id로 된 apply테이블의 정보를 삭제
-	public int updateRegister(String userId) {
-		openConnection();
-		//해당 값들 인자로 받아와서 belong을 update
-		//제대로 전송됐는지 안됐는지만 int값으로 리턴
-		try{
-			
+	//등록 후 목록으로 바로
+	public int updateRegister(String userId,String lecName) {
+		int result = 1;
+		int lecture_id = 999999999;
+		//해당 값들 인자로 받아와서 user01에서 belong을 update
+		//lectureuser에서 lecture_id 업데이트
+		//apply table 해당 학생 아이디의 apply 삭제
+		String sql = "select lecture_id from lecture where name=?";
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, lecName);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				lecture_id=rs.getInt("lecture_id");
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
 		}finally{
 			closeConnection();
 		}
-		return 0;
+		
+		String sql1 = "update user01 set belong='student' where user_id=?";
+		String sql2 = "update lectureUser set lecture_id = ? where user_id=?";
+		String sql3 = "delete from apply where user_id=?";
+		
+		//제대로 전송됐는지 안됐는지만 int값으로 리턴
+		try {
+			openConnection();
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.setString(1, userId);
+			pstmt.addBatch();
+			pstmt = conn.prepareStatement(sql2);
+			pstmt.setInt(1, lecture_id);
+			pstmt.setString(2, userId);
+			pstmt.addBatch();
+			pstmt = conn.prepareStatement(sql3);
+			pstmt.setString(1, userId);
+			pstmt.addBatch();
+			int[] results = pstmt.executeBatch();
+			for(int i=0; i<results.length; i++){
+				result *= results[i];
+			}
+			
+			pstmt.clearBatch();
+			if(result>0){
+                conn.commit();
+			}
+			
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally{
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			closeConnection();
+		}
+		
+		return result;
 	}
 	
 	
@@ -577,7 +633,6 @@ public class AdminDao extends Dao {
 				bean.setTitle(rs.getString("title"));
 				bean.setStdName(rs.getString("std_name"));
 				bean.setWriteDate(rs.getString("write_date"));
-				bean.setIsRespon(rs.getString("is_respone"));
 				bean.setType(rs.getString("type"));
 				list.add(bean);
 			}

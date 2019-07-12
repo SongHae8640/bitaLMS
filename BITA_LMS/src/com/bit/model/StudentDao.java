@@ -46,7 +46,6 @@ public class StudentDao extends Dao{
 	}
 
 	public AttendanceDto getAttendance(String userId) {
-<<<<<<< HEAD
 		//Student 출석상황에 필요한 정보 가져오기
 		//입실/지각/퇴실 정보 등 status, 입퇴실시간(where오늘,시분만 가져오기)
 		AttendanceDto bean = new AttendanceDto();
@@ -255,7 +254,7 @@ public class StudentDao extends Dao{
 	}
 
 
-	public QnaLDto getQnaBean(String qnaId) {
+	public QnaLDto getQna(String qnaId) {
 		openConnection();
 		
 		closeConnection();
@@ -324,6 +323,10 @@ public class StudentDao extends Dao{
 			closeConnection();
 		}
 		return result;
+	}
+
+	public int insertQnaL(QnaLDto qnaLBean) {
+		return 0;
 	}
 
 

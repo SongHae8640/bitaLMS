@@ -276,9 +276,18 @@ public class AdminController extends HttpServlet {
 					result = dao.deleteQnaL(qnaLIdList);
 					rd = req.getRequestDispatcher("qna.adm");
 					
+				} else if (path.equals("/register_update.adm")) {
+					// 학생등록 
+					String id = req.getParameter("id");
+					String lecName = req.getParameter("lecName");
+					System.out.println(id+":"+lecName);
+					if(id!=null&&lecName!=null){
+						result = dao.updateRegister(id,lecName);
+					}
+					resp.sendRedirect("register.adm");
 				}
 				
-				if(result==1){					
+				if(rd!=null){					
 					rd.forward(req, resp);
 				}else{
 					System.out.println("결과값없음");

@@ -158,6 +158,7 @@
 			</ul>
 		</div>
 		<div id="real_content">
+		<form action="register_update.adm" method="post">
 			<br/>
 			<div id="page_name">
 				<h2>학생등록</h2>
@@ -175,7 +176,8 @@
 					</tr>
 					<tr>
 						<th>작성</th>
-						<td><%=registerBean.getUserId() %></td>
+						<td><input type="hidden" name="id" value="<%=registerBean.getUserId() %>"><%=registerBean.getUserId() %></td>
+						
 					</tr>
 					<tr>
 						<td colspan="2">
@@ -189,7 +191,7 @@
 							</div>
 							<div>
 								<label>강좌선택</label>
-								<span><%=registerBean.getLecName() %></span>
+								<span><input type="hidden" name="lecName" value="<%=registerBean.getLecName() %>"><%=registerBean.getLecName() %></span>
 							</div>
 							<div>
 								<label>연락처</label>
@@ -205,13 +207,14 @@
 					<%
 								}
 					%>
-					<!--<tr>
+					<!-- 
+					<tr>
 						<th>제목</th>
 						<td>김경민님의 수강신청</td>
 					</tr>
 					<tr>
 						<th>작성</th>
-						<td>rudals108</td>
+						<td><input type="hidden" name="id" value="bef1">bef1</td>
 					</tr>
 					<tr>
 						<td colspan="2">
@@ -225,7 +228,7 @@
 							</div>
 							<div>
 								<label>강좌선택</label>
-								<span>JAVA</span>
+								<span><input type="hidden" name="id" value="JAVA">JAVA</span>
 							</div>
 							<div>
 								<label>연락처</label>
@@ -237,7 +240,8 @@
 							</div>
 						</div>
 						</td>
-					</tr>  -->
+					</tr>
+					 -->
 			</table>
 		</div>
 		<div id="under_list">
@@ -248,10 +252,11 @@
 				<button type="button" id="del_btn">삭제</button>
 			</div>
 			<div id="reg_button">
-				<button type="button">등록</button>
+				<button type="submit">등록</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
+		</form>
 	</div>
 	</div>
 		<div id="footer">

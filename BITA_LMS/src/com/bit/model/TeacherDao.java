@@ -224,7 +224,6 @@ public class TeacherDao extends Dao{
 				bean.setTitle(rs.getString("title"));
 				bean.setStdName(rs.getString("std_name"));
 				bean.setWriteDate(rs.getString("write_date"));
-				bean.setIsRespon(rs.getString("answer_content"));	///이게 맞으련지?
 				bean.setType(rs.getString("type"));
 				list.add(bean);
 			}
@@ -281,7 +280,6 @@ public class TeacherDao extends Dao{
 		return 0;
 	}
 
-<<<<<<< HEAD
 	public int updateAttendance(String stdId, String btn) {
 		int result = 0;
 		String sql="";
