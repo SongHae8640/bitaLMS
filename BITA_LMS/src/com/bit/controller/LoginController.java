@@ -26,6 +26,11 @@ public class LoginController extends HttpServlet {
 		
 			if(path.equals("/login.bit")||path.equals("/index.bit")){
 				//로그인페이지는 세션이 없을때에만 접근가능
+				if(session.getAttribute("userBean") != null){
+					session.invalidate();
+					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
+					rd.forward(req, resp);
+				}
 				if(session.getAttribute("userBean") == null){
 					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
 					rd.forward(req, resp);

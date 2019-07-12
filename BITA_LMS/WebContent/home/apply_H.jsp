@@ -136,7 +136,7 @@
 		    return false;  
 		  }
 		});
-		$("#signin_btn").click(function(){
+		$("#signin_btn").on('click',function(){
 			var id = $("#id").val();
             var pw = $("#pw").val();
  
@@ -173,7 +173,7 @@
 		});
             
 	});
-		$("#logout_btn").click(function(){
+		$("#logout_btn").on('click',function(){
             //세션 끊기
             $.ajax({
                 type : "post",
@@ -193,22 +193,25 @@
             
 		});
     });
-	/* 로그인안하면 수강신청 불가 */
- 	$("#apply_btn").click(function(){
- 	var name = $("#name").val();
- 	var lecture_Id = $("#lecture_Id").val();
- 	var user_apply = $("#user_apply").val();
-	var session = <%=session.getAttribute("userBean") %>;
-	var agree = $("#agree").is(":checked");	//약관동의 체크(true)상태여야 함
-	
-	
-     if(session===null){
-		alert("로그인해주세요");
-		$("#apply_btn").attr('disabled',true);
-		return;
-     }	
-	});
-}); 
+	$("#apply_btn").on("click",function(e){
+		var my_name = $("#my_name").text();      
+		//로그인 됐을 때 안됐을 때 나누기
+		if(my_name==""){
+		  	 alert("로그인해주세요");
+		  	 return;
+		}    
+		else if(my_name!=""){
+	      if(name==""){
+	        //삭제먼저하고 생성
+	        $("#name_div>span").remove();   
+	        $("#name_div").append("<span>내용을 입력해주세요</span>");
+	        return;
+	      }else{
+	        $("#name_div>span").remove();
+	      } 
+		}
+	});  
+});   
 </script>
 </head>
 <body>
@@ -218,7 +221,8 @@
 			<a href="#" id="login_btn">login</a>
 			<%	}else{ 	
 			%> <a href="#" id="logout_btn">logout</a>
-			<span id="my_name"><%=((UserDto)session.getAttribute("userBean")).getName() %>님 환영합니다.</span>
+			<span id="my_name"><%=((UserDto)session.getAttribute("userBean")).getName() %></span>
+			<span>님 환영합니다.</span>
 			<%	} %>
 			<img alt="logo" src="img/logo.jpg" />
 		</div>
@@ -260,21 +264,22 @@
 		<form action="apply.home"method="post"enctype="multipart/form-data">
 			<div id="con_form2">
 				<div>
-					<div>
+					<div id="name_div">
 						<label>이름</label>
 						<input type="text" name="name" id="name" placeholder="내용을 입력해주세요" />
 					</div>
-					<div>
+					<div id="lecture_div">
 						<label>강좌선택</label>
 				              <select name="lecture_Id">
-				                 <option value="1">JAVA</option>
-				                 <option value="2">DB</option>
-				                 <option value="3">WEB</option>
+				              	<option value="0" selected>-</option> 
+				                <option value="1">JAVA</option>
+				                <option value="2">DB</option>
+				                <option value="3">WEB</option>
 				         	</select>
 					</div>
-					<div>
+					<div id="tel_div">
 						<label>연락처</label>
-						<input type="tel"name="tel" placeholder="00*-000*-00000"
+						<input type="tel"name="tel" id="tel" placeholder="00*-000*-00000"
 						pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" /> 
 					</div>
 					<div id="file_upload">
@@ -296,11 +301,13 @@
 							접수기간동안 1회에 한하여 수강료가 동일할 경우 과목 변경 가능하며, 6일후 정원마감과 상관없이 모든과목의 수강생모집을 종료합니다.
 						</p>
 						</div>
-   						<div><input type="checkbox" name="agree" id="agree"> 개인정보 수집 및 이용에 동의합니다.</div> 
-					<div>
+   						<div id="agree_div">
+   						<input type="checkbox" name="agree" id="agree"> 개인정보 수집 및 이용에 동의합니다.
+   						</div> 
+						<div>
 						<button type="submit" id="apply_btn">확인</button>&nbsp;&nbsp;
 						<button type="button" id="f">취소</button>
-					</div>
+						</div>
 				</div> 
 			</div>
 			</div>
@@ -336,12 +343,11 @@
 		</div>
 <%
 	//ui를 깨지지 않게 하려면 항상 body 닫기 전에 넣는 것이 좋다. 로딩하다가 출력되기 때문
-	Object obj1 = request.getAttribute("errmsg");
-	Object obj2 = request.getAttribute("msg");
-	if (obj1 != null)
-	out.println(obj1);
+	Object obj = request.getAttribute("errmsg");
+	if (obj != null)
+	out.println(obj);
 	else
-	out.println(obj2);
+	out.println(obj);
 %>
 	</body>
 </html>
