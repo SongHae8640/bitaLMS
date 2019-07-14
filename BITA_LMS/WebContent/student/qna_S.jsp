@@ -24,7 +24,7 @@
 			$('.submenu').css('display', 'none')
 		});
 		$('#ch').click(function(){
-			if($("#ch").prop("checked")){
+			if($("#all_chk").prop("checked")){
 	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
 	            $("input[name=chk]").prop("checked",true);
 	            //클릭이 안되있으면
@@ -32,6 +32,9 @@
 	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
 	            $("input[name=chk]").prop("checked",false);
 	        }
+		});
+		$('#claim_btn').click(function(){
+			location.href='qan_insert.stu';
 		});
 	});
 </script>
@@ -61,14 +64,14 @@
 						<th>작성일</th>
 						<th>답변여부</th>
 						<th>분류</th>
-						<th><input type="checkbox" name="ch1" id="ch"/></th>
+						<th><input type="checkbox" name="all_chk" id="all_chk"/></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 					<tr>
 						<td>1</td>
-						<td><a href="qna_detail_S.jsp">sub</a></td>
+						<td><a href="qna_detail.stu">sub</a></td>
 						<td>name</td>
 						<td>day</td>
 						<td>vs</td>
@@ -76,25 +79,22 @@
 						<th><input type="checkbox" name="chk" /></th>
 					</tr>
 				</tbody>
-				<tfooter>
 				<tr>
-					<td><select name="" label="">
-							<opt>
-							<option value="">성적문의</option>
-							<option value="">강사</option>
-							<option value="">행정</option>
-							</opt>
-					</select></td>
+					<td>
+						<select name="select_view" >
+							<option value="1">전체보기</option>
+							<option value="2">성적문의</option>
+							<option value="3">강사</option>
+							<option value="4">행정</option>
+						</select>
+					</td>
 					<td><input type="text" name="" id="" /></td>
 					<td><button>검색</button></td>
 				</tr>
-				</tfooter>
 			</table>
 			<div>
-				<form action="qna_add_S.stu">
-					<button type="submit">등록</button>
-				</form>
-				<button type="">삭제</button>
+				<button type="button" id="claim_btn">등록</button>
+				<button type="button">삭제</button>
 			</div>
 		</div>
 		<div id="footer">

@@ -87,17 +87,17 @@ public class TeacherDao extends Dao{
 	// 강좌번호(lectureId)에 해당하는 학생들의 성적을 가져오는 메서드
 	public ArrayList<ScoreDto> getScoreList(int lectureId) {
 		ArrayList<ScoreDto> list = new ArrayList<ScoreDto>();
-		String sql = "SELECT name, first_score, second_score,third_score,avg_score "
+		String sql = "SELECT s.name, first_score, second_score,third_score,avg_score "
 				+ "FROM user01 u JOIN score s "
 				+ "ON s.std_id=u.user_id "
-				+ "WHERE lecture_id = ? " + "ORDER BY u.name";
-
+				+ "WHERE lecture_id = ? " + "ORDER BY s.name";
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, lectureId);
+			pstmt.setInt(1, lectureId);		//지금 tea1계정 lectureId=0인상태라 test인자로 1줘버림
+			System.out.println("lectureId"+lectureId);
 			rs = pstmt.executeQuery();
-			while (rs.next()) {
+			while(rs.next()) {   
 				ScoreDto bean = new ScoreDto();
 				bean.setName(rs.getString("name"));
 				bean.setFirstScore(rs.getInt("first_score"));
@@ -106,13 +106,98 @@ public class TeacherDao extends Dao{
 				bean.setAvgScore(rs.getDouble("avg_score"));
 				list.add(bean);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			closeConnection();
 		}
-		return list;
+		return list; 
+	}
+
+	public int insertScore(String[] name_arr,int[] score_num_arr,int lectureId,int count) {
+		String sql=""; //몇번째 시험점수를 입력하느냐에따라 경우가 나뉨
+		String name="";
+		int score=0;
+		int result=0;
+		if(count==1) {
+			sql = "UPDATE score a SET a.first_score=?"
+				+"WHERE a.std_id in(SELECT b.user_id FROM user01 b WHERE lecture_id=? and name=?)";
+		}else if(count==2) {
+			sql = "UPDATE score a SET a.second_score=?"
+					+"WHERE a.std_id in(SELECT b.user_id FROM user01 b WHERE lecture_id=? and name=?)";
+		}else if(count==3) {
+			sql = "UPDATE score a SET a.third_score=? , a.avg_score=?"
+					+"WHERE a.std_id in(SELECT b.user_id FROM user01 b WHERE lecture_id=? and name=?)";
+		}
+		try { 
+			openConnection();
+			conn.setAutoCommit(false);
+			for(int i = 0;i<score_num_arr.length;i++) {
+				name=name_arr[i];
+				score=score_num_arr[i];
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, score);
+			pstmt.setInt(2,lectureId);
+			pstmt.setString(3,name); 
+			result = pstmt.executeUpdate();
+			System.out.println(i);
+			System.out.println(score);
+			}
+			System.out.println("insertScore의 result "+result);
+		} catch (SQLException e) {
+			e.printStackTrace();
+	        if (conn != null) {
+	            try {
+	                System.err.print("Transaction is being rolled back");
+	                conn.rollback();
+	            } catch(SQLException excep) {
+	            	e.printStackTrace();
+	            }
+	        }
+		} finally{
+			try {
+				closeConnection();
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public int updateAvgscore(String[] name_arr,int[] score_num_arr,int lectureId) {
+		int result=0;
+		ArrayList<Integer[]> avg_list = new ArrayList<Integer[]>();
+		String sql = "UPDATE score a SET a.avg_score=?"
+					+"WHERE a.std_id in(SELECT b.user_id FROM user01 b WHERE lecture_id=? and name=?)";
+		for(int i=0;i<3;i++) {
+			avg_list.add(score_num_arr[i]);
+		}
+		try {
+			openConnection();
+			for(int i = 0;i<name_arr.length;i++) {
+				
+			}
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,lectureId);
+			pstmt.setInt(2,scoreBean.getFirstScore());
+			pstmt.setInt(3,scoreBean.getSecondScore());
+			pstmt.setInt(4,scoreBean.getThirdScore());
+			pstmt.setInt(2,lectureId);
+			pstmt.setDouble(3,lectureId);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				closeConnection();
+				if(pstmt!=null)pstmt.close();
+				if(conn!=null)conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 
 	public ArrayList<AssignmentDto> getAssignmentList(int lectureId) {
@@ -237,6 +322,7 @@ public class TeacherDao extends Dao{
 	}
 
 	public int insertAssignment(AssignmentDto assignmentBean) {
+		int result=0;
 		// assignmnet_id 는 seq, write_date는 SYSDATE 로 INSERT
 		String sql = "insert into assignment(assignment_id, title, content, lecture_id, write_date)";
 		sql += "values(assignment_id_seq.nextval,?,?,?,SYSDATE)";

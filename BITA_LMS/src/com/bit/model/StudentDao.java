@@ -231,12 +231,31 @@ public class StudentDao extends Dao{
 		closeConnection();
 		return null;
 	}
-
+	//학생이 scoreBean에 담긴 자신의 점수를 가져 올 수 있음
 	public ScoreDto getScoreBean(String userId) {
-		openConnection();
-	
-		closeConnection();
-		return null;
+		ScoreDto scoreBean = new ScoreDto();
+		String sql = "SELECT s.name,first_score,second_score,third_score,avg_score "
+					+"from user01 u JOIN score s ON s.std_id=u.user_id WHERE user_id = ?";
+		try {  
+			openConnection();
+			System.out.println("연결");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				scoreBean.setName(rs.getString("name"));
+				scoreBean.setFirstScore(rs.getInt("first_score"));
+				scoreBean.setSecondScore(rs.getInt("second_score"));
+				scoreBean.setThirdScore(rs.getInt("third_score"));
+				scoreBean.setAvgScore(rs.getDouble("avg_score"));
+			}
+			System.out.println(scoreBean.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return scoreBean;
 	}
 
 
@@ -357,7 +376,7 @@ public class StudentDao extends Dao{
 
 	//학생이 질문을 올리는 메서드
 	//answer_content는 입력 하지 않기 때문에 null(이후에 answer_content가 not null 이고 is_check가 0인걸로 new를 확인)
-	public int insertQnaL(QnaLDto qnaLBean) {
+	public int insertQnaL(QnaLDto qnaLBean) { 
 		String sql = "INSERT INTO qna_l(qnal_id,std_id, type, title, question_content, responder_id, write_date, is_check) "
 				+ "VALUES(qnal_id_seq.nextval,?,?,?,?,?,SYSDATE,0)";
 		int result = -1;
@@ -444,12 +463,4 @@ public class StudentDao extends Dao{
 		}
 		return result;
 	}
-
-	public int insertQnaL(QnaLDto qnaLBean) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
 }

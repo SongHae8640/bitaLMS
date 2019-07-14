@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="java.util.Date,java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,10 +22,20 @@
 		});
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
+		}); 
+		$("#submit_btn").click(function(){
+			if($('#title').val()==""){ 
+				alert("제목을 입력해주세요");
+				return false;
+			} 
+			if($('#questionContent').val()==""){
+				alert("내용을 입력해주세요");
+				return false;
+			}     
 		});
-	});
-</script>
-</head>
+	}); 
+</script> 
+</head> 
 <body>
 	<div>
 		<div id="header">
@@ -39,43 +49,39 @@
 				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
-		<div id="menu">
-			<ul>
-				<li class="topmenu"><a href="../attendance_S.jsp">출결관리</a>
-				<li><a href="../score_S.jsp">성적관리</a></li>
-				<li><a href="../assignment_S.jsp">과제관리</a></li>
-				<li><a href="../qna_S.jsp">1:1문의</a></li>
-			</ul>
-		</div>
 		<div id="content">
+		<%
+		String name =(String)request.getAttribute("name");
+		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
+		Date time = new Date();
+		String date = format.format(time);
+		%>
 			<h1>1:1문의 등록</h1>
-			<form action="">
+			<form action="qna_insert.stu" method="post">
 				<div>
-					<label>제목</label> <input type="text" value="sub" />
+					<label>제목</label><input type="text" name="title" id="title"/>
 				</div>
 				<div>
-					<label>작성자</label> <input type="text" value="김코난" />
+					<label>작성자</label><span><%=" "+name %></span>
 				</div>
 				<div>
-					<label>날짜</label> <input type="text" value="day" />
+					<label>날짜</label><span><%=" "+date %></span>
 				</div>
 				<div>
-					<label>분류</label> <select name="" label="" value="성적문의">
-						<opt>
-						<option value="">성적문의</option>
-						<option value="">강사</option>
-						<option value="">행정</option>
-						</opt>
+					<label>분류</label> 
+					<select name="type"  id="type">
+						<option value="이의신청">이의신청</option>
+						<option value="성적문의">성적문의</option>
+						<option value="기타문의">기타문의</option>
 					</select>
 				</div>
 				<div>
 					<label>내용</label>
-					<textarea name="" id="" cols="30" rows="10"></textarea>
+					<textarea name="questionContent" id="questionContent"></textarea>
 				</div>
-
 				<div>
-					<button type="submit">insert</button>
-					<button type="back">cancle</button>
+					<button type="submit" id="submit_btn">확인</button>
+					<button type="button" id="cancle_btn">취소</button>
 				</div>
 			</form>
 		</div>

@@ -178,7 +178,7 @@
                 data : data,
                 url : "/BITA_LMS/login.home",
                 success : function(value) {
-                	alert("통신 성공1");				//로그인 성공 시 위에 환영문구 뜸
+				//로그인 성공 시 위에 환영문구 뜸
                 	console.log(value);
                 	$('#login_btn').remove();
                 	$('#header').append(value);
@@ -187,7 +187,7 @@
  
                 },
                 error : function(){
-                	alert("통신 실패1");
+                	alert("id&pw를 다시 확인하세요");
                 }
             
 		});
@@ -197,9 +197,8 @@
                 $.ajax({
                     type : "post",
                     url : "/BITA_LMS/logout.home",
-                    success : function(value) {
-                    	alert("통신 성공2");				//로그아웃 하러감
-                    	console.log(value);
+                    success : function(value) {				//로그아웃 하러감
+                    	console.log("통신성공-로그아웃");
                     	$('#logout_btn').remove();
                     	$('#my_name').remove();
                     	$('#header').append(value);
@@ -207,7 +206,7 @@
                     	 
                     },
                     error : function(){
-                    	alert("통신 실패2");
+                    	console.log("통신실패-로그아웃");
                     }
                 
     		});

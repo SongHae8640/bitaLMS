@@ -11,135 +11,138 @@
 <link type="text/css" rel="stylesheet" href="css/loginframe_H.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.bxslider.css" />
 <style type="text/css">
-	#menu>ul {
+#menu>ul {
 	width: 760px; 
 	list-style-type: none;
 	margin: 0px auto;
-	}
-	#content{
+}
+#content{
 	clear:both;
 	width: 70%;
 	height:100%;
 	margin: 0px auto;
 	position:relative;
-	}
-	#content #sidebar{
+}
+#content #sidebar{
 	position:absolute;
 	float:left;
 	height:100%; 
 	width: 187px;
 	text-align:center; 
 	background-color: gray; 
-	}
-	#content #sidebar ul li{
+}
+#content #sidebar ul li{
 	list-style: none;
-	}
-	#content #sidebar ul li a{
+}
+#content #sidebar ul li a{
 	text-decoration: none; 
 	color: rgb(0,0,0);
-	}
-	#content #con_form1{
+}
+#content #con_form1{
 	float:right;
 	position:absolute;
 	left:250px;      
 	width: 70%;   
 	height:100%;
-	} 
-	#content #con_form2{ 
+} 
+#content #con_form2{ 
 	background-color: rgb(220,220,220);
 	border-radius: 10px;
 	width: 600px;
 	height:550px;
 	line-height: 50px; 
 	margin: 50px auto;
-	}
-	#content #con_form2 input[type=text]{
+}
+#content #con_form2 input[type=text]{
 	width:130px; 
-	}
-	#content #con_form2 #agree_des{
+}
+#content #con_form2 #agree_des{
 	width:600px;
 	height:200px; 
 	overflow: auto; 
 	background-color:rgb(190,190,190);
-	}
-	#content #con_form2 #agree_des p {
+}
+#content #con_form2 #agree_des p {
 	 margin-top: 0;
 	 margin-bottom: 0;  
-	 }
-	#inflow input[type=checkbox]{  
+}
+#inflow input[type=checkbox]{  
 	width: 65px;  
-	}
-	
-	#content #con_form2 div[type=button]{
+}
+#content #con_form2 div[type=button]{
 	margin: 0 auto;
-	}
-<<<<<<< HEAD
-	#header>#login_btn{
+}
+#content #user_apply{
+	border: 0.5px solid rgb(250,245,250);
+}
+#content #con_form2 span{
+	color: rgb(250,0,0);
+}
+#header>#login_btn{
 	top:-75px;
 	right:15px;
 	position:absolute;
 	float:right;
 	cursor: pointer;
-	}
-	#header>#logout_btn{
+}
+#header>#logout_btn{
 	top:-75px;
 	right:15px;
 	position:absolute;
 	float:right;
 	cursor: pointer;
-	}
-=======
->>>>>>> master
+}
+
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="js/jquery.bxslider.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('.topmenu1').on({
-			mouseenter: function(){$('.submenu1').css('display', 'block');},
-			mouseleave: function(){$('.submenu1').css('display', 'none');}
-		});
-		$('.topmenu2').on({
-			mouseenter: function(){$('.submenu2').css('display', 'block');},
-			mouseleave: function(){$('.submenu2').css('display', 'none');}
-		});
-		$('.topmenu3').on({
-			mouseenter: function(){$('.submenu3').css('display', 'block');},
-			mouseleave: function(){$('.submenu3').css('display', 'none');}
-		});
-		$('.topmenu4').on({
-			mouseenter: function(){$('.submenu4').css('display', 'block');},
-			mouseleave: function(){$('.submenu4').css('display', 'none');}
-		});	
-		$('#header>img').click(function() {
-			location.href = 'main.home'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
-		});
-		$("#login_btn").click(function(){
-			$('#myModal').show();
-		});
-		$("#exit").click(function(){
-            $('#myModal').hide();
-       });
-		$(document).mouseup(function (e){
-			var container=$("#myModal");
-			if(container.has(e.target).length===0)
-				container.hide();
-		});
-		$("#Lms_login").click(function(){
-			window.open('login.bit');
-		});
-		//로그인 클릭&엔터시 데이터 submit
-		$('input').keypress(function (e) {
-		 var key = e.which;
-		 if(key == 13)  // the enter key code
-		  {
-			 $('#signin_btn').click();
-		    return false;  
-		  }
-		});
-		$("#signin_btn").on('click',function(){
+$(document).ready(function() {
+	$('.topmenu1').on({
+		mouseenter: function(){$('.submenu1').css('display', 'block');},
+		mouseleave: function(){$('.submenu1').css('display', 'none');}
+	});
+	$('.topmenu2').on({
+		mouseenter: function(){$('.submenu2').css('display', 'block');},
+		mouseleave: function(){$('.submenu2').css('display', 'none');}
+	});
+	$('.topmenu3').on({
+		mouseenter: function(){$('.submenu3').css('display', 'block');},
+		mouseleave: function(){$('.submenu3').css('display', 'none');}
+	});
+	$('.topmenu4').on({
+		mouseenter: function(){$('.submenu4').css('display', 'block');},
+		mouseleave: function(){$('.submenu4').css('display', 'none');}
+	});	
+	$('#header>img').click(function() {
+		location.href = 'main.home'
+	}).mouseenter(function(){
+		$('#header>img').css('cursor', 'pointer')
+	});
+	$("#login_btn").click(function(){
+		$('#myModal').show();
+	});
+	$("#exit").click(function(){
+           $('#myModal').hide();
+      });
+	$(document).mouseup(function (e){
+		var container=$("#myModal");
+		if(container.has(e.target).length===0)
+			container.hide();
+	});
+	$("#Lms_login").click(function(){
+		window.open('login.bit');
+	});
+	//로그인 클릭&엔터시 데이터 submit
+	$('input').keypress(function (e) {
+	 var key = e.which;
+	 if(key == 13)  // the enter key code
+	  {
+		 $('#signin_btn').click();
+	    return false;  
+	  }
+	});
+	$("#signin_btn").on('click',function(){
 			var id = $("#id").val();
             var pw = $("#pw").val();
  
@@ -156,66 +159,105 @@
             //비동기 ajax 방식으로 데이터 주고 받기 방버버
             var data = "id=" + id + "&pw=" + pw;
             
-            $.ajax({
-                type : "post",
-                data : data,
-                url : "/BITA_LMS/login.home",
-                success : function(value) {
-                	console.log("통신 성공");				//로그인 성공 시 위에 환영문구 뜸
-                	console.log(value);
-                	$('#login_btn').remove();
-                	$('#header').append(value);
-                	$('#myModal').hide();
-                	location.reload();
-                	 
-                },
-                error : function(){
-                	console.log("통신 실패");
-                }
-            
-		});
-            
+        $.ajax({
+        	type : "post",
+           	data : data,
+            url : "/BITA_LMS/login.home",
+            success : function(value) {
+               console.log("통신 성공");				//로그인 성공 시 위에 환영문구 뜸
+               console.log(value);
+               $('#login_btn').remove();
+               $('#header').append(value);
+               $('#myModal').hide();
+               location.reload();	 
+          	},
+           	error : function(){
+           		alert("id&pw를 다시 확인하세요");
+                console.log("통신 실패");
+            }
+		});  
 	});
-		$("#logout_btn").on('click',function(){
-            //세션 끊기
-            $.ajax({
-                type : "post",
-                url : "/BITA_LMS/logout.home",
-                success : function(value) {
-                	console.log("통신 성공2");				//로그아웃 하러감
-                	console.log(value);
-                	$('#logout_btn').remove();
-                	$('#my_name').remove();
-                	$('#header').append(value);
-                	location.reload();
-                	 
-                },
-                error : function(){
+	$("#logout_btn").on('click',function(){
+           //세션 끊기
+        $.ajax({
+         	type : "post",
+            url : "/BITA_LMS/logout.home",
+            success : function(value) {
+	         console.log("통신 성공2");				//로그아웃 하러감
+	         console.log(value);
+	         $('#logout_btn').remove();
+	         $('#my_name').remove();
+	         $('#header').append(value);
+	         location.reload();	 
+           	},
+            error : function(){
                 	console.log("통신 실패2");
-                }
-            
+            }  
 		});
-    });
+	});
 	$("#apply_btn").on("click",function(e){
-		var my_name = $("#my_name").text();      
+		//시간남으면 비동기로 하기...
 		//로그인 됐을 때 안됐을 때 나누기
-		if(my_name==""){
+		var my_name = $("#my_name").text();
+		var name = $("#name").val();
+		var user_apply = $("#user_apply").val();
+		var agree = $("#agree").is(":checked");   //약관동의 체크(true)상태여야 함 
+		var lecture_id = $('#lecture_Id').val();
+		if(my_name==""){//로그인 안했는데 수강신청 하려는 경우
 		  	 alert("로그인해주세요");
 		  	 return false;
-		  	location.reload();
-		}    
-		else if(my_name!=""){
-	      if(name==""){
-	        //삭제먼저하고 생성
-	        $("#name_div>span").remove();   
-	        $("#name_div").append("<span>내용을 입력해주세요</span>");
-	        return;
-	      }else{
-	        $("#name_div>span").remove();
-	      } 
+		  	location.reload(); 
+		}else{			//로그인 했는데 수강신청 폼 제대로 작성 안한 경우
+		if(my_name!=""){
+			
+		if(name==""){
+		//삭제먼저하고 생성
+			$("#name_div>span").remove();   
+			$("#name_div").append("<span>이름을 다시입력해주세요</span>");
+			return false;
+			alert("2");
+		}else{
+			$("#name_div>span").remove();   
 		}
-	});  
-});   
+		
+		if(lecture_id==0){
+	        $("#lecture_div>span").remove();   
+	        $("#lecture_div").append("<span>강의를 선택해주세요</span>");
+	        return false;
+	    }else{
+	        $("#lecture_div>span").remove();
+	    } 
+		if($("#phone_num").val()==""){
+	       $("#phone_num_div>span").remove();   
+	       $("#phone_num_div").append("<span>번호를 다시 입력해주세요</span>");
+	       return false;
+	    }else{ 
+	       $("#phone_num_div>span").remove();
+	    }
+	    if($("#user_apply").val()==""){
+	        $("#file_upload>span").remove();   
+	        $("#file_upload").append("<span>파일을 첨부해주세요</span>");
+	        return false;
+	    }else{
+	        $("#file_upload>span").remove();
+	   	}
+	    
+	    if(agree!=true){
+			$("#agree_div>span").remove();   
+	       	alert("약관에 동의해주세요");
+	        return false;
+	   	}else{
+	          $("#agree_div>span").remove(); 
+	    }
+		}
+	} 
+});
+	//폼 전송 후 뒤로가기 막기
+	history.pushState(null, null,location.href);
+	window.onpopstate = function(event) {
+	    history.go(1);
+	};
+});    
 
 </script>
 </head>
@@ -227,8 +269,7 @@
 			<%	
 				}else{ 	
 			%> <a href="#" id="logout_btn">logout</a>
-			<span id="my_name"><%=((UserDto)session.getAttribute("userBean")).getName() %></span>
-			<span>님 환영합니다.</span>
+			<span id="my_name"><%=((UserDto)session.getAttribute("userBean")).getName() %>님 환영합니다.</span>
 			<%	} %>
 			<img alt="logo" src="img/logo.jpg" />
 		</div>
@@ -267,7 +308,7 @@
 			<div><span>수강신청</span></div>
 		</div>
 		<div id="con_form1">
-		<form action="apply.home"method="post"enctype="multipart/form-data">
+		<form action="apply.home" method="post" enctype="multipart/form-data" >
 			<div id="con_form2">
 				<div>
 					<div id="name_div">
@@ -276,16 +317,16 @@
 					</div>
 					<div id="lecture_div">
 						<label>강좌선택</label>
-				              <select name="lecture_Id">
+				              <select name="lecture_Id" id="lecture_Id">
 				              	<option value="0" selected>-</option> 
 				                <option value="1">JAVA</option>
 				                <option value="2">DB</option>
 				                <option value="3">WEB</option>
 				         	</select>
 					</div>
-					<div id="tel_div">
+					<div id="phone_num_div">
 						<label>연락처</label>
-						<input type="tel"name="tel" id="tel" placeholder="00*-000*-00000"
+						<input type="phone_num"name="phone_num" id="phone_num" placeholder="00*-000*-00000"
 						pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" /> 
 					</div>
 					<div id="file_upload">
