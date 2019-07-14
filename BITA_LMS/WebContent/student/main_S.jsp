@@ -18,7 +18,11 @@
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
+	var updateTimer;	//updateData를 갱신 처리하는 타이머
+	var xhr;
+	var temp;
 	$(document).ready(function() {
+		
 		$('.topmenu').mouseenter(function() {
 			$('.submenu').css('display', 'block')
 		});
@@ -28,17 +32,47 @@
 		$('#content>button').hide().eq(0).show().click(function() {
 			$('#content>button').show().eq(0).hide();
 		});
+		
+		updateData();
 	});
+	
+	function updateData(){
+		$.ajax({
+            type : "GET",
+            url : "student/studentStatus.jsp",
+            dataType : "json",
+            error : function(){
+                alert('통신실패!!');
+            },
+            success : function(data){
+            	var show = "";
+				$.each(data, function(index,item){
+					console.log(item.name);
+					show +="<span>"+"출석 일 수 : "+item.attendanceDays+"</span><br>";
+					show +="<span>"+"총 일 수 : "+item.totalyDays+"</span><br>";
+					show +="<span>"+"새로운 Q&A답변 : "+item.newAnswerNum+"</span><br>";
+					show +="<span>"+"Q&A 질문 : "+item.totalQnaLNum+"</span><br>";
+					show +="<span>"+"수업 진행 일 수  : "+item.progressDays+"</span><br>";
+				})
+					
+                $("#status").html(show) ;
+            }
+             
+        });
+		
+		//updateTimer = setTimeout("updateData()", 1000);	// 00초에 한번씩 갱신
+		
+	};
 </script>
 </head>
 <body>
 	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance.stu">출결관리</a>
+				<li class="topmenu"><a href="attendanceMonth.stu">출결관리</a>
 				<li><a href="score.stu">성적관리</a></li>
 				<li><a href="assignment.stu">과제관리</a></li>
 				<li><a href="qna.stu">1:1문의</a></li>
@@ -46,9 +80,18 @@
 		</div>
 		<div id="content">
 			<h2>메인</h2>
-			<button id="checkin">입실</button>
-			<button id="checkout">퇴실</button>
-
+			
+			
+			<div id = "calendar">
+			
+			</div>
+			
+			<div id = "attendance"></div>
+				<jsp:include page="../call_attendance_S.jsp" flush="false"/>
+			
+			<div id = "status">
+				여기!
+			</div>
 		</div>
 		<div id="footer">
 			<div>

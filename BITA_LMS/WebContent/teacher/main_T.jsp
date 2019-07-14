@@ -11,7 +11,7 @@
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
-	$(document).ready(function() {
+	$(document).ready(function() { 
 		$('.topmenu').mouseenter(function() {
 			$('.submenu').css('display', 'block')
 		});
@@ -24,7 +24,7 @@
 <body>
 	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>

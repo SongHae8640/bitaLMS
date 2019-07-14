@@ -1,6 +1,7 @@
 package com.bit.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+
+import com.bit.model.QnaLDto;
 import com.bit.model.StudentDao;
 import com.bit.model.UserDto;
 
@@ -22,9 +26,8 @@ public class StudentController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("StudentController :: path = " + path);
+		System.out.println("StudentController(doGet) :: path = " + path);
 		
-		//¼¼¼Ç ÀúÀå
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
@@ -32,69 +35,93 @@ public class StudentController extends HttpServlet {
 			if(userBean.getBelong().equals("student")){
 				StudentDao dao = new StudentDao();
 				if (path.equals("/main.stu")) {
-					String yearMonth = req.getParameter("yearMonthDay");	///´Ş·ÂÀÇ ¿ù ÀÌµ¿À» ÇÒ¶§ idx·Î ³â¿ùÀ» ¹Ş¾Æ ¿Ã°Í
-					String yearMonthDay = req.getParameter("yearMonthDay");	///´Ş·ÂÀÇ ¿ù ÀÌµ¿À» ÇÒ¶§ idx·Î ³â¿ùÀ» ¹Ş¾Æ ¿Ã°Í
-					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonth));
-					req.setAttribute("calendarDayList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonthDay));
+					String yearMonth = req.getParameter("yearMonthDay");	
+					String yearMonthDay = req.getParameter("yearMonthDay");	
+
 					
-					//main ÁÂÃøÇÏ´Ü Á¤º¸ Àü´Ş
+					//main 
 					req.setAttribute("userBean", userBean);
 					
-					//main ¿ìÃø ÇÏ´Ü Á¤º¸ Àü´Ş
-					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
-					req.setAttribute("qnaNum", dao.getQnaNum(userBean.getUserId()));
-					///qna¿¡¼­ new´Â ´äº¯ÀÌ ¿ÔÀ¸³ª ÀÚ½ÅÀÌ È®ÀÎÇÏÁö ¾ÊÀº ¼ö¸¦ ¸»ÇÏ´Â °ÍÀÎ°¡??? ÈÄ
-					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
-					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLecture_id()));
+
 					
 					rd = req.getRequestDispatcher("student/main_S.jsp");
 				} else if (path.equals("/attendance.stu")) {
-					//ÁÂÃø Á¤º¸ Àü´Ş
-					req.setAttribute("attendanceBean", dao.getAttendance(userBean.getUserId())); 	//bean¾È¿¡ »óÅÂ, ÀÔ½Ç Åğ½Ç Á¤º¸, ½Ã°£ÀÌ ÀÖ´Ù
+					//main ì¢Œì¸¡ í•˜ë‹¨ ì •ë³´ ì „ë‹¬
+					req.setAttribute("attendanceBean", dao.getAttendance(userBean.getUserId())); 	
 					req.setAttribute("userBean", userBean);
 					
-					//main ¿ìÃø ÇÏ´Ü Á¤º¸ Àü´Ş
+					//main ìš°ì¸¡ í•˜ë‹¨ ì •ë³´ ì „ë‹¬
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
-					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
+					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
 					req.setAttribute("attendanceStatusList", dao.getAttendanceStatusList(userBean.getUserId()));
 					
-					rd = req.getRequestDispatcher("student/attendance_S.jsp");
+					rd = req.getRequestDispatcher("student/attendance_day_S.jsp");
 					
 				} else if (path.equals("/attendanceMonth.stu")) {
-					String yearMonth = req.getParameter("idx");	///´Ş·ÂÀÇ ¿ù ÀÌµ¿À» ÇÒ¶§ idx·Î ³â¿ùÀ» ¹Ş¾Æ ¿Ã°Í
-					req.setAttribute("attendanceMonthList", dao.getAttendanceMonthList(userBean.getUserId(), yearMonth));
-					rd = req.getRequestDispatcher("student/attendance_S_month.jsp");	//ÀÌ°Å Ãß°¡ÇØ¾ßÇÔ
+					String yearMonth = req.getParameter("idx");	
+					rd = req.getRequestDispatcher("student/attendance_month_S.jsp");	//ì´ê±° ì¶”ê°€í•´ì•¼í•¨
+
 					
 				} else if (path.equals("/score.stu")) {
 					req.setAttribute("scoreBean", dao.getScoreBean(userBean.getUserId()));
 					rd = req.getRequestDispatcher("student/score_S.jsp");
 					
 				} else if (path.equals("/assignment.stu")) {
-					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLecture_id()));
+					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("student/assignment_S.jsp");
+			
 					
-				} else if (path.equals("/assignmentdetail.stu")) {
-					String assignmentId = req.getParameter("idx");	//¸ñ·ÏÈ­¸é¿¡¼­ °úÁ¦ ¹øÈ£¸¦ °¡Á®¿Ã °Í
-					req.setAttribute("assignmentBean", dao.getAssignmentBean(assignmentId));
-					req.setAttribute("submissionBean", dao.getSubmissionBean(assignmentId, userBean.getUserId()));
-					
-					rd = req.getRequestDispatcher("student/assignment_S/assignmentdetail_S.jsp");
+				} else if (path.equals("/assignment_detail.stu")) {
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
+					req.setAttribute("assignmentBean", dao.getAssignment(assignmentId));
+					System.out.println("dao.getAssignmentBean(assignmentId)");
+//					req.setAttribute("submissionBean", dao.getSubmission(assignmentId, userBean.getUserId()));
+					System.out.println("dao.getSubmissionBean(assignmentId, userBean.getUserId())");
+					rd = req.getRequestDispatcher("student/assignment_S_detail.jsp");
 					
 				} else if (path.equals("/qna.stu")) {
-					req.setAttribute("qnaList", dao.getQnaList(userBean.getUserId()));
+					req.setAttribute("qnaLList", dao.getQnaList(userBean.getUserId()));
 					rd = req.getRequestDispatcher("student/qna_S.jsp");
+				} else if (path.equals("/qna_insert.stu")) {
+					rd = req.getRequestDispatcher("student/qna_S_add.jsp");
 				} else if (path.equals("/qna_detail.stu")) {
-					String qnaId = req.getParameter("idx");	//¸ñ·ÏÈ­¸é¿¡¼­ °úÁ¦ ¹øÈ£¸¦ °¡Á®¿Ã °Í
-					req.setAttribute("qnaBean", dao.getQnaBean(qnaId));
-					rd = req.getRequestDispatcher("student/qna_S/qnadetail_S.jsp");
-				} else {
-					System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ÆäÀÌÁö");
+					int qnaLId = Integer.parseInt(req.getParameter("idx"));	
+					req.setAttribute("qnaLBean", dao.getQnaL(qnaLId));
+					rd = req.getRequestDispatcher("student/qna_S_detail.jsp");
+				} else if (path.equals("/qna_edit.stu")) {
+					int qnaLId = Integer.parseInt(req.getParameter("idx"));	
+					req.setAttribute("qnaLBean", dao.getQnaL(qnaLId));
+					rd = req.getRequestDispatcher("student/qna_S_edit.jsp");
 				}
+				
+				//ajax ë°©ì‹ ( rdë¥¼ ì‚¬ìš”í•˜ì§€ ì•ŠìŒ)
+				else if(path.equals("/callAttendanceMonthListJson.stu")) {
+					//jsonìœ¼ë¡œ ë³´ë‚¼ë•Œ í•œê¸€ ê¹¨ì§ ë°©ì§€
+					resp.setContentType("text/html;charset=UTF-8");
+					
+					// calendar ê°€ì ¸ì™€ì•¼ í•¨
+					System.out.println();
+					String yearMonthDay = "2019-07-10";
+					String yearMonth = yearMonthDay.substring(0,7);
+					
+					JSONArray attendanceMonthListJson = dao.getAttendanceMonthListJson(userBean.getUserId(),yearMonth);
+					PrintWriter out = resp.getWriter();
+					out.write(attendanceMonthListJson.toJSONString());
+					out.close();
+				}else {
+					System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” í˜ì´ì§€");
+
+				}
+				
+				
 			}else {
-				//teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
+				//teacherë‚˜ studentí˜ì´ì§€ë¡œ ì ‘ê·¼í•˜ë ¤ê³  í•˜ë©´ ê± ë³´ë‚´ë²„ë¦¼
 				req.getRequestDispatcher("login.bit");
 			}
-			rd.forward(req, resp);
+			if(rd!=null) {
+				rd.forward(req, resp);
+			}
+			
 		}catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
 		}
@@ -107,14 +134,13 @@ public class StudentController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("StudentController :: path = " + path);
+		System.out.println("StudentController(doPost) :: path = " + path);
 		
-		//¼¼¼Ç ÀúÀå
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//insert, edit, delete ÀÇ °á°ú ³»¿ëÀ» ÀúÀåÇÏ´Â result
-		///¾î¶»°Ô »ç¿ëÇÒÁö ¾ÆÁ÷ ¹ÌÁ¤
+		//insert, edit, delete ì˜ ê²°ê³¼ ë‚´ìš©ì„ ì €ì¥í•˜ëŠ” result
+		///ì–´ë–»ê²Œ ì‚¬ìš©í• ì§€ ì•„ì§ ë¯¸ì •
 		int result;
 		
 		try {
@@ -125,42 +151,53 @@ public class StudentController extends HttpServlet {
 				}else if(path.equals("/submission_insert.stu")){
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
 					result = dao.insertSubmission(assignmentId, userBean.getUserId());		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µğÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	
 				}else if(path.equals("/submission_update.stu")){
 					String assignmentId = req.getParameter("idx");	
-					String fileName = req.getParameter("fileName");	//¼öÁ¤ÆäÀÌÁö¿¡¼­ °¡Á®¿Ã °Í
+					String fileName = req.getParameter("fileName");	//ìˆ˜ì •í˜ì´ì§€ì—ì„œ ê°€ì ¸ì˜¬ ê²ƒ
 					result = dao.updateSubmission(assignmentId, userBean.getUserId() , fileName);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µğÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	
 				}else if(path.equals("/submission_delete.stu")){
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
 					result = dao.deleteSubmission(assignmentId, userBean.getUserId());		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µğÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
-				}else if(path.equals("/qan_insert.stu")){
-					String title = req.getParameter("title");
-					String type = req.getParameter("type");
-					String questionContent = req.getParameter("questionContent");
-					result = dao.insertQnaL(userBean.getUserId(),title,type, questionContent);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µğÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
-				}else if(path.equals("/qan_update.stu")){
-					int qnaId = Integer.parseInt(req.getParameter("qnaId"));
-					String title = req.getParameter("title");
-					String type = req.getParameter("type");	///ÀÌ°Íµµ ¼öÁ¤Ç×¼ö ÀÖ³ª??
-					String questionContent = req.getParameter("questionContent");
-					result = dao.updateQnaL(qnaId ,title,type, questionContent);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//°úÁ¦ µğÅ×ÀÏ È­¸éÀ¸·Î ÀÌµ¿, //±»ÀÌ rd·Î ÀÌµ¿ÇØ¾ßÇÏ³ª?
-				}else if(path.equals("/qan_delete.stu")){
-					String[] qnaId = req.getParameterValues("qnaId");
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	
+				}else if(path.equals("/qna_insert.stu")){
+					QnaLDto qnaLBean = new QnaLDto();
+					qnaLBean.setTitle(req.getParameter("title"));
+					qnaLBean.setType(req.getParameter("type"));
+					qnaLBean.setQuestionContent(req.getParameter("questionContent"));
+					qnaLBean.setStuId(userBean.getUserId());					
+					result = dao.insertQnaL(qnaLBean);		
 					
-					result = dao.deleteQnaL(qnaId);		
-					rd = req.getRequestDispatcher("qna.stu");	//qna ¸ñ·Ï ÆäÀÌÁö·Î ÀÌµ¿ÀÌµ¿ÇØ¾ßÇÏ³ª?
+					///result ê°’ì— ë”°ë¼ write ê°’ ë³€ê²½ í•´ì•¼í•¨
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();	
+				}else if(path.equals("/qna_update.stu")){
+					//jsonìœ¼ë¡œ ë³´ë‚¼ë•Œ í•œê¸€ ê¹¨ì§ ë°©ì§€
+					resp.setContentType("text/html;charset=UTF-8");
+					QnaLDto bean = new QnaLDto();
+					bean.setQnaLId(Integer.parseInt(req.getParameter("qnaLId")));
+					bean.setTitle(req.getParameter("title"));
+					bean.setQuestionContent(req.getParameter("questionContent"));
+					result = dao.updateQnaL(bean);	
+					
+					
+					///result ê°’ì— ë”°ë¼ write ê°’ ë³€ê²½ í•´ì•¼í•¨
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();
 				}else {
-					System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â ÆäÀÌÁö");
+					System.out.println("ì¡´ì¬í•˜ì§€ ì•ŠëŠ” í˜ì´ì§€");
 				}
 			}else {
-				//teacher³ª studentÆäÀÌÁö·Î Á¢±ÙÇÏ·Á°í ÇÏ¸é °Á º¸³»¹ö¸²
+				
 				req.getRequestDispatcher("login.bit");
 			}
-			rd.forward(req, resp);
+			if(rd!=null) {
+				rd.forward(req, resp);
+			}
+			
 		}catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
 		}

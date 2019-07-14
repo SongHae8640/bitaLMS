@@ -1,3 +1,6 @@
+<%@page import="com.bit.model.SubmsissionDto"%>
+<%@page import="com.bit.model.AssignmentDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,30 +21,37 @@
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-						$('.topmenu').mouseenter(function(){
+	$(document)
+			.ready(
+					function() {
+						$('.topmenu').mouseenter(function() {
 							$('.submenu').css('display', 'block')
 						});
-						$('.topmenu').mouseleave(function(){
+						$('.topmenu').mouseleave(function() {
 							$('.submenu').css('display', 'none')
 						});
-						$('#ch').click(function(){
-							if ($('#ch').prop("checked")){
+						$('#ch').click(function() {
+							if ($('#ch').prop("checked")) {
 								$("input[name=chk]").prop("checked", true);
 							} else {
 								$("input[name=chk]").prop("checked", false);
 							}
 						});
-						$("#serch").keyup(function(){
-							var k = $(this).val();
-							$("table>tbody>tr").hide();
-							var temp = $("table>tbody>tr>td:nth-child(6n+2):contains('"+ k + "')");
-							$(temp).parent().show();
-						});
-						$('#delete').click(function(){
-							$(location).attr('href','assignment_delete_T.tea');
-						});
-	});
+						$("#serch")
+								.keyup(
+										function() {
+											var k = $(this).val();
+											$("table>tbody>tr").hide();
+											var temp = $("table>tbody>tr>td:nth-child(6n+2):contains('"
+													+ k + "')");
+											$(temp).parent().show();
+										});
+						$('#delete').click(
+								function() {
+									$(location).attr('href',
+											'assignment_delete_T.tea');
+								});
+					});
 </script>
 </head>
 <body>
@@ -63,28 +73,32 @@
 		<div id="content">
 			<form action="assignment_edit_T.tea">
 				<h2>과제 상세</h2>
-
+				<% 
+					AssignmentDto bean_a=(AssignmentDto)request.getAttribute("AssignmentBean");
+					
+				%>
 				<div>
-					<label>제목</label> <span>8/2</span>
+					<label>제목</label> <span><%=bean_a.getTitle() %></span>
 				</div>
 				<div>
-					<label>작성자</label> <span>김강사</span>
+					<label>작성자</label> <span><%=bean_a.getWriter() %></span>
 				</div>
 				<div>
-					<label>날짜</label> <span>date</span>
+					<label>날짜</label> <span><%=bean_a.getWriteDate() %></span>
 				</div>
 				<div>
 					<label>내용</label>
-					<textarea name="" id="" cols="30" rows="10">hello</textarea>
+					<span><%=bean_a.getContent() %></span>
 				</div>
 
 				<div>
-					<button onclick="location='assignment_T.tea'">과제목록</button>
+					<button onclick="location='assignment.tea'">과제목록</button>
 				</div>
 				<div>
 					<button type="submit">수정</button>
 					<input type="button" id="delete" value="삭제">
 				</div>
+				<% String root=request.getContextPath(); %>
 				<table border="1">
 					<thead>
 						<tr>
@@ -97,22 +111,26 @@
 						</tr>
 					</thead>
 					<tbody>
+						<%	
+							
+						ArrayList<SubmsissionDto> list=(ArrayList<SubmsissionDto>)request.getAttribute("submissionList");
+						for(SubmsissionDto bean_s : list){
+							System.out.println("bean_s="+bean_s);
+							
+						%>
 						<tr>
-							<td>2</td>
-							<td><a href="#">8/2 김코난 과제</a></td>
-							<td>김코난</td>
-							<td>2019-08-02</td>
-							<td>확인대기</td>
+							<td><%=bean_s.getRowNum() %></td>
+							<td><a href="#"><%=bean_s.getFileName() %></a></td>
+							<td><%=bean_s.getStdName() %></td>
+							<td><%=bean_s.getSubmitDate() %></td>
+							<td><%=bean_s.getIsCheck() %></td>
 							<td><input type="checkbox" name="chk" /></td>
 						</tr>
-						<tr>
-							<td>3</td>
-							<td><a href="#">8/2 콜롬보 과제</a></td>
-							<td>콜롬보</td>
-							<td>2019-08-02</td>
-							<td>확인대기</td>
-							<td><input type="checkbox" name="chk" /></td>
-						</tr>
+
+						<%
+						}
+							
+						%>
 					</tbody>
 				</table>
 				<div>

@@ -1,3 +1,4 @@
+<%@page import="com.bit.model.QnaLDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -25,14 +26,17 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-	});
-	$('#content>form input').hide();
-	$('#content>form button').hide().eq(0).show();
-	$('#content>form button').eq(0).click(function() {
-		$('#content>form input').show().prev('span').hide();
-		$('#content>form input').show().eq(0).hide();
-		$('#content>form button').show().eq(0).hide();
-		$('#edit').text('수정페이지');
+		
+		$('#editBtn').on('click', function(){
+			location.href = "qna_edit.stu?idx="+$('#qnaLId').text();
+			
+		});
+
+		$('#checkBtn').on('click', function(){
+			location.href = "qna.stu";
+		});
+		
+		
 	});
 </script>
 </head>
@@ -50,41 +54,51 @@
 				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
-<h2 id="edit">상세보기</h2>
-					<div id="content">
-		<form action="">
-			<div>
-				<label>제목</label> <span>sub</span> <input type="text" value="sub" />
-			</div>
-			<div>
-				<label>작성자</label> <span>name</span> <input type="text" value="김코난" />
-			</div>
-			<div>
-				<label>날짜</label> <span>date</span> <input type="text" value="date" />
-			</div>
-			<div>
-				<label>분류</label> <select name="" label="">
-					<opt>
-					<option value="">성적문의</option>
-					<option value="">강사</option>
-					<option value="">행정</option>
-					</opt>
-				</select>
-			</div>
-			<div>
-				<label>내용</label>
-				<textarea name="" id="" cols="30" rows="10">hello</textarea>
-			</div>
-
-			<div>
-				<button type="button">edit</button>
-				<button type="submit">edit</button>
-				<button type="reset">cancle</button>
-				<button type="button">back</button>
-			</div>
-		</form>
-		<div>
-			<textarea rows="10" cols="30"></textarea>
+		<h2 id="edit">1:1문의</h2>
+		<%
+			QnaLDto bean = (QnaLDto)request.getAttribute("qnaLBean");
+		%>
+		<div id="content">
+			
+			<form action="">
+				<div>
+				<span id="qnaLId" style="display:none;"><%=bean.getQnaLId()%></span>
+				</div>
+				<div>
+					<label>제목</label> <span><%=bean.getTitle() %></span>
+				</div>
+				<div>
+					<label>분류</label> <span><%=bean.getType() %></span>
+				</div>
+				<div>
+					<label>작성자</label> <span><%=bean.getStdName() %></span>
+				</div>
+				<div>
+					<label>날짜</label> <span><%=bean.getWriteDate() %></span>
+				</div>
+				<div>
+					<label>내용</label>
+					<textarea cols="30" rows="10" readonly="readonly"><%=bean.getQuestionContent() %></textarea>
+				</div>
+				<div>
+					<label>답변</label>
+					<%
+						if(bean.getIsCheck().equals("1")){
+					%>
+					<textarea cols="30" rows="10" readonly="readonly"><%=bean.getAnswerContent() %></textarea>
+					<%
+						}else{
+					%>
+					<textarea cols="30" rows="10" readonly="readonly" placeholder="답변 대기 중 입니다."></textarea>
+					<%
+						}
+					%>
+				</div>
+				<div>
+					<button type="button" id="editBtn">수정</button>
+					<button type="button" id="checkBtn">확인</button>
+				</div>
+			</form>
 		</div>
 
 		<div id="footer">
@@ -100,5 +114,5 @@
 		</div>
 	</div>
 
-				</body>
+</body>
 </html>

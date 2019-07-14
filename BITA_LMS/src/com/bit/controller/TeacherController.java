@@ -2,6 +2,7 @@ package com.bit.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -29,79 +30,88 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//����� �ּ� Ȯ���ϰ� ���ּҸ� �����ϱ�
+
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doGet) :: path = " + path);
 
-		//���� ����
+
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//�ߺ��Ǵ� RequestDispatcher
+		//�뜝�뙥釉앹삕�뜝�떎�뙋�삕 RequestDispatcher
 		RequestDispatcher rd = null;
 
 		try {
 			if (userBean.getBelong().equals("teacher")) {
-
 				TeacherDao dao = new TeacherDao();
-				///lecture_id 는 자주 써서 변수로 하나 빼는게 좋을 것 같음
+				///lecture_id 占쎈뮉 占쎌쁽雅뚳옙 占쎈쑅占쎄퐣 癰귨옙占쎈땾嚥∽옙 占쎈릭占쎄돌 �뜮�눖�뮉野껓옙 �넫�뿭�뱽 野껓옙 揶쏆늿�벉
+				
 				
 				if (path.equals("/main.tea")) {
-					String yearMonth = req.getParameter("yearMonth");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
-					String yearMonthDay = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
-					req.setAttribute("calendarMonthList",dao.getCalendarMonthList(userBean.getLecture_id(), yearMonth));
-					req.setAttribute("calendarDayList",dao.getCalendarDayList(userBean.getLecture_id(), yearMonthDay));
 					
-					//main 좌측하단 정보 전달
+					//main �넫�슣瑜ワ옙釉�占쎈뼊 占쎌젟癰귨옙 占쎌읈占쎈뼎
 					req.setAttribute("userBean", userBean);
 					
+
 					//main 우측 하단 정보 전달
-					req.setAttribute("numStu", dao.getStuNum(userBean.getLecture_id()));
-					req.setAttribute("checkinNum", dao.getCheckinNum(userBean.getLecture_id()));
-					req.setAttribute("submissionNum", dao.getSubmissionNum(userBean.getLecture_id()));
-					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLecture_id()));
-					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLecture_id()));
+
+
+					req.setAttribute("numStu", dao.getStuNum(userBean.getLectureId()));
+					req.setAttribute("checkinNum", dao.getCheckinNum(userBean.getLectureId()));
+					req.setAttribute("submissionNum", dao.getSubmissionNum(userBean.getLectureId()));
+					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
+					req.setAttribute("progressDays", dao.getProgressDays(userBean.getLectureId()));
 					
 					rd = req.getRequestDispatcher("teacher/main_T.jsp");
 
 				}else if (path.equals("/attendance.tea")) {
-					 //��Ʈ����Ʈ�� �����ϰ� jsp������� get��� �ҷ����
-					 req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLecture_id()));
-					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 
+					 req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
+					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 				}else if (path.equals("/score.tea")) {
-					req.setAttribute("scoreList",dao.getScoreList(userBean.getLecture_id()));
+					req.setAttribute("scoreList",dao.getScoreList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("teacher/score_T.jsp");
 					
 				} else if (path.equals("/assignment.tea")) {
-					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLecture_id()));
+					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("teacher/assignment_T.jsp");
-	
-				}else if (path.equals("/assignment_detail.tea")) {
-					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//글 리스트(또는 edit에서)에서 idx로 assignmentId를 받아와서 사용(rownum)아님
+					
+					//insert
+				} else if(path.equals("/assignment_insert.tea")){
+					
+					rd = req.getRequestDispatcher("teacher/assignment_T_insert.jsp");
+					
+				} else if (path.equals("/assignment_detail.tea")) {
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//疫뀐옙 �뵳�딅뮞占쎈뱜(占쎌굢占쎈뮉 edit占쎈퓠占쎄퐣)占쎈퓠占쎄퐣 idx嚥∽옙 assignmentId�몴占� 獄쏆룇釉섓옙占쏙옙苑� 占쎄텢占쎌뒠(rownum)占쎈툡占쎈뻷
 					req.setAttribute("AssignmentBean", dao.getAssignment(assignmentId));
 					req.setAttribute("submissionList", dao.getSubmissionList(assignmentId));
-					rd = req.getRequestDispatcher("teacher/assignment_T_deatil.jsp");
+					rd = req.getRequestDispatcher("teacher/assignment_T_detail.jsp");
 				
 				}else if (path.equals("/qna.tea")) {
-					ArrayList<QnaLDto> qnaLList = dao.getQnaLList(userBean.getUserId());
-					req.setAttribute("qnaLList", qnaLList);
+					req.setAttribute("qnaLList", dao.getQnaLList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
 
 				}else if (path.equals("/qna_detail.tea")) {
-					int qnaLId = Integer.parseInt(req.getParameter("idx"));	//글 리스트(또는 edit에서)에서 idx로 assignmentId를 받아와서 사용(rownum)아님
-					req.setAttribute("QnaLBean", dao.getQnaL(qnaLId));
-					rd = req.getRequestDispatcher("teacher/qna_T_deatil.jsp");
-				
-				}else {
-					System.out.println("존재하지 않는 페이지");
+
+					req.setAttribute("QnaLBean", dao.getQnaL(Integer.parseInt(req.getParameter("idx"))));
+					rd = req.getRequestDispatcher("teacher/qna_T_detail.jsp");
+
+				}
+				if (path.equals("/attendance.tea")) {
+					//처음 출석상태를 전부 뽑아오기
+					//이름,버튼,상태
+					req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
+					rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
+				}
+				if(rd!=null){
+					rd.forward(req, resp);
 				}
 			}else {
-				//teacher�� student������� ����Ϸ�� �ϸ� �� ������
+
 				req.getRequestDispatcher("login.bit");
 			}
-			rd.forward(req, resp);
 		} catch (java.lang.NullPointerException e) {
+//			e.printStackTrace();
 			resp.sendRedirect("login.bit");
 		}
 
@@ -112,20 +122,19 @@ public class TeacherController extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 
-		//����� �ּ� Ȯ���ϰ� ���ּҸ� �����ϱ�
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("teacherController(doPost) :: path = " + path);
 
-		//���� ����
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
+		System.out.println(userBean.toString());
 		
-		//�ߺ��Ǵ� RequestDispatcher
+
 		RequestDispatcher rd = null;
 		
 		//insert, edit, delete 의 결과 내용을 저장하는 result
 		///어떻게 사용할지 아직 미정
-		int result;
+		int result = 0;
 
 		try {
 			if (userBean.getBelong().equals("teacher")) {
@@ -134,53 +143,89 @@ public class TeacherController extends HttpServlet {
 
 				if(path.equals("")){
 					
-				}else if(path.equals("/attendance_checkin.tea")){
-					String stdId = (String)req.getParameter("idx");
-					result = dao.insertAttendanceCheckin(stdId);
-					rd = req.getRequestDispatcher("/attendance.tea");	//다시 today 출석 리스트로 이동
+
+				
+				}else if (path.equals("/assignment_insert.tea")) {//assignment insert占쎈퓠占쎄퐣 post獄쎻뫗�뻼占쎌몵嚥∽옙 占쎄퐜野껋눘�뱽占쎈르
 					
-				}else if(path.equals("/attendance_checkout.tea")){
-					String stdId = (String)req.getParameter("idx");
-					result = dao.updateAttendanceCheckout(stdId);
-					rd = req.getRequestDispatcher("/attendance.tea");	//다시 today 출석 리스트로 이동
+
+					AssignmentDto assignmentBean=new AssignmentDto();
 					
-				}else if (path.equals("/assignment_insert.tea")) {//assignment insert에서 post방식으로 넘겼을때
-					String title = req.getParameter("title");
-					String content = req.getParameter("content");
-					result = dao.insertAssignment(title, content,userBean.getLecture_id());	///result를 어떻게 사용할지 나중에 생각
-					rd = req.getRequestDispatcher("/assignment.tea");	//리스트 페이지로
+					assignmentBean.setTitle(req.getParameter("title"));
+					assignmentBean.setContent(req.getParameter("content"));
+					assignmentBean.setLectureId(userBean.getLectureId());
+					assignmentBean.setWriter(userBean.getUserId());
+					result=dao.insertAssignment(assignmentBean);///result를 어떻게 사용할지 나중에 생각
+					
+					rd = req.getRequestDispatcher("/assignment_detail.tea?idx=");	//리스트 페이지로
+
 					
 				} else if (path.equals("/assignment_edit.tea")) {
 					String title = req.getParameter("title");
 					String content = req.getParameter("content");
-					String assingmentId = req.getParameter("assignmentId");
-					result = dao.updateAssignment(title,content,assingmentId);
-					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assingmentId);	///수정한 페이지로
+					String assignmentId = req.getParameter("assignmentId");
+					result = dao.updateAssignment(title,content,assignmentId);
+					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assignmentId);	///占쎈땾占쎌젟占쎈립 占쎈읂占쎌뵠筌욑옙嚥∽옙
 				} else if (path.equals("/assignment_delete.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
-					result = dao.getAssignmentDelete(assignmentId);
+					result = dao.deleteAssignment(assignmentId);
 					rd = req.getRequestDispatcher("teacher/assignment_T_.jsp");
 				
-				}else if (path.equals("/qnaAnswer_insert.tea")) {//qna에서 답변을 입력 또는 수정할때 
+				}else if (path.equals("/qnaAnswer_insert.tea")) {//qna占쎈퓠占쎄퐣 占쎈뼗癰귨옙占쎌뱽 占쎌뿯占쎌젾 占쎌굢占쎈뮉 占쎈땾占쎌젟占쎈막占쎈르 
 					String answerContent = req.getParameter("answerContent");
 					int questionId = Integer.parseInt(req.getParameter("questionId"));
 					result = dao.updateQnaLAnswer(answerContent,questionId);
-					rd = req.getRequestDispatcher("/qna_detail.tea?idx="+questionId);	//리스트 페이지로
+					rd = req.getRequestDispatcher("/qna_detail.tea?idx="+questionId);	//�뵳�딅뮞占쎈뱜 占쎈읂占쎌뵠筌욑옙嚥∽옙
 				}else if(path.equals("/calendar_insert.tea")){
 					String startDate = req.getParameter("startDate");
 					String endDate = req.getParameter("endDate");
 					String title = req.getParameter("title");
 					String content = req.getParameter("content");
-					result = dao.insertCalendar(startDate, endDate, title, content, userBean.getLecture_id());
+					result = dao.insertCalendar(startDate, endDate, title, content, userBean.getLectureId());
 				}
-				else {
+
+
+				
+				//비동기 통신
+				if(path.equals("/attendance_check.tea")){
+					//버튼값에 따라서 update를 다르게 수행
+					String stdId = req.getParameter("id");
+					String btn = req.getParameter("btn");
+					System.out.println(stdId+":"+btn);
+					result = dao.updateAttendance(stdId,btn);
+					
+					if(result>0){
+						PrintWriter out= resp.getWriter(); 
+						out.write("{\"msg\":\"성공적으로 수정되었습니다\"}");
+						out.close();
+					}
+				}else if(path.equals("/qna_update.tea")){
+					QnaLDto bean = new QnaLDto();
+					bean.setQnaLId(Integer.parseInt(req.getParameter("qnaLId")));
+					bean.setAnswerContent(req.getParameter("questionAnswer"));
+					System.out.println("bean = "+bean.toString());
+					result = dao.updateQnaL(bean);
+					System.out.println("result = "+result);
+					
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();
+				}else if (path.equals("/qna_delete.tea")) {
+					// 큐엔에이 삭제 페이지
+					result = dao.deleteQnaL(Integer.parseInt(req.getParameter("qnaLId")));
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();					
+				}else {
 					System.out.println("존재하지 않는 페이지");
 				}
+				
+				if(result>0){
+					rd.forward(req, resp);					
+				}
 			}else {
-				//teacher�� student������� ����Ϸ�� �ϸ� �� ������
+				
 				req.getRequestDispatcher("login.bit");
 			}
-			rd.forward(req, resp);
 		} catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
 		}

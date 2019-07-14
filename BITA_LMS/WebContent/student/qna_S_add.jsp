@@ -1,3 +1,4 @@
+<%@page import="com.bit.model.UserDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -23,9 +24,65 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
+		
+		//현재 날짜
+		var now = new Date();
+	    var year= now.getFullYear();
+	    var mon = (now.getMonth()+1)>9 ? ''+(now.getMonth()+1) : '0'+(now.getMonth()+1);
+	    var day = now.getDate()>9 ? ''+now.getDate() : '0'+now.getDate();        
+	   	var chan_val = year + '-' + mon + '-' + day;
+	   	$('#todaySpan').text(chan_val);
+
+
+		$('#insertBtn').on('click', function(e){
+			var title = $('#qnaLTitle').val();
+			var type = $("select[name=question_type]").val()
+			var questionContent = $('#qnaLContent').val();
+
+			if(!title){
+				alert("제목을 입력 하시오.");
+				return false;
+			}
+			if(!questionContent){
+				alert("질문을 입력 하시오.");
+				return false;
+			}
+
+			$.ajax({
+				url : "qna_insert.stu",
+				type : "POST",
+				data : {
+						title : title,
+						type : type,
+						questionContent : questionContent					
+				},
+				success : function(data){
+					if(data =='OK'){
+						location.href = "qna.stu";	
+					}else{
+						console.log("질문 수정 실패");
+					}
+					
+				},
+				error : function(){
+					console.log("질문 수정 실패");
+				}
+			})
+
+			e.preventDefault();	
+		})
+		
+		$("span[name=question_type]").change(function() {
+			console.log("change")
+			//var k = $(this).children("option:selected").text();
+			
+	    });
 	});
 </script>
 </head>
+<%
+	UserDto userBean = (UserDto)session.getAttribute("userBean");
+%>
 <body>
 	<div>
 		<div id="header">
@@ -39,43 +96,32 @@
 				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
-		<div id="menu">
-			<ul>
-				<li class="topmenu"><a href="../attendance_S.jsp">출결관리</a>
-				<li><a href="../score_S.jsp">성적관리</a></li>
-				<li><a href="../assignment_S.jsp">과제관리</a></li>
-				<li><a href="../qna_S.jsp">1:1문의</a></li>
-			</ul>
-		</div>
+		<h2>1:1문의</h2>
 		<div id="content">
-			<h1>1:1문의 등록</h1>
-			<form action="">
+			<form>
 				<div>
-					<label>제목</label> <input type="text" value="sub" />
+					<label>제목</label><input id =qnaLTitle type="text" value="" /> <span></span>
 				</div>
 				<div>
-					<label>작성자</label> <input type="text" value="김코난" />
-				</div>
-				<div>
-					<label>날짜</label> <input type="text" value="day" />
-				</div>
-				<div>
-					<label>분류</label> <select name="" label="" value="성적문의">
-						<opt>
-						<option value="">성적문의</option>
-						<option value="">강사</option>
-						<option value="">행정</option>
-						</opt>
+					<label>분류</label>
+					<select name="question_type">
+						<option value="성적문의" selected="selected">성적문의</option>
+						<option value="강사">강사</option>
+						<option value="행정">행정</option>
 					</select>
 				</div>
 				<div>
-					<label>내용</label>
-					<textarea name="" id="" cols="30" rows="10"></textarea>
+					<label>작성자</label><span><%=userBean.getName() %></span>
 				</div>
-
 				<div>
-					<button type="submit">insert</button>
-					<button type="back">cancle</button>
+					<label>날짜</label> <span id="todaySpan"></span>
+				</div>
+				<div>
+					<label>내용</label>
+					<textarea id="qnaLContent" cols="30" rows="10" ></textarea>
+				</div>
+				<div>
+					<button type="button" id="insertBtn">확인</button>
 				</div>
 			</form>
 		</div>

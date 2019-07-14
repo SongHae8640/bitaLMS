@@ -1,8 +1,8 @@
 --TEACHER
---lecture_id °¡ °áÇÕµÈ Å×ÀÌºí
+--lecture_id ê°€ ê²°í•©ëœ í…Œì´ë¸”
 SELECT u.user_id, u.name, lu.lecture_id FROM lectureUser lu JOIN user01 u ON lu.user_id = u.user_id;
 
---teacher ¸®½ºÆ®
+--teacher ë¦¬ìŠ¤íŠ¸
 SELECT u.user_id, u.name, lu.lecture_id FROM lectureUser lu JOIN user01 u ON lu.user_id = u.user_id WHERE belong = 'teacher';
 
 --teacher > assignment > getAssignmentDetail
@@ -11,11 +11,15 @@ SELECT title, name,TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,content  FROM
 --teacher > assignment > getSubmissionList
 SELECT row_number() OVER(ORDER BY submit_date) num, file_name,name as std_name ,TO_CHAR(submit_date,'yyyy-mm-dd') as submit_date,is_check FROM submission s JOIN user01 u ON s.std_id = u.user_id WHERE assignment_id=1;
 
---teacher > qna_l > getQnaList : ¹øÈ£, Á¦¸ñ, ÀÛ¼ºÀÚ, ÀÛ¼ºÀÏ, ´äº¯¿©ºÎ(answer_contentÀÇ °ª À¯¹«·Î), ºĞ·ù
---°­»ç°¡ ÀÚ½Å¿¡°Ô ÇØ´çÇÏ´Â qna¸¦ Ã£´Â ¹æ¹ıÀº responder_idÀ¸·Î ÇØ¼­ ÀÚ½Å¸¸ Á¢±ÙÇÏ°Ô ÇÏ°í(°­ÁÂ¹øÈ£·Î ÇÒ±î °í¹Îµµ ÇÔ)
---¹İ¸é ÇàÁ¤¿¡¼­ Ã£À»¶§´Â typeÀ¸·Î ÇØ¼­ ÇàÁ¤ 3¸í ¸ğµÎ Á¢±Ù °¡´ÉÇÏ°Ô ÇÒ°Í 
+--teacher > qna_l > getQnaList : ë²ˆí˜¸, ì œëª©, ì‘ì„±ì, ì‘ì„±ì¼, ë‹µë³€ì—¬ë¶€(answer_contentì˜ ê°’ ìœ ë¬´ë¡œ), ë¶„ë¥˜
+--ê°•ì‚¬ê°€ ìì‹ ì—ê²Œ í•´ë‹¹í•˜ëŠ” qnaë¥¼ ì°¾ëŠ” ë°©ë²•ì€ responder_idìœ¼ë¡œ í•´ì„œ ìì‹ ë§Œ ì ‘ê·¼í•˜ê²Œ í•˜ê³ (ê°•ì¢Œë²ˆí˜¸ë¡œ í• ê¹Œ ê³ ë¯¼ë„ í•¨)
+--ë°˜ë©´ í–‰ì •ì—ì„œ ì°¾ì„ë•ŒëŠ” typeìœ¼ë¡œ í•´ì„œ í–‰ì • 3ëª… ëª¨ë‘ ì ‘ê·¼ ê°€ëŠ¥í•˜ê²Œ í• ê²ƒ 
 SELECT row_number() OVER(ORDER BY write_date) num, title, name as std_name,TO_CHAR(write_date,'yyyy-mm-dd'),answer_content, type FROM qna_l ql JOIN user01 u ON ql.std_id = u.user_id WHERE responder_id = 'tea1';
 
 
 --User
 SELECT u.user_Id AS user_id, password, u.name AS name, email,phone_number,belong, l.name AS lectureName,start_date,end_date,l.lecture_id AS lecture_id FROM user01 u JOIN lectureuser lu ON u.user_id = lu.user_id JOIN lecture l ON lu.lecture_id = l.lecture_id WHERE u.user_id='tea1' AND u.password='1234';
+
+
+---Student
+SELECT total_days FROM user01 u JOIN lectureUser lu ON u.user_id = lu.user_id JOIN lecture l ON lu.lecture_id  = l.lecture_id WHERE l.lecture_id =?

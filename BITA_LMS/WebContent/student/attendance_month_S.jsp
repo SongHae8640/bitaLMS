@@ -5,13 +5,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="../css/frame.css" />
-<link href='../packages/core/main.css' rel='stylesheet' />
-<link href='../packages/daygrid/main.css' rel='stylesheet' />
-<script src='../packages/core/main.js'></script>
-<script src='../packages/interaction/main.js'></script>
-<script src='../packages/daygrid/main.js'></script>
+	<link href='css/fullcalendar.min.css' rel='stylesheet' />
+	<link href='css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+	<script src='js/moment.min.js'></script>
+	<script src='js/jquery-1.12.4.js'></script>
+	<script src='js/jquery.bpopup.min.js'></script>
+	<script src='js/fullcalendar.js'></script>
+	<script src='js/fullcalendar_ko.js'></script>
+<link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
 	width: 610px;
@@ -24,7 +25,6 @@ body {
 	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
 	font-size: 14px;
 }
-
 #calendar {
 	max-width: 900px;
 	margin: 0 auto;
@@ -39,70 +39,36 @@ body {
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-	});
-	document.addEventListener('DOMContentLoaded', function() {
-		var calendarEl = document.getElementById('calendar');
+		
+		
+		//fullCalendar 가져오기
+		$('#calendar').fullCalendar({
+			defaultDate: "2019-07-10",
+			lang: "ko",
+			editable: true,
+			eventLimit: true,
+			displayEventTime: false,
+			events: {
+				url: "callAttendanceMonthListJson.stu",
+				error: function() {
+					console.log("fullcalendar 가져오기 실패")
+				},
+				success: function(calData) {
+					console.log("fullcalendar 가져오기 성공")
+					console.log(calData);
+				}
+			},
 
-		var calendar = new FullCalendar.Calendar(calendarEl, {
-			plugins : [ 'interaction', 'dayGrid' ],
-			defaultDate : '2019-06-12',
-			editable : true,
-			eventLimit : true, // allow "more" link when too many events
-			events : [ {
-				title : 'All Day Event',
-				start : '2019-06-01'
-			}, {
-				title : 'Long Event',
-				start : '2019-06-07',
-				end : '2019-06-10'
-			}, {
-				groupId : 999,
-				title : 'Repeating Event',
-				start : '2019-06-09T16:00:00'
-			}, {
-				groupId : 999,
-				title : 'Repeating Event',
-				start : '2019-06-16T16:00:00'
-			}, {
-				title : 'Conference',
-				start : '2019-06-11',
-				end : '2019-06-13'
-			}, {
-				title : 'Meeting',
-				start : '2019-06-12T10:30:00',
-				
-				end : '2019-06-12T12:30:00'
-			}, {
-				title : 'Lunch',
-				start : '2019-06-12T12:00:00'
-			}, {
-				title : 'Meeting',
-				start : '2019-06-12T14:30:00'
-			}, {
-				title : 'Happy Hour',
-				start : '2019-06-12T17:30:00'
-			}, {
-				title : 'Dinner',
-				start : '2019-06-12T20:00:00'
-			}, {
-				title : 'Birthday Party',
-				start : '2019-06-13T07:00:00'
-			}, {
-				title : 'Click for Google',
-				url : 'http://google.com/',
-				start : '2019-06-28'
-			} ]
 		});
-
-		calendar.render();
 	});
+	
 </script>
 </head>
 <body>
 	
 	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<a href="logout.bit">logout</a> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
 			<ul>
