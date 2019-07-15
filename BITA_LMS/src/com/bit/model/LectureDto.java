@@ -1,8 +1,8 @@
 package com.bit.model;
 
 public class LectureDto {
-	private int lectureID, numStd, totalDays, maxStd, lv, progressDays;
-	private String name, startDate, endDate, content, fileName, teaName;
+	private int lectureID, numStd, totalDays, maxStd, lv, progressDays, fileId, curriId;
+	private String name, startDate, endDate, content, teaName, teaId;
 	private boolean isClose; //�ʱⰪ false
 
 	public String getTeaName() {
@@ -49,10 +49,6 @@ public class LectureDto {
 		return content;
 	}
 
-	public String getFileName() {
-		return fileName;
-	}
-
 	public boolean getIsClose() {
 		return isClose;
 	}
@@ -93,10 +89,6 @@ public class LectureDto {
 		this.content = content;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
 	public void setIsClose(String isClose) {
 		this.isClose = isClose.equals("1");
 	}
@@ -114,8 +106,32 @@ public class LectureDto {
 				+ ", totalDays=" + totalDays + ", maxStd=" + maxStd + ", lv="
 				+ lv + ", name=" + name + ", startDate=" + startDate
 				+ ", endDate=" + endDate + ", content=" + content
-				+ ", fileName=" + fileName + ", teaName=" + teaName
+				+ ", teaName=" + teaName
 				+ ", isClose=" + isClose + "]";
+	}
+
+	public int getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(int fileId) {
+		this.fileId = fileId;
+	}
+
+	public int getCurriId() {
+		return curriId;
+	}
+
+	public void setCurriId(int curriId) {
+		this.curriId = curriId;
+	}
+
+	public String getTeaId() {
+		return teaId;
+	}
+
+	public void setTeaId(String teaId) {
+		this.teaId = teaId;
 	}
 
 

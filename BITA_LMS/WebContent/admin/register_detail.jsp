@@ -205,7 +205,7 @@
 							</div>
 							<div>
 								<label>파일첨부</label>
-								<a><%=registerBean.getFileName() %></a>
+								<a><%=registerBean.getFileId() %></a>
 							</div>
 						</div>
 						</td>

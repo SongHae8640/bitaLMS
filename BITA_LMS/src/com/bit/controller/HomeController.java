@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import com.bit.model.ApplyDto;
 import com.bit.model.AttachedFileDto;
-import com.bit.model.FileGroupDto;
 import com.bit.model.HomeDao;
 import com.bit.model.UserDao;
 import com.bit.model.UserDto;
@@ -153,9 +152,7 @@ public class HomeController extends HttpServlet {
 
 			
 			//FileGroupDto생성 후 fileGBean에 데이터 담기
-			FileGroupDto fileGBean = new FileGroupDto();
-			fileGBean.setFileGroup("수강신청"); 		//수강신청 그룹에 파일이 들어감
-			fileGBean.setPath(filePath);				//파일 저장경로
+			fileBean.setPath(filePath);				//파일 저장경로
 				
 			//HomeDao 인스턴스화해서 메소드 사용
 			//중복파일 검사 후 이름 바꿔서 fileBean에 담기
@@ -167,7 +164,7 @@ public class HomeController extends HttpServlet {
 				fileBean.setFileName(oriFileName);
 			}
 			//파일업로드한거 insert 
-			result = dao.insertApply(applyBean,fileBean,fileGBean, userBean);	 
+			result = dao.insertApply(applyBean,fileBean, userBean);	 
 			System.out.println("수강신청결과"+result); 
 			
 			//정상적으로 수강신청 한 것만

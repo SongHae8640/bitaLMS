@@ -84,14 +84,54 @@
 	#content #under_list #list_button{
 	float: left;
 	}
-	#content #under_list #ans_button{
+	#content #under_list #ok_button{
 	float: right;
-	width: 45px;
+	width: 50px;
 	}
 	#content #under_list #del_button{
 	float: right;
-	width: 45px;
+	width: 50px;
 	}
+	#pic{
+	width:100px;
+	}
+	#tea_pic label {
+	position: absolute;
+	top:235px;
+	left:0px;
+	height:15px;
+  display: inline-block;
+  padding: .5em .75em;
+  color: #fff;
+  font-size: inherit;
+  line-height: 15px;
+  vertical-align: middle;
+  background-color: #2C528C;
+  cursor: pointer;
+  border: 1px solid #003366;
+  border-radius: .25em;
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+
+#tea_pic label:hover {
+  background-color: #51A0D5;
+}
+
+#tea_pic label:active {
+  background-color: #51A0D5;
+}
+
+#tea_pic input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
 	
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -103,18 +143,99 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#del_btn').click(function(){
-			var result = confirm('정말 삭제하시겠습니까?'); 
-			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm'); } 
-			else { 
-				//no-변동사항없음
-				} 
-			});
 		$('#list_btn').click(function(){
-				location.replace('qna.adm'); 
+				location.replace('manage_tea.adm'); 
+		});
+		$('#reject_btn').click(function(){
+			location.replace('manage_tea.adm'); 
+		});
+		$("#teacher").change(function() {
+	        readURL(this);
+	        
+	    });
+		$("#add_career1").click(function(){
+			var plus = $("#add_career1").prev();
+			plus.after('<input type="text" name="tea_career1" placeholder="회사명-개발내용"><br>');
+		});
+		$("#add_career2").click(function(){
+			var plus = $("#add_career2").prev();
+			plus.after('<input type="text" name="tea_career2" placeholder="책제목-출판사"><br>');
+		});
+		$("#add_qul").click(function(){
+			var plus = $("#add_qul").prev();
+			plus.after('<input type="text" name="tea_qul" placeholder="정처기"><br>');
+		});
+		
+		$("#btn").click(function(){
+
+			var result = txtFieldCheck() == true ? true : false;
+			
+			if(result==true && $('#tea_password').val()!=$('#tea_password_re').val()){
+				alert('비밀번호와 재입력한 비밀번호가 맞지 않습니다.');
+				$("#tea_password").focus();
+				result = false;
+			}
+
+			
+			if(result==true){
+				$("#send_tea").attr("action", "manage_tea_insert.adm");
+				$("#send_tea").submit();
+			}
+
 		});
 	});
+	
+	 function readURL(input) {
+	        if (input.files && input.files[0]) {
+	            var reader = new FileReader();
+	            reader.onload = function(e) {
+	                $('#pic').attr('src', e.target.result);
+	                $('#pic').attr('width', '100px');
+	            }
+	            reader.readAsDataURL(input.files[0]);
+	        }
+	 }
+	 
+	 function txtFieldCheck(){
+
+		// form안의 모든 text type 조회
+
+		var txtEle = $(".checkField");
+
+		  
+
+		for(var i = 0; i < txtEle.length; i ++){
+
+
+			if("" == $(txtEle[i]).val() || null == $(txtEle[i]).val()){
+	
+				var ele_id = $(txtEle[i]).attr("id");
+		
+				var label_txt = $("label[for='" + ele_id +"']").text();
+		
+				console.log("id : " + ele_id + ", label : " + label_txt);
+		
+				showAlert(ele_id, label_txt);
+				
+				return false;
+	
+			}
+
+		}
+		return true;
+
+	}
+
+		function showAlert(ele_id, label_txt){
+
+		alert(label_txt + " 은/는 꼭 입력해야합니다.");
+
+		// 해당 id에 focus.
+
+		$("#" + ele_id).focus();
+
+		}
+	    
 </script>
 </head>
 <body>
@@ -139,7 +260,7 @@
 			<h3>강사관리</h3>
 			<br/><br/>
 		</div>
-		<form name="send_tea" method="post" action="#">
+		<form id="send_tea" method="post" enctype="multipart/form-data" action="" >
 		<div id="real_content">
 			<div id="page_name">
 				<h2>강사정보</h2>
@@ -147,16 +268,18 @@
 			<br/><br/>
 		<div id="tea_detail">
 			<div id="tea_pic">
-				<h3>강사이미지</h3>
+				<img id="pic"src="img/tea.png" />
+				<label for="teacher">upload</label>
+				<input type="file" name="teacher" id="teacher" class="checkField"/>
 			</div>
 			<table id="tea_table1">
 					<tr>
-						<td>강사명</td>
-						<td><input type="text" name="tea_name" placeholder="김코난"></td>
+						<td><label for="name">강사명</label></td>
+						<td><input type="text" name="name" id="name" placeholder="김코난" class="checkField"></td>
 					</tr>
 					<tr>
-						<td>학력</td>
-						<td><input type="text" name="tea_level" placeholder="세종대학교 컴퓨터공학 석사"></td>
+						<td><label for="tea_level">학력</label></td>
+						<td><input type="text" name="tea_level" id="tea_level" placeholder="세종대학교 컴퓨터공학 석사" class="checkField"></td>
 					</tr>
 			</table>
 			<table id="tea_table2">
@@ -172,12 +295,24 @@
 					<td><input type="text" name="tea_qul" placeholder="정처기"><button type="button" id="add_qul">+</button></td>
 				</tr>
 				<tr>
-					<td>이메일</td>
-					<td colspan="2"><input type="text" name="tea_mail" placeholder="kmkm@naver.com"></td>
+					<td><label for="tea_id">ID</label></td>
+					<td colspan="2"><input type="text" name="tea_id" id="tea_id" placeholder="4~12자 사이의 영문자 또는 영문자+숫자" class="checkField"></td>
 				</tr>
 				<tr>
-					<td>연락처</td>
-					<td colspan="2"><input type="text" name="tea_tel" placeholder="010-1234-5678"></td>
+					<td><label for="tea_password">비밀번호</label></td>
+					<td colspan="2"><input type="password" name="tea_password" id="tea_password" placeholder="양문자+숫자" class="checkField"></td>
+				</tr>
+				<tr>
+					<td><label for="tea_password_re">비밀번호 확인</label></td>
+					<td colspan="2"><input type="password" name="tea_password_re" id="tea_password_re" placeholder="영문자+숫자" class="checkField"></td>
+				</tr>
+				<tr>
+					<td><label for="tea_mail">이메일</label></td>
+					<td colspan="2"><input type="email" name="tea_mail" id="tea_mail" placeholder="kmkm@naver.com" class="checkField"></td>
+				</tr>
+				<tr>
+					<td><label for="tea_tel">연락처</label></td>
+					<td colspan="2"><input type="tel" name="tea_tel" id="tea_tel" placeholder="00*-000*-00000" pattern="[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}" class="checkField"></td>
 				</tr>
 			</table>
 	</div>
@@ -186,10 +321,10 @@
 				<button type="button" id="list_btn">목록</button>
 			</div>
 			<div id="del_button">
-				<button type="button" id="del_btn">삭제</button>
+				<button type="button" id="reject_btn">취소</button>
 			</div>
-			<div id="ans_button">
-				<button type="submit">수정</button>
+			<div id="ok_button">
+				<button type="button" id="btn">확인</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>

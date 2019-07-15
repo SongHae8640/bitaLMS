@@ -1,5 +1,6 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList,com.bit.model.TeacherDto,com.bit.model.LectureDto"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -114,8 +115,50 @@
 	width: 45px;
 	}
 	
+#pic, #curri_thumb{
+	width:150px;
+	}
+	#curri_thumb label {
+	position: absolute;
+	top:280px;
+	left:0px;
+	height:15px;
+  display: inline-block;
+  padding: .5em .75em;
+  color: #fff;
+  font-size: inherit;
+  line-height: 15px;
+  vertical-align: middle;
+  background-color: #2C528C;
+  cursor: pointer;
+  border: 1px solid #003366;
+  border-radius: .25em;
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+
+#curri_thumb label:hover {
+  background-color: #51A0D5;
+}
+
+#curri_thumb label:active {
+  background-color: #51A0D5;
+}
+
+#curri_thumb input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+	
 </style>
-<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.topmenu').mouseenter(function() {
@@ -126,12 +169,79 @@
 		});
 		$('#list_btn').click(function(){ 
 			location.replace('manage_lec.adm');  
-			});
+		});
 		$('#reject_btn').click(function(){
 			//원래글 디테일
-			location.replace('manage_lec_detail.adm');  
+			window.history.back();
 		});
+		$("#btn").click(function(){
+
+			var result = txtFieldCheck() == true ? true : false;
+
+			
+			if(result==true){
+				$("#send_tea").attr("action", "manage_tea_insert.adm");
+				$("#send_tea").submit();
+			}
+
+		});
+		
+		$("#lecture").change(function() {
+	        readURL(this);
+	        
+	    });
 	});
+	
+	function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#pic').attr('src', e.target.result);
+                $('#pic').attr('width', '100px');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+ }
+ 
+ function txtFieldCheck(){
+
+	// form안의 모든 text type 조회
+
+	var txtEle = $(".checkField");
+
+	  
+
+	for(var i = 0; i < txtEle.length; i ++){
+
+
+		if("" == $(txtEle[i]).val() || null == $(txtEle[i]).val()){
+
+			var ele_id = $(txtEle[i]).attr("id");
+	
+			var label_txt = $("label[for='" + ele_id +"']").text();
+	
+			console.log("id : " + ele_id + ", label : " + label_txt);
+	
+			showAlert(ele_id, label_txt);
+			
+			return false;
+
+		}
+
+	}
+	return true;
+
+}
+
+	function showAlert(ele_id, label_txt){
+
+	alert(label_txt + " 은/는 꼭 입력해야합니다.");
+
+	// 해당 id에 focus.
+
+	$("#" + ele_id).focus();
+
+	}
 </script>
 </head>
 <body>
@@ -156,7 +266,7 @@
 			<h3>강좌관리</h3>
 			<br/><br/>
 		</div>
-		<form name="send_lec" method="post" action="manage_lec_edit.adm">
+		<form name="send_lec" method="post" action="manage_lec_update.adm" accept-charset="utf-8"  enctype="multipart/form-data">
 		<div id="real_content">
 		<br />
 
@@ -166,60 +276,76 @@
 			<br/><br/>
 		<div id="lec_detail">
 			<div id="curri_thumb">
-				<h3>커리큘럼이미지</h3>
+				<img id="pic"src="img/JAVA.jpg" />
+				<label for="lecture">upload</label>
+				<input type="file" name="lecture" id="lecture" class="checkField"/>
 			</div>
 			<table id="lec_table1">
 					<tr>
-						<td>강좌명</td>
-						<td><input type="text" name="lec_name" placeholder="JAVA"></td>
+					<%
+								LectureDto lectureBean = (LectureDto)request.getAttribute("lectureBean");
+								if(lectureBean !=null){
+					%>
+						<td><label for="lec_name">강좌명</label><input type="hidden" name="lec_id" id="lec_id" value="<%=lectureBean.getLectureID() %>"></td>
+						<td><input type="text" name="lec_name" id="lec_name" class="checkField" value="<%=lectureBean.getName() %>"></td>
 					</tr>
 					<tr>
 						<td>강사명</td>
 						<td>
-							<select name="tea_name">
-							    <option value="김코난">김코난</option>
-							    <option value="남도일">남도일</option>
-							    <option value="유미란">유미란</option>
+							<select name="tea_name" class="checkField">
+							<option value="<%=lectureBean.getTeaId() %>"><%=lectureBean.getTeaName() %></option>
+							<%
+				ArrayList<TeacherDto> teacherList = (ArrayList<TeacherDto>)request.getAttribute("teacherList");
+				if(teacherList !=null){
+					for(int i=0; i<teacherList.size(); i++){
+						
+				%>
+							    <option value="<%=teacherList.get(i).getTeacherId() %>"><%=teacherList.get(i).getName() %></option>
+							    <%
+					}
+				}
+							    %>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<td>교육기간</td>
 						<td>
-						<input type="text" name="lec_start" value="2019-07-01">~ 
-						<input type="text" name="lec_end" value="2019-10-01">
+						<input type="date" name="lec_start" style="width: 120px" class="checkField" value="<%=lectureBean.getStartDate() %>">
+						~
+						<input type="date" name="lec_end" style="width: 120px" class="checkField" value="<%=lectureBean.getEndDate() %>">
 						</td>
 					</tr>
 					<tr>
-						<td><input type="text" name="lec_level" value="3">수준</td>
+						<td><input type="text" name="lec_level" class="checkField" value="<%=lectureBean.getLv() %>">수준</td>
 					</tr>
 					<tr>
-						<td>최대인원</td>
-						<td><input type="text" name="max_stu" value="30"></td>
+						<td><label for="max_stu">최대인원</label></td>
+						<td><input type="text" name="max_stu" id="max_stu" class="checkField" value="<%=lectureBean.getMaxStd() %>"></td>
+
 					</tr>
 			</table>
 			<table id="lec_table2">
 				<tr>
 					<td>
-						<label>진도율</label>
-						<progress value="20" max="100"></progress>
-					</td>
-				</tr>
-				<tr>
-					<td>
-					<label>강의내용</label>
+					<label for="content_area">강의내용</label>
 						<div>
-						<textarea name="content" rows="6" cols="70">내용</textarea>
+						<textarea name="content_area" id="content_area" rows="6" cols="70"><%=lectureBean.getContent() %></textarea>
 						</div>
 					</td>
 				</tr>
 				<tr>
 					<td>
+						<label for="lec_file">커리큘럼 이미지</label>
 						<div id="curri_des">
-							<input type="file"id="lec_file"/>
+							<img src="img/<%=lectureBean.getFileId()+".jpg"%>"/>
+							<input type="file" name="lec_file" id="lec_file"/>
 						</div>
 					</td> 
 				</tr>
+				<%
+								}
+					%>
 			</table>
 	</div>
 		<div id="under_list">

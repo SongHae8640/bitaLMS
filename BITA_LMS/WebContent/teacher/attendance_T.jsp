@@ -24,11 +24,9 @@
 		$('#sb').change(function(){
 			var state=$('#sb option:selected').val();
 			if(state=='day'){
-				alert('day');
-				$(location).attr('href', 'attendance_T.tea')
+				$(location).attr('href', 'attendance.tea')
 			}else if(state=='month'){
-				alert('month');
-				$(location).attr('href', 'month_attendance_T.tea')
+				$(location).attr('href', 'attendance_month.tea')
 			}
 		});
 		$('#content>button').hide().eq(0).show().click(function() {

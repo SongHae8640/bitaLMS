@@ -67,7 +67,7 @@ public class HomeDao extends Dao{
 		return result;
 	}
 	
-	public int insertApply(ApplyDto applyBean,AttachedFileDto fileBean,FileGroupDto fileGBean,UserDto userBean){
+	public int insertApply(ApplyDto applyBean,AttachedFileDto fileBean,UserDto userBean){
 		int result1 = 0;
 		int result2 = 0;
 		int result3 = 0;
@@ -75,7 +75,6 @@ public class HomeDao extends Dao{
 		//apply_id apply_date lecture_id file_name user_id
 		//apply,Attached_File,File_Group 에 데이터 한번에 넣기
 		System.out.println(applyBean.toString());
-		System.out.println(fileGBean.toString());
 		System.out.println(fileBean.toString());
 		String sql1 = "insert into Attached_File (file_id,file_group,original_name,file_name,file_extension,ref_date,reg_id)"
 					+"values (file_id_seq.nextval,?,?,?,?,sysdate,?)";
@@ -102,8 +101,7 @@ public class HomeDao extends Dao{
 			if(result2==1){
 			result2 = pstmt.executeUpdate();
 			pstmt = conn.prepareStatement(sql3);		
-			pstmt.setString(1, fileGBean.getFileGroup());		//File_Group에 테이블에 넣기
-			pstmt.setString(2, fileGBean.getPath());
+			pstmt.setString(2, fileBean.getPath());
 			result3 = pstmt.executeUpdate();
 			System.out.println("result3"+result3);
 			}

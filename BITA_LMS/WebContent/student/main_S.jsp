@@ -15,6 +15,9 @@
 	list-style-type: none;
 	margin: 0px auto;
 }
+#attendance>table{
+	display: inline;
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -56,6 +59,7 @@
 				})
 					
                 $("#statusGroup").html(show) ;
+				 $("#statusGroup").css('float','left');
             }
              
         });
@@ -85,12 +89,16 @@
 			<div id = "calendar">
 			
 			</div>
-			
-			<div id = "attendance"></div>
-				<jsp:include page="../call_attendance_S.jsp" flush="false"/>
-			
-			<div id = "statusGroup">
+			<div id = "attendance">
+			<table>
+				<tr>
+					<td><jsp:include page="call_attendance_S.jsp" flush="false"/></td>
+					<td><div id = "statusGroup">
 				여기!
+				</div></td>
+				</tr>
+			</table>
+			</div>
 			</div>
 		</div>
 		<div id="footer">

@@ -232,7 +232,7 @@ public class StudentDao extends Dao{
 		return null;
 	}
 
-	public ScoreDto getScoreBean(String userId) {
+	public ScoreDto getScore(String userId) {
 		openConnection();
 	
 		closeConnection();
@@ -443,11 +443,6 @@ public class StudentDao extends Dao{
 			closeConnection();
 		}
 		return result;
-	}
-
-	public int insertQnaL(QnaLDto qnaLBean) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 

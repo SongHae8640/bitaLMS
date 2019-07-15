@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList,com.bit.model.TeacherDto,com.bit.model.AttachedFileDto" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -88,6 +89,9 @@
 	width: 45px;
 	float: right;
 	}
+	#pic{
+	width:100px;
+	}
 	
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -108,9 +112,13 @@
 				} 
 			});
 		$('#list_btn').click(function(){
-				location.replace('qna.adm'); } 
-			}); 
+				location.replace('manage_tea.adm');
+		}); 
+		
 	});
+	
+	
+	
 </script>
 </head>
 <body>
@@ -130,6 +138,7 @@
 			</ul>
 		</div>
 		<div id="content">
+		<form id="form" action="tea_delete.adm" method="post">
 			<div id="sidebar">
 			<br/><br/><br/><br/>
 			<h3>강사관리</h3>
@@ -141,17 +150,43 @@
 			</div>
 			<br/><br/>
 		<div id="tea_detail">
+			<%
+				AttachedFileDto fileBean = (AttachedFileDto)request.getAttribute("fileBean");
+				if(fileBean !=null){
+			%>
 			<div id="tea_pic">
-				<h3>강사이미지</h3>
+				<img id="pic"src="<%="save/profile/"+fileBean.getFileName()+"."+fileBean.getFileExtension() %>" />
 			</div>
-			<table id="lec_table1">
+			<table id="tea_table1">
+			<%
+				}
+			%>
+			<%
+				ArrayList<TeacherDto> teacherBean = (ArrayList<TeacherDto>)request.getAttribute("teacherBean");
+				if(teacherBean !=null){
+					
+				%>
+					<input type="hidden" name="userId" value="<%=teacherBean.get(0).getTeacherId() %>">
+				
 					<tr>
-						<td>김코난</td>
-						<td>JAVA</td>
+						<td><%=teacherBean.get(0).getName() %></td>
+						<td><%=teacherBean.get(0).getLecName() %></td>
 					</tr>
 					<tr>
 						<td>학력</td>
-						<td>세종대학교 컴퓨터공학 석사</td>
+						<td>
+						<%
+					for(int i=0; i<teacherBean.size(); i++){
+						TeacherDto bean = teacherBean.get(i);
+						if(bean.getType().equals("학력")){
+						
+					%>
+						<%=bean.getContent() %>
+					<%
+					}
+					}
+					%>
+					</td>
 					</tr>
 			</table>
 			<table id="lec_table2">
@@ -161,17 +196,59 @@
 					<td>자격</td>
 				</tr>
 				<tr>
-					<td>회사명-개발내용</td>
-					<td>책제목-출판사</td>
-					<td>정처기</td>
+				<td>
+				<%
+					for(int i=0; i<teacherBean.size(); i++){
+					String type = teacherBean.get(0).getType();
+					TeacherDto bean = teacherBean.get(i);
+					if(bean.getType().contains("경력")){
+						
+				%>
+				<%=bean.getContent()+"<br>"%>
+					
+				<%
+					}
+				}
+				%>
+				</td>
+				<td>
+				<%
+					for(int i=0; i<teacherBean.size(); i++){
+					String type = teacherBean.get(0).getType();
+					TeacherDto bean = teacherBean.get(i);
+					if(bean.getType().contains("저서")){
+						
+				%>
+				<%=bean.getContent()+"<br>"%>
+					
+				<%
+					}
+				}
+				%>
+				</td>
+				<td>
+				<%
+					for(int i=0; i<teacherBean.size(); i++){
+					String type = teacherBean.get(0).getType();
+					TeacherDto bean = teacherBean.get(i);
+					if(bean.getType().contains("자격")){
+						
+				%>
+				<%=bean.getContent()+"<br>"%>
+					
+				<%
+					}
+				}
+				%>
+				</td>
 				</tr>
 				<tr>
 					<td>이메일</td>
-					<td colspan="2">kmkm@naver.com</td>
+					<td colspan="2"><%=teacherBean.get(0).getEmail() %></td>
 				</tr>
 				<tr>
 					<td>연락처</td>
-					<td colspan="2">010-1234-5678</td>
+					<td colspan="2"><%=teacherBean.get(0).getPhoneNumber() %></td>
 				</tr>
 			</table>
 			
@@ -181,14 +258,18 @@
 				<button type="button" id="list_btn">목록</button>
 			</div>
 			<div id="del_button">
-				<button type="button" id="del_btn">삭제</button>
+				<button type="submit" id="del_btn">삭제</button>
 			</div>
 			<div id="ans_button">
-				<button type="button">수정</button>
+				<button type="button" onclick="location.href='manage_tea_update.adm?idx=<%=teacherBean.get(0).getTeacherId()%>'">수정</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
+		<%
+				}
+		%>
 	</div>
+	</form>
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />

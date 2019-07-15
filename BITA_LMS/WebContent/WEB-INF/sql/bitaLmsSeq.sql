@@ -8,6 +8,7 @@ DROP SEQUENCE review_id_seq;
 DROP SEQUENCE data_id_seq;
 DROP SEQUENCE notice_id_seq;
 DROP SEQUENCE qnal_id_seq;
+DROP SEQUENCE file_id_seq;
 
 
 CREATE SEQUENCE apply_id_seq;
@@ -20,4 +21,5 @@ CREATE SEQUENCE review_id_seq;
 CREATE SEQUENCE data_id_seq;
 CREATE SEQUENCE notice_id_seq;
 CREATE SEQUENCE qnal_id_seq;
+CREATE SEQUENCE file_id_seq;
 commit;

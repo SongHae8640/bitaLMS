@@ -50,7 +50,7 @@ INSERT INTO lectureUser(lecture_id, user_id) values(0,'bef3');
 INSERT INTO lectureUser(lecture_id, user_id) values(0,'bef4');
 
 --학생의 강좌를 입력
-UPDATE 
+--UPDATE 
 
 
 --�л� ����� ���Ҷ� 
@@ -58,7 +58,9 @@ UPDATE
 --SELECT * FROM user01 u JOIN lectureUser l ON u.user_id=l.user_id;
 
 --Teacher_info
-INSERT INTO teacher_info(info_id,type ,content,teacher_id) VALUES(1,'자격증','정보처리기사','tea1');
+INSERT INTO teacher_info(info_id,type ,content,teacher_id) VALUES(1,'학력','세종대학교 컴퓨터공학과','tea1');
+INSERT INTO teacher_info(info_id,type ,content,teacher_id) VALUES(2,'학력','건국대학교 문화콘텐츠학과','tea2');
+INSERT INTO teacher_info(info_id,type ,content,teacher_id) VALUES(3,'학력','고려대학교 컴퓨터공학과','tea3');
 
 --Attendance
 INSERT INTO attendance(day_time,std_id,checkin_time,checkout_time,status,lecture_id) VALUES(TO_DATE('20190701','YYYYMMDD'),'stu1',TO_DATE('20190701 09:00:11','YYYYMMDD HH24:MI:SS') ,TO_DATE('20190701 18:00:11','YYYYMMDD HH24:MI:SS') ,'�⼮',1);
@@ -108,4 +110,137 @@ INSERT INTO calendar(calendar_id, title, content, start_date, end_date, lecture_
 INSERT INTO apply(apply_date,apply_id,lecture_id,user_id,file_id) VALUES(sysdate,1,1,'bef1',1);
 INSERT INTO apply(apply_date,apply_id,lecture_id,user_id,file_id) VALUES(sysdate,2,1,'bef2',2);
 INSERT INTO apply(apply_date,apply_id,lecture_id,user_id,file_id) VALUES(sysdate,3,1,'bef3',3);
+
+--이거 다 버리고
+ALTER TABLE Apply DROP CONSTRAINT R_13;
+ALTER TABLE Apply
+	ADD (CONSTRAINT  R_13 FOREIGN KEY (user_id) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Apply DROP CONSTRAINT R_14;
+ALTER TABLE Apply
+	ADD (CONSTRAINT  R_14 FOREIGN KEY (lecture_id) REFERENCES Lecture(lecture_id) ON DELETE cascade);
+
+
+ALTER TABLE Apply DROP CONSTRAINT R_63;
+ALTER TABLE Apply
+	ADD (CONSTRAINT  R_63 FOREIGN KEY (file_id) REFERENCES Attached_File(file_id) ON DELETE cascade);
+
+
+ALTER TABLE Assignment DROP CONSTRAINT R_38;
+ALTER TABLE Assignment
+	ADD (CONSTRAINT  R_38 FOREIGN KEY (lecture_id) REFERENCES Lecture(lecture_id) ON DELETE cascade);
+
+
+ALTER TABLE Attached_File DROP CONSTRAINT R_59;
+ALTER TABLE Attached_File
+	ADD (CONSTRAINT  R_59 FOREIGN KEY (file_group) REFERENCES File_Group(file_group) ON DELETE cascade);
+
+
+ALTER TABLE Attached_File DROP CONSTRAINT R_64;
+ALTER TABLE Attached_File
+	ADD (CONSTRAINT  R_64 FOREIGN KEY (reg_id) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Attendance DROP CONSTRAINT R_11;
+ALTER TABLE Attendance
+	ADD (CONSTRAINT  R_11 FOREIGN KEY (std_id) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Attendance DROP CONSTRAINT R_25;
+ALTER TABLE Attendance
+	ADD (CONSTRAINT  R_25 FOREIGN KEY (lecture_id) REFERENCES Lecture(lecture_id) ON DELETE cascade);
+
+
+ALTER TABLE Calendar DROP CONSTRAINT R_24;
+ALTER TABLE Calendar
+	ADD (CONSTRAINT  R_24 FOREIGN KEY (lecture_id) REFERENCES Lecture(lecture_id) ON DELETE cascade);
+
+
+ALTER TABLE Data_room DROP CONSTRAINT R_39;
+ALTER TABLE Data_room
+	ADD (CONSTRAINT  R_39 FOREIGN KEY (writer) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Data_room DROP CONSTRAINT R_61;
+ALTER TABLE Data_room
+	ADD (CONSTRAINT  R_61 FOREIGN KEY (file_id) REFERENCES Attached_File(file_id) ON DELETE cascade);
+
+
+ALTER TABLE Lecture DROP CONSTRAINT R_62;
+ALTER TABLE Lecture
+	ADD (CONSTRAINT  R_62 FOREIGN KEY (file_id) REFERENCES Attached_File(file_id) ON DELETE cascade);
+
+
+ALTER TABLE Lecture_review DROP CONSTRAINT R_30;
+ALTER TABLE Lecture_review
+	ADD (CONSTRAINT  R_30 FOREIGN KEY (writer) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE LectureUser DROP CONSTRAINT R_51;
+ALTER TABLE LectureUser
+	ADD (CONSTRAINT  R_51 FOREIGN KEY (lecture_id) REFERENCES Lecture(lecture_id) ON DELETE cascade);
+
+
+ALTER TABLE LectureUser DROP CONSTRAINT R_52;
+ALTER TABLE LectureUser
+	ADD (CONSTRAINT  R_52 FOREIGN KEY (user_id) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Notice DROP CONSTRAINT R_42;
+ALTER TABLE Notice
+	ADD (CONSTRAINT  R_42 FOREIGN KEY (writer) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Qna_H DROP CONSTRAINT R_40;
+ALTER TABLE Qna_H
+	ADD (CONSTRAINT  R_40 FOREIGN KEY (std_id) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Qna_L DROP CONSTRAINT R_45;
+ALTER TABLE Qna_L
+	ADD (CONSTRAINT  R_45 FOREIGN KEY (std_id) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Qna_L DROP CONSTRAINT R_49;
+ALTER TABLE Qna_L
+	ADD (CONSTRAINT  R_49 FOREIGN KEY (responder_id) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Score DROP CONSTRAINT R_16;
+ALTER TABLE Score
+	ADD (CONSTRAINT  R_16 FOREIGN KEY (std_id) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Score DROP CONSTRAINT R_17;
+ALTER TABLE Score
+	ADD (CONSTRAINT  R_17 FOREIGN KEY (lecture_id) REFERENCES Lecture(lecture_id) ON DELETE cascade);
+
+
+ALTER TABLE Submission DROP CONSTRAINT R_27;
+ALTER TABLE Submission
+	ADD (CONSTRAINT  R_27 FOREIGN KEY (assignment_id) REFERENCES Assignment(assignment_id) ON DELETE cascade);
+
+
+ALTER TABLE Submission DROP CONSTRAINT R_28;
+ALTER TABLE Submission
+	ADD (CONSTRAINT  R_28 FOREIGN KEY (std_id) REFERENCES User01(user_id) ON DELETE cascade);
+
+
+ALTER TABLE Submission DROP CONSTRAINT R_60;
+ALTER TABLE Submission
+	ADD (CONSTRAINT  R_60 FOREIGN KEY (file_id) REFERENCES Attached_File(file_id) ON DELETE cascade);
+
+
+
+ALTER TABLE Teacher_Info DROP CONSTRAINT R_36;
+ALTER TABLE Teacher_Info
+	ADD (CONSTRAINT  R_36 FOREIGN KEY (teacher_id) REFERENCES User01(user_id) ON DELETE cascade);
+--delete
+
+--파일그룹 미리 만들기
+insert into File_Group (file_group,path) values ('profile','C:\java\workspace2\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\BITA_LMS\save\profile');
+insert into File_Group (file_group,path) values ('lecture','C:\java\workspace2\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\BITA_LMS\save\lecture');
+
+
 commit;

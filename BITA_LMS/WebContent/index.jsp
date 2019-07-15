@@ -18,59 +18,68 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#insert').click(function(){
-			$(location).attr('href', 'insert_score_T.jsp')
-		});
-		$('#cancle').click(function(){
-			$(location).attr('href', 'score_T.jsp')
-		});
-		
 	});
 </script>
 </head>
 <body>
 	<div>
 		<div id="header">
-			<a href="#">logout</a> <img alt="logo" src="img/logo.jpg" />
+			<!-- <a href="#">logout</a> --> <img alt="logo" src="img/logo.jpg" />
 		</div>
 		<div id="menu">
+		<!-- 강사팀 메뉴
 			<ul>
 				<li class="topmenu"><a href="#">학생관리</a>
 					<ul class="submenu">
-						<li><a href="attendance.tea">출결관리</a></li>
-						<li><a href="score.tea">성적관리</a></li>
-						<li><a href="assignment.tea">과제관리</a></li>
+						<li><a href="#">출결관리</a></li>
+						<li><a href="#">성적관리</a></li>
+						<li><a href="#">과제관리</a></li>
 					</ul></li>
-				<li><a href="qna.tea">1:1문의</a></li>
+				<li><a href="#">1:1문의</a></li>
 			</ul>
+			
+			-->
+			<!--
+			행정팀메뉴
+			<ul>
+				<li class="topmenu"><a href="#">학생관리</a>
+					<ul class="submenu">
+						<li><a href="#">학생등록</a></li>
+						<li><a href="#">수강생관리</a></li>
+					</ul></li>
+				<li><a href="#">강좌관리</a></li>
+				<li><a href="#">강사관리</a></li>
+				<li><a href="#">1:1문의</a></li>
+			</ul>
+			
+			-->
+			<!-- 학생메뉴
+			
+			<ul>
+				<li class="topmenu"><a href="#">출결관리</a>
+				<li><a href="#">성적관리</a></li>
+				<li><a href="#">과제관리</a></li>
+				<li><a href="#">1:1문의</a></li>
+			</ul>
+			
+			-->
 		</div>
 		<div id="content">
-			<h2>성적입력</h2>
-			<form action="score_T.jsp">
-			<table border="1">
-				<thead>
-					<tr>
-						<th>이름</th>
-						<th>1차</th>
-						<th>2차</th>
-						<th>3차</th>
-						<th>평균</th>
-					</tr>
-				</thead>
-				<thead>
-					<tr>
-						<td>홍길동</td>
-						<td><input type="text" value="90"/></td>
-						<td><input type="text" value="70"/></td>
-						<td><input type="text"></td>
-						<td>80</td>
-					</tr>
-				</thead>
-			</table>
-			<div>
-				<button type="submit">수정</button>
-				<input type="button" value="취소" id="cancle"/>
-			</div>
+			<h2>로그인페이지</h2>
+			<form action="login.bit" method="post">
+				<div>
+					<lable for="id">id</lable>
+					<input type="text" name="id" id="id" />
+				</div>
+				<div>
+					<lable for="pw">pw</lable>
+					<input type="password" name="pw" id="pw" />
+				</div>
+				<div>
+					<button type="submit">로그인</button>
+					<button type="reset">취소</button>
+					<button type="button">회원가입</button>
+				</div>
 			</form>
 		</div>
 		<div id="footer">
@@ -85,5 +94,11 @@
 			</div>
 		</div>
 	</div>
+	<%
+		//ui를 깨지지 않게 하려면 항상 body 닫기 전에 넣는 것이 좋다. 로딩하다가 출력되기 때문
+		Object obj = request.getAttribute("msg");
+		if (obj != null)
+			out.println(obj);
+	%>
 </body>
 </html>

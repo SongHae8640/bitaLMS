@@ -1,8 +1,8 @@
 package com.bit.model;
 
 public class RegisterDto {
-	private int rowNum,applyId;
-	private String userId,userName,lecName,applyDate,numStd,maxStd,fileName,phoneNumber;
+	private int rowNum,applyId,fileId;
+	private String userId,userName,lecName,applyDate,numStd,maxStd,phoneNumber;
 	
 	public int getRowNum() {
 		return rowNum;
@@ -46,12 +46,6 @@ public class RegisterDto {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getFileName() {
-		return fileName;
-	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -63,6 +57,12 @@ public class RegisterDto {
 	}
 	public void setApplyId(int applyId) {
 		this.applyId = applyId;
+	}
+	public int getFileId() {
+		return fileId;
+	}
+	public void setFileId(int fileId) {
+		this.fileId = fileId;
 	}
 	
 }
