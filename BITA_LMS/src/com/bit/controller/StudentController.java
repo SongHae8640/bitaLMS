@@ -12,6 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import com.bit.model.QnaLDto;
+import com.bit.model.StudentDao;
+import com.bit.model.UserDto;
+
 @WebServlet("*.stu")
 public class StudentController extends HttpServlet {
 	protected void doGet(javax.servlet.http.HttpServletRequest req,
@@ -21,21 +28,17 @@ public class StudentController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("StudentController :: path = " + path);
-		
-		//占쏙옙占쏙옙 占쏙옙占쏙옙
+		System.out.println("StudentController(doGet) :: path = " + path);
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		System.out.println("userid="+userBean.toString());
 		try {
 			if(userBean.getBelong().equals("student")){
 				StudentDao dao = new StudentDao();
-				if (path.equals("/main.stu")) {
-					String yearMonth = req.getParameter("yearMonthDay");	
-					String yearMonthDay = req.getParameter("yearMonthDay");	
-
+				if (path.equals("/main.stu")) {	
+//					String yearMonthDay = req.getParameter("yearMonthDay");	///달력의 월 이동을 할때 idx로 년월을 받아 올것
+//					String yearMonth = yearMonthDay.substring(0, 10);
 					
-					//main 
 					req.setAttribute("userBean", userBean);
 					
 
@@ -44,23 +47,20 @@ public class StudentController extends HttpServlet {
 					
 					rd = req.getRequestDispatcher("student/main_S.jsp");
 				} else if (path.equals("/attendance.stu")) {
-					//占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙
+					//좌측 정보 전달
 					req.setAttribute("attendanceBean", dao.getAttendance(userBean.getUserId())); 	
 					req.setAttribute("userBean", userBean);
 					
-					//main 占쏙옙占쏙옙 占싹댐옙 占쏙옙占쏙옙 占쏙옙占쏙옙
+					//main 우측 하단 정보 전달
 					req.setAttribute("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
 					req.setAttribute("totalDays", dao.getTotalDays(userBean.getLectureId()));
 					req.setAttribute("attendanceStatusList", dao.getAttendanceStatusList(userBean.getUserId()));
 					
 					rd = req.getRequestDispatcher("student/attendance_day_S.jsp");
 					
-				} else if (path.equals("/attendanceMonth.stu")) {
-					String yearMonth = req.getParameter("idx");	
-					req.setAttribute("attendanceMonthList", dao.getAttendanceMonthList(userBean.getUserId(), yearMonth));
-
-					rd = req.getRequestDispatcher("student/attendance_month_S.jsp");	//이거 추가해야함
-
+				}else if (path.equals("/attendanceMonth.stu")) {
+					
+					rd = req.getRequestDispatcher("student/attendance_month_S.jsp");
 					
 				} else if (path.equals("/score.stu")) {
 					req.setAttribute("scoreBean", dao.getScoreBean(userBean.getUserId()));
@@ -72,31 +72,82 @@ public class StudentController extends HttpServlet {
 			
 					
 				} else if (path.equals("/assignment_detail.stu")) {
-					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//疫뀐옙 �뵳�딅뮞占쎈뱜(占쎌굢占쎈뮉 edit占쎈퓠占쎄퐣)占쎈퓠占쎄퐣 idx嚥∽옙 assignmentId�몴占� 獄쏆룇釉섓옙占쏙옙苑� 占쎄텢占쎌뒠(rownum)占쎈툡占쎈뻷
-					String userId=userBean.getUserId();
-					System.out.println("hello="+userId);
-//					req.setAttribute("attachedBean", dao.getAttachedBean(AttachedFileDto));
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//목록화면에서 과제 번호를 가져올 것
 					req.setAttribute("assignmentBean", dao.getAssignment(assignmentId));
-					req.setAttribute("submissionList", dao.getSubmissionList(assignmentId ,userId));
+					req.setAttribute("submissionBean", dao.getSubmission(assignmentId, userBean.getUserId())); 
 					rd = req.getRequestDispatcher("student/assignment_S_detail.jsp");
 					
 				} else if (path.equals("/qna.stu")) {
-					req.setAttribute("qnaList", dao.getQnaList(userBean.getUserId()));
+					req.setAttribute("qnaLList", dao.getQnaList(userBean.getUserId()));
 					rd = req.getRequestDispatcher("student/qna_S.jsp");
+				} else if (path.equals("/qna_insert.stu")) {
+					rd = req.getRequestDispatcher("student/qna_S_add.jsp");
 				} else if (path.equals("/qna_detail.stu")) {
-
-					String qnaId = req.getParameter("idx");	//목록화면에서 과제 번호를 가져올 것
-					req.setAttribute("qnaBean", dao.getQna(qnaId));
-					rd = req.getRequestDispatcher("student/qna_S/qnadetail_S.jsp");
+					int qnaLId = Integer.parseInt(req.getParameter("idx"));	
+					req.setAttribute("qnaLBean", dao.getQnaL(qnaLId));
+					rd = req.getRequestDispatcher("student/qna_S_detail.jsp");
+				} else if (path.equals("/qna_edit.stu")) {
+					int qnaLId = Integer.parseInt(req.getParameter("idx"));	
+					req.setAttribute("qnaLBean", dao.getQnaL(qnaLId));
+					rd = req.getRequestDispatcher("student/qna_S_edit.jsp");
+				}
+				
+				//ajax 방식 ( rd를 사요하지 않음)
+				else if(path.equals("/callCalendar.stu")) {
+					//json으로 보낼때 한글 깨짐 방지
+					resp.setContentType("text/html;charset=UTF-8");
+					
+					// calendar 가져와야 함
+					String yearMonthDay = "2019-07-10";
+					String yearMonth = yearMonthDay.substring(0,7);
+					JSONArray calendarMonthListJson = dao.getCalendarMonthListJson(userBean.getLectureId());
+					PrintWriter out = resp.getWriter();
+					out.write(calendarMonthListJson.toJSONString());
+					out.close();
+				}else if(path.equals("/callAttendanceMonthListJson.stu")) {
+					//json으로 보낼때 한글 깨짐 방지
+					resp.setContentType("text/html;charset=UTF-8");
+					
+					// calendar 가져와야 함
+					System.out.println();
+					String yearMonthDay = "2019-07-10";
+					String yearMonth = yearMonthDay.substring(0,7);
+					
+					JSONArray attendanceMonthListJson = dao.getAttendanceMonthListJson(userBean.getUserId(),yearMonth);
+					PrintWriter out = resp.getWriter();
+					out.write(attendanceMonthListJson.toJSONString());
+					out.close();
+				}else if(path.equals("/studentStatus.stu")) {
+					//json으로 보낼때 한글 깨짐 방지
+					resp.setContentType("text/html;charset=UTF-8");
+					
+					
+					JSONObject jObj = new JSONObject();
+					jObj.put("attendanceDays", dao.getAttendanceDays(userBean.getUserId()));
+					jObj.put("totalyDays", dao.getTotalDays(userBean.getLectureId()));
+					jObj.put("newAnswerNum",dao.getNewQnaLAnswerNum(userBean.getUserId()));
+					jObj.put("totalQnaLNum", dao.getTotalQnaLNum(userBean.getUserId()));
+					jObj.put("progressDays", dao.getProgressDays(userBean.getLectureId()));
+					
+					PrintWriter out = resp.getWriter();
+					out.write(jObj.toJSONString());
+					out.close();
 				}else {
 					System.out.println("존재하지 않는 페이지");
 
 				}
+				
+				
 			}else {
-				//teacher占쏙옙 student占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싹뤄옙占쏙옙 占싹몌옙 占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙
+				//teacher나 student페이지로 접근하려고 하면 걍 보내버림
 				req.getRequestDispatcher("login.bit");
 			}
-			rd.forward(req, resp);
+			
+			
+			if(rd !=null){
+				rd.forward(req, resp);
+			}
+			
 		}catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
 		} 
@@ -108,14 +159,17 @@ public class StudentController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("StudentController :: path = " + path);
+		System.out.println("StudentController(doPost) :: path = " + path);
 		
-		//占쏙옙占쏙옙 占쏙옙占쏙옙
+		//세션 저장
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//insert, edit, delete 占쏙옙 占쏙옙占 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싹댐옙 result
-		///占쏘떻占쏙옙 占쏙옙占쏙옙占쏙옙占 占쏙옙占쏙옙 占쏙옙占쏙옙
+		//json으로 보낼때 한글 깨짐 방지
+		resp.setContentType("text/html;charset=UTF-8");
+		
+		//insert, edit, delete 의 결과 내용을 저장하는 result
+		///어떻게 사용할지 아직 미정
 		int result;
 		
 		try {
@@ -129,44 +183,60 @@ public class StudentController extends HttpServlet {
 					AttachedFileDto fileBean=new AttachedFileDto();
 					bean_s.setAssignmentId(Integer.parseInt(req.getParameter("assignment_id")));
 					result = dao.insertSubmission(userBean, bean_s, fileBean);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	
 				}else if(path.equals("/submission_update.stu")){
 					String assignmentId = req.getParameter("idx");	
-					String fileName = req.getParameter("fileName");	//占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙
+					String fileName = req.getParameter("fileName");	//수정페이지에서 가져올 것
 					result = dao.updateSubmission(assignmentId, userBean.getUserId() , fileName);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	
 				}else if(path.equals("/submission_delete.stu")){
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
 					result = dao.deleteSubmission(assignmentId, userBean.getUserId());		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
-				}else if(path.equals("/qan_insert.stu")){
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	
+				}else if(path.equals("/qna_insert.stu")){
 					QnaLDto qnaLBean = new QnaLDto();
 					qnaLBean.setTitle(req.getParameter("title"));
 					qnaLBean.setType(req.getParameter("type"));
 					qnaLBean.setQuestionContent(req.getParameter("questionContent"));
 					qnaLBean.setStuId(userBean.getUserId());					
 					result = dao.insertQnaL(qnaLBean);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
-				}else if(path.equals("/qan_update.stu")){
-					int qnaId = Integer.parseInt(req.getParameter("qnaId"));
-					String title = req.getParameter("title");
-					String type = req.getParameter("type");	///占싱것듸옙 占쏙옙占쏙옙占쌓쇽옙 占쌍놂옙??
-					String questionContent = req.getParameter("questionContent");
-					result = dao.updateQnaL(qnaId ,title,type, questionContent);		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
-				}else if(path.equals("/qan_delete.stu")){
-					String[] qnaId = req.getParameterValues("qnaId");
+
+					///result 값에 따라 write 값 변경 해야함
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();
+				}else if(path.equals("/qna_update.stu")){
+					QnaLDto bean = new QnaLDto();
+					bean.setQnaLId(Integer.parseInt(req.getParameter("qnaLId")));
+					bean.setTitle(req.getParameter("title"));
+					bean.setQuestionContent(req.getParameter("questionContent"));
+					result = dao.updateQnaL(bean);	
 					
+					///result 값에 따라 write 값 변경 해야함
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();
+				}else if(path.equals("/qna_delete.stu")){
+					String[] qnaId = req.getParameterValues("qnaId");
 					result = dao.deleteQnaL(qnaId);		
-					rd = req.getRequestDispatcher("qna.stu");	//qna 占쏙옙占 占쏙옙占쏙옙占쏙옙占쏙옙 占싱듸옙占싱듸옙占쌔억옙占싹놂옙?
+					
+					///result 값에 따라 write 값 변경 해야함
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();	
 				}else {
-					System.out.println("占쏙옙占쏙옙占쏙옙占쏙옙 占십댐옙 占쏙옙占쏙옙占쏙옙");
+					System.out.println("존재하지 않는 페이지");
 				}
+				
+				
 			}else {
-				//teacher占쏙옙 student占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싹뤄옙占쏙옙 占싹몌옙 占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙
+				//teacher나 student페이지로 접근하려고 하면 걍 보내버림
 				req.getRequestDispatcher("login.bit");
 			}
-			rd.forward(req, resp);
+			if(rd!=null) {
+				rd.forward(req, resp);
+			}
+			
 		}catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
 		}

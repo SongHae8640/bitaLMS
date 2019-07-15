@@ -1,3 +1,4 @@
+<%@page import="com.bit.model.QnaLDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -10,11 +11,79 @@
 	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
-#menu>ul {
+	#menu>ul {
 	width: 610px;
 	list-style-type: none;
 	margin: 0px auto;
-}
+	}
+	#content{
+	height:700px;
+	margin: 0 auto;
+	}
+	#content #sidebar{
+	position:absolute;
+	top:243px;
+	height:700px;
+	width: 200px;
+	text-align:center;
+	background-color: gray;
+	}
+	#content #sidebar ul li{
+	list-style: none;
+	}
+	#content #sidebar ul li a{
+	text-decoration: none;
+	color: rgb(0,0,0);
+	}
+	#content #page_name{
+	width: 120px;
+	margin: 0 auto;
+	text-align:center;
+	border: 1px solid gray;
+	}
+	#content #real_content{
+	position:relative;
+	left:300px;
+	width: 600px;
+	height:700px;
+	}
+	#content #real_content #q_detail{
+	width: 600px;
+	}
+	#content #real_content #q_detail table{
+	width: 600px;
+	margin: 0 auto;
+	}
+	#content #real_content #q_detail table,th,td{
+	border: 1px solid gray;
+	}
+	#content #real_content #q_detail #submit{
+	width:145px;
+	float: right;
+	}
+	#content #real_content #q_detail #qna_content {
+	overflow:auto;
+	width:600px;
+	height:200px;
+	}
+	#qna_answer{
+	height:200px;
+	background-color: gray;
+	}
+	#content #under_list{
+	width: 600px;
+	height:95px;
+	margin: 0 auto;
+	}
+	#content #under_list div{
+	width: 80px;
+	}
+	#list_button{
+	float: left;
+	}
+	#ans_button{
+	float: right;
+	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -25,12 +94,70 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#content form textarea').hide();
-		$('#content>form button').hide().eq(0).show().click(function(){
-			$('#content>form button').show().eq(0).hide();
-			$('#content>form textarea').show();
-			$('#content>form span').hide();
+		
+
+		$('#list_btn').click(function(){
+				location.replace('qna.tea'); 
 		});
+		
+		$('#delete_btn').click(function(){
+			if(!confirm("정말 삭제하시겠습니까?")){
+				console.log("삭제안함")
+				return false;
+			}
+			console.log("삭제")
+			$.ajax({
+				url : "qna_delete.tea",
+				type : "POST",
+				data : {
+						qnaLId : $('#qnaLId').text()
+				},
+				success : function(data){
+					if(data =='OK'){
+						console.log("삭제 성공");
+						location.href = "qna.tea";	
+					}else{
+						console.log("삭제 실패");
+					}
+					
+				},
+				error : function(){
+					console.log("삭제 실패");
+				}
+			})
+			
+		});
+		
+		$('#ans_btn').click(function(){
+			var questionAnswer = $('#qnaLAnswer').val();
+			if(!questionAnswer){
+				alert("답변을 입력 하시오.");
+				return false;
+			}
+
+			$.ajax({
+				url : "qna_update.tea",
+				type : "POST",
+				data : {
+						qnaLId : $('#qnaLId').text(),
+						questionAnswer : questionAnswer
+				},
+				success : function(data){
+					if(data =='OK'){
+						console.log("답변 성공");
+						location.href = "qna_detail.tea?idx="+$('#qnaLId').text();	
+					}else{
+						console.log("답변 실패");
+					}
+					
+				},
+				error : function(){
+					console.log("답변 실패");
+				}
+			})
+			
+		});
+
 	});
 	
 </script>
@@ -51,48 +178,98 @@
 				<li><a href="qna.tea">1:1문의</a></li>
 			</ul>
 		</div>
-		<h2>상세보기</h2>
 		<div id="content">
-			<div>
-				<label>제목</label> <span>sub</span>
+			<div id="sidebar">
+			<br/><br/><br/><br/>
+			<h3>1:1문의</h3>
+			<br/><br/>
+		</div>
+		<div id="real_content">
+			<br/>
+			<div id="page_name">
+				<h2>1:1문의</h2>
 			</div>
-			<div>
-				<label>작성자</label> <span>name</span>
-			</div>
-			<div>
-				<label>날짜</label> <span>date</span>
-			</div>
-			<div>
-				<label>분류</label> <span>이의신청</span>
-			</div>
-				<div>
-					<label>내용</label> <span>hello</span>
+			<br/><br/>
+		<div id="q_detail">
+		<%
+			QnaLDto bean = (QnaLDto)request.getAttribute("qnaLBean");
+			System.out.println(bean.toString());
+		%>
+			<table>
+				<div >
+					<span id="qnaLId" style="display:none;"><%=bean.getQnaLId()%></span>
 				</div>
-			<form action="">
-					<h1 id="edit">답글</h1>
-					<div>
-						<span>hello</span>
-						<textarea rows="10" cols="30"></textarea>
-					</div>
-					<div>
-						<button type="button">수정</button>
-						<button type="submit">수정완료</button>
-						<button type="reset">취소</button>
-					</div>
-			</form>
+					<tr>
+						<th>제목</th>
+						<td><%=bean.getTitle() %></td>
+					</tr>
+					<tr>
+						<th>작성자</th>
+						<td><%=bean.getStdName() %></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+						<div id="qna_content">
+							<div id="submit">
+								<span ><%=bean.getWriteDate() %></span>
+							</div>
+							<div>
+								<p><%=bean.getQuestionContent() %></p>
+							</div>
+						</div>
+						<div id="qna_answer">
+						<%
+							if(bean.getIsCheck().equals("1")){
+	
+						%>
+							<textarea id="qnaLAnswer" ><%=bean.getAnswerContent() %></textarea>
+						<%
+						}else{
+						%>
+							<textarea id="qnaLAnswer" placeholder="답변 대기 중 입니다."></textarea>
+						<%
+							}
+						%>
+						</div>
+						</td>
+					</tr>
+			</table>
+		</div>
+		<div id="under_list">
+			<div>
+				<button type="button" id="list_btn">목록</button>
+			</div>
+			<div>
+			<%
+				if(bean.getIsCheck().equals("1")){
+	
+			%>
+				<button type="button" id="ans_btn">답변수정</button>
+			<%
+				}else{
+			%>
+				<button type="button" id="ans_btn">답변등록</button>
+			<%
+				}
+			%>	
+			</div>
+			<div>
+				<button type="button" id="delete_btn">글삭제</button>
+			</div>
 		</div>
 	</div>
-	<div id="footer">
-		<div>
-			<img alt="logo" src="img/logo.jpg" />
-			<p>
-				비트캠프 서울시 서초구 강남대로 459 (서초동, 백암빌딩)｜ 사업자등록번호 : 214-85-24928<br>
-				(주)비트컴퓨터 서초본원 대표이사 : 조현정 / 문의 : 02-3486-9600 / 팩스 : 02-6007-1245<br>
-				통신판매업 신고번호 : 제 서초-00098호 / 개인정보보호관리책임자 : 최종진<br> Copyright
-				&copy; 비트캠프 All rights reserved.
-			</p>
-		</div>
 	</div>
+		<div id="footer">
+			<div>
+				<img alt="logo" src="img/logo.jpg" />
+				<p>
+					비트캠프 서울시 서초구 강남대로 459 (서초동, 백암빌딩)｜ 사업자등록번호 : 214-85-24928<br>
+					(주)비트컴퓨터 서초본원 대표이사 : 조현정 / 문의 : 02-3486-9600 / 팩스 : 02-6007-1245<br>
+					통신판매업 신고번호 : 제 서초-00098호 / 개인정보보호관리책임자 : 최종진<br> Copyright
+					&copy; 비트캠프 All rights reserved.
+				</p>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

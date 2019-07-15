@@ -39,22 +39,16 @@
 	function updateData(){
 		$.ajax({
             type : "GET",
-            url : "student/studentStatus.jsp",
+            url : "studentStatus.stu",
             dataType : "json",
             error : function(){
                 alert('통신실패!!');
             },
             success : function(data){
             	var show = "";
-				$.each(data, function(index,item){
-					console.log(item.name);
-					show +="<span>"+"출석 일 수 : "+item.attendanceDays+"</span><br>";
-					show +="<span>"+"총 일 수 : "+item.totalyDays+"</span><br>";
-					show +="<span>"+"새로운 Q&A답변 : "+item.newAnswerNum+"</span><br>";
-					show +="<span>"+"Q&A 질문 : "+item.totalQnaLNum+"</span><br>";
-					show +="<span>"+"수업 진행 일 수  : "+item.progressDays+"</span><br>";
-				})
-					
+				show +="<div><span>출결 현황</span><span>"+data.attendanceDays+"/"+data.totalyDays+"</span></div><br>";
+				show +="<div><span>Q&A 답변</span><span>"+data.newAnswerNum+"/"+data.totalQnaLNum+"</span></div><br>";
+				show +="<div><span>수업진행 현황</span><span>"+data.progressDays+"/"+data.totalyDays+"</span></div><br>";
                 $("#status").html(show) ;
             }
              
@@ -72,25 +66,22 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="topmenu"><a href="attendance.stu">출결관리</a>
+				<li class="topmenu"><a href="attendanceMonth.stu">출결관리</a>
 				<li><a href="score.stu">성적관리</a></li>
 				<li><a href="assignment.stu">과제관리</a></li>
 				<li><a href="qna.stu">1:1문의</a></li>
 			</ul>
 		</div>
 		<div id="content">
-			<h2>메인</h2>
-			
-			
+			<h2>메인</h2>			
 			<div id = "calendar">
-			
+				<jsp:include page="call_calendar_S.jsp" flush="false"/>
 			</div>
 			
 			<div id = "attendance"></div>
-				<jsp:include page="../call_attendance_S.jsp" flush="false"/>
+				<!--<jsp:include page="../call_attendance_S.jsp" flush="false"/>-->
 			
 			<div id = "status">
-				여기!
 			</div>
 		</div>
 		<div id="footer">

@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.QnaLDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -118,13 +120,9 @@
 			<br/><br/>
 		</div>
 		<div id="real_content">
-			<br/>
-			<div id="page_name">
-				<h2>1:1문의</h2>
-			</div>
-			<br/><br/>
-			<div id="q_list">
-			<table>
+			<h2>1:1문의</h2>
+
+			<table border="1">
 				<thead>
 					<tr>
 						<th>번호</th>
@@ -133,41 +131,29 @@
 						<th>작성일</th>
 						<th>답변여부</th>
 						<th>분류</th>
-						<th><input type="checkbox" id="qna_ck"></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>1</td>
-						<td><a href="qna_detail.amd">프린트도 사용가능한가요?</a></td>
-						<td>김코난</td>
-						<td>2019-07-02</td>
-						<td>답변대기</td>
-						<td>행정</td>
-						<td><input type="checkbox" id="qna_ck"></td>
+					<%
+					ArrayList<QnaLDto> qList = (ArrayList<QnaLDto>)request.getAttribute("qnaLList");
+					for(QnaLDto bean : qList){
+					%>
+					<tr>
+						<td><%=bean.getRowNum() %></td>
+						<td><a href="qna_detail.adm?idx=<%=bean.getQnaLId() %>"><%=bean.getTitle() %></a></td>
+						<td><%=bean.getStdName() %></td>
+						<td><%=bean.getWriteDate() %></td>
+						<td><%=bean.getIsCheck() %></td>
+						<td><%=bean.getType() %></td>
 					</tr>
+					<%
+					}
+					
+					%>
 				</tbody>
 			</table>
 		</div>
-		<div id="under_list">
-			<div id="close_button">
-				<button type="button">삭제</button>
-			</div>
-			<div id="search_box">
-				<form action="register_list.adm">
-					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit">검색</button>
-				</form>
-			</div>
-			<div id="page_button">
-				<button><</button>
-				<button>1</button>
-				<button>2</button>
-				<button>3</button>
-				<button>></button>
-			</div>
-		</div>
-	</div>
 	</div>
 		<div id="footer">
 			<div>

@@ -160,7 +160,7 @@
 				ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("arrangeLectureList");
 				if(lectureList !=null){
 				for(LectureDto bean : lectureList){
-						if(bean.getLectureID()>0){
+						if(bean.getLectureId()>0){
 				%>
 					<option value="" ><%=bean.getName()%></option>
 				<%

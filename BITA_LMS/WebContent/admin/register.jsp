@@ -183,7 +183,7 @@
 				int num = 0,max=0;
 				if(lectureList !=null){
 					for(LectureDto bean : lectureList){
-						if(bean.getLectureID()>0){
+						if(bean.getLectureId()>0){
 							num += bean.getNumStd();
 							max += bean.getMaxStd();
 						
@@ -205,7 +205,7 @@
 				<option value="" selected="selected">전체</option>
 				<%
 				for(LectureDto bean : lectureList){
-						if(bean.getLectureID()>0){
+						if(bean.getLectureId()>0){
 				%>
 					<option value="" ><%=bean.getName()%></option>
 				<%
