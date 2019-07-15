@@ -1,6 +1,5 @@
-<%@page import="com.bit.model.ScoreDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="java.util.Date,java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +11,7 @@
 #menu>ul {
 	width: 610px;
 	list-style-type: none;
-	margin: 0px auto; 
+	margin: 0px auto;
 }
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -23,13 +22,20 @@
 		});
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
+		}); 
+		$("#submit_btn").click(function(){
+			if($('#title').val()==""){ 
+				alert("제목을 입력해주세요");
+				return false;
+			} 
+			if($('#questionContent').val()==""){
+				alert("내용을 입력해주세요");
+				return false;
+			}     
 		});
-		$('#claim_btn').click(function(){
-			location.href='qna_insert.stu';		
-		});
-	});
-</script>
-</head>
+	}); 
+</script> 
+</head> 
 <body>
 	<div>
 		<div id="header">
@@ -44,36 +50,40 @@
 			</ul>
 		</div>
 		<div id="content">
-			<h2>성적관리</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>이름</th>
-						<th>1차</th> 
-						<th>2차</th>
-						<th>3차</th>
-					</tr>
-				</thead>
-				<tbody>
-				<%
-				ScoreDto scoreBean =(ScoreDto)request.getAttribute("scoreBean");
-				System.out.println("뷰-"+scoreBean);
-				if(scoreBean!=null){
-				%>  
-					<tr>
-						<td><%=scoreBean.getName() %></td>
-						<td><%=scoreBean.getFirstScore() %></td>
-						<td><%=scoreBean.getSecondScore() %></td>
-						<td><%=scoreBean.getThirdScore() %></td>
-					</tr>
-				<%
-				}
-				%>
-				</tbody>
-			</table>
-			<div>
-				<button type="button" id="claim_btn">이의신청</button>
-			</div>
+		<%
+		String name =(String)request.getAttribute("name");
+		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
+		Date time = new Date();
+		String date = format.format(time);
+		%>
+			<h1>1:1문의 등록</h1>
+			<form action="qna_insert.stu" method="post">
+				<div>
+					<label>제목</label><input type="text" name="title" id="title"/>
+				</div>
+				<div>
+					<label>작성자</label><span><%=" "+name %></span>
+				</div>
+				<div>
+					<label>날짜</label><span><%=" "+date %></span>
+				</div>
+				<div>
+					<label>분류</label> 
+					<select name="type"  id="type">
+						<option value="이의신청">이의신청</option>
+						<option value="성적문의">성적문의</option>
+						<option value="기타문의">기타문의</option>
+					</select>
+				</div>
+				<div>
+					<label>내용</label>
+					<textarea name="questionContent" id="questionContent"></textarea>
+				</div>
+				<div>
+					<button type="submit" id="submit_btn">확인</button>
+					<button type="button" id="cancle_btn">취소</button>
+				</div>
+			</form>
 		</div>
 		<div id="footer">
 			<div>

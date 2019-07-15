@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -28,10 +27,10 @@ public class StudentController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
+
 		System.out.println("StudentController(doGet) :: path = " + path);
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
-		System.out.println("userid="+userBean.toString());
 		try {
 			if(userBean.getBelong().equals("student")){
 				StudentDao dao = new StudentDao();
@@ -42,7 +41,7 @@ public class StudentController extends HttpServlet {
 					req.setAttribute("userBean", userBean);
 					
 
-					//main 우측 하단 정보 전달
+					//main �슦痢� �븯�떒 �젙蹂� �쟾�떖
 
 					
 					rd = req.getRequestDispatcher("student/main_S.jsp");
@@ -58,11 +57,13 @@ public class StudentController extends HttpServlet {
 					
 					rd = req.getRequestDispatcher("student/attendance_day_S.jsp");
 					
+
 				}else if (path.equals("/attendanceMonth.stu")) {
 					
 					rd = req.getRequestDispatcher("student/attendance_month_S.jsp");
+
 					
-				} else if (path.equals("/score.stu")) {
+				} else if (path.equals("/score.stu")) {//scoreBean에 점수를 담아 view로 보냄
 					req.setAttribute("scoreBean", dao.getScoreBean(userBean.getUserId()));
 					rd = req.getRequestDispatcher("student/score_S.jsp");
 					
@@ -75,8 +76,8 @@ public class StudentController extends HttpServlet {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//목록화면에서 과제 번호를 가져올 것
 					req.setAttribute("assignmentBean", dao.getAssignment(assignmentId));
 					req.setAttribute("submissionBean", dao.getSubmission(assignmentId, userBean.getUserId())); 
+
 					rd = req.getRequestDispatcher("student/assignment_S_detail.jsp");
-					
 				} else if (path.equals("/qna.stu")) {
 					req.setAttribute("qnaLList", dao.getQnaList(userBean.getUserId()));
 					rd = req.getRequestDispatcher("student/qna_S.jsp");
@@ -133,7 +134,7 @@ public class StudentController extends HttpServlet {
 					out.write(jObj.toJSONString());
 					out.close();
 				}else {
-					System.out.println("존재하지 않는 페이지");
+					System.out.println("알수 없는 페이지입니다.");
 
 				}
 				
@@ -150,9 +151,9 @@ public class StudentController extends HttpServlet {
 			
 		}catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
-		} 
+		}
 	}
-	
+	  
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -178,6 +179,10 @@ public class StudentController extends HttpServlet {
 				if (path.equals("/main.stu")) {
 					
 				}else if(path.equals("/submission_insert.stu")){
+
+		
+				}else if(path.equals("/submission_delete.stu")){
+				
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
 					SubmissionDto bean_s=new SubmissionDto();
 					AttachedFileDto fileBean=new AttachedFileDto();

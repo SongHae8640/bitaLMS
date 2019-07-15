@@ -178,16 +178,13 @@
                 data : data,
                 url : "/BITA_LMS/login.home",
                 success : function(value) {
-                	alert("통신 성공1");				//로그인 성공 시 위에 환영문구 뜸
+				//로그인 성공 시 위에 환영문구 뜸
                 	console.log(value);
-                	$('#login_btn').remove();
-                	$('#header').append(value);
-                	$('#myModal').hide();
                 	location.reload();
  
                 },
                 error : function(){
-                	alert("통신 실패1");
+                	alert("id&pw를 다시 확인하세요");
                 }
             
 		});
@@ -197,9 +194,8 @@
                 $.ajax({
                     type : "post",
                     url : "/BITA_LMS/logout.home",
-                    success : function(value) {
-                    	alert("통신 성공2");				//로그아웃 하러감
-                    	console.log(value);
+                    success : function(value) {				//로그아웃 하러감
+                    	console.log("통신성공-로그아웃");
                     	$('#logout_btn').remove();
                     	$('#my_name').remove();
                     	$('#header').append(value);
@@ -207,7 +203,7 @@
                     	 
                     },
                     error : function(){
-                    	alert("통신 실패2");
+                    	console.log("통신실패-로그아웃");
                     }
                 
     		});
@@ -218,7 +214,8 @@
 <body>
 	<div id="header">
 			<%
-			if(session.getAttribute("userBean")==null){ %>
+			if(session.getAttribute("userBean")==null){ 
+			%>
 			<a href="#" id="login_btn">login</a>
 			<%	}else{ 	
 			%> 
@@ -266,23 +263,23 @@
 		<div id="con_form2">
 			<div><h3><span>공지사항</span></h3><a href ="#"><img src="img/puls_btn.png" id="plus_btn" /></a></div>
 			<div>
-				<div><span><a href ="#">공지사항내용</a></span></div>
-				<div><span><a href ="#">공지사항내용</a></span></div>
-				<div><span><a href ="#">공지사항내용</a></span></div>
-				<div><span><a href ="#">공지사항내용</a></span></div>
-				<div><span><a href ="#">공지사항내용</a></span></div>
-				<div><span><a href ="#">공지사항내용</a></span></div>
+				<div><span><a href ="#"> 2019년 서울 유망산업 JOB 페스티벌 참여 모집 ..</a></span></div>
+				<div><span><a href ="#"> [비트캠프 안양센터] 2019 안양시 청년 뉴딜일자리..</a></span></div>
+				<div><span><a href ="#"> [비트캠프 서초본원] 2019 혁신성장 청년인재 집중..</a></span></div>
+				<div><span><a href ="#"> ★비트캠프 - 2019년 3월 Java 기초특강(무료..</a></span></div>
+				<div><span><a href ="#"> ★비트캠프-2019년 2월 무료 기초특강 마감</a></span></div>
+				<div><span><a href ="#"> 쇼핑몰 성공창업세미나 안내 ( 서초캠퍼스)</a></span></div>
 			</div>
 		</div>
 		<div id="con_form3">
 			<div><h3><span>수강후기</span></h3><a href ="#"><img src="img/puls_btn.png" id="plus_btn" /></a></div>
 			<div>
-				<div><span><a href ="#">수강후기내용</a></span></div>
-				<div><span><a href ="#">수강후기내용</a></span></div>
-				<div><span><a href ="#">수강후기내용</a></span></div>
-				<div><span><a href ="#">수강후기내용</a></span></div>
-				<div><span><a href ="#">수강후기내용</a></span></div>
-				<div><span><a href ="#">수강후기내용</a></span></div>
+				<div><span><a href ="#"> UI/UX기반의 자바개발자 양성과정(자바108기) ..</a></span></div>
+				<div><span><a href ="#"> 자바웹&앱 개발자 양성과정을 수료한 자바106기 ..</a></span></div>
+				<div><span><a href ="#"> 스마트웹앱 컨텐츠제작 양성과정 수료</a></span></div>
+				<div><span><a href ="#"> 스마트문화앱콘텐츠제작 양성과정 수강</a></span></div>
+				<div><span><a href ="#"> [신촌센터]빅데이터를 활용한 응용SW엔지니어링 ..</a></span></div>
+				<div><span><a href ="#"> [강남센터] 정보처리산업기사[과정평가형자격] ..</a></span></div>
 			</div>
 		</div>
 		</div>

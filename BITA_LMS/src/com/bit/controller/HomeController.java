@@ -1,6 +1,7 @@
 package com.bit.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,12 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import com.bit.model.ApplyDto;
 import com.bit.model.AttachedFileDto;
-import com.bit.model.FileGroupDto;
 import com.bit.model.HomeDao;
-import com.bit.model.UserDao;
 import com.bit.model.UserDto;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -38,13 +36,18 @@ public class HomeController extends HttpServlet {
 		if(path.equals("/main.home")){
 			rd = req.getRequestDispatcher("home/main_H.jsp");
 		}else if(path.equals("/join.home")){
+			String id = req.getParameter("id");
 			rd = req.getRequestDispatcher("home/join_H.jsp");
 		}else if(path.equals("/apply.home")){
 			rd = req.getRequestDispatcher("home/apply_H.jsp");	
+		}else if(path.equals("/idcheck.home")){
+			rd = req.getRequestDispatcher("home/idCheck_H.jsp");
 		}
 		
-		rd.forward(req, resp);
-		
+		if(rd!=null){
+			rd.forward(req, resp);
+		}
+
 	}
 	
 	@Override
@@ -52,8 +55,8 @@ public class HomeController extends HttpServlet {
 			throws ServletException, IOException {
 		RequestDispatcher rd = null;
 		HttpSession session = req.getSession();
+		HomeDao dao = new HomeDao();
 		int result = 0;
-		
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("HomeController(doPost) :: path = " + path);
 		
@@ -61,54 +64,98 @@ public class HomeController extends HttpServlet {
 			
 			String id = req.getParameter("id");
 			String pw = req.getParameter("pw");
-			HomeDao dao = new HomeDao();
 			UserDto userBean = dao.login(id, pw);
 			String name = userBean.getName();
 			String message = "";
 			
-			try{
-				System.out.println(userBean.getUserId());
-				if(userBean.getUserId().equals(id) && userBean.getPassword().equals(pw) ){//로그인성공
-					//session
-					session.setAttribute("userBean", userBean);
-					message = name + "님 환영합니다.";
-	//				session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
-					
-			}else{//로그인실패
-				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
+		try{
+			System.out.println(userBean.getUserId());
+			if(userBean.getUserId().equals(id) && userBean.getPassword().equals(pw) ){//로그인성공
+				//session
+				session.setAttribute("userBean", userBean);
+				session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
+				doGet(req, resp);
 			}
-			//데이터 저장 화면에 출력해줘야해
-				req.setAttribute("message", message);
-				System.out.println(message);
-		        rd = req.getRequestDispatcher("/home/login_result_H.jsp");	
 			}catch(java.lang.NullPointerException e){
 				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
 			}
-			rd.forward(req, resp);
 		}else if(path.equals("/logout.home")){
 			session.invalidate();//로그아웃-invalidate는 세션자체가 갱신됨
-			 rd = req.getRequestDispatcher("/home/logout_result_H.jsp");
-			 rd.forward(req, resp); 
+		
+		}else if(path.equals("/idcheck.home")){
+			String msg ="";
+			String id = req.getParameter("id");
+			System.out.println("id"+id); 
+			result = dao.idCheck(id);
+			System.out.println("중복확인result값 "+result);
+			if(result>0){
+				msg = "사용할 수 없는 ID입니다";
+			}else{ 
+				msg = "사용가능한 ID입니다";
+			}
+			req.setAttribute("id", id);
+			req.setAttribute("msg", msg);
+			doGet(req, resp);
+		
 		}else if(path.equals("/join.home")){
 			//getParam으로 회원가입에 필요한 내용 체크 및 저장
 			//전부 체크 성공 시 저장, 하나라도 안 맞으면 다시 돌려보내기
-			
 			//ApplyDto생성
-			ApplyDto applyBean = new ApplyDto();
-//			userBean.setUserId(userId); 값 초기화 (다른 값들도)
-			HomeDao dao = new HomeDao();
-			result = dao.insertUser(applyBean);
-			
+			req.setCharacterEncoding("UTF-8");
+			resp.setContentType("text/html;charset=UTF-8");
+			String user_id = req.getParameter("id");
+			System.out.println("user_id"+user_id);
+			String password = req.getParameter("pw");
+			String name = req.getParameter("name");
+			String email = req.getParameter("email");
+			String phone_num = req.getParameter("phone_num");
+			System.out.println(phone_num);
+			String belong="-1";			//등록 전 학생 default값 -1
+			String[] inflow_path_num = req.getParameterValues("inflow_path");	//유입경로(중복O)
+			String ect = req.getParameter("ect");
+			String inflow_path = "";
+			String total="";
+			for(int i=0;i<inflow_path_num.length;i++) {
+				inflow_path = inflow_path_num[i];
+				if(inflow_path.equals("1")) {
+					inflow_path = "지인소개";
+				}else if(inflow_path.equals("2")) {
+					inflow_path = "인터넷 검색";
+				}else if(inflow_path.equals("3")) {
+					inflow_path = "블로그/카페";
+				}else if(inflow_path.equals("4")) {
+					inflow_path = "커뮤니티";  
+				}else if(inflow_path.equals("5")) {
+					inflow_path = "학원생 추천";
+				}else if(inflow_path.equals("6")) {
+					inflow_path = ect;
+				}	
+				total+=inflow_path+",";
+			} 
+			System.out.println("1");
+			int Idx = total.lastIndexOf(","); total = total.substring(0, Idx);
+			UserDto userBean = new UserDto();
+			userBean.setUserId(user_id);
+			userBean.setPassword(password);
+			userBean.setName(name);
+			userBean.setEmail(email);
+	 		userBean.setPhoneNumber(phone_num);
+			userBean.setInflowPath(total);
+			userBean.setBelong(belong);
+			result = dao.insertUser(userBean);
+			System.out.println(result);
 			//정상적으로 회원 가입 한 것만
 			if(result ==1) {
-				session.setAttribute("applyBean", applyBean);
-				resp.sendRedirect("home/login_H.jsp");
+				System.out.println("회원가입성공");
+				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('가입을 축하드립니다.');</script>");
+				rd = req.getRequestDispatcher("home/main_H.jsp");
+				rd.forward(req, resp);
 			}else {
 				//result 값에 따라 오류 메세지 
-				req.setAttribute("msg", "<script type=\"text/javascript\">alert('result값에따라 문구 바꾸기');</script>");
+				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('회원가입실패');</script>");
 				doGet(req, resp);
 			}
-			
+			 
 		}else if(path.equals("/apply.home")) {
 			//수강신청 등록하면 여기로 옴 getPost()
 			//파일이 저장될 서버의 경로
@@ -125,19 +172,17 @@ public class HomeController extends HttpServlet {
 			//getParam으로 수강에 필요한 내용 저장 
 			UserDto userBean = (UserDto)session.getAttribute("userBean");	//로그인한 세션 받아오기-여기서 아이디 받아와야 함  
 			String userId = userBean.getUserId();							//수강신청한 회원의 Id 
+			System.out.println(userId);
 			String lectureId =multi.getParameter("lecture_Id"); 			//강좌번호  
-			System.out.println(lectureId);
+			System.out.println("lectureId(자바1,디비2,웹3)"+lectureId);
 			int param = Integer.parseInt(lectureId); 				
-			System.out.println(userId);										
-			String fullfileName = multi.getFilesystemName("user_apply");
-			int Idx = fullfileName .lastIndexOf(".");								//확장자분리
-			String oriFileName = fullfileName.substring(0, Idx);					//첨부파일이름  
+			String fullfileName = multi.getOriginalFileName("user_apply");		
+			int Idx = fullfileName .lastIndexOf(".");								
+			String oriFileName = fullfileName.substring(0, Idx);
 			String fileExtend = fullfileName.substring(fullfileName.lastIndexOf(".")+1);//확장자이름 
-			String filePath = savePath+"\\"+fullfileName;
 			// 업로드한 파일의 전체 경로를 DB에 저장하기 위함
-			System.out.println("oriFileName: "+oriFileName);
-			System.out.println("fullfileName: "+fullfileName);
-			System.out.println("fileExtend: "+fileExtend);
+			System.out.println("oriFileName: 사용자가 올리는 파일이름 "+oriFileName);
+			System.out.println("fileExtend: 확장자이름 "+fileExtend);
 			
 			//ApplyDto생성 후 applyBean에 데이터 담기 
 			ApplyDto applyBean = new ApplyDto(); 
@@ -150,24 +195,22 @@ public class HomeController extends HttpServlet {
 			fileBean.setOriginalName(oriFileName);		//사용자가 올린 파일의 original name
 			fileBean.setFileExtension(fileExtend);		//파일의 확장자
 			fileBean.setRegId(userId);					//파일 올린 회원의 id
-
-			
-			//FileGroupDto생성 후 fileGBean에 데이터 담기
-			FileGroupDto fileGBean = new FileGroupDto();
-			fileGBean.setFileGroup("수강신청"); 		//수강신청 그룹에 파일이 들어감
-			fileGBean.setPath(filePath);				//파일 저장경로
-				
+	
 			//HomeDao 인스턴스화해서 메소드 사용
 			//중복파일 검사 후 이름 바꿔서 fileBean에 담기
-			HomeDao dao = new HomeDao();
 			int count = dao.findFile(fileBean);
+			System.out.println("count: 중복되는 파일 수 "+count);
 			if(count>0){
-				fileBean.setFileName(oriFileName+"("+count+")");	//중복파일이름 생성~~!
+				String fileName = oriFileName+"("+count+")";
+				fileBean.setFileName(fileName);	//중복파일이름 생성~~!
+				System.out.println("fileName: "+fileName);
 			}else{
-				fileBean.setFileName(oriFileName);
+				String fileName = oriFileName;
+				fileBean.setFileName(fileName);
+				System.out.println("fileName: "+fileName);
 			}
 			//파일업로드한거 insert 
-			result = dao.insertApply(applyBean,fileBean,fileGBean, userBean);	 
+			result = dao.insertApply(applyBean,fileBean);	 
 			System.out.println("수강신청결과"+result); 
 			
 			//정상적으로 수강신청 한 것만

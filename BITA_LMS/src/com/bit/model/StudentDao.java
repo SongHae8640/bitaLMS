@@ -193,11 +193,31 @@ public class StudentDao extends Dao{
 		return statusList;
 	}
 
+	//학생이 scoreBean에 담긴 자신의 점수를 가져 올 수 있음
 	public ScoreDto getScoreBean(String userId) {
-		openConnection();
-
-		closeConnection();
-		return null;
+		ScoreDto scoreBean = new ScoreDto();
+		String sql = "SELECT name,first_score,second_score,third_score,avg_score "
+					+"from user01 u JOIN score s ON s.std_id=u.user_id WHERE user_id = ?";
+		try {  
+			openConnection();
+			System.out.println("연결");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				scoreBean.setName(rs.getString("name"));
+				scoreBean.setFirstScore(rs.getInt("first_score"));
+				scoreBean.setSecondScore(rs.getInt("second_score"));
+				scoreBean.setThirdScore(rs.getInt("third_score"));
+				scoreBean.setAvgScore(rs.getDouble("avg_score"));
+			}
+			System.out.println(scoreBean.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return scoreBean;
 	}
 
 	public ArrayList<AssignmentDto> getAssignmentList(int lectureId) {
@@ -520,7 +540,6 @@ public class StudentDao extends Dao{
 		}
 		return result;
 	}
-
 
 	public JSONArray getAttendanceMonthListJson(String userId, String yearMonth) {
 		JSONArray jArray = new JSONArray();
