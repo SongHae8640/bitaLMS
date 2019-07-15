@@ -1,4 +1,4 @@
-<%@page import="com.bit.model.SubmsissionDto"%>
+<%@page import="com.bit.model.SubmissionDto"%>
 <%@page import="com.bit.model.UserDto"%>
 <%@page import="com.bit.model.AssignmentDto"%>
 <%@page import="java.util.ArrayList"%>
@@ -71,20 +71,19 @@
 				<tbody>
 					<%
 						ArrayList<AssignmentDto> list=(ArrayList<AssignmentDto>)request.getAttribute("assignmentList");
-							for(AssignmentDto bean : list){
-								System.out.println("bean"+bean.toString());
-								UserDto userBean = (UserDto) session.getAttribute("userBean");
-								SubmsissionDto bean_u=(SubmsissionDto)request.getAttribute("submissionBean");
-								System.out.println("userBean"+userBean.toString());
-								System.out.println("bean_u="+bean_u);
-								
+										for(AssignmentDto bean : list){
+											System.out.println("bean"+bean.toString());
+											UserDto userBean = (UserDto) session.getAttribute("userBean");
+											SubmissionDto bean_u=(SubmissionDto)request.getAttribute("submissionBean");
+											System.out.println("userBean"+userBean.toString());
+											System.out.println("bean_u="+bean_u);
 					%>
 					<tr>
 						<td><%=bean.getRowNum()%></td>
 						<td><a href="assignment_detail.stu?idx=<%=bean.getAssignmentId()%>"><%=bean.getTitle()%></a></td>
-						<td><%=userBean.getUserId()%></td>
+						<td><%=userBean.getName()%></td>
 						<td><%=bean.getWriteDate()%></td>
-<%-- 						<td><%=bean_u.getIsCheck() %></td> --%>
+<%--  						<td><%=bean_u.getIsCheck() %></td> --%>
 					</tr>
 					<%
 						}

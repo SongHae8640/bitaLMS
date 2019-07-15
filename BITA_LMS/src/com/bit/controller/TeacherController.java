@@ -20,7 +20,7 @@ import com.bit.model.AttendanceDto;
 import com.bit.model.CalendarDto;
 import com.bit.model.QnaLDto;
 import com.bit.model.ScoreDto;
-import com.bit.model.SubmsissionDto;
+import com.bit.model.SubmissionDto;
 import com.bit.model.TeacherDao;
 import com.bit.model.UserDto;
 
@@ -76,6 +76,7 @@ public class TeacherController extends HttpServlet {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
 					req.setAttribute("AssignmentBean", dao.getAssignment(assignmentId));
 					req.setAttribute("submissionList", dao.getSubmissionList(assignmentId));
+//					req.setAttribute("submissionIscheck", dao.getSubmissionIscheck(assignmentId,stdId));
 					rd = req.getRequestDispatcher("teacher/assignment_T_detail.jsp");
 				
 				}else if (path.equals("/qna.tea")) {
@@ -148,8 +149,7 @@ public class TeacherController extends HttpServlet {
 				TeacherDao dao = new TeacherDao();
 
 				if(path.equals("")){
-					
-
+				
 				}else if (path.equals("/assignment_insert.tea")) {//assignment insert
 					AssignmentDto assignmentBean=new AssignmentDto();
 					
@@ -157,20 +157,20 @@ public class TeacherController extends HttpServlet {
 					assignmentBean.setContent(req.getParameter("content"));
 					assignmentBean.setLectureId(userBean.getLectureId());
 					assignmentBean.setWriter(userBean.getUserId());
-					result=dao.insertAssignment(assignmentBean);///result를 어떻게 사용할지 나중에 생각
+					result=dao.insertAssignment(assignmentBean);///result瑜� �뼱�뼸寃� �궗�슜�븷吏� �굹以묒뿉 �깮媛�
 					
-					rd = req.getRequestDispatcher("/assignment_detail.tea?idx=");	//리스트 페이지로
+					rd = req.getRequestDispatcher("/assignment.tea");	//由ъ뒪�듃 �럹�씠吏�濡�
 
 					
 				} else if (path.equals("/assignment_edit.tea")) {
-					String title = req.getParameter("title");
-					String content = req.getParameter("content");
-					String assignmentId = req.getParameter("assignmentId");
-					result = dao.updateAssignment(title,content,assignmentId);
-					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assignmentId);
+					System.out.println(2);
+					rd = req.getRequestDispatcher("/assignment.tea");
 
 				} else if (path.equals("/assignment_delete.tea")) {
+					System.out.println(3);
+					AssignmentDto bean=new AssignmentDto();
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
+					System.out.println("assignmentid="+assignmentId);
 					result = dao.deleteAssignment(assignmentId);
 					rd = req.getRequestDispatcher("teacher/assignment_T_.jsp");
 				}else if(path.equals("/qna_update.tea")){
@@ -198,7 +198,7 @@ public class TeacherController extends HttpServlet {
 					
 					if(result>0){
 						PrintWriter out= resp.getWriter(); 
-						out.write("{\"msg\":\"성공적으로 수정되었습니다\"}");
+						out.write("{\"msg\":\"존재하지 않음\"}");
 						out.close();
 					}
 				}else if (path.equals("/calendar_insert.tea")) {
@@ -238,7 +238,7 @@ public class TeacherController extends HttpServlet {
 					result = dao.deleteCalendar(Integer.parseInt(req.getParameter("calendarId")));
 					System.out.println("result = "+result);
 				}else {
-					System.out.println("존재하지 않는 페이지");
+					System.out.println("존재하지 않는 페이지 입니다.");
 
 				}
 				
@@ -246,12 +246,13 @@ public class TeacherController extends HttpServlet {
 					rd.forward(req, resp);					
 				}
 			}else {
-				
 				req.getRequestDispatcher("login.bit");
 			}
 		} catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
 		}
+		System.out.println("Tea Con : method : post - if문 퇴장");
 	}
+
 
 }

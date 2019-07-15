@@ -1,7 +1,8 @@
-package com.bit.controller;
+package com.bit.model;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,7 +31,7 @@ public class StudentController extends HttpServlet {
 		System.out.println("StudentController(doGet) :: path = " + path);
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
-		
+		System.out.println("userid="+userBean.toString());
 		try {
 			if(userBean.getBelong().equals("student")){
 				StudentDao dao = new StudentDao();
@@ -149,8 +150,7 @@ public class StudentController extends HttpServlet {
 			
 		}catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
-		}
-
+		} 
 	}
 	
 	@Override
@@ -178,9 +178,12 @@ public class StudentController extends HttpServlet {
 				if (path.equals("/main.stu")) {
 					
 				}else if(path.equals("/submission_insert.stu")){
-					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
-					result = dao.insertSubmission(assignmentId, userBean.getUserId());		
-					rd = req.getRequestDispatcher("assignmentdetail.stu");
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));
+					SubmissionDto bean_s=new SubmissionDto();
+					AttachedFileDto fileBean=new AttachedFileDto();
+					bean_s.setAssignmentId(Integer.parseInt(req.getParameter("assignment_id")));
+					result = dao.insertSubmission(userBean, bean_s, fileBean);		
+					rd = req.getRequestDispatcher("assignmentdetail.stu");	
 				}else if(path.equals("/submission_update.stu")){
 					String assignmentId = req.getParameter("idx");	
 					String fileName = req.getParameter("fileName");	//수정페이지에서 가져올 것
