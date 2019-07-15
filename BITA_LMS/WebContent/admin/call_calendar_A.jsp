@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.LectureDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -22,6 +24,9 @@
 		var yearMonthDay = date.getFullYear() + "-" + leadingZeros(date.getMonth() + 1, 2) + "-" + leadingZeros(date.getDate(), 2);
 
 		var calendarEvent;
+		var callCalendarUrl = "callCalendar.adm?idx=0";
+		
+		var test;
 
 
 		$(document).ready(function() {
@@ -34,7 +39,7 @@
 				eventLimit: true,
 				displayEventTime: false,
 				events: {
-					url: "callCalendar.adm",
+					url: callCalendarUrl,
 					error: function() {
 						console.log("fullcalendar 가져오기 실패")
 					},
@@ -99,6 +104,16 @@
 
 
 		});
+		
+		
+		//콤보 박스에서 lecture를 변경하였을때 
+		function changeLecture() {
+			var select = $("select[name=lecture_name]");
+			var lectureId = $(select[0]).children("option:selected")[0].value;
+			var callCalendarUrl = "callCalendar.adm?idx="+lectureId;
+			console.log(callCalendarUrl);
+			$('#calendar').fullCalendar('refetchEvents');
+	    }
 
 		function editeCalendar() {
 			closeMessage('winAlert');
@@ -133,7 +148,7 @@
 				type: 'POST',
 				url: "calendar_delete.adm",
 				data: {
-					calendar_id: calEvent.id + "",
+					calendarId: calEvent.id + "",
 				},
 				cache: false,
 				async: false,
@@ -153,8 +168,9 @@
 
 		function addCalendar() {
 			console.log('일정 추가')
+			
 			var htmlsContents = "";
-			htmlsContents += "<div><a>강좌번호</a><div><input type='text' id='calendar_lecture_id' value=''></div></div><br>";
+			htmlsContents += "<div><a>강좌이름</a><div>"+$('#lecture_list').html()+"</div><br>";
 			htmlsContents += "<div><div>날짜</div><div><input type='text' id='calendar_start_date' value=''>-<input type='text' id='calendar_end_date' value=''></div></div><br>";
 			htmlsContents += "<div><div>제목</div><div><input type='text' id='calendar_title' value=''></div></div><br>";
 			htmlsContents += "<div><div>내용</div><div><input type='text' id='calendar_content' value=''></div></div>";
@@ -181,15 +197,19 @@
 
 		function saveCalendar() {
 			console.log("일정 저장하기");
+			
 			saveCalBtn = document.getElementById('save_calendar_Btn');
 			//입력값 검사 
-			var lectureId = $('#calendar_lecture_id').val();
+			
+			var select = $("select[name=lecture_name]")[1];
+			console.log(select);
+			var lectureId = $(select[0]).children("option:selected")[0].value;
 			var startDate = $('#calendar_start_date').val();
 			var endDate = $('#calendar_end_date').val();
 			var title = $('#calendar_title').val();
 			var content = $('#calendar_content').val();
 
-			if (!lectureId) {
+			if (lectureId = "0") {
 				alert('강좌명을 입력해 주세요.');
 				return false;
 			}
@@ -270,10 +290,29 @@
 
 
 
-
-
+	
+	<div id="lecture_list">
+		<select name="lecture_name" onchange = "changeLecture()">
+			<option value="0" selected="selected">전체</option>
+			<%
+			ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)session.getAttribute("arrangeLectureList");
+				if(lectureList !=null){
+					for(LectureDto bean : lectureList){
+						if(bean.getLectureId()>0){
+			%>
+			<option value="<%=bean.getLectureId()%>"><%=bean.getName()%></option>
+			<%
+						}
+					}
+				}
+			%>
+		</select>
+	</div>
+	
 	<div id='calendar'></div>
+	
 	<div id='day_calender'>
+		
 		<!--여기에 당일 일정 리스트가 내용이 들어감  -->
 		<button id="add_calendar_Btn">일정 등록</button>
 	</div>

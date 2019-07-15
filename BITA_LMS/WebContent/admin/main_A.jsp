@@ -1,92 +1,119 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@page import="com.bit.model.LectureDto"%>
+<%@page import="java.util.ArrayList"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<link
-	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
-	rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="css/frame.css" />
-<style type="text/css">
-#menu>ul {
-	width: 610px;
-	list-style-type: none;
-	margin: 0px auto;
-}
-#content {
-	height: 700px;
-	margin: 0 auto;
-}
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Insert title here</title>
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="css/frame.css" />
+	<style type="text/css">
+		#menu>ul {
+			width: 610px;
+			list-style-type: none;
+			margin: 0px auto;
+		}
 
-#content #content_upper {
-	height: 450px;
-	margin: 0 auto;
-}
+		#content {
+			height: 700px;
+			margin: 0 auto;
+		}
 
-#content #content_under {
-	height: 250px;
-}
+		#content #content_upper {
+			height: 450px;
+			margin: 0 auto;
+		}
 
-#content #content_under #myinfo {
-	float: left;
-	width: 400px;
-	margin-top: 50px;
-}
+		#content #content_under {
+			height: 250px;
+		}
 
-#content #content_under #myinfo #myinfo_form {
-	width: 300px;
-	margin: 0 auto;
-}
+		#content #content_under #myinfo {
+			float: left;
+			width: 400px;
+			margin-top: 50px;
+		}
 
-#content #content_under #myinfo #myinfo_form #mypic {
-	float: left;
-	height: 100px;
-	width: 100px;
-}
+		#content #content_under #myinfo #myinfo_form {
+			width: 300px;
+			margin: 0 auto;
+		}
 
-#content #content_under #myinfo #myinfo_form #welcome {
-	float: right;
-	line-height: 50px;
-	width: 190px;
-	text-align: center;
-}
+		#content #content_under #myinfo #myinfo_form #mypic {
+			float: left;
+			height: 100px;
+			width: 100px;
+		}
 
-#content #content_under #myinfo #myinfo_form2 {
-	overflow: auto;
-	width: 300px;
-}
+		#content #content_under #myinfo #myinfo_form #welcome {
+			float: right;
+			line-height: 50px;
+			width: 190px;
+			text-align: center;
+		}
 
-#content #content_under #mywork {
-	float: right;
-	width: 395px;
-	margin: 100px auto;
-}
+		#content #content_under #myinfo #myinfo_form2 {
+			overflow: auto;
+			width: 300px;
+		}
 
-#content #content_under #mywork #mywork_form {
-	width: 395px;
-	text-align: center;
-}
-</style>
+		#content #content_under #mywork {
+			float: right;
+			width: 395px;
+			margin: 100px auto;
+		}
 
-<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('.topmenu').mouseenter(function() {
-			$('.submenu').css('display', 'block')
+		#content #content_under #mywork #mywork_form {
+			width: 395px;
+			text-align: center;
+		}
+
+	</style>
+	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('.topmenu').mouseenter(function() {
+				$('.submenu').css('display', 'block')
+			});
+			$('.topmenu').mouseleave(function() {
+				$('.submenu').css('display', 'none')
+			});
+			$('#header>img').click(function() {
+				location.href = 'main.adm'
+			}).mouseenter(function() {
+				$('#header>img').css('cursor', 'pointer')
+			});
+
+			updateData();
 		});
-		$('.topmenu').mouseleave(function() {
-			$('.submenu').css('display', 'none')
-		});
-		$('#header>img').click(function() {
-			location.href = 'main.adm'
-		}).mouseenter(function(){
-			$('#header>img').css('cursor', 'pointer')
-		});
-	});
-</script>
+
+		function updateData() {
+			$.ajax({
+				type: "get",
+				url: "teacher/teacherStatus.jsp",
+				datatype: "json",
+				error: function(data) {
+					var show = "";
+					$.each(data, function(index, item) {
+						console.log(item.name);
+						show += "<span>" + "지점:" + item.lecName + "</span><br>";
+						show += "<span>" + "소속:" + item.totalyDays + "</span><br>";
+						show += "<span>" + "신청 현황:" + getSubmission + "</span><br>";
+						show += "<span>" + "Q&A 문의:" + totalQnalNum + "</span><br>";
+
+					});
+				}
+			});
+		}
+
+	</script>
+
 </head>
+
 <body>
 	<div>
 		<div id="header">
@@ -98,7 +125,8 @@
 					<ul class="submenu">
 						<li><a href="register.adm">학생등록</a></li>
 						<li><a href="manage_stu.adm">수강생관리</a></li>
-					</ul></li>
+					</ul>
+				</li>
 				<li><a href="manage_lec.adm">강좌관리</a></li>
 				<li><a href="manage_tea.adm">강사관리</a></li>
 				<li><a href="qna.adm">1:1문의</a></li>
@@ -108,6 +136,7 @@
 			<div id="content_upper">
 				<div id="calender">
 					<h1>달력</h1>
+					
 					<jsp:include page="call_calendar_A.jsp" flush="false"></jsp:include>
 				</div>
 			</div>
@@ -121,14 +150,12 @@
 						</div>
 					</div>
 					<div id="myinfo_form2">
-						<label for="branch">지점 :</label> <span>비트교육센터 안양지점</span> <br /> <label
-							for="belong">소속 :</label> <span>belong</span>
+						<label for="branch">지점 :</label> <span>비트교육센터 안양지점</span> <br /> <label for="belong">소속 :</label> <span>belong</span>
 					</div>
 				</div>
 				<div id="mywork">
 					<div id="mywork_form">
-						<label for="today_a">신청현황 </label> <span> ?? / 30</span> <br /> <label
-							for="today_q">문의현황 </label> <span> ?? / 30</span>
+						<label for="today_a">신청현황 </label> <span> ?? / 30</span> <br /> <label for="today_q">문의현황 </label> <span> ?? / 30</span>
 					</div>
 				</div>
 			</div>
@@ -147,4 +174,5 @@
 		</div>
 	</div>
 </body>
+
 </html>

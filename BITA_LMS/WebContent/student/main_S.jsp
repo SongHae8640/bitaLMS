@@ -81,18 +81,17 @@
 		<div id="content">
 			<h2>메인</h2>
 			
-			<div id = "calendar">
 			
+			<div id = "calendar">
+				<jsp:include page="call_calendar_S.jsp" flush="false"/>
 			</div>
 			
 			<div id = "attendance"></div>
-				<button id="checkin">입실</button>
-				<button id="checkout">퇴실</button>
+				<!--<jsp:include page="../call_attendance_S.jsp" flush="false"/>-->
 			
 			<div id = "status">
 				여기!
 			</div>
-
 		</div>
 		<div id="footer">
 			<div>

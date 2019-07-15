@@ -10,7 +10,7 @@
 	int totalQnaLNum = -1;
 	int progressDays = -1;
 	
-	System.out.println(userBean.toString());
+	//System.out.println("studentSatus :: userBean = "+userBean.toString());
 	
 	
 	attendanceDays = dao.getAttendanceDays(userBean.getUserId());

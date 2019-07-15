@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="com.bit.model.LectureDto, java.util.ArrayList,com.bit.model.UserDto"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,6 +89,8 @@
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		var stuList = $('#stu_list>table>tbody>tr');
+		
 		$('.topmenu').mouseenter(function() {
 			$('.submenu').css('display', 'block')
 		});
@@ -100,6 +102,20 @@
 		}).mouseenter(function(){
 			$('#header>img').css('cursor', 'pointer')
 		});
+		
+		$("select[name=lecture_name]").change(
+	               function() {
+	                  var k = $(this).children("option:selected").text();
+	                  if(k=="전체"){
+	                	  stuList.show();
+	                  }
+	                  else{
+	                	  stuList.hide();
+		                  var temp = $("#stu_list>table>tbody>tr>td:contains('"
+		                        + k + "')");
+		                  $(temp).parent().show();
+	                  }
+	         });
 	});
     //테스트 주석
 </script>
@@ -137,18 +153,25 @@
 			<div id="page_name">
 				<h2>수강생관리</h2>
 			</div>
-			<div id="people_check">
-			<span>num_stu/max_stu</span>
-			</div>
 			<div id="lecture_list">
 				<select name="lecture_name">
-				    <option value="">JAVA</option>
-				    <option value="학생">WEB</option>
-				    <option value="회사원">DB</option>
+				    <option value="" selected="selected">전체</option>
+				<%
+				ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)request.getAttribute("arrangeLectureList");
+				if(lectureList !=null){
+				for(LectureDto bean : lectureList){
+						if(bean.getLectureID()>0){
+				%>
+					<option value="" ><%=bean.getName()%></option>
+				<%
+						}
+					}
+				}
+				%>
 				</select>
 			</div>
 			<div id="month_ck">
-				<button type="button">월별출석표 보기</button>
+				<button type="button" onclick="location.href = 'manage_stu_month.adm'">월별출석표 보기</button>
 			</div>
 			<div id="stu_list">
 			<table>
@@ -163,6 +186,24 @@
 					</tr>
 				</thead>
 				<tbody>
+					<%
+								ArrayList<UserDto> userBean = (ArrayList<UserDto>)request.getAttribute("userBean");
+								if(userBean !=null){
+									for(UserDto bean : userBean){
+					%>
+					<tr>
+						<td><%=bean.getRowNum() %></td>
+						<td><%=bean.getName() %></td>
+						<td><progress value="<%=bean.getAttendanceDays() %>" max="<%=bean.getTotalDays()%>"></progress></td>
+						<td><%=bean.getAttendanceStatus() %></td>
+						<td><%=bean.getLectureName() %></td>
+						<td><input type="checkbox" id="stu_ck"></td>
+					</tr>
+					<%
+									}
+								}
+					%>
+					<!-- 
 					<tr>
 						<td>1</td>
 						<td>김경민</td>
@@ -171,6 +212,7 @@
 						<td>JAVA</td>
 						<td><input type="checkbox" id="stu_ck"></td>
 					</tr>
+					 -->
 				</tbody>
 			</table>
 		</div>

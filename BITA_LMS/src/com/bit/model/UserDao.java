@@ -14,12 +14,12 @@ public class UserDao extends Dao{
 		String sql = "SELECT u.user_Id AS user_id, password, u.name AS name, "
 				+ "email, phone_number, belong"
 				+ ", l.name AS lectureName, "
-				+ "start_date,end_date,l.lecture_id AS lecture_id"
+				+ "to_char(start_date) as \"start_date\",to_char(end_date) as \"end_date\",l.lecture_id AS lecture_id"
 				+ " FROM user01 u "
 				+ "JOIN lectureuser lu ON u.user_id = lu.user_id "
 				+ "JOIN lecture l ON lu.lecture_id = l.lecture_id "
 				+ "WHERE u.user_id=? AND u.password=?";
-		
+
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -35,9 +35,9 @@ public class UserDao extends Dao{
 				bean.setEmail(rs.getString("email"));
 				bean.setPhoneNumber(rs.getString("phone_number"));
 				bean.setBelong(rs.getString("belong"));
-//				bean.setLectureName(rs.getString("lectureName"));
-//				bean.setStartDate(rs.getString("start_date"));
-//				bean.setEndDate(rs.getString("end_date"));
+				bean.setLectureName(rs.getString("lectureName"));
+				bean.setStartDate(rs.getString("start_date"));
+				bean.setEndDate(rs.getString("end_date"));
 				bean.setLectureId(rs.getInt("lecture_id"));
 			}
 		} catch (SQLException e) {

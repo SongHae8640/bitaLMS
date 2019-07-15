@@ -1,4 +1,4 @@
-package com.bit.controller;
+ï»¿package com.bit.controller;
 
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ import com.bit.model.UserDao;
 import com.bit.model.UserDto;
 
 
-@WebServlet("*.bit")
+@WebServlet("/login.bit")
 public class LoginController extends HttpServlet {
 	
 	@Override
@@ -23,28 +23,27 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		HttpSession session = req.getSession();
-		System.out.println("LoginController(doGet) :: ");
 		
-			if(path.equals("/login.bit")||path.equals("/index.bit")){
-				//·Î±×ÀÎÆäÀÌÁö´Â ¼¼¼ÇÀÌ ¾øÀ»¶§¿¡¸¸ Á¢±Ù°¡´É
-				if(session.getAttribute("userBean") == null){
-					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
-					rd.forward(req, resp);
-				//ÀÌ¹Ì ·Î±×ÀÎÀ» ÇÑ ÈÄ¿¡´Â ·Î±×¾Æ¿ôÀ» ÇØ¾ßÁö¸¸ Àç·Î±×ÀÎÀ» ÇÒ ¼ö ÀÖ´Ù.
+		if(path.equals("/login.bit")||path.equals("/index.bit")){
+			//ë¡œê·¸ì¸í˜ì´ì§€ëŠ” ì„¸ì…˜ì´ ì—†ì„ë•Œì—ë§Œ ì ‘ê·¼ê°€ëŠ¥
+			if(session.getAttribute("userBean") == null){
+				RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
+				rd.forward(req, resp);
+			//ì´ë¯¸ ë¡œê·¸ì¸ì„ í•œ í›„ì—ëŠ” ë¡œê·¸ì•„ì›ƒì„ í•´ì•¼ì§€ë§Œ ì¬ë¡œê·¸ì¸ì„ í•  ìˆ˜ ìˆë‹¤.
+			}else{
+				UserDto userBean = (UserDto) session.getAttribute("userBean");
+				if(userBean.getBelong().equals("teacher")){
+					resp.sendRedirect("main.tea");
+				}else if(userBean.getBelong().equals("admin")){
+					resp.sendRedirect("main.adm");
 				}else{
-					UserDto userBean = (UserDto) session.getAttribute("userBean");
-					if(userBean.getBelong().equals("teacher")){
-						resp.sendRedirect("main.tea");
-					}else if(userBean.getBelong().equals("admin")){
-						resp.sendRedirect("main.adm");
-					}else{
-						resp.sendRedirect("main.stu");
-					}
+					resp.sendRedirect("main.stu");
 				}
-			}else if(path.equals("/logout.bit")){
-				session.invalidate();
-				resp.sendRedirect("login.bit");
 			}
+		}else if(path.equals("/logout.bit")){
+			session.invalidate();
+			resp.sendRedirect("login.bit");
+		}
 		
 	}
 	
@@ -63,7 +62,7 @@ public class LoginController extends HttpServlet {
 			//session
 			HttpSession session = req.getSession();
 			session.setAttribute("userBean", userBean);
-//			session.setMaxInactiveInterval(5*60);	//³ªÁß¿¡ ·Î±×ÀÎ ¸¸·á½Ã°£À» »ç¿ëÇÒ¶§ »ç¿ë, paramÀÇ ´ÜÀ§´Â ÃÊ
+//			session.setMaxInactiveInterval(5*60);	//ë‚˜ì¤‘ì— ë¡œê·¸ì¸ ë§Œë£Œì‹œê°„ì„ ì‚¬ìš©í• ë•Œ ì‚¬ìš©, paramì˜ ë‹¨ìœ„ëŠ” ì´ˆ
 			resp.sendRedirect("main.tea");
 		}else if(userBean.getBelong().equals("admin")){
 			HttpSession session = req.getSession();
@@ -77,7 +76,8 @@ public class LoginController extends HttpServlet {
 			resp.sendRedirect("main.stu");
 		}
 		}catch(java.lang.NullPointerException e){
-			req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pw¸¦ ´Ù½Ã È®ÀÎÇÏ¼¼¿ä');</script>");
+			req.setAttribute("msg", "<script type=\"text/javascript\">alert('id&pwë¥¼ ë‹¤ì‹œ í™•ì¸í•˜ì„¸ìš”');</script>");
+
 			doGet(req, resp);
 		}
 	}
