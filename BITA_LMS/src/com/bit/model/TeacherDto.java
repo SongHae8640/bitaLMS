@@ -10,7 +10,7 @@ public class TeacherDto {
 	//info_id, u.name(user_id=teacher_id°°À»¶§)
 	
 	private int infoId, rowNum;
-	private String type,content,teacherId,name,lecName,email,phoneNumber,writer,writeDate;
+	private String type,content,teacherId,name,lecName,email,phoneNumber,startDate,password;
 	public int getInfoId() {
 		return infoId;
 	}
@@ -59,23 +59,23 @@ public class TeacherDto {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public String getWriter() {
-		return writer;
-	}
-	public void setWriter(String writer) {
-		this.writer = writer;
-	}
-	public String getWriteDate() {
-		return writeDate;
-	}
-	public void setWriteDate(String writeDate) {
-		this.writeDate = writeDate;
-	}
 	public int getRowNum() {
 		return rowNum;
 	}
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
+	}
+	public String getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	

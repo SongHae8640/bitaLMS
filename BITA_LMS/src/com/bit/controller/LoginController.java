@@ -15,7 +15,7 @@ import com.bit.model.UserDao;
 import com.bit.model.UserDto;
 
 
-@WebServlet("/login.bit")
+@WebServlet("*.bit")
 public class LoginController extends HttpServlet {
 	
 	@Override

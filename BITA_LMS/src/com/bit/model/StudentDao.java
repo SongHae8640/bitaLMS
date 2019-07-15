@@ -540,7 +540,6 @@ public class StudentDao extends Dao{
 		}
 		return result;
 	}
-
 	public JSONArray getAttendanceMonthListJson(String userId, String yearMonth) {
 		JSONArray jArray = new JSONArray();
 		String sql = "SELECT TO_CHAR(day_time,'YYYY-MM-DD') as \"day_time\" ,status, "

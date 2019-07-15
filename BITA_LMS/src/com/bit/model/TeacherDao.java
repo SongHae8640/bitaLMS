@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 
 import org.json.simple.JSONArray;
 
@@ -24,7 +27,8 @@ public class TeacherDao extends Dao{
 				+ "ON a.std_id = u.user_id "
 				+ "WHERE a.lecture_id=? "
 //				+ "AND TO_CHAR(To_date('2019-07-09'),'yyyymmdd')=TO_CHAR(a.day_time,'yyyymmdd')";
-				+ "AND TO_CHAR(SYSDATE,'yyyymmdd')=TO_CHAR(a.day_time,'yyyymmdd')";
+				+ "AND TO_CHAR(SYSDATE,'yyyymmdd')=TO_CHAR(a.day_time,'yyyymmdd')"
+				+ "ORDER BY name";
 
 		try {
 			openConnection();
@@ -53,31 +57,35 @@ public class TeacherDao extends Dao{
 
 	// 강좌번호와 월을 파라미터로 주고 학생이름, 출석상태, 날짜를 리턴 받는다.
 	// 출결 관리(월별) 페이지에서 보여지는 0000-00의 값을 yyyymm 형태의 문자열로 받는다.
-	public ArrayList<AttendanceDto> getMonthAttendance(int lectureId,String yyyymm) {
+	public ArrayList<AttendanceDto> getMonthAttendance(int lectureId,
+			String yyyymm) {
+		openConnection();
 		ArrayList<AttendanceDto> list = new ArrayList<AttendanceDto>();
-		String sql = "SELECT name, status, day_time " + "FROM attendance a "
-				+ "JOIN user01  u " + "on a.std_id=u.user_id "
-				+ "WHERE a.lecture_id = ? AND "
-				+ "?=TO_CHAR(day_time,'yyyymm') " 
-				+ "ORDER BY name";
-
+		String sql="";
+		
+		sql = "select u.name, a.std_id, to_char(a.day_time,'dd') as \"day\","
+					+ " SUBSTR(a.status, 1, 1) as \"status\" from attendance a inner join user01 u on u.user_id=a.std_id"
+					+ " where to_date(trunc(day_time,'mm'))=to_date(?) and a.lecture_id=?"
+					+ " order by u.name, a.day_time";
+		
+		System.out.println(sql);
 		try {
-			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, lectureId);
-			pstmt.setString(2, yyyymm);
+			pstmt.setString(1, yyyymm+"-01");
+			pstmt.setInt(2, lectureId);
 			rs = pstmt.executeQuery();
-			while (rs.next()) {
+			
+			while(rs.next()){
 				AttendanceDto bean = new AttendanceDto();
-				bean.setDayTime(rs.getString("day_time"));
 				bean.setName(rs.getString("name"));
-				bean.setStatus(rs.getString("stutus"));
+				bean.setDayTime(rs.getString("day"));
+				bean.setStatus(rs.getString("status"));
 				list.add(bean);
 			}
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
+		}finally{
 			closeConnection();
 		}
 		return list;
@@ -356,7 +364,6 @@ public class TeacherDao extends Dao{
 			result=pstmt.executeUpdate();
 			System.out.println(result);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			closeConnection();
@@ -641,6 +648,22 @@ public class TeacherDao extends Dao{
 		return 0;
 	}
 
+
+	public String getMonthAttendanceJson(ArrayList<AttendanceDto> monthAttendance) {
+		JSONArray jArray = new JSONArray();
+		if (monthAttendance != null) { 
+            for (int i = 0; i < monthAttendance.size(); i++) {
+                JSONObject jObject = new JSONObject();//배열 내에 들어갈 json
+                jObject.put("name", monthAttendance.get(i).getName());
+                jObject.put("dayTime", monthAttendance.get(i).getDayTime());
+                jObject.put("status", monthAttendance.get(i).getStatus());
+                jArray.add(jObject);
+            }
+            System.out.println(jArray.toJSONString());
+		} 
+		
+		return jArray.toJSONString();
+  }
 	public JSONArray getCalendarMonthListJson(int lectureId) {
 		JSONArray jArray = new JSONArray();
 		String sql = "SELECT c.calendar_id, c.lecture_id, c.title, c.content,l.name, "

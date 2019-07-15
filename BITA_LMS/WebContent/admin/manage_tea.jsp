@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList,com.bit.model.TeacherDto" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -83,9 +84,9 @@
 	height:95px;
 	margin: 0 auto;
 	}
-	#content #under_list #close_button{
+	#content #under_list #insert_button{
 	float:right;
-	width: 45px;
+	width: 50px;
 	}
 	#content #under_list #search_box{
 	clear:both;
@@ -161,59 +162,52 @@
 					<tr>
 						<th>번호</th>
 						<th>강사정보</th>
-						<th>작성자</th>
-						<th>작성일</th>
+						<th>강좌 시작일</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>1</td>
+				<%
+				ArrayList<TeacherDto> teacherList = (ArrayList<TeacherDto>)request.getAttribute("teacherList");
+				if(teacherList !=null){
+					//String id = teacherList.get(0).getTeacherId();
+					for(int i=0; i<teacherList.size(); i++){
+						TeacherDto bean = teacherList.get(i);
+						//if(i!=0 && id.equals(bean.getTeacherId())){
+						//	continue;
+						//}else{
+						//	id = bean.getTeacherId();
+						//}
+				%>
+					<tr onclick="location.href='manage_tea_detail.adm?idx=<%=bean.getTeacherId()%>'">
+						<td><%=bean.getRowNum() %></td>
 						<td>
 							<div id="tea_pic">
-								<h3>강사사진</h3>
+								<h3>강사이미지<!-- 나중에 file data에서 빼올 것 --></h3>
 							</div>
 							<table>
 								<tr>
-									<td>김코난 / JAVA</td>
+									<td><%=bean.getName() %> / <%=bean.getLecName() %></td>
 								</tr>
 								<tr>
-									<td>학력</td>
+									<td><%=bean.getType() %></td>
 								</tr>
 								<tr>
-									<td>세종대학교 컴공석사</td>
+									<td><%=bean.getContent() %></td>
 								</tr>
 							</table>
 						</td>
-						<td>관리자</td>
-						<td>2019-07-02</td>
+						<td><%=bean.getStartDate() %></td>
 					</tr>
-					<tr>
-						<td>1</td>
-						<td>
-							<div id="tea_pic">
-								<h3>강사사진</h3>
-							</div>
-							<table id="tea_info">
-								<tr>
-									<td>남도일 / WEB</td>
-								</tr>
-								<tr>
-									<td>학력</td>
-								</tr>
-								<tr>
-									<td>아주대학교 컴공석사</td>
-								</tr>
-							</table>
-						</td>
-						<td>관리자</td>
-						<td>2019-07-02</td>
-					</tr>
+					<%
+						}
+					}
+					%>
 				</tbody>
 			</table>
 		</div>
 		<div id="under_list">
-			<div id="close_button">
-				<button type="button">삭제</button>
+			<div id="insert_button">
+				<button type="button" onClick="location.href='manage_tea_insert.adm'">등록</button>
 			</div>
 			<div id="search_box">
 				<form action="register_list.adm">

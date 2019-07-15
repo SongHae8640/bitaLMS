@@ -1,8 +1,8 @@
 package com.bit.model;
 
 public class RegisterDto {
-	private int rowNum;
-	private String userId,userName,lecName,applyDate,numStd,maxStd,fileName,phoneNumber;
+	private int rowNum,applyId,fileId;
+	private String userId,userName,lecName,applyDate,numStd,maxStd,phoneNumber;
 	
 	public int getRowNum() {
 		return rowNum;
@@ -46,24 +46,23 @@ public class RegisterDto {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	@Override
-	public String toString() {
-		return "RegisterDto [rowNum=" + rowNum + ", userId=" + userId
-				+ ", userName=" + userName + ", lecName=" + lecName
-				+ ", applyDate=" + applyDate + ", numStd=" + numStd
-				+ ", maxStd=" + maxStd + "]";
-	}
-	public String getFileName() {
-		return fileName;
-	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	public int getApplyId() {
+		return applyId;
+	}
+	public void setApplyId(int applyId) {
+		this.applyId = applyId;
+	}
+	public int getFileId() {
+		return fileId;
+	}
+	public void setFileId(int fileId) {
+		this.fileId = fileId;
 	}
 	
 }

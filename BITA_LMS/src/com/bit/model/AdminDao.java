@@ -2,6 +2,7 @@
 
 
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -229,14 +230,20 @@ public class AdminDao extends Dao {
 	
 	//행정팀 강좌목록 불러오기
 	//싸그리 다 불러와서 필요한것만 뽑아서 쓰기
+	//
 	//20190709 am 11:23 되는지 확인
 	public ArrayList<LectureDto> getLectureList() {
 		openConnection();
 		ArrayList<LectureDto> list = new ArrayList<LectureDto>();
 		
 		//번호/강좌명/강사명/개강일
-		String sql = "select l.lecture_id,l.name,u.name as \"teaName\",TO_CHAR(start_date,'yyyymmdd') as \"startDate\" from lecture l JOIN lectureuser lu on lu.lecture_id=l.lecture_id JOIN user01 u on u.user_id=lu.user_id where u.belong='teacher'";
+		String sql = "select l.lecture_id,l.name,u.name as \"teaName\", "
+				+ "TO_CHAR(start_date,'yyyymmdd') as \"startDate\" from lecture l "
+				+ "JOIN lectureuser lu on lu.lecture_id=l.lecture_id "
+				+ "JOIN user01 u on u.user_id=lu.user_id "
+				+ "where u.belong='teacher'";
 		
+		System.out.println(sql);
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -271,7 +278,7 @@ public class AdminDao extends Dao {
 				+ "lv,l.name,u.name as \"username\",to_char(start_date, 'yyyy-mm-dd') as \"startDate\", "
 				+ "to_char(end_date, 'yyyy-mm-dd') as \"endDate\", "
 				//filename을 filenum으로 바꿔야
-				+ "content,file_name,is_close, "
+				+ "content,file_id,is_close, "
 				+ "(select (TRUNC(sysdate) - TRUNC(start_date)) from lecture where lecture_id=?) as \"progressDays\""
 				+ " from lecture l JOIN lectureuser lu on lu.lecture_id=l.lecture_id"
 				+ " JOIN user01 u on u.user_id=lu.user_id"
@@ -297,8 +304,8 @@ public class AdminDao extends Dao {
 				bean.setEndDate(rs.getString("endDate"));
 				bean.setProgressDays(rs.getInt("progressDays"));
 				bean.setContent(rs.getString("content"));
-				bean.setFileName(rs.getString("file_name"));
-				bean.setIsClose(rs.getString("is_close"));
+//				bean.setFileId(rs.getInt("file_id"));
+//				bean.setIsClose(rs.getString("is_close"));
 			}
 			System.out.println(bean.toString());
 			
@@ -313,42 +320,205 @@ public class AdminDao extends Dao {
 	//행정팀 강좌관리 강좌 추가 페이지(POST방식)
 	//넘어올 값 강좌명,강사명,교육기간(시작일,종료일),교육수준,최대인원,강좌내용,파일이름
 	//결과값 int로 전송되어 제대로 입력되었는지 확인 가능
-	public int insertLecture(LectureDto lectureBean) {
-		openConnection();
-		String sql = "";
+	public int insertLecture(LectureDto lectureBean, AttachedFileDto fileBean, AttachedFileDto fileBean2) {
+		int idx=0;
+		//file 테이블에 추가
+		String sql1 = "insert into Attached_File (file_id,file_group,original_name,file_name,file_extension,ref_date,reg_id)"
+				+"values (file_id_seq.nextval,?,?,?,?,sysdate,?)";
+		
+		//file 테이블에 추가하고 select로 현재 아이디 받아오기
+		String sql2 = "select file_id_seq.currval as \"file_id\" from attached_file";
+		
+		//total_days 검색
+		String sql3 = "SELECT (TO_DATE(?) - TO_DATE(?)) as \"totalDays\"  FROM DUAL";
+				
+		//강좌 추가
+		String sql4 = "insert into lecture(lecture_id, name, start_date, end_date, total_days, max_std, lv, content, file_id, curri_id) "
+				+ "values(lecture_id_seq.nextval,?,to_date(?),to_date(?),?,?,?,?,?,?)";
+//		String sql4 = "insert into lecture(lecture_id, name, start_date, end_date, total_days, max_std, lv, content) "
+//				+ "values(lecture_id_seq.nextval,?,to_date(?),to_date(?),?,?,?,?)";
+		
+		//현재 lecture current_val 검색
+		String sql5 = "select lecture_id_seq.currval as \"lectureId\" from lecture";
+		
+		//lectureuser 변경
+		String sql6 = "update lectureuser set lecture_id=? where user_id=?";
+		
 		try{
+			openConnection();
+			conn.setAutoCommit(false);
 			
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.setString(1, fileBean.getFileGroup());
+			pstmt.setString(2, fileBean.getOriginalName());
+			pstmt.setString(3, fileBean.getFileName());
+			pstmt.setString(4, fileBean.getFileExtension());
+			pstmt.setString(5, fileBean.getRegId());
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql2);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				lectureBean.setFileId(rs.getInt("file_id"));
+				System.out.println(rs.getInt("file_id"));
+			}
+			
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.setString(1, fileBean2.getFileGroup());
+			pstmt.setString(2, fileBean2.getOriginalName());
+			pstmt.setString(3, fileBean2.getFileName());
+			pstmt.setString(4, fileBean2.getFileExtension());
+			pstmt.setString(5, fileBean2.getRegId());
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql2);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				lectureBean.setFileId(rs.getInt("file_id"));
+				System.out.println(rs.getInt("file_id"));
+			}
+			
+			pstmt = conn.prepareStatement(sql3);
+			pstmt.setString(1, lectureBean.getEndDate());
+			pstmt.setString(2, lectureBean.getStartDate());
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				lectureBean.setTotalDays(rs.getInt("totalDays"));
+				System.out.println(rs.getInt("totalDays"));
+			}
+			
+			//name, start_date, end_date, total_days, max_std, lv, content, file_id, curri_id
+			System.out.println(sql4);
+			pstmt = conn.prepareStatement(sql4);
+			pstmt.setString(1, lectureBean.getName());
+			pstmt.setString(2, lectureBean.getStartDate());
+			pstmt.setString(3, lectureBean.getEndDate());
+			pstmt.setInt(4, lectureBean.getTotalDays());
+			pstmt.setInt(5, lectureBean.getMaxStd());
+			pstmt.setInt(6, lectureBean.getLv());
+			pstmt.setString(7, lectureBean.getContent());
+			pstmt.setInt(8, lectureBean.getFileId());
+			pstmt.setInt(9, lectureBean.getCurriId());
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql5);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				idx = rs.getInt("lectureId");
+			}
+			
+			pstmt = conn.prepareStatement(sql6);
+			pstmt.setInt(1, idx);
+			pstmt.setString(2, lectureBean.getTeaId());
+			pstmt.executeUpdate();
+			
+			conn.commit();
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
 		}finally{
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			closeConnection();
 		}
-		return 0;
+		return idx;
 	}
 	
 	//행정팀 강좌관리 강좌 수정 페이지(POST방식)
 	//넘어올 값 커리큘럼이미지,강좌명,강사명,교육기간,교육수준,최대인원,강좌내용,첨부파일을 수정가능
 	//결과값 int로 전송되어 제대로 입력되었는지 확인 가능
-	public int updateLecture(LectureDto lectureBean) {
-		openConnection();
-		String sql = "";
-		try{
+	public int updateLecture(LectureDto lectureBean, AttachedFileDto fileBean, AttachedFileDto fileBean2) {
+		
+		int idx = 0;
+		//file 테이블 수정
+		String sql1 = "update Attached_File set file_name=?, file_extension=?, ref_date=sysdate where "
+				+ "file_id=?";
 			
+		//강좌 수정
+		String sql2 = "update lecture set name=?, start_date=?, end_date=?, total_days=?, max_std=?, lv=?, content=? "
+				+ "where lecture_id=?";
+		
+		//lectureuser 변경
+		String sql3 = "update lectureuser set lecture_id=? where user_id=?";
+			
+		try{
+			openConnection();
+			conn.setAutoCommit(false);
+			
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.setString(1, fileBean.getFileName());
+			pstmt.setString(2, fileBean.getFileExtension());
+			pstmt.setInt(3, lectureBean.getFileId());
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.setString(1, fileBean.getFileName());
+			pstmt.setString(2, fileBean.getFileExtension());
+			pstmt.setInt(3, lectureBean.getCurriId());
+			pstmt.executeUpdate();
+			
+			//name, start_date, end_date, total_days, max_std, lv, content, file_id, curri_id
+			System.out.println(sql2);
+			pstmt = conn.prepareStatement(sql2);
+			pstmt.setString(1, lectureBean.getName());
+			pstmt.setString(2, lectureBean.getStartDate());
+			pstmt.setString(3, lectureBean.getEndDate());
+			pstmt.setInt(4, lectureBean.getTotalDays());
+			pstmt.setInt(5, lectureBean.getMaxStd());
+			pstmt.setInt(6, lectureBean.getLv());
+			pstmt.setString(7, lectureBean.getContent());
+			pstmt.setInt(8, lectureBean.getLectureID());
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql3);
+			pstmt.setInt(1, lectureBean.getLectureID());
+			pstmt.setString(2, lectureBean.getTeaId());
+			pstmt.executeUpdate();
+			
+			conn.commit();
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
 		}finally{
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			closeConnection();
 		}
-		return 0;
+		return idx;
 	}
 	
 	//행정팀 강좌관리 삭제 기능
 	public int deleteLecture(int lectureId) {
-		//해당 idx값을 삭제
-		openConnection();
-		String sql = "";
+		//제대로 전송됐는지 안됐는지만 int값으로 리턴
+		int result = 0;
+		String sql = "delete from lecture where lecture_id=?";
+		
 		try{
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, lectureId);
+			result = pstmt.executeUpdate();
 			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}finally{
 			closeConnection();
 		}
-		return 0;
+		return result;
 	}
 	
 	//행정팀 학생관리 학생등록 목록 페이지
@@ -402,8 +572,8 @@ public class AdminDao extends Dao {
 		//학생목록에서 num를 idx로 받아 해당 num의 수강신청한 내용을 볼 수 있게
 		//제목/작성자아이디/제출일/이름/강좌/연락처/파일
 		openConnection();
-		String sql = "SELECT u.name as \"name\", u.user_id AS \"id\", l.name AS \"lecName\", "
-				+"TO_CHAR(a.apply_date,'yyyy-mm-dd') AS \"applyDate\", a.file_name, u.phone_number "
+		String sql = "SELECT u.name as \"name\", u.user_id AS \"id\", l.name AS \"lecName\", a.apply_id, "
+				+"TO_CHAR(a.apply_date,'yyyy-mm-dd') AS \"applyDate\", a.file_id, u.phone_number "
 				+"FROM apply a INNER JOIN user01 u on a.user_id=u.user_id "
 				+"INNER JOIN lecture l on l.lecture_id = a.lecture_id "
 				+"WHERE apply_id = ?";
@@ -419,10 +589,11 @@ public class AdminDao extends Dao {
 			
 			if(rs.next()){
 				bean.setApplyDate(rs.getString("applyDate"));
+				bean.setApplyId(rs.getInt("apply_id"));
 				bean.setUserId(rs.getString("id"));
 				bean.setLecName(rs.getString("lecName"));
 				bean.setUserName(rs.getString("name"));
-				bean.setFileName(rs.getString("file_name"));
+				bean.setFileId(rs.getInt("file_id"));
 				bean.setPhoneNumber(rs.getString("phone_number"));
 				return bean;
 			}
@@ -437,26 +608,35 @@ public class AdminDao extends Dao {
 	}
 	
 	//행정팀 학생관리 학생등록 상세페이지 삭제
-	public int deleteRegister(int registerId) {
-		openConnection();
+	public int deleteRegister(int ApplyId) {
 		//제대로 전송됐는지 안됐는지만 int값으로 리턴
+		int result = 0;
+		String sql = "delete from apply where apply_id=?";
+		
 		try{
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, ApplyId);
+			result = pstmt.executeUpdate();
 			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}finally{
 			closeConnection();
 		}
-		return 0;
+		return result;
 	}
 	
 	//행정팀 학생관리 수강생으로 등록(user테이블 update), 해당 user_id로 된 apply테이블의 정보를 삭제
 	//등록 후 목록으로 바로
+	//2019-07-12 완료
 	public int updateRegister(String userId,String lecName) {
 		int result = 1;
 		int lecture_id = 999999999;
 		//해당 값들 인자로 받아와서 user01에서 belong을 update
 		//lectureuser에서 lecture_id 업데이트
 		//apply table 해당 학생 아이디의 apply 삭제
-		String sql = "select lecture_id from lecture where name=?";
+		String sql = "select lecture_id from lecture where name=? and num_std<max_std";
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -473,7 +653,9 @@ public class AdminDao extends Dao {
 		
 		String sql1 = "update user01 set belong='student' where user_id=?";
 		String sql2 = "update lectureUser set lecture_id = ? where user_id=?";
-		String sql3 = "delete from apply where user_id=?";
+		String sql3 = "update lecture set num_std = num_std+1 where lecture_id=?";
+		String sql4 = "delete from apply where user_id=?";
+		String sql5 = "insert into score(lecture_id,std_id) values(?,?)";
 		
 		//제대로 전송됐는지 안됐는지만 int값으로 리턴
 		try {
@@ -487,17 +669,24 @@ public class AdminDao extends Dao {
 			pstmt.setString(2, userId);
 			pstmt.addBatch();
 			pstmt = conn.prepareStatement(sql3);
+			pstmt.setInt(1, lecture_id);
+			pstmt.addBatch();
+			//계속 4번째 쿼리가 실행안돼서 한번 더 넣어줌
+			pstmt.executeBatch();
+
+			pstmt = conn.prepareStatement(sql4);
 			pstmt.setString(1, userId);
 			pstmt.addBatch();
-			int[] results = pstmt.executeBatch();
-			for(int i=0; i<results.length; i++){
-				result *= results[i];
-			}
+			pstmt.executeBatch();
+			
+			pstmt = conn.prepareStatement(sql5);
+			pstmt.setInt(1, lecture_id);
+			pstmt.setString(2, userId);
+			pstmt.addBatch();
+			pstmt.executeBatch();
 			
 			pstmt.clearBatch();
-			if(result>0){
-                conn.commit();
-			}
+            conn.commit();
 			
 		} catch (SQLException e) {
 			try {
@@ -529,7 +718,7 @@ public class AdminDao extends Dao {
 		
 		ArrayList<UserDto> list = new ArrayList<UserDto>();
 		
-		String sql = "select ROW_NUMBER() OVER(ORDER BY lu.lecture_id, u.name) NUM, u.name as \"userName\", "
+		String sql = "select ROW_NUMBER() OVER(ORDER BY lu.lecture_id, u.name) NUM, u.name as \"userName\", u.user_id, "
 				+ "l.total_days AS \"totalDays\", l.name as \"lecName\", a.status, t1.* "
 				+ "from user01 u inner join lectureuser lu on u.user_id = lu.user_id "
 				+ "inner join lecture l on l.lecture_id = lu.lecture_id "
@@ -549,6 +738,7 @@ public class AdminDao extends Dao {
 				UserDto bean = new UserDto();
 				bean.setRowNum(rs.getInt("num"));
 				bean.setName(rs.getString("userName"));
+				bean.setUserId(rs.getString("user_id"));
 				bean.setTotalDays(rs.getInt("totalDays"));
 				bean.setAttendanceDays(rs.getInt("count"));
 				bean.setAttendanceStatus(rs.getString("status"));
@@ -613,15 +803,42 @@ public class AdminDao extends Dao {
 	}
 	
 	//행정팀 수강생 삭제, 강사 삭제
+	//연관된 데이터를 다 삭제하기 위해서는 on delete cascade 해줘야된다 (외래키로 받는 테이블에)
 	public int deleteUser(String[] userId) {
-		openConnection();
+		String sql = "";
+		int result = 0;
+		
 		try{
+			openConnection();
+			conn.setAutoCommit(false);
+			for(int i=0; i<userId.length; i++){
+				sql = "delete from user01 where user_id=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, userId[i]);
+				pstmt.executeUpdate();
+				System.out.println(userId[i]);
+				result++;
+			}
 			
+			conn.commit();
+			
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException f) {
+				e.printStackTrace();
+			}
+			e.printStackTrace();
 		}finally{
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			closeConnection();
 		}
 		
-		return -1;
+		return result;
 	}
 	
 	//행정팀 강사관리 목록
@@ -629,22 +846,30 @@ public class AdminDao extends Dao {
 		openConnection();
 		ArrayList<TeacherDto> list = new ArrayList<TeacherDto>();
 		
-		//번호, 사진, 이름, 강좌, 학력, 작성자, 날짜
+		//번호, 사진(은 파일불러오는거에서 불러오기), 이름, 맡은 강좌, 학력, 강좌 시작일
 		//파일은 file_group/path/file_name.file_extension
-		String sql = "SELECT ROW_NUMBER() OVER(ORDER BY start_date) NUM, "
-				+ "from user01 u inner join teacher_info on"
-				+ "inner join lectureuser on "
-				+ "inner join ";
+		String sql = "SELECT ROW_NUMBER() OVER(ORDER BY start_date, u.name) NUM, u.name, l.name as \"lecName\", "
+				+ "ti.type, ti.content, u.user_id, "
+				+ "to_char(l.start_date, 'yyyy-mm-dd') as \"startDate\" "
+				+ "from user01 u inner join teacher_info ti on ti.teacher_id=u.user_id "
+				+ "inner join lectureuser lu on lu.user_id=u.user_id "
+				+ "inner join lecture l on lu.lecture_id=l.lecture_id "
+				+ "where u.belong='teacher' and type='학력'";
 		
 		System.out.println(sql);
 		try {
 			pstmt = conn.prepareStatement(sql);
-//			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()){
 				TeacherDto bean = new TeacherDto();
-				bean.setRowNum(rs.getInt(""));
+				bean.setRowNum(rs.getInt("num"));
+				bean.setName(rs.getString("name"));
+				bean.setLecName(rs.getString("lecName"));
+				bean.setType(rs.getString("type"));
+				bean.setContent(rs.getString("content"));
+				bean.setStartDate(rs.getString("startDate"));
+				bean.setTeacherId(rs.getString("user_id"));
 				list.add(bean);
 			}
 			
@@ -656,34 +881,359 @@ public class AdminDao extends Dao {
 		return list;
 	}
 	
-	//행정팀 강사관리 상세
-	//강사 명으로 접근해야 하기 때문에 user_id의 자료형인 String형으로 수정
-	public TeacherDto getTeacher(String userId) {
-		openConnection();
-		try{
+	//맡은반 없는 강사만 뽑아오기 (콤보박스)
+		public ArrayList<TeacherDto> getComboTeacherList() {
+			openConnection();
+			ArrayList<TeacherDto> list = new ArrayList<TeacherDto>();
 			
-		}finally{
+			//파일은 file_group/path/file_name.file_extension
+			String sql = "SELECT u.name, u.user_id "
+					+ "from user01 u "
+					+ "inner join lectureuser lu on lu.user_id=u.user_id "
+					+ "inner join lecture l on lu.lecture_id=l.lecture_id "
+					+ "where u.belong='teacher' and lu.lecture_id<=0";
+			
+			System.out.println(sql);
+			try {
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()){
+					TeacherDto bean = new TeacherDto();
+					bean.setName(rs.getString("name"));
+					bean.setTeacherId(rs.getString("user_id"));
+					list.add(bean);
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				closeConnection();
+			}
+			return list;
+		}
+	
+	//행정팀 파일 입력하기 여러개일때
+	public int insertFile(ArrayList<AttachedFileDto> list){
+		int result1 = 0;
+		int result2 = 0;
+		String sql = "Select count(*) as total from Attached_File where original_name=?";
+		String sql1 ="insert into File_Group (file_group,path) values (?,?)";
+		String sql2 = "insert into Attached_File (file_id,file_group,original_name,file_name,file_extension,ref_date,reg_id)"
+				+"values (file_id_seq.nextval,?,?,?,?,sysdate,?)";
+		
+		
+		try { 
+			openConnection();
+			conn.setAutoCommit(false);
+			for(int i=0; i<list.size(); i++){
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, list.get(i).getOriginalName());
+				result1 = pstmt.executeUpdate();
+				if(result1>0){
+					list.get(i).setFileName(list.get(i).getFileName()+result1);
+				}
+				pstmt = conn.prepareStatement(sql1);
+				pstmt.setString(1, list.get(i).getFileGroup());
+				pstmt.setString(2, list.get(i).getPath());
+				result2 += pstmt.executeUpdate();
+				pstmt = conn.prepareStatement(sql2);
+				pstmt.setString(1, list.get(i).getFileGroup());
+				pstmt.setString(2, list.get(i).getOriginalName());
+				pstmt.setString(3, list.get(i).getFileName());
+				pstmt.setString(4, list.get(i).getFileExtension());
+				pstmt.setString(5, list.get(i).getRegId());
+				result2 += pstmt.executeUpdate();
+			}
+			
+			conn.commit();
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally{
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			closeConnection();
 		}
-		return null;
+		return result2;
+		
+	}
+	
+	//행정팀 강사 프로필 파일 불러오기(상세)
+	public AttachedFileDto getProfileFile(String userId){
+		AttachedFileDto bean = new AttachedFileDto();
+		String sql = "Select fg.path, af.file_name, af.file_extension "
+				+ "from attached_file af inner join file_group fg on fg.file_group = af.file_group "
+				+ "where af.reg_id=? and af.file_group='profile'";
+		
+		System.out.println(sql);
+		try { 
+			openConnection();
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				bean.setPath(rs.getString("path"));
+				bean.setFileName(rs.getString("file_name"));
+				bean.setFileExtension(rs.getString("file_extension"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			closeConnection();
+		}
+		return bean;
+	}
+	
+	//행정팀 강사 프로필 파일 불러오기(목록)
+	//좀 이따가 하자
+	public AttachedFileDto getProfileFileList(String userId){
+		AttachedFileDto bean = new AttachedFileDto();
+		String sql = "Select fg.path, af.file_name, af.file_extension "
+				+ "from attached_file af inner join file_group fg on fg.file_group = af.file_group "
+				+ "inner join user01"
+				+ "where af.file_group='profile'";
+		
+		System.out.println(sql);
+		try { 
+			openConnection();
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				bean.setPath(rs.getString("path"));
+				bean.setFileName(rs.getString("file_name"));
+				bean.setFileExtension(rs.getString("file_extension"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			closeConnection();
+		}
+		return bean;
+	}
+	
+	
+	//행정팀 강사관리 상세
+	//강사 명으로 접근해야 하기 때문에 user_id의 자료형인 String형으로 수정
+	//이름, 맡은 강좌,학력,타입, 콘텐츠(있는거 싹다),이메일,연락처
+	public ArrayList<TeacherDto> getTeacher(String userId) {
+		ArrayList<TeacherDto> list = new ArrayList<TeacherDto>(); 
+		String sql = "Select u.name, l.name as \"lecName\", ti.type, ti.content, u.email, u.phone_number, u.user_id "
+				+ "from user01 u inner join lectureuser lu on lu.user_id=u.user_id "
+				+ "inner join lecture l on l.lecture_id=lu.lecture_id "
+				+ "inner join teacher_info ti on ti.teacher_id=u.user_id "
+				+ "where u.user_id=? order by ti.type";
+		
+		System.out.println(sql);
+		try { 
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			
+			TeacherDto bean = new TeacherDto();
+			while(rs.next()){
+				bean = new TeacherDto();
+				bean.setName(rs.getString("name"));
+				bean.setTeacherId(rs.getString("user_id"));
+				bean.setLecName(rs.getString("lecName"));
+				bean.setType(rs.getString("type"));
+				bean.setContent(rs.getString("content"));
+				bean.setEmail(rs.getString("email"));
+				bean.setPhoneNumber(rs.getString("phone_number"));
+				list.add(bean);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			closeConnection();
+		}
+		return list;
 	}
 	
 	//행정팀 강사관리 추가
-	public int insertTeacher(TeacherDto teacherBean) {
-		openConnection();
+	//teacherInfo 객체를 만드는게 좋으려나....
+	public int insertTeacher(TeacherDto teacherBean, String[] career, String[] book, String[] certificate, AttachedFileDto fileBean) {
+		int result=0;
+		int result1 = 0; 
+		int result2 = 0;
+		//user 테이블에 추가
+		String sql1 = "insert into user01(user_id,password,name,email,phone_number,belong) values(?,?,?,?,?,'teacher')";
+		//lectureuser 테이블에 추가 (강좌가 할당되지 않았으므로 lecture_id는 -1)
+		String sql2 = "insert into lectureuser(lecture_id,user_id) values(-1,?)";
+		
+		//파일추가
+		String sql6 = "insert into Attached_File (file_id,file_group,original_name,file_name,file_extension,ref_date,reg_id)"
+				+"values (file_id_seq.nextval,?,?,?,?,sysdate,?)";
+		
+		//teacherInfo 테이블에 추가 (여러개있으면 여러번 추가)
+		String sql3 = "insert into teacher_info(info_id,type,content,teacher_id) values(info_id_seq.nextval,?,?,?)";
+		
 		try{
+			openConnection();
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.setString(1, teacherBean.getTeacherId());
+			pstmt.setString(2, teacherBean.getPassword());
+			pstmt.setString(3, teacherBean.getName());
+			pstmt.setString(4, teacherBean.getEmail());
+			pstmt.setString(5, teacherBean.getPhoneNumber());
+			result = pstmt.executeUpdate();
 			
+			pstmt = conn.prepareStatement(sql2);
+			pstmt.setString(1, teacherBean.getTeacherId());
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql6);
+			pstmt.setString(1, fileBean.getFileGroup());
+			pstmt.setString(2, fileBean.getOriginalName());
+			pstmt.setString(3, fileBean.getFileName());
+			pstmt.setString(4, fileBean.getFileExtension());
+			pstmt.setString(5, fileBean.getRegId());
+			result2 += pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql3);
+			pstmt.setString(1, "학력");
+			pstmt.setString(2, teacherBean.getContent());
+			pstmt.setString(3, teacherBean.getTeacherId());
+			pstmt.executeUpdate();
+			
+			for(int i=0; i<career.length; i++){
+				System.out.println(career[i]);
+				pstmt = conn.prepareStatement(sql3);
+				pstmt.setString(1, "경력사항");
+				pstmt.setString(2, career[i]);
+				pstmt.setString(3, teacherBean.getTeacherId());
+				pstmt.executeUpdate();
+			}
+			for(int i=0; i<book.length; i++){
+				System.out.println(book[i]);
+				pstmt = conn.prepareStatement(sql3);
+				pstmt.setString(1, "저서");
+				pstmt.setString(2, book[i]);
+				pstmt.setString(3, teacherBean.getTeacherId());
+				pstmt.executeUpdate();
+			}
+			for(int i=0; i<certificate.length; i++){
+				System.out.println(certificate[i]);
+				pstmt = conn.prepareStatement(sql3);
+				pstmt.setString(1, "자격");
+				pstmt.setString(2, certificate[i]);
+				pstmt.setString(3, teacherBean.getTeacherId());
+				pstmt.executeUpdate();
+			}
+			
+			conn.commit();
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
 		}finally{
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			closeConnection();
 		}
-		return 0;
+		return result+result2;
 	}
 	
+	
 	//행정팀 강사관리 수정
-	public int updateTeacher(TeacherDto teacherBean) {
-		openConnection();
+	//강사 수정할 때는 update
+	//파일Db도 업데이트 reg_id가 해당 강사의 아이디이고 group이 profile일때
+	public int updateTeacher(TeacherDto teacherBean, String[] career, String[] book, String[] certificate, AttachedFileDto fileBean) {
+		int result=0;
+		int result1 = 0; 
+		int result2 = 0;
+		
+		//user업데이트
+		//강사명, 이메일, 전화번호
+		String sql1 = "update user01 set name=?, email=?, phone_number=? where user_id=?";
+		
+		//파일 업데이트
+		//original_name,file_name,file_extension,ref_date 업데이트
+		String sql2 = "update attached_file set original_name=?, file_name=?, file_extension=?, "
+				+ "ref_date=sysdate where reg_id=? and file_group='profile'";
+		
+		//teacherInfo 수정 info id를 어떻게...?...있는거는 할당해도 추가를 하면 어떻게...?
+		//그냥 삭제하고 다시 넣는게 깔끔할 것 같다.
+		//학력, 경력, 저서, 자격
+		String sql3 = "delete from teacher_info where teacher_id=?";
+		String sql4 = "insert into teacher_info(info_id,type,content,teacher_id) values(info_id_seq.nextval,?,?,?)";
+		
 		try{	
+			openConnection();
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.setString(1, teacherBean.getName());
+			pstmt.setString(2, teacherBean.getEmail());
+			pstmt.setString(3, teacherBean.getPhoneNumber());
+			pstmt.setString(4, teacherBean.getTeacherId());
+			result = pstmt.executeUpdate();
 			
+			pstmt = conn.prepareStatement(sql2);
+			pstmt.setString(1, fileBean.getOriginalName());
+			pstmt.setString(2, fileBean.getFileName());
+			pstmt.setString(3, fileBean.getFileExtension());
+			pstmt.setString(4, fileBean.getRegId());
+			result2 += pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql3);
+			pstmt.setString(1, teacherBean.getTeacherId());
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement(sql4);
+			pstmt.setString(1, "학력");
+			pstmt.setString(2, teacherBean.getContent());
+			pstmt.setString(3, teacherBean.getTeacherId());
+			pstmt.executeUpdate();
+			
+			for(int i=0; i<career.length; i++){
+				System.out.println(career[i]);
+				pstmt = conn.prepareStatement(sql4);
+				pstmt.setString(1, "경력사항");
+				pstmt.setString(2, career[i]);
+				pstmt.setString(3, teacherBean.getTeacherId());
+				pstmt.executeUpdate();
+			}
+			for(int i=0; i<book.length; i++){
+				System.out.println(book[i]);
+				pstmt = conn.prepareStatement(sql4);
+				pstmt.setString(1, "저서");
+				pstmt.setString(2, book[i]);
+				pstmt.setString(3, teacherBean.getTeacherId());
+				pstmt.executeUpdate();
+			}
+			for(int i=0; i<certificate.length; i++){
+				System.out.println(certificate[i]);
+				pstmt = conn.prepareStatement(sql4);
+				pstmt.setString(1, "자격");
+				pstmt.setString(2, certificate[i]);
+				pstmt.setString(3, teacherBean.getTeacherId());
+				pstmt.executeUpdate();
+			}
+			
+			conn.commit();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}finally{
 			closeConnection();
 		}

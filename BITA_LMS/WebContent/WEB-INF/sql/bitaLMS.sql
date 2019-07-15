@@ -2533,7 +2533,7 @@ BEGIN
     THEN
       raise_application_error(
         -20001,
-        'Cannot delete User01 because Score exists.'
+         'Cannot delete User01 because Attendance exists.'
       );
     END IF;
 

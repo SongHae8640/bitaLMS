@@ -3,7 +3,7 @@ import java.sql.SQLException;
 
 public class HomeDao extends Dao{
 
-	//È¨·Î±×ÀÎ
+	//í™ˆë¡œê·¸ì¸
 	public UserDto login(String id, String pw){
 		UserDto bean = new UserDto();
 		String sql = "SELECT u.user_Id AS user_id, password, u.name AS name, "
@@ -44,12 +44,12 @@ public class HomeDao extends Dao{
 		return bean;
 	}
 	public int findFile(AttachedFileDto fileBean){
-		//DB¿¡ ³ÖÀ¸·Á´Â ÆÄÀÏÀÌ Á¸ÀçÇÏ´ÂÁö °³¼öÃâ·Â
+		//DBì— ë„£ìœ¼ë ¤ëŠ” íŒŒì¼ì´ ì¡´ì¬í•˜ëŠ”ì§€ ê°œìˆ˜ì¶œë ¥
 		int result = 0;
 		String sql = "Select count(*) as total from Attached_File where original_name=?";
 		try { 
 			openConnection();
-			pstmt = conn.prepareStatement(sql);				//apply Å×ÀÌºí¿¡ ³Ö±â
+			pstmt = conn.prepareStatement(sql);				//apply í…Œì´ë¸”ì— ë„£ê¸°
 			pstmt.setString(1,fileBean.getOriginalName());
 			rs = pstmt.executeQuery();
 			
@@ -63,13 +63,13 @@ public class HomeDao extends Dao{
 		}
 		return result;
 	}
-	//¼ö°­½ÅÃ»
+	//ìˆ˜ê°•ì‹ ì²­
 	public int insertApply (ApplyDto applyBean,AttachedFileDto fileBean){
 		int result1 = 0;
 		int result2 = 0;
-		//¾îÇÃ¶óÀÌ¾ÆÀÌµğ = ½ÃÄö½º
+		//ì–´í”Œë¼ì´ì•„ì´ë”” = ì‹œí€€ìŠ¤
 		//apply_id apply_date lecture_id file_name user_id
-		//apply,Attached_File,File_Group ¿¡ µ¥ÀÌÅÍ ÇÑ¹ø¿¡ ³Ö±â
+		//apply,Attached_File,File_Group ì— ë°ì´í„° í•œë²ˆì— ë„£ê¸°
 		System.out.println(applyBean.toString());
 		System.out.println(fileBean.toString());
 		String sql1 = "insert into Attached_File (file_id,file_group,original_name,file_name,file_extension,ref_date,reg_id)"
@@ -79,8 +79,8 @@ public class HomeDao extends Dao{
 		try {  
 			openConnection();
 			conn.setAutoCommit(false);
-			pstmt = conn.prepareStatement(sql1);				//apply Å×ÀÌºí¿¡ ³Ö±â
-			pstmt.setString(1, fileBean.getFileGroup());		//Attached_FileÅ×ÀÌºí¿¡ ³Ö±â
+			pstmt = conn.prepareStatement(sql1);				//apply í…Œì´ë¸”ì— ë„£ê¸°
+			pstmt.setString(1, fileBean.getFileGroup());		//Attached_Fileí…Œì´ë¸”ì— ë„£ê¸°
 			pstmt.setString(2, fileBean.getOriginalName());
 			pstmt.setString(3, fileBean.getFileName());		
 			pstmt.setString(4, fileBean.getFileExtension());
@@ -116,7 +116,7 @@ public class HomeDao extends Dao{
 		}
 		return result2;
 	}
-	//È¸¿ø°¡ÀÔ
+	//íšŒì›ê°€ì…
 	public int insertUser (UserDto userBean){
 		int result1 = 0;
 		int result2 = 0;
@@ -130,16 +130,16 @@ public class HomeDao extends Dao{
 			pstmt.setString(1,userBean.getUserId());
 			pstmt.setString(2,userBean.getPassword());
 			pstmt.setString(3,userBean.getName());
-			System.out.println("ÀÌ¸§"+userBean.getName());
+			System.out.println("ì´ë¦„"+userBean.getName());
 			pstmt.setString(4,userBean.getEmail());
 			pstmt.setString(5,userBean.getPhoneNumber());
 			System.out.println(userBean.getInflowPath());
 			pstmt.setString(6,userBean.getInflowPath());
-			pstmt.setString(7,"before");			//¼ö°­½ÅÃ»µî·Ï Àü ÇĞ»ı°ª=0
+			pstmt.setString(7,"before");			//ìˆ˜ê°•ì‹ ì²­ë“±ë¡ ì „ í•™ìƒê°’=0
 			result1 = pstmt.executeUpdate();
 			if(result1==1) {
 			pstmt = conn.prepareStatement(sql2);
-			pstmt.setString(1,"0");				//°­ÁÂ°³¼³¾ÆÁ÷ ¾ÈµÆÀ¸´Ï±î µğÆúÆ® 0
+			pstmt.setString(1,"0");				//ê°•ì¢Œê°œì„¤ì•„ì§ ì•ˆëìœ¼ë‹ˆê¹Œ ë””í´íŠ¸ 0
 			pstmt.setString(2,userBean.getUserId());
 			result2 = pstmt.executeUpdate();
 			}
@@ -165,7 +165,7 @@ public class HomeDao extends Dao{
 		}
 		return result2;
 	}
-	//Áßº¹ ¾ÆÀÌµğ Ã¼Å©
+	//ì¤‘ë³µ ì•„ì´ë”” ì²´í¬
 	public int idCheck(String id) {
 		int result = 0;
 		String sql = "Select count(*) as total from user01 where user_id=?";

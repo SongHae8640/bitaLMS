@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList,com.bit.model.TeacherDto,com.bit.model.AttachedFileDto" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,7 +93,46 @@
 	float: right;
 	width: 45px;
 	}
-	
+	#pic{
+	width:100px;
+	}
+	#tea_pic label {
+	position: absolute;
+	top:235px;
+	left:0px;
+	height:15px;
+  display: inline-block;
+  padding: .5em .75em;
+  color: #fff;
+  font-size: inherit;
+  line-height: 15px;
+  vertical-align: middle;
+  background-color: #2C528C;
+  cursor: pointer;
+  border: 1px solid #003366;
+  border-radius: .25em;
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+
+#tea_pic label:hover {
+  background-color: #51A0D5;
+}
+
+#tea_pic label:active {
+  background-color: #51A0D5;
+}
+
+#tea_pic input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -103,17 +143,39 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#del_btn').click(function(){
-			var result = confirm('정말 삭제하시겠습니까?'); 
-			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm'); } 
-			else { 
-				//no-변동사항없음
-				} 
-			});
-		$('#list_btn').click(function(){
-				location.replace('qna.adm'); 
+		$("#add_career1").click(function(){
+			var plus = $("#add_career1").prev();
+			plus.after('<input type="text" name="tea_career1" placeholder="회사명-개발내용"><br>');
 		});
+		$("#add_career2").click(function(){
+			var plus = $("#add_career2").prev();
+			plus.after('<input type="text" name="tea_career2" placeholder="책제목-출판사"><br>');
+		});
+		$("#add_qul").click(function(){
+			var plus = $("#add_qul").prev();
+			plus.after('<input type="text" name="tea_qul" placeholder="정처기"><br>');
+		});
+		
+		$("#btn").click(function(){
+			$("#send_tea").attr("action", "manage_tea_update.adm");
+			$("#send_tea").submit();
+		});
+		
+		$("#teacher").change(function() {
+	        readURL(this);
+	        
+	    });
+		
+		function readURL(input) {
+	        if (input.files && input.files[0]) {
+	            var reader = new FileReader();
+	            reader.onload = function(e) {
+	                $('#pic').attr('src', e.target.result);
+	                $('#pic').attr('width', '100px');
+	            }
+	            reader.readAsDataURL(input.files[0]);
+	        }
+	 }
 	});
 </script>
 </head>
@@ -139,24 +201,49 @@
 			<h3>강사관리</h3>
 			<br/><br/>
 		</div>
-		<form name="send_tea" method="post" action="#">
+		<form id="send_tea" method="post" enctype="multipart/form-data" action="" >
 		<div id="real_content">
 			<div id="page_name">
 				<h2>강사정보</h2>
 			</div>
 			<br/><br/>
 		<div id="tea_detail">
+			<%
+				AttachedFileDto fileBean = (AttachedFileDto)request.getAttribute("fileBean");
+				if(fileBean !=null){
+			%>
 			<div id="tea_pic">
-				<h3>강사이미지</h3>
+				<img id="pic" src="<%="save/profile/"+fileBean.getFileName()+"."+fileBean.getFileExtension() %>" />
+				<label for="teacher">upload</label>
+				<input type="file" name="teacher" id="teacher" class="checkField"/>
 			</div>
 			<table id="tea_table1">
+			<%
+				}
+			%>
+			<%
+				ArrayList<TeacherDto> teacherBean = (ArrayList<TeacherDto>)request.getAttribute("teacherBean");
+				if(teacherBean !=null){
+					
+			%>
+				<input type="hidden" name="userId" value="<%=teacherBean.get(0).getTeacherId() %>">
 					<tr>
 						<td>강사명</td>
-						<td><input type="text" name="tea_name" placeholder="김코난"></td>
+						<td><input type="text" name="name" value="<%=teacherBean.get(0).getName() %>"></td>
 					</tr>
 					<tr>
 						<td>학력</td>
-						<td><input type="text" name="tea_level" placeholder="세종대학교 컴퓨터공학 석사"></td>
+						<%
+					for(int i=0; i<teacherBean.size(); i++){
+						TeacherDto bean = teacherBean.get(i);
+						if(bean.getType().equals("학력")){
+						
+					%>
+						<td><input type="text" name="tea_level" value="<%=bean.getContent() %>"></td>
+					<%
+					}
+					}
+					%>
 					</tr>
 			</table>
 			<table id="tea_table2">
@@ -167,32 +254,100 @@
 				</tr>
 				<tr>
 				<!-- 추가버튼누르면 빈칸 추가되면서 데이터 입력가능 -->
-					<td><input type="text" name="tea_career1" placeholder="회사명-개발내용"><button type="button" id="add_career1">+</button></td>
-					<td><input type="text" name="tea_career2" placeholder="책제목-출판사"><button type="button" id="add_career2">+</button></td>
-					<td><input type="text" name="tea_qul" placeholder="정처기"><button type="button" id="add_qul">+</button></td>
+				<td>
+				<%
+				if(teacherBean.size()==0){
+				%>
+					<input type="text" name="tea_career1" placeholder="회사명-개발내용">
+				<% 
+				}
+				%>
+				<%
+					int cnt1=0;
+					for(int i=0; i<teacherBean.size(); i++){
+						
+					String type = teacherBean.get(0).getType();
+					TeacherDto bean = teacherBean.get(i);
+					if(bean.getType().contains("경력")){
+						cnt1++;
+						
+				%>
+					<input type="text" name="tea_career1" value="<%=bean.getContent() %>"><br>
+				<%
+					}else if(i==teacherBean.size()-1 && cnt1==0){
+				%>
+						<input type="text" name="tea_career2" placeholder="책제목-출판사">
+				<%
+					}
+				}
+				%>
+					<button type="button" id="add_career1">+</button></td>
+					<td>
+				<%
+					int cnt2=0;
+					for(int i=0; i<teacherBean.size(); i++){
+						
+					String type = teacherBean.get(0).getType();
+					TeacherDto bean = teacherBean.get(i);
+					if(bean.getType().contains("저서")){
+						cnt2++;
+				%>	
+				<input type="text" name="tea_career2" value="<%=bean.getContent() %>"><br>
+				<%
+					}else if(i==teacherBean.size()-1 && cnt2==0){
+				%>
+						<input type="text" name="tea_career2" placeholder="책제목-출판사"><br>
+				<%
+					}
+				}
+				%>
+				
+				<button type="button" id="add_career2">+</button></td>
+					<td>
+				<%
+					int cnt3=0;
+					for(int i=0; i<teacherBean.size(); i++){
+					String type = teacherBean.get(0).getType();
+					TeacherDto bean = teacherBean.get(i);
+					if(bean.getType().contains("자격")){
+						cnt3++;
+				%>
+					<input type="text" name="tea_qul" value="<%=bean.getContent() %>"><br>
+				<%
+					}else if(i==teacherBean.size()-1 && cnt3==0){
+				%>
+						<input type="text" name="tea_qul" placeholder="정처기"><br>
+				<%
+					}
+				}
+				%>
+				<button type="button" id="add_qul">+</button></td>
 				</tr>
 				<tr>
 					<td>이메일</td>
-					<td colspan="2"><input type="text" name="tea_mail" placeholder="kmkm@naver.com"></td>
+					<td colspan="2"><input type="email" name="tea_mail" value="<%=teacherBean.get(0).getEmail() %>"></td>
 				</tr>
 				<tr>
 					<td>연락처</td>
-					<td colspan="2"><input type="text" name="tea_tel" placeholder="010-1234-5678"></td>
+					<td colspan="2"><input type="tel" name="tea_tel" value="<%=teacherBean.get(0).getPhoneNumber() %>"></td>
 				</tr>
 			</table>
 	</div>
 		<div id="under_list">
 			<div id="list_button">
-				<button type="button" id="list_btn">목록</button>
+				<button type="button" id="list_btn" onclick="location.href='manage_tea.adm'">목록</button>
 			</div>
 			<div id="del_button">
-				<button type="button" id="del_btn">삭제</button>
+				<button type="button" id="del_btn" onclick="location.href='manage_tea.adm?idx=<%=teacherBean.get(0).getTeacherId()%>'">취소</button>
 			</div>
 			<div id="ans_button">
-				<button type="submit">수정</button>
+				<button type="submit" id="btn">확인</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
+		<%
+				}
+		%>
 	</div>
 	</form>
 		<div id="footer">

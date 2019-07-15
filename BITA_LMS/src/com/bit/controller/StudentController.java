@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.bit.model.AttendanceDto;
 import com.bit.model.QnaLDto;
 import com.bit.model.StudentDao;
 import com.bit.model.UserDto;
@@ -70,8 +71,7 @@ public class StudentController extends HttpServlet {
 				} else if (path.equals("/assignment.stu")) {
 					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("student/assignment_S.jsp");
-			
-					
+
 				} else if (path.equals("/assignment_detail.stu")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//목록화면에서 과제 번호를 가져올 것
 					req.setAttribute("assignmentBean", dao.getAssignment(assignmentId));
@@ -135,7 +135,6 @@ public class StudentController extends HttpServlet {
 					out.close();
 				}else {
 					System.out.println("알수 없는 페이지입니다.");
-
 				}
 				
 				
@@ -160,6 +159,7 @@ public class StudentController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
+
 		System.out.println("StudentController(doPost) :: path = " + path);
 		
 		//세션 저장
@@ -205,7 +205,6 @@ public class StudentController extends HttpServlet {
 					qnaLBean.setQuestionContent(req.getParameter("questionContent"));
 					qnaLBean.setStuId(userBean.getUserId());					
 					result = dao.insertQnaL(qnaLBean);		
-
 					///result 값에 따라 write 값 변경 해야함
 					PrintWriter out = resp.getWriter();
 					out.write("OK");
@@ -215,8 +214,7 @@ public class StudentController extends HttpServlet {
 					bean.setQnaLId(Integer.parseInt(req.getParameter("qnaLId")));
 					bean.setTitle(req.getParameter("title"));
 					bean.setQuestionContent(req.getParameter("questionContent"));
-					result = dao.updateQnaL(bean);	
-					
+					result = dao.updateQnaL(bean);				
 					///result 값에 따라 write 값 변경 해야함
 					PrintWriter out = resp.getWriter();
 					out.write("OK");
@@ -224,25 +222,79 @@ public class StudentController extends HttpServlet {
 				}else if(path.equals("/qna_delete.stu")){
 					String[] qnaId = req.getParameterValues("qnaId");
 					result = dao.deleteQnaL(qnaId);		
+					rd = req.getRequestDispatcher("qna.stu");	
+				}
+				
+				if(rd!=null){
+					rd.forward(req, resp);				
+				}
+				
+				String json = "";
+				if(path.equals("/callAttendance.stu")){
+					resp.setContentType("text/html;charset=UTF-8"); 
 					
-					///result 값에 따라 write 값 변경 해야함
-					PrintWriter out = resp.getWriter();
-					out.write("OK");
-					out.close();	
+					System.out.println("post");
+					
+					String id = req.getParameter("id");
+
+					//Student 출석상황에 필요한 정보 가져오기
+					
+					//입실/지각/퇴실 정보 등 status, 입퇴실시간(where오늘,시분만 가져오기),강좌명,강좌기간
+					AttendanceDto AttendanceBean = dao.getAttendance(userBean.getUserId());
+					//입실 횟수 / 지각 횟수/ 조퇴횟수 / 외출횟수 / 결석 횟수 groupby status
+					int[] statusNum = dao.getAttendanceStatusList(userBean.getUserId());
+					
+					//출결현황 (총출석수, 총수업수), userbean에있는 id 이용
+					int attendanceDays = dao.getAttendanceDays(userBean.getUserId());
+					//userbean에 들어있는 lectureId
+					int totalDays= dao.getTotalDays(userBean.getLectureId());
+					
+					//출석 지각 조퇴 외출 결석
+					json = "{\"status\" : \""+AttendanceBean.getStatus()+"\" , \"name\" : \""+userBean.getName()+"\" ,"
+							+ " \"checkinTime\" : \""+AttendanceBean.getCheckinTime()+"\", \"checkoutTime\" : \""+AttendanceBean.getCheckoutTime()+"\","
+							+ " \"lecName\" : \""+userBean.getLectureName()+"\", \"startDate\" : \""+userBean.getStartDate()+"\", \"endDate\" : \""+userBean.getEndDate()+"\""
+							+ " ,\"attendanceDays\" : \""+attendanceDays+"\", \"totalDays\" : \""+totalDays+"\""
+							+ " ,\"출석\" : \""+statusNum[0]+"\", \"지각\" : \""+statusNum[1]+"\", \"조퇴\" : \""+statusNum[2]+"\", \"외출\" : \""+statusNum[3]+"\", \"결석\" : \""+statusNum[4]+"\"}";
+					//입실, 퇴실 버튼을 눌렀을 때는 출석입력하고 출석상황 갖고 오기
+					System.out.println(json);
+					PrintWriter out= resp.getWriter(); 
+					out.write(json);
+					out.close();
+				}else if(path.equals("/callAttendanceBtn.stu")){
+					req.setCharacterEncoding("utf-8");
+					resp.setContentType("text/html;charset=UTF-8"); 
+					
+					System.out.println("btnpost");
+					
+					String btn = req.getParameter("btn");
+					System.out.println(btn);
+					
+					System.out.println(userBean.getUserId());
+					result = dao.updateAttendance(userBean.getUserId(), btn);
+					AttendanceDto AttendanceBean = null;
+					if(result<0){
+						System.out.println("오류");
+					}else{				
+						AttendanceBean = dao.getAttendance(userBean.getUserId());
+					}
+					json = "{\"status\" : \""+AttendanceBean.getStatus()+"\", "
+							+ " \"checkinTime\" : \""+AttendanceBean.getCheckinTime()+"\", \"checkoutTime\" : \""+AttendanceBean.getCheckoutTime()+"\"}";
+					
+					System.out.println(json);
+					PrintWriter out= resp.getWriter(); 
+					out.write(json);
+					out.close();
 				}else {
 					System.out.println("존재하지 않는 페이지");
 				}
-				
 				
 			}else {
 				//teacher나 student페이지로 접근하려고 하면 걍 보내버림
 				req.getRequestDispatcher("login.bit");
 			}
-			if(rd!=null) {
-				rd.forward(req, resp);
-			}
 			
 		}catch (java.lang.NullPointerException e) {
+			e.printStackTrace();
 			resp.sendRedirect("login.bit");
 		}
 	}

@@ -15,10 +15,25 @@
 	list-style-type: none;
 	margin: 0px auto;
 }
+#content #att_list table{
+	margin: 0 auto;
+	width:100%;
+	border-collapse: collapse;
+}
+#content #att_list table,th,td{
+	border: 1px solid gray;
+	border-collapse: collapse;
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
+	var yearMonth = new Date();
 	$(document).ready(function() {
+		if(yearMonth.getMonth()*1<10){
+			yearMonth = $('#yearMonth').text(yearMonth.getFullYear()+"-0"+(yearMonth.getMonth()+1));
+		}else{
+			yearMonth = $('#yearMonth').text(yearMonth.getFullYear()+"-"+(yearMonth.getMonth()+1));			
+		}
 		$('.topmenu').mouseenter(function() {
 			$('.submenu').css('display', 'block')
 		});
@@ -31,14 +46,116 @@
 		$('#sb').change(function(){
 			var state=$('#sb option:selected').val();
 			if(state=='day'){
-				alert('day');
 				$(location).attr('href', 'attendance.tea')
 			}else if(state=='month'){
-				alert('month');
-				$(location).attr('href', 'attendance_month_T.tea')
+				$(location).attr('href', 'attendance_month.tea')
 			}
 		});
+		
+		ajaxCall();
+		
+		$('.monthBtn').click(ajaxMonthCall);
 	});
+	
+	var ajaxCall = function() {
+		//맨처음 데이터 가져올 때 & 월별 데이터 가져올때
+		$.when($.ajax({ 
+			url: "attendance_month.tea", 
+			dataType : 'json',
+			data : {yearMonth:$('#yearMonth').text()},
+			type: "post",
+			success: function(data){
+				obj = data;
+				console.log($('#yearMonth').text());
+			},error : function(){
+                alert("통신실패");
+            }
+		})).done(function() {
+			var lastDay = ( new Date( $('#yearMonth').text().substr(0,4), $('#yearMonth').text().substr(5,2), 0) ).getDate();
+			var thead = $('#att_list>table>thead>tr');
+			var tbody = $('#att_list>table>tbody');
+			thead.append("<th>이름</th>");
+			for(var i=1; i<=lastDay; i++){
+				thead.append("<th>"+i+"</th>");
+			}
+			thead.parent().parent().parent().css("width", "1000px");
+			thead.parent().parent().css("width", "1000px");
+			thead.css("width", "1000px");
+			thead.children().css("width", "100px");
+			var check = "";
+			var cnt = 0;
+			$.each(obj,function(key,value) {
+				if(key==0){
+					check = value.name;
+					tbody.append("<tr><th>"+value.name+"</th></tr>");
+					cnt++;
+				}else{
+					if(check==value.name){
+					}else{
+						check = value.name;
+						tbody.append("<tr><th>"+value.name+"</th></tr>");
+						cnt++;
+					}
+				}
+			});
+			for(var i=1; i<=cnt; i++){
+				for(var j=1; j<=lastDay; j++){
+					tbody.children().eq(i-1).append("<td></td>");
+				}
+			}
+			var num = 0;
+			$.each(obj,function(key,value) {
+				var idx = value.dayTime*1;
+				if(key==0){
+					check = value.name;
+					tbody.children().eq(0).children().eq(idx).text(value.status);
+					console.log(value.dayTime);
+					num++;
+				}else{
+					if(check!=value.name){
+						check = value.name;
+						tbody.children().eq(num).children().eq(idx).text(value.status);
+						console.log(value.dayTime);
+						num++;
+					}else{
+						num--;
+						tbody.children().eq(num).children().eq(idx).text(value.status);
+						console.log(value.dayTime);
+						num++;
+					}
+				}
+			});
+			
+		});
+	}
+	
+	var ajaxMonthCall = function() {
+		//월이동 버튼을 눌렀을 때
+		var yyyy = $('#yearMonth').text().substr(0, 4);
+	    var m = $('#yearMonth').text().substr(5, 2);
+	    
+		if($(this).attr('id')=='prevMonth'){
+			m = m-1;
+			if((m*1)<1){
+				m=12;
+				yyyy=yyyy-1;
+			}
+		}else{
+			m = (m*1)+1;
+			if((m*1)>12){
+				m=1;
+				yyyy=(yyyy*1)+1;
+			}
+		}
+		if((m*1)<10){
+			 $('#yearMonth').text(yyyy+"-0"+m);			
+		}else{
+			 $('#yearMonth').text(yyyy+"-"+m)
+		}
+		$('#att_list>table>thead>tr>th').remove();
+		$('#att_list>table>tbody').children().remove();
+		ajaxCall();
+	}
 	
 </script>
 </head>
@@ -65,33 +182,31 @@
 				<option value="day" id="day">day</option>
 				<option value="month" id="month">month</option>
 			</select>
-			<table border="1">
+			<div id=upper_content>
+				<div id="month_ck">
+					<div><label>month</label></div>
+					<div>
+						<button id="prevMonth" class="monthBtn"><</button>
+						<label id="yearMonth"></label>
+						<button id="nextMonth" class="monthBtn">></button>
+					</div>
+				</div>
+					<div id="api">
+					<p><br>(출)석 / (공)결 / (결)석 / (지)각 / (조)퇴<br><br></p>
+					</div>
+			</div>
+			<div id="att_list">
+			<table>
 				<thead>
 					<tr>
-						<th>이름</th>
-						<%
-							int i = 1;
-							for (i = 1; i <= 31; i++) {
-						%>
-						<td><%=i%>
-						<td>
-							<%
-								}
-							%>
-						
+					<!-- 이름 및 날짜 th -->
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>홍길동</td>
-						<td>출석</td>
-						<td>지각</td>
-						<td>출석</td>
-						<td>출석</td>
-						<td>출석</td>
-					</tr>
+				 
 				</tbody>
 			</table>
+		</div>
 		</div>
 		<div id="footer">
 			<div>

@@ -195,7 +195,10 @@ public class HomeController extends HttpServlet {
 			fileBean.setOriginalName(oriFileName);		//사용자가 올린 파일의 original name
 			fileBean.setFileExtension(fileExtend);		//파일의 확장자
 			fileBean.setRegId(userId);					//파일 올린 회원의 id
-	
+		
+			//FileGroupDto생성 후 fileGBean에 데이터 담기
+			fileBean.setPath(filePath);				//파일 저장경로
+
 			//HomeDao 인스턴스화해서 메소드 사용
 			//중복파일 검사 후 이름 바꿔서 fileBean에 담기
 			int count = dao.findFile(fileBean);
@@ -213,7 +216,7 @@ public class HomeController extends HttpServlet {
 			result = dao.insertApply(applyBean,fileBean);	 
 			System.out.println("수강신청결과"+result); 
 			
-			//정상적으로 수강신청 한 것만
+			//정상적으로 수강신청 한 것만
 			if(result ==1) {
 				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('수강신청이 성공적으로 완료되었습니다.');</script>");
 				doGet(req, resp);

@@ -89,6 +89,13 @@
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		$('input[type=checkbox]').prop( 'checked', false )
+		
+		
+		$( '#ck_all' ).click( function() {
+          $( '.stu_ck' ).prop( 'checked', this.checked );
+        } );
+		
 		var stuList = $('#stu_list>table>tbody>tr');
 		
 		$('.topmenu').mouseenter(function() {
@@ -102,6 +109,10 @@
 		}).mouseenter(function(){
 			$('#header>img').css('cursor', 'pointer')
 		});
+		
+		var form = $('#form')
+		
+		$('#del_btn').click(submitForm);
 		
 		$("select[name=lecture_name]").change(
 	               function() {
@@ -117,7 +128,41 @@
 	                  }
 	         });
 	});
-    //테스트 주석
+	
+	
+	
+	var submitForm = function() {
+		var result = confirm('정말 삭제하시겠습니까?'); 
+		if(result) { 
+			//yes-해당수강신청삭제
+			    if ($('#form').find('input[name=userId]').length == 'undefined') //단일
+					{
+  						 if ($('#form').find('input[name=userId]').is(":checked")==false)
+		        	{
+  						form.elements['userId'].attr( 'disabled', true );
+		       		 }
+					} else { //다중
+				        for (i=0; i<$('#form').find('input[name=userId]'); i++)
+				        {
+				            if ($('#form').find('input[name=userId]').is(":checked").checked==false)
+				            {
+				            	$('#form').find('input[name=userId]').eq(i).attr( 'disabled', true );
+				            }
+				        }
+				    }
+			
+				$("#form").attr("method", "post");
+				$("#form").attr("target", "hid_reload");
+				$("#form").attr("action", "user_delete.adm");
+				$("#form").submit().promise().done(function() {
+					window.location.reload();
+				});
+		} 
+		else { 
+			//no-변동사항없음
+		} 
+	};
+	
 </script>
 </head>
 <body>
@@ -174,6 +219,7 @@
 				<button type="button" onclick="location.href = 'manage_stu_month.adm'">월별출석표 보기</button>
 			</div>
 			<div id="stu_list">
+			<form id="form" method="post">
 			<table>
 				<thead>
 					<tr>
@@ -182,7 +228,7 @@
 						<th>출석률</th>
 						<th>출석상태</th>
 						<th>강좌</th>
-						<th><input type="checkbox" id="stu_ck"></th>
+						<th><input type="checkbox" id="ck_all"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -197,7 +243,7 @@
 						<td><progress value="<%=bean.getAttendanceDays() %>" max="<%=bean.getTotalDays()%>"></progress></td>
 						<td><%=bean.getAttendanceStatus() %></td>
 						<td><%=bean.getLectureName() %></td>
-						<td><input type="checkbox" id="stu_ck"></td>
+						<td><input type="checkbox" name="userId" class="stu_ck" value="<%=bean.getUserId() %>"></td>
 					</tr>
 					<%
 									}
@@ -215,6 +261,8 @@
 					 -->
 				</tbody>
 			</table>
+			</form>
+			<iframe name="hid_reload" style="display:none"></iframe>
 		</div>
 		<div id="under_list">
 			<div id="del_button">

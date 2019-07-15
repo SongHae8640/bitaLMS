@@ -3,7 +3,7 @@ package com.bit.model;
 import java.util.Date;
 
 public class AttachedFileDto {
-	private String fileGroup,originalName,fileName,fileExtension,regId;
+	private String fileGroup,originalName,fileName,fileExtension,regId, path;
 	private Date refDate;
 	int fileId;
 	public String getFileGroup() {
@@ -54,5 +54,11 @@ public class AttachedFileDto {
 				+ originalName + ", fileName=" + fileName + ", fileExtension="
 				+ fileExtension + ", regId=" + regId + ", refDate=" + refDate
 				+ ", fileId=" + fileId + "]";
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
 	}
 }

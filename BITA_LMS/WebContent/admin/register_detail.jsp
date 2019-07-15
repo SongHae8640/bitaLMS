@@ -117,15 +117,20 @@
 		});
 		$('#del_btn').click(function(){
 			var result = confirm('정말 삭제하시겠습니까?'); 
-			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm'); } 
+			if(result) { 
+				//yes-해당수강신청삭제
+				
+					var form = $('#form')
+					$("#form").attr("action", "register_delete.adm");
+					$("#form").submit();
+			} 
 			else { 
 				//no-변동사항없음
 				} 
-			});
+		});
 		$('#list_btn').click(function(){
 				location.replace('register.adm');
-			});
+		});
 	});
 </script>
 </head>
@@ -158,7 +163,7 @@
 			</ul>
 		</div>
 		<div id="real_content">
-		<form action="register_update.adm" method="post">
+		<form action="register_update.adm" method="post" id="form">
 			<br/>
 			<div id="page_name">
 				<h2>학생등록</h2>
@@ -181,6 +186,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">
+						<input type="hidden" name="applyId" value="<%=registerBean.getApplyId() %>"/>
 						<div id="reg_form">
 							<div id="submit">
 								<span>제출일 <%=registerBean.getApplyDate() %></span>
@@ -199,7 +205,7 @@
 							</div>
 							<div>
 								<label>파일첨부</label>
-								<a><%=registerBean.getFileName() %></a>
+								<a><%=registerBean.getFileId() %></a>
 							</div>
 						</div>
 						</td>

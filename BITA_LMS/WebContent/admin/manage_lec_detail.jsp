@@ -111,9 +111,6 @@
 		$('#list_btn').click(function(){ 
 			location.href='manage_lec.adm'  
 			});
-		$('#edit_btn').click(function(){ 
-			location.href='manage_lec_update.adm'
-			}); 
 		$('#del_btn').click(function(){
 			var result = confirm('정말 삭제하시겠습니까?'); 
 			if(result) { //yes-해당수강신청삭제
@@ -141,6 +138,7 @@
 				<li><a href="qna.adm">1:1문의</a></li>
 			</ul>
 		</div>
+		<form id="form" action="manage_lec_delete.adm" method="post">
 		<div id="content">
 			<div id="sidebar">
 			<br/><br/><br/><br/>
@@ -165,7 +163,7 @@
 								if(lectureBean !=null){
 					%>
 							<tr>
-								<td>강좌명</td>
+								<td>강좌명<input type="hidden" name="lecture_id" value="<%=lectureBean.getLectureID() %>" /></td>
 								<td><%=lectureBean.getName() %></td>
 							</tr>
 							<tr>
@@ -217,13 +215,11 @@
 					<tr>
 						<td>
 							<div id="curri_des">
-								<img src="img/<%=lectureBean.getFileName()+".jpg"%>"/>	
+								<img src="img/<%=lectureBean.getFileId()+".jpg"%>"/>	
 							</div>
 						</td>
 					</tr>
-					<%
-								}
-					%>
+					
 				</table>
 				</div>
 			</div>
@@ -232,14 +228,18 @@
 				<button type="button" id="list_btn">목록</button>
 			</div>
 			<div id="del_button">
-				<button type="button" id="del_btn">삭제</button>
+				<button type="submit" id="del_btn">삭제</button>
 			</div>
 			<div id="edit_button">
-				<button type="button" id="edit_btn">수정</button>
+				<button type="button" id="edit_btn" onclick="location.href='manage_lec_update.adm?idx=<%=lectureBean.getLectureID()%>'">수정</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>
+		<%
+								}
+					%>
 	</div>
+	</form>
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />

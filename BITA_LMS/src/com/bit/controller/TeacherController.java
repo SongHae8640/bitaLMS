@@ -57,9 +57,12 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/main_T.jsp");
 
 				}else if (path.equals("/attendance.tea")) {
+					//일별출석
 					 req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
-					 
+				}else if (path.equals("/attendance_month.tea")) {
+					//월별출석
+					rd = req.getRequestDispatcher("teacher/attendance_T_month.jsp");
 				}else if (path.equals("/score.tea")) {					//강사가 자신의강의 아이디를 넣으면 해당 강의의 학생들의 점수들만 볼 수 있음
 					req.setAttribute("scoreList",dao.getScoreList(lecture_id));	//test 1반일 때 나중에 userBean.getLectureId() 로 바꿔
 					System.out.println("/score.tea두겟"+lecture_id);
@@ -124,8 +127,6 @@ public class TeacherController extends HttpServlet {
 					out.write(calendarMonthListJson.toJSONString());
 					out.close();
 				}
-				
-				
 				if(rd!=null){
 					rd.forward(req, resp);
 				}
@@ -247,6 +248,29 @@ public class TeacherController extends HttpServlet {
 						System.out.println("성적입력실패"+result);
 					}
 				}
+				
+				//비동기 통신
+				resp.setContentType("text/html;charset=UTF-8");
+				if(path.equals("/attendance_check.tea")){
+					//버튼값에 따라서 update를 다르게 수행
+					String stdId = req.getParameter("id");
+					String btn = req.getParameter("btn");
+					System.out.println(stdId+":"+btn);
+					result = dao.updateAttendance(stdId,btn);
+					
+					if(result>0){
+						PrintWriter out= resp.getWriter(); 
+						out.write("{\"msg\":\"성공적으로 수정되었습니다\"}");
+						out.close();
+					}
+				}else if(path.equals("/attendance_month.tea")){
+					// 수강생관리 목록 페이지(월별) 월 이동
+					String yyyymm = req.getParameter("yearMonth");
+					System.out.println(yyyymm);
+					ArrayList<AttendanceDto> monthAttendance = dao.getMonthAttendance(userBean.getLectureId(), yyyymm);
+					PrintWriter out= resp.getWriter(); 
+					out.write(dao.getMonthAttendanceJson(monthAttendance)+"");
+					out.close();
         else if(path.equals("/qna_update.tea")){
 					QnaLDto bean = new QnaLDto();
 					bean.setQnaLId(Integer.parseInt(req.getParameter("qnaLId")));

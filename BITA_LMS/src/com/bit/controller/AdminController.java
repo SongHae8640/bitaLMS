@@ -30,14 +30,19 @@ import org.json.simple.parser.JSONParser;
 
 
 import com.bit.model.AdminDao;
+import com.bit.model.ApplyDto;
+import com.bit.model.AttachedFileDto;
 import com.bit.model.AttendanceDto;
 import com.bit.model.CalendarDto;
+import com.bit.model.HomeDao;
 import com.bit.model.LectureDto;
 import com.bit.model.QnaLDto;
 import com.bit.model.RegisterDto;
 import com.bit.model.TeacherDao;
 import com.bit.model.TeacherDto;
 import com.bit.model.UserDto;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 @WebServlet("*.adm")
 public class AdminController extends HttpServlet {
@@ -77,6 +82,7 @@ public class AdminController extends HttpServlet {
 				} else if (path.equals("/manage_lec_detail.adm")) {
 					// 강좌관리 상세 페이지
 					int lectureId = Integer.parseInt(req.getParameter("idx"));
+					System.out.println(lectureId);
 					req.setAttribute("lectureBean", dao.getLecture(lectureId));
 					rd = req.getRequestDispatcher("admin/manage_lec_detail.jsp");
 					rd.forward(req, resp);
@@ -91,6 +97,7 @@ public class AdminController extends HttpServlet {
 				} else if (path.equals("/manage_stu_month.adm")) {
 					// 수강생관리 목록 페이지(월별)
 					//콤보박스 정보
+					req.setCharacterEncoding("utf-8");
 					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
 					dao = new AdminDao();
 					String yearMonth = req.getParameter("yearMonth");
@@ -98,13 +105,18 @@ public class AdminController extends HttpServlet {
 					rd = req.getRequestDispatcher("admin/manage_stu_month.jsp");
 				} else if (path.equals("/manage_tea.adm")) {
 					// 강사관리 목록 페이지
+					// 파일불러오기
 					req.setAttribute("teacherList", dao.getTeacherList());
 					rd = req.getRequestDispatcher("admin/manage_tea.jsp");
 
 				} else if (path.equals("/manage_tea_detail.adm")) {
 					// 강사관리 상세 페이지
+					//파일불러오기
 					String userId = req.getParameter("idx");
-					req.setAttribute("teacherBean", dao.getTeacher(userId));	
+					System.out.println(userId);
+					req.setAttribute("fileBean", dao.getProfileFile(userId));
+					req.setAttribute("teacherBean", dao.getTeacher(userId));
+
 					rd = req.getRequestDispatcher("admin/manage_tea_detail.jsp");
 				} else if (path.equals("/register.adm")) {
 					// 학생등록 목록페이지
@@ -120,11 +132,19 @@ public class AdminController extends HttpServlet {
 					rd = req.getRequestDispatcher("admin/register_detail.jsp");
 					rd.forward(req, resp);
 				}  else if (path.equals("/manage_lec_update.adm")) {
-					//강좌관리 수정 페이지	
+					//강좌관리 수정 페이지
+					//강사 콤보박스 리스트 채우려면 강사 리스트도 불러와야
+					req.setAttribute("teacherList", dao.getComboTeacherList());
+					int lectureId = Integer.parseInt(req.getParameter("idx"));
+					System.out.println(lectureId);
+					req.setAttribute("lectureBean", dao.getLecture(lectureId));
+
 					rd = req.getRequestDispatcher("admin/manage_lec_update.jsp");
 					rd.forward(req, resp);
 				}else if (path.equals("/manage_lec_insert.adm")) {
 					//강좌관리 입력 페이지
+					//강사 콤보박스 리스트 채우려면 강사 리스트도 불러와야
+					req.setAttribute("teacherList", dao.getComboTeacherList());
 					rd = req.getRequestDispatcher("admin/manage_lec_insert.jsp");
 					rd.forward(req, resp);
 				} else if (path.equals("/manage_tea_insert.adm")) {
@@ -132,6 +152,12 @@ public class AdminController extends HttpServlet {
 					rd = req.getRequestDispatcher("admin/manage_tea_insert.jsp");
 				} else if (path.equals("/manage_tea_update.adm")) {
 					// 강사관리 강사 수정 페이지
+					String userId = req.getParameter("idx");
+					System.out.println(userId);
+					
+					//파일불러오기
+					req.setAttribute("fileBean", dao.getProfileFile(userId));
+					req.setAttribute("teacherBean", dao.getTeacher(userId));
 					rd = req.getRequestDispatcher("admin/manage_tea_update.jsp");
 					
 				} else if (path.equals("/qna.adm")) {
@@ -146,8 +172,8 @@ public class AdminController extends HttpServlet {
 				}
 				
 				
-				//ajax 방식 ( rd를 사요하지 않음)
-				else if(path.equals("/callCalendar.adm")) {
+				//ajax 방식 ( rd를 사용하지 않음)
+				if(path.equals("/callCalendar.adm")) {
 					//json으로 보낼때 한글 깨짐 방지
 					resp.setContentType("text/html;charset=UTF-8");
 					
@@ -155,8 +181,6 @@ public class AdminController extends HttpServlet {
 					PrintWriter out = resp.getWriter();
 					out.write(calendarMonthListJson.toJSONString());
 					out.close();
-				}else {
-					System.out.println("존재하지않는페이지");
 				}	
 			} else {
 				// teacher나 student페이지로 접근하려고 하면 걍 보내버림
@@ -195,77 +219,265 @@ public class AdminController extends HttpServlet {
 			if (userBean.getBelong().equals("admin")) {
 				AdminDao dao = new AdminDao();
 				if (path.equals("/manage_lec_update.adm")) {
-					//강좌관리 수정 페이지
-					//커리큘럼이미지,강좌명,강사명,교육기간,교육수준,최대인원,강좌내용,첨부파일을 수정가능
+					//강좌 수정
+					req.setCharacterEncoding("utf-8");
+					//먼저 파일을 만들고
+					//파일이 저장될 서버의 경로
+					//폴더가 없을시 만들어줘야 들어감
+
+					String savePath = req.getServletContext().getRealPath("save/lecture");
+					System.out.println("여기저장"+savePath);
+					int sizeLimit = 1024*1024*500;
+					
+					//  ↓ request 객체,               ↓ 저장될 서버 경로,       ↓ 파일 최대 크기,    ↓ 인코딩 방식,       ↓ 같은 이름의 파일명 방지 처리
+					// (HttpServletRequest request, String saveDirectory, int maxPostSize, String encoding, FileRenamePolicy policy)
+					// 아래와 같이 MultipartRequest를 생성만 해주면 파일이 업로드 된다.(파일 자체의 업로드 완료)
+					MultipartRequest multi = new MultipartRequest(req, savePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
+					AttachedFileDto fileBean = new AttachedFileDto();
+					AttachedFileDto fileBean2 = new AttachedFileDto();
+					
+					Enumeration files = multi.getFileNames();
+					while(files.hasMoreElements()){ 
+					    String name = (String)files.nextElement(); //각각의 파일 name을 String name에 담는다.
+					    System.out.println(name);
+					    String fullfileName = multi.getFilesystemName(name); //각각의 파일 name을 통해서 파일의 정보를 얻는다.
+					    String orifileName = multi.getOriginalFileName(name).substring(0, multi.getOriginalFileName(name).lastIndexOf("."));
+					    if(name.equals("lecture")){
+					    	int Idx = fullfileName.lastIndexOf(".");
+							//첨부파일이름  
+							String fileExtend = fullfileName.substring(fullfileName.lastIndexOf(".")+1);//확장자이름 
+							fullfileName = fullfileName.substring(0, Idx);
+//							String oriFileName = multi.getOriginalFileName("lecture").substring(0, multi.getOriginalFileName("teacher").lastIndexOf("."));
+							String filePath = savePath+"\\"+fullfileName; //파일패쓰
+							
+							fileBean = new AttachedFileDto();
+							fileBean.setFileGroup("lecture");	
+							fileBean.setOriginalName(orifileName);		//사용자가 올린 파일의 original name
+							fileBean.setFileName(fullfileName);
+							fileBean.setFileExtension(fileExtend);		//파일의 확장자
+							fileBean.setRegId(userBean.getUserId());					//파일 올린 회원의 id
+							fileBean.setPath(filePath);		//파일 저장경로
+					    }else{
+					    	int Idx = fullfileName.lastIndexOf(".");
+							//첨부파일이름  
+					    	String fileExtend = fullfileName.substring(fullfileName.lastIndexOf(".")+1);//확장자이름 
+							fullfileName = fullfileName.substring(0, Idx);
+//							String oriFileName = multi.getOriginalFileName("lec_file").substring(0, multi.getOriginalFileName("teacher").lastIndexOf("."));
+							String filePath = savePath+"\\"+fullfileName; //파일패쓰
+							
+							fileBean2 = new AttachedFileDto();
+							fileBean2.setFileGroup("lecture");	
+							fileBean2.setOriginalName(orifileName);		//사용자가 올린 파일의 original name
+							fileBean2.setFileName(fullfileName);
+							fileBean2.setFileExtension(fileExtend);		//파일의 확장자
+							fileBean2.setRegId(userBean.getUserId());					//파일 올린 회원의 id
+							fileBean2.setPath(filePath);				//파일 저장경로
+					    }
+
+					}
+					
 					LectureDto lectureBean = new LectureDto();
-					lectureBean.setContent(req.getParameter(""));
-					lectureBean.setEndDate(req.getParameter(""));
-					lectureBean.setFileName(req.getParameter(""));
-					lectureBean.setContent(req.getParameter(""));
-//					lectureBean.setLectureId(Integer.parseInt(req.getParameter(""))); //구분자로서의 역할
-					lectureBean.setName(req.getParameter(""));
-					lectureBean.setLv(Integer.parseInt(req.getParameter("")));
-					lectureBean.setTeaName(req.getParameter(""));
-					lectureBean.setStartDate(req.getParameter(""));
-					lectureBean.setMaxStd(Integer.parseInt(req.getParameter("")));
+					lectureBean.setContent(multi.getParameter("content_area"));
+					lectureBean.setLectureID(Integer.parseInt(multi.getParameter("lec_id")));
+					lectureBean.setEndDate(multi.getParameter("lec_end"));
+					lectureBean.setContent(multi.getParameter("content_area"));
+					lectureBean.setName(multi.getParameter("lec_name"));
+					lectureBean.setLv(Integer.parseInt(multi.getParameter("lec_level")));
+					lectureBean.setTeaName(multi.getParameter("tea_name"));
+					lectureBean.setStartDate(multi.getParameter("lec_start"));
+					lectureBean.setMaxStd(Integer.parseInt(multi.getParameter("max_stu")));
+					lectureBean.setTeaId(multi.getParameter("tea_name"));
 					
-					//결과값에 따라 성공/실패 구분
-					result = dao.updateLecture(lectureBean);
-					
-//					idx = lectureBean.getLectureId();
-					rd = req.getRequestDispatcher("manage_lec_detail.adm?idx="+idx);
+					//idx가 select 문돌려서 lecture_id 갖고와야됨
+					idx = dao.updateLecture(lectureBean,fileBean,fileBean2);
+					resp.sendRedirect("manage_lec_detail.adm?idx="+Integer.parseInt(multi.getParameter("lec_id")));
+
 					
 				}else if (path.equals("/manage_lec_insert.adm")) {
 					//강좌관리 입력 페이지
+					req.setCharacterEncoding("utf-8");
+					//먼저 파일을 만들고
+					//파일이 저장될 서버의 경로
+					//폴더가 없을시 만들어줘야 들어감
+
+					String savePath = req.getServletContext().getRealPath("save/lecture");
+					System.out.println("여기저장"+savePath);
+					int sizeLimit = 1024*1024*500;
+					
+					//  ↓ request 객체,               ↓ 저장될 서버 경로,       ↓ 파일 최대 크기,    ↓ 인코딩 방식,       ↓ 같은 이름의 파일명 방지 처리
+					// (HttpServletRequest request, String saveDirectory, int maxPostSize, String encoding, FileRenamePolicy policy)
+					// 아래와 같이 MultipartRequest를 생성만 해주면 파일이 업로드 된다.(파일 자체의 업로드 완료)
+					MultipartRequest multi = new MultipartRequest(req, savePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
+					AttachedFileDto fileBean = new AttachedFileDto();
+					AttachedFileDto fileBean2 = new AttachedFileDto();
+					
+					Enumeration files = multi.getFileNames();
+					while(files.hasMoreElements()){ 
+					    String name = (String)files.nextElement(); //각각의 파일 name을 String name에 담는다.
+					    System.out.println(name);
+					    String fullfileName = multi.getFilesystemName(name); //각각의 파일 name을 통해서 파일의 정보를 얻는다.
+					    String orifileName = multi.getOriginalFileName(name).substring(0, multi.getOriginalFileName(name).lastIndexOf("."));
+					    if(name.equals("lecture")){
+					    	int Idx = fullfileName.lastIndexOf(".");
+							//첨부파일이름  
+							String fileExtend = fullfileName.substring(fullfileName.lastIndexOf(".")+1);//확장자이름 
+							fullfileName = fullfileName.substring(0, Idx);
+//							String oriFileName = multi.getOriginalFileName("lecture").substring(0, multi.getOriginalFileName("teacher").lastIndexOf("."));
+							String filePath = savePath+"\\"+fullfileName; //파일패쓰
+							
+							fileBean = new AttachedFileDto();
+							fileBean.setFileGroup("lecture");	
+							fileBean.setOriginalName(orifileName);		//사용자가 올린 파일의 original name
+							fileBean.setFileName(fullfileName);
+							fileBean.setFileExtension(fileExtend);		//파일의 확장자
+							fileBean.setRegId(userBean.getUserId());					//파일 올린 회원의 id
+							fileBean.setPath(filePath);		//파일 저장경로
+					    }else{
+					    	int Idx = fullfileName.lastIndexOf(".");
+							//첨부파일이름  
+					    	String fileExtend = fullfileName.substring(fullfileName.lastIndexOf(".")+1);//확장자이름 
+							fullfileName = fullfileName.substring(0, Idx);
+//							String oriFileName = multi.getOriginalFileName("lec_file").substring(0, multi.getOriginalFileName("teacher").lastIndexOf("."));
+							String filePath = savePath+"\\"+fullfileName; //파일패쓰
+							
+							fileBean2 = new AttachedFileDto();
+							fileBean2.setFileGroup("lecture");	
+							fileBean2.setOriginalName(orifileName);		//사용자가 올린 파일의 original name
+							fileBean2.setFileName(fullfileName);
+							fileBean2.setFileExtension(fileExtend);		//파일의 확장자
+							fileBean2.setRegId(userBean.getUserId());					//파일 올린 회원의 id
+							fileBean2.setPath(filePath);				//파일 저장경로
+					    }
+
+					}
+					
 					LectureDto lectureBean = new LectureDto();
-					lectureBean.setContent(req.getParameter(""));
-					lectureBean.setEndDate(req.getParameter(""));
-					lectureBean.setFileName(req.getParameter(""));
-					lectureBean.setContent(req.getParameter(""));
-//					lectureBean.setLectureId(Integer.parseInt(req.getParameter(""))); //구분자로서의 역할
-					lectureBean.setName(req.getParameter(""));
-					lectureBean.setLv(Integer.parseInt(req.getParameter("")));
-					lectureBean.setTeaName(req.getParameter(""));
-					lectureBean.setStartDate(req.getParameter(""));
-					lectureBean.setMaxStd(Integer.parseInt(req.getParameter("")));
+					lectureBean.setContent(multi.getParameter("content_area"));
+					lectureBean.setEndDate(multi.getParameter("lec_end"));
+					lectureBean.setContent(multi.getParameter("content_area"));
+					lectureBean.setName(multi.getParameter("lec_name"));
+					lectureBean.setLv(Integer.parseInt(multi.getParameter("lec_level")));
+					lectureBean.setTeaName(multi.getParameter("tea_name"));
+					lectureBean.setStartDate(multi.getParameter("lec_start"));
+					lectureBean.setMaxStd(Integer.parseInt(multi.getParameter("max_stu")));
+					lectureBean.setTeaId(multi.getParameter("tea_name"));
 					
-					idx = dao.insertLecture(lectureBean);
-					rd = req.getRequestDispatcher("manage_lec_detail.adm?idx="+idx);
-					
-					rd = req.getRequestDispatcher("admin/manage_lec_insert.jsp");
+					//idx가 select 문돌려서 lecture_id 갖고와야됨
+					idx = dao.insertLecture(lectureBean,fileBean,fileBean2);
+					resp.sendRedirect("manage_lec_detail.adm?idx="+idx);
 				} else if (path.equals("/manage_lec_delete.adm")) {
 					//강좌관리 강좌 삭제 (가상의 페이지 바로 돌릴거 딴곳으로)
-					idx = Integer.parseInt(req.getParameter("idx"));
+					idx = Integer.parseInt(req.getParameter("lecture_id"));
 					result = dao.deleteLecture(idx); //나중에 쓸 결과값
 					
-					rd = req.getRequestDispatcher("manage_lec.adm");
-				} else if (path.equals("/manage_stu_month_update.adm")) {
-					// 수강생관리 목록 페이지 삭제
-					String[] userId = req.getParameterValues("");
-					result = dao.deleteUser(userId);
-					
-					rd = req.getRequestDispatcher("manage_stu.adm");
-				}else if (path.equals("/manage_tea_insert.adm")) {
+					resp.sendRedirect("manage_lec.adm");
+				} else if (path.equals("/manage_tea_insert.adm")) {
 					// 강사관리 강사 추가 페이지
-					TeacherDto teacherBean = new TeacherDto();
-//					teacherBean.set어쩌구
-					result = dao.insertTeacher(teacherBean);
 					
-					rd = req.getRequestDispatcher("manage_tea_detail.adm?idx="+idx);
+					//파일이 저장될 서버의 경로
+					//폴더가 없을시 만들어줘야 들어감
+					String savePath = req.getServletContext().getRealPath("save/profile");
+					System.out.println("여기저장"+savePath);
+					int sizeLimit = 1024*1024*15;
+					
+					//  ↓ request 객체,               ↓ 저장될 서버 경로,       ↓ 파일 최대 크기,    ↓ 인코딩 방식,       ↓ 같은 이름의 파일명 방지 처리
+					// (HttpServletRequest request, String saveDirectory, int maxPostSize, String encoding, FileRenamePolicy policy)
+					// 아래와 같이 MultipartRequest를 생성만 해주면 파일이 업로드 된다.(파일 자체의 업로드 완료)
+					MultipartRequest multi = new MultipartRequest(req, savePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
+					
+					
+					String fullfileName = multi.getFilesystemName("teacher");
+					int Idx = fullfileName.lastIndexOf(".");
+					//첨부파일이름  
+					String fileExtend = fullfileName.substring(fullfileName.lastIndexOf(".")+1);//확장자이름 
+					fullfileName = fullfileName.substring(0, Idx);
+					String oriFileName = multi.getOriginalFileName("teacher").substring(0, multi.getOriginalFileName("teacher").lastIndexOf("."));
+					String filePath = savePath+"\\"+fullfileName; //파일패쓰
+					// 업로드한 파일의 전체 경로를 DB에 저장하기 위함
+					System.out.println("oriFileName: "+oriFileName);
+					System.out.println("fullfileName: "+fullfileName);
+					System.out.println("fileExtend: "+fileExtend);
+					System.out.println("filePath: "+filePath);
+					
+					String teaId = multi.getParameter("tea_id");
+					System.out.println("teaId::"+teaId);
+					
+					//AttechedFileDto생성 후 fileBean에 데이터 담기
+					AttachedFileDto fileBean = new AttachedFileDto();
+					fileBean.setFileGroup("profile");	
+					fileBean.setOriginalName(oriFileName);		//사용자가 올린 파일의 original name
+					fileBean.setFileName(fullfileName);
+					fileBean.setFileExtension(fileExtend);		//파일의 확장자
+					fileBean.setRegId(teaId);					//파일 올린 회원의 id
+					fileBean.setPath(filePath);				//파일 저장경로
+					
+					TeacherDto teaBean = new TeacherDto();
+					teaBean.setEmail(multi.getParameter("tea_mail"));
+					teaBean.setName(multi.getParameter("name"));
+					teaBean.setType("학력");
+					teaBean.setContent(multi.getParameter("tea_level"));
+					teaBean.setTeacherId(teaId);
+					teaBean.setPhoneNumber(multi.getParameter("tea_tel"));
+					teaBean.setPassword(multi.getParameter("tea_password"));
+					
+					result = dao.insertTeacher(teaBean,multi.getParameterValues("tea_career1"),multi.getParameterValues("tea_career2"),multi.getParameterValues("tea_qul"),fileBean);
+					System.out.println("insertTeacher::result="+result);
+					
+					resp.sendRedirect("manage_tea_detail.adm?idx="+teaId);
 
 				} else if (path.equals("/manage_tea_update.adm")) {
 					// 강사관리 강사 수정 페이지
-					TeacherDto teacherBean = new TeacherDto();
-//					teacherBean.set어쩌구
-					result = dao.updateTeacher(teacherBean);
 					
-					rd = req.getRequestDispatcher("manage_tea_detail.adm?idx="+idx);
+					//파일이 저장될 서버의 경로
+					//폴더가 없을시 만들어줘야 들어감
+					String savePath = req.getServletContext().getRealPath("save/profile");
+					System.out.println("여기저장"+savePath);
+					int sizeLimit = 1024*1024*15;
+					
+					//  ↓ request 객체,               ↓ 저장될 서버 경로,       ↓ 파일 최대 크기,    ↓ 인코딩 방식,       ↓ 같은 이름의 파일명 방지 처리
+					// (HttpServletRequest request, String saveDirectory, int maxPostSize, String encoding, FileRenamePolicy policy)
+					// 아래와 같이 MultipartRequest를 생성만 해주면 파일이 업로드 된다.(파일 자체의 업로드 완료)
+					MultipartRequest multi = new MultipartRequest(req, savePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
+																			
+					String fullfileName = multi.getFilesystemName("teacher");
+					int Idx = fullfileName.lastIndexOf(".");
+					//첨부파일이름  
+					String fileExtend = fullfileName.substring(fullfileName.lastIndexOf(".")+1);//확장자이름 
+					fullfileName = fullfileName.substring(0, Idx);
+					String oriFileName = multi.getOriginalFileName("teacher").substring(0, multi.getOriginalFileName("teacher").lastIndexOf("."));
+					String filePath = savePath+"\\"+fullfileName; //파일패쓰
 
-				} else if (path.equals("/manage_tea_delete.adm")) {
-					// 강사관리 강사 삭제 페이지
-					String[] userId = req.getParameterValues("");
-					result = dao.deleteUser(userId);
-					rd = req.getRequestDispatcher("manage_tea.adm");
+					// 업로드한 파일의 전체 경로를 DB에 저장하기 위함
+					System.out.println("oriFileName: "+oriFileName);
+					System.out.println("fullfileName: "+fullfileName);
+					System.out.println("fileExtend: "+fileExtend);
+					System.out.println("filePath: "+filePath);
+					
+					String teaId = multi.getParameter("userId");
+					System.out.println("teaId::"+teaId);
+					
+					//AttechedFileDto생성 후 fileBean에 데이터 담기
+					AttachedFileDto fileBean = new AttachedFileDto();
+					fileBean.setFileGroup("profile");	
+					fileBean.setOriginalName(oriFileName);		//사용자가 올린 파일의 original name
+					fileBean.setFileName(fullfileName);
+					fileBean.setFileExtension(fileExtend);		//파일의 확장자
+					fileBean.setRegId(teaId);					//파일 올린 회원의 id
+					fileBean.setPath(filePath);				//파일 저장경로
+					
+					TeacherDto teaBean = new TeacherDto();
+					teaBean.setEmail(multi.getParameter("tea_mail"));
+					teaBean.setName(multi.getParameter("name"));
+					teaBean.setType("학력");
+					teaBean.setContent(multi.getParameter("tea_level"));
+					teaBean.setTeacherId(teaId);
+					teaBean.setPhoneNumber(multi.getParameter("tea_tel"));
+					teaBean.setPassword(multi.getParameter("tea_password")); 
+					
+					result = dao.updateTeacher(teaBean,multi.getParameterValues("tea_career1"),multi.getParameterValues("tea_career2"),multi.getParameterValues("tea_qul"),fileBean);
+					System.out.println("updateTeacher::result="+result);
+					
+					resp.sendRedirect("manage_tea_detail.adm?idx="+teaId);
 
 				} else if (path.equals("/register_update.adm")) {
 					// 학생등록 
@@ -276,11 +488,35 @@ public class AdminController extends HttpServlet {
 						result = dao.updateRegister(id,lecName);
 					}
 					resp.sendRedirect("register.adm");
+				} else if (path.equals("/register_delete.adm")){
+					// 수강신청페이지 삭제
+					int applyId = Integer.parseInt(req.getParameter("applyId"));
+					result = dao.deleteRegister(applyId);
+					if(result>0){
+						resp.sendRedirect("register.adm");
+					}
+				} else if (path.equals("/user_delete.adm")){
+					// 학생 및 강사 삭제
+					String[] userId = req.getParameterValues("userId");
+					System.out.println(userId.length);
+					result = dao.deleteUser(userId);
+					System.out.println(result);
+				} else if (path.equals("/tea_delete.adm")){
+					// 강사 삭제(따로 분류)
+					String[] userId = new String[1];
+					String id = req.getParameter("userId");
+					System.out.println(id+"가 삭제됩니다.");
+					userId[0] = id;
+					result = dao.deleteUser(userId);
+					resp.sendRedirect("manage_tea.adm");
 				}
 				
+				if(rd!=null){					
+					rd.forward(req, resp);
+				}
 				
-				
-				
+				resp.setContentType("text/html;charset=UTF-8");
+				resp.setCharacterEncoding("UTF-8");
 				//비동기 통신
 				else if (path.equals("/manage_stu_month.adm")) {
 					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
@@ -429,9 +665,6 @@ public class AdminController extends HttpServlet {
 				}else {
 					System.out.println("주소 없음 ");
 				}
-				
-
-				
 				
 				
 				if(rd!=null){					
