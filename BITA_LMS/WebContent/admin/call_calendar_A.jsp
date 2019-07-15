@@ -102,9 +102,36 @@
 			addCalBtn.addEventListener('click', function(event) {
 				addCalendar();
 			});
-
+			
+			
+			var insertAllAttendanceBtn = $('#insert_all_attendance');
+			insertAllAttendanceBtn.on('click', function() {
+				console.log("출석 생성")
+				insertAllAttendance();
+			});
+			
+			var updateAllAttendanceBtn = $('#update_all_attendance');
+			updateAllAttendanceBtn.on('click', function() {
+				updateAllAttendance();
+			});
 
 		});
+		
+		function insertAllAttendance(){
+			//내용을 다 입력 했을때 통신 시작
+			$.ajax({
+				type: 'POST',
+				url: "attendacne_allInsert.adm",
+				cache: false,
+				async: false,
+				error: function() {
+					alert('모든 학생의 출석이 생성 되지 않았습니다..');
+				},
+				success: function(e) {
+					console.log(e,'정상적으로 모든 학생의 출석이 생성되었습니다.');
+				}
+			});
+		}
 
 		function editeCalendar() {
 			closeMessage('winAlert');
@@ -337,7 +364,7 @@
 
 
 	
-	<div id="lecture_list">
+	<div id="lecture_list" style="display: none">
 		<select name="lecture_name" >
 			<option value="0" selected="selected">전체</option>
 			<%
@@ -360,6 +387,8 @@
 	<div id='day_calender'>
 		<!--여기에 당일 일정 리스트가 내용이 들어감  -->
 		<button id="add_calendar_Btn">일정 등록</button>
+		<button id="insert_all_attendance">출석 생성</button>
+		<button id= "update_all_attendance">출석 평가</button>
 	</div>
 
 	<div class="box box-success" id="winAlert" style="width: 500px; background-color: white; display: none">

@@ -4,8 +4,10 @@
 
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -805,20 +807,168 @@ public class AdminDao extends Dao {
 	
 	//매일(수업이 있는) 오전 6시 모든 학생의 출석 row를 생성
 	//checkin, checkout 모두 null
-	public int insertAttendanceAll(ArrayList<UserDto> stuList) {
-		openConnection();
+	public ArrayList<Integer> insertAttendanceAll() {
+		ArrayList<String> stuList = new ArrayList<String>();
+		ArrayList<Integer> resultList = new ArrayList<Integer>();
+		int result = -1;
 		
-		closeConnection();
-		return -1;
+		//교육 기간 중에 있는 모든 학생의 id를 모음
+		String selectStuSql = "SELECT u.user_id "
+				+ "FROM user01 u "
+				+ "JOIN lectureUser lu ON u.user_id = lu.user_id "
+				+ "JOIN lecture l ON lu.lecture_id = l.lecture_id "
+				+ "WHERE u.belong = 'student' "
+				+ "AND (SYSDATE BETWEEN l.start_date AND l.end_date)";
+		
+		//출석 테이블에 당일 row를 삽입
+		// 그냥 sysdate로 하면 시간에 따라 중복 삽입이 가능하니 년월일로 만듬
+		String insertAttendanceSql = "INSERT INTO attendance(day_time,std_id) VALUES(TO_DATE(TO_CHAR(SYSDATE,'YYYY-MM-DD'),'YYYY-MM-DD'), ?)";
+		try {
+			openConnection();
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(selectStuSql);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				stuList.add(rs.getString("user_id"));
+			}
+			System.out.println("대상 학생 id : "+stuList.toString());
+			closeConnection();
+			openConnection();
+			for(int idx = 0 ; idx <stuList.size() ; idx ++){
+				pstmt = conn.prepareStatement(insertAttendanceSql);
+				pstmt.setString(1, stuList.get(idx));
+				result = pstmt.executeUpdate();
+				System.out.println(result);
+			}
+			conn.commit();
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally{
+			try {
+				conn.setAutoCommit(true);
+				closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return resultList;
 	}
 	
 	//매일(수업이 있는) 오후 11시 모든 학생의 출석 상태를 수정
 	//checkinTime과 checkoutTime을 비교해서 출석,지각, 결석, 조퇴 중 하나로 변경
-	public int updateAttendanceAll(ArrayList<UserDto> stuList) {
-		openConnection();
+	public int updateAttendanceAll(String updateDay) {
+		//오후 11시 기준으로 출석이 있는 강좌를 듣는 학생들
+		String selectStuSql = " SELECT a.std_id, TO_CHAR(checkin_time, 'HH24:MI:SS') as \"checkin_time\" ,TO_CHAR(checkout_time, 'HH24:MI:SS') as \"checkout_time\" "
+				+ "FROM user01 u "
+				+ "JOIN lectureUser lu ON u.user_id = lu.user_id "
+				+ "JOIN lecture l ON l.lecture_id = lu.lecture_id "
+				+ "JOIN attendance a ON a.std_id = u.user_id "
+				+ "WHERE u.belong = 'student' "
+				+ "AND (SYSDATE BETWEEN l.start_date AND l.end_date)";
 		
-		closeConnection();
+		//
+		String updateStatusSql = "UPDATE attendance SET status=? "
+				+ "WHERE (? = TO_CHAR(day_time,'YYYY-MM-DD')) "
+				+ "AND std_id =?";
+		
+		
+		ArrayList<AttendanceDto> attendanceList = new ArrayList<AttendanceDto>(); 
+		ArrayList<Integer> resultList = new ArrayList<Integer>();
+		String status= "";
+		
+		
+		
+		try {
+			openConnection();
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(selectStuSql);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				AttendanceDto bean = new AttendanceDto();
+				bean.setStdId(rs.getString("std_id"));
+				bean.setCheckinTime(rs.getString("checkin_time"));
+				bean.setCheckoutTime(rs.getString("checkout_time"));
+				
+				pstmt = conn.prepareStatement(updateStatusSql);
+				status = calculateStatus(bean);
+				pstmt.setString(1, status);
+				pstmt.setString(2, updateDay);
+				pstmt.setString(3, bean.getStdId());
+				resultList.add(pstmt.executeUpdate());
+			}
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}catch (ParseException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally{
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
+				closeConnection();
+			}
+			
+		}
+		
+		
 		return -1;
+	}
+
+	private String calculateStatus(AttendanceDto bean) throws ParseException {
+		//체크인 또는 체크아웃을 하지 않은 경우 -> 결석
+		if((bean.getCheckinTime() ==null) || (bean.getCheckoutTime() ==null)){
+			return "결석";
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date checkinTime = dateFormat.parse(bean.getCheckinTime());
+		Date checkoutTime = dateFormat.parse(bean.getCheckoutTime());
+		
+		boolean isLate = false;
+		boolean isEarly = false;
+		
+		String status ="출석";
+		
+		//지각 check
+		if(checkinTime.getHours() >9){
+			if(checkinTime.getMinutes()>40){
+				isLate = true;
+			}
+		}
+		
+		//조퇴 check
+		if(checkoutTime.getHours() < 18){
+			isEarly = true;
+		}
+		
+		if(isLate &&isEarly){
+			status = "결석";
+		}else if(isLate){
+			status = "지각";
+		}else if(isEarly){
+			status = "조퇴";
+		}
+		return status;
 	}
 
 	//출석업데이트

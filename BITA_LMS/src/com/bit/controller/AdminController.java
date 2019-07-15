@@ -54,6 +54,7 @@ public class AdminController extends HttpServlet {
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		//System.out.println("AdminController(doGet) :: userBean="+userBean.toString());
+	
 
 		try {
 			//로그인이 안된 접속자 일때( session에 userBean이 없는경우
@@ -64,6 +65,7 @@ public class AdminController extends HttpServlet {
 			// admin만 접근가능
 			if (userBean.getBelong().equals("admin")) {
 				AdminDao dao = new AdminDao();
+				session.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
 				if (path.equals("/main.adm")) {
 					// 메인페이지
 					rd = req.getRequestDispatcher("admin/main_A.jsp");
@@ -413,6 +415,14 @@ public class AdminController extends HttpServlet {
 				}else if (path.equals("/qna_delete.adm")) {
 					// 큐엔에이 삭제 페이지
 					result = dao.deleteQnaL(Integer.parseInt(req.getParameter("qnaLId")));
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();					
+				}
+				else if (path.equals("/attendacne_allInsert.adm")) {
+					System.out.println("추가!!");
+					// 큐엔에이 삭제 페이지
+					dao.insertAttendanceAll();
 					PrintWriter out = resp.getWriter();
 					out.write("OK");
 					out.close();					

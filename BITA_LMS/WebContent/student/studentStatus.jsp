@@ -1,7 +1,11 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> song2
+=======
+
+>>>>>>> d0180b1a7f4bdedaefd73083ad7f4d199bb34232
 <%@page import="com.bit.model.UserDto"%>
 <%@page import="com.bit.model.StudentDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
