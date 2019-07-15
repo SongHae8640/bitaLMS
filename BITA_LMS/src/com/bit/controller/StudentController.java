@@ -1,7 +1,8 @@
-package com.bit.controller;
+package com.bit.model;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,10 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.bit.model.QnaLDto;
-import com.bit.model.StudentDao;
-import com.bit.model.UserDto;
 
 @WebServlet("*.stu")
 public class StudentController extends HttpServlet {
@@ -29,7 +26,7 @@ public class StudentController extends HttpServlet {
 		//占쏙옙占쏙옙 占쏙옙占쏙옙
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
-		
+		System.out.println("userid="+userBean.toString());
 		try {
 			if(userBean.getBelong().equals("student")){
 				StudentDao dao = new StudentDao();
@@ -75,11 +72,12 @@ public class StudentController extends HttpServlet {
 			
 					
 				} else if (path.equals("/assignment_detail.stu")) {
-					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//占쏙옙占싫�옙涌∽옙占 占쏙옙占쏙옙 占쏙옙호占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//疫뀐옙 �뵳�딅뮞占쎈뱜(占쎌굢占쎈뮉 edit占쎈퓠占쎄퐣)占쎈퓠占쎄퐣 idx嚥∽옙 assignmentId�몴占� 獄쏆룇釉섓옙占쏙옙苑� 占쎄텢占쎌뒠(rownum)占쎈툡占쎈뻷
+					String userId=userBean.getUserId();
+					System.out.println("hello="+userId);
+//					req.setAttribute("attachedBean", dao.getAttachedBean(AttachedFileDto));
 					req.setAttribute("assignmentBean", dao.getAssignment(assignmentId));
-					System.out.println("dao.getAssignmentBean(assignmentId)");
-					req.setAttribute("submissionBean", dao.getSubmission(assignmentId, userBean.getUserId())); //dto�
-					System.out.println("dao.getSubmissionBean(assignmentId, userBean.getUserId())");
+					req.setAttribute("submissionList", dao.getSubmissionList(assignmentId ,userId));
 					rd = req.getRequestDispatcher("student/assignment_S_detail.jsp");
 					
 				} else if (path.equals("/qna.stu")) {
@@ -101,8 +99,7 @@ public class StudentController extends HttpServlet {
 			rd.forward(req, resp);
 		}catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
-		}
-
+		} 
 	}
 	
 	@Override
@@ -127,8 +124,11 @@ public class StudentController extends HttpServlet {
 				if (path.equals("/main.stu")) {
 					
 				}else if(path.equals("/submission_insert.stu")){
-					int assignmentId = Integer.parseInt(req.getParameter("idx"));	
-					result = dao.insertSubmission(assignmentId, userBean.getUserId());		
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));
+					SubmissionDto bean_s=new SubmissionDto();
+					AttachedFileDto fileBean=new AttachedFileDto();
+					bean_s.setAssignmentId(Integer.parseInt(req.getParameter("assignment_id")));
+					result = dao.insertSubmission(userBean, bean_s, fileBean);		
 					rd = req.getRequestDispatcher("assignmentdetail.stu");	//占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 화占쏙옙占쏙옙占쏙옙 占싱듸옙, //占쏙옙占쏙옙 rd占쏙옙 占싱듸옙占쌔억옙占싹놂옙?
 				}else if(path.equals("/submission_update.stu")){
 					String assignmentId = req.getParameter("idx");	

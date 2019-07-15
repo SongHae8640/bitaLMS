@@ -8,8 +8,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.eclipse.jdt.internal.compiler.parser.CommitRollbackParser;
+
 
 public class TeacherDao extends Dao{
+	private int result;
+
 	//번호 (제목제외) ID 이름 강좌 날짜 과정, 등록인원/최대인원
 	//이름,버튼(jquery에서),상태,아이디(hidden) where 오늘 날짜일때, 강좌아이디가 해당 아이디일 때
 	public ArrayList<AttendanceDto> getTodayAttendance(int lectureId) {
@@ -171,22 +175,22 @@ public class TeacherDao extends Dao{
 		return bean;
 	}
 
-	public ArrayList<SubmsissionDto> getSubmissionList(int assignmentId) {
-		ArrayList<SubmsissionDto> list = new ArrayList<SubmsissionDto>();
-		String sql = "SELECT row_number() OVER(ORDER BY submit_date) num, file_id,name as std_name ,"
-				+ "TO_CHAR(submit_date,'yyyy-mm-dd') as submit_date,is_check "
-				+ "FROM submission s JOIN user01 u ON s.std_id = u.user_id "
-				+ "WHERE assignment_id=?";
-
+	public ArrayList<SubmissionDto> getSubmissionList(int assignmentId) {
+		ArrayList<SubmissionDto> list = new ArrayList<SubmissionDto>();
+		String sql = "SELECT row_number() OVER(ORDER BY submit_date) num, file_name,name as std_name,"
+				+ "TO_CHAR(submit_date,'yyyy-mm-dd') as submit_date,is_check,std_id "
+				+ "FROM submission s JOIN user01 u ON s.std_id = u.user_id join attached_file a on a.file_id=s.file_id"
+				+ " WHERE assignment_id=?";
+		System.out.println("submission sql=" + sql);
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, assignmentId);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				SubmsissionDto bean = new SubmsissionDto();
+				SubmissionDto bean = new SubmissionDto();
 				bean.setRowNum(rs.getInt("num"));
-				bean.setFileName(rs.getString("file_id"));
+				bean.setFileName(rs.getString("file_name"));
 				bean.setStdName(rs.getString("std_name"));
 				bean.setSubmitDate(rs.getString("submit_date"));
 				bean.setIsCheck(rs.getString("is_check")); // submission의
@@ -270,10 +274,49 @@ public class TeacherDao extends Dao{
 
 	public int deleteAssignment(int assignmentId) {
 		// 과제 번호로 해당 과제 삭제
-		openConnection();
-
-		closeConnection();
-		return 0;
+		int result1=0;
+		int result2=0;
+		String sql="delete from submission where assignment_id=? ";
+		String sql1="delete from assignment where assignment_id=?";
+		System.out.println("delete sql="+sql);
+		System.out.println("delete sql2="+sql1);
+		try {
+			conn.setAutoCommit(false);
+			openConnection();
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, assignmentId);
+			result1=pstmt.executeUpdate();
+			System.out.println(1);
+			if(result1==1) {
+				pstmt = conn.prepareStatement(sql1);
+				pstmt.setInt(1, assignmentId);
+				result2=pstmt.executeUpdate();
+			}else{
+				pstmt = conn.prepareStatement(sql1);
+				pstmt.setInt(1, assignmentId);
+				result2=pstmt.executeUpdate();
+			}
+			conn.commit();
+			
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			closeConnection();			
+		}
+		return result2;
 	}
 
 	public QnaLDto getQnaL(int qnaLId) {
@@ -384,21 +427,41 @@ public class TeacherDao extends Dao{
 		return -1;
 	}
 
-	public SubmsissionDto getSubmissionNum(int lectureId) {
+	public int getSubmissionIscheck(int assignmentId,String stdId) {
+		//과제 확인 메서드
+		SubmissionDto bean_s=new SubmissionDto();
+		String sql="update submission set is_check='1' where assignment_id=? and std_id=?";
+		System.out.println("check sql"+sql);
+		try {
+			openConnection();
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, assignmentId);
+			pstmt.setString(2, stdId);
+			result=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			closeConnection();			
+		}
+		return result;
+	}
+	
+	public SubmissionDto getSubmissionNum(int lectureId) {
 		// 과제 제출(submission)한 학생수 반환 메서드
 		// 가장 최근에 낸 과제(assingment)에 제출한
 
-		openConnection();
 
 
-		SubmsissionDto bean =new SubmsissionDto();
-		ArrayList<SubmsissionDto> list=new ArrayList<SubmsissionDto>();
+		SubmissionDto bean =new SubmissionDto();
+		ArrayList<SubmissionDto> list=new ArrayList<SubmissionDto>();
 		openConnection();
 		String sql="SELECT row_number() OVER(ORDER BY write_date) num, title, name as std_name,"
 				+ "TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,answer_content, type "
 				+ "FROM qna_l ql JOIN user01 u ON ql.std_id = u.user_id "
 				+ "WHERE responder_id = ?";	//수정해야함 
 		try {
+			openConnection();
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setString(1, "num");
 			rs=pstmt.executeQuery();

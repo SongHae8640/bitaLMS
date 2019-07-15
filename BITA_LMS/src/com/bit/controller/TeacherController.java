@@ -17,7 +17,7 @@ import com.bit.model.AssignmentDto;
 import com.bit.model.AttendanceDto;
 import com.bit.model.QnaLDto;
 import com.bit.model.ScoreDto;
-import com.bit.model.SubmsissionDto;
+import com.bit.model.SubmissionDto;
 import com.bit.model.TeacherDao;
 import com.bit.model.UserDto;
 
@@ -38,22 +38,22 @@ public class TeacherController extends HttpServlet {
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		
-		//�뜝�뙥釉앹삕�뜝�떎�뙋�삕 RequestDispatcher
+		//占쎈쐻占쎈솯�뇡�빘�굲占쎈쐻占쎈뼄占쎈솇占쎌굲 RequestDispatcher
 		RequestDispatcher rd = null;
 
 		try {
 			if (userBean.getBelong().equals("teacher")) {
 				TeacherDao dao = new TeacherDao();
-				///lecture_id 占쎈뮉 占쎌쁽雅뚳옙 占쎈쑅占쎄퐣 癰귨옙占쎈땾嚥∽옙 占쎈릭占쎄돌 �뜮�눖�뮉野껓옙 �넫�뿭�뱽 野껓옙 揶쏆늿�벉
+				///lecture_id �뜝�럥裕� �뜝�럩�겱�썒�슪�삕 �뜝�럥�몗�뜝�럡�맋 �솻洹⑥삕�뜝�럥�빢�슖�댙�삕 �뜝�럥由��뜝�럡�룎 占쎈쑏占쎈닑占쎈츎�뇦猿볦삕 占쎈꽞占쎈열占쎈굵 �뇦猿볦삕 �뤆�룇�듌占쎈쾳
 				
 				
 				if (path.equals("/main.tea")) {
 					
-					//main �넫�슣瑜ワ옙釉�占쎈뼊 占쎌젟癰귨옙 占쎌읈占쎈뼎
+					//main 占쎈꽞占쎌뒩�몴�꺈�삕�뇡占썲뜝�럥堉� �뜝�럩�젧�솻洹⑥삕 �뜝�럩�쓧�뜝�럥堉�
 					req.setAttribute("userBean", userBean);
 					
 
-					//main 우측 하단 정보 전달
+					//main �슦痢� �븯�떒 �젙蹂� �쟾�떖
 
 
 					req.setAttribute("numStu", dao.getStuNum(userBean.getLectureId()));
@@ -82,9 +82,16 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/assignment_T_insert.jsp");
 					
 				} else if (path.equals("/assignment_detail.tea")) {
-					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//疫뀐옙 �뵳�딅뮞占쎈뱜(占쎌굢占쎈뮉 edit占쎈퓠占쎄퐣)占쎈퓠占쎄퐣 idx嚥∽옙 assignmentId�몴占� 獄쏆룇釉섓옙占쏙옙苑� 占쎄텢占쎌뒠(rownum)占쎈툡占쎈뻷
+					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//�뼨�먯삕 占쎈뎨占쎈봾裕욃뜝�럥諭�(�뜝�럩援℡뜝�럥裕� edit�뜝�럥�뱺�뜝�럡�맋)�뜝�럥�뱺�뜝�럡�맋 idx�슖�댙�삕 assignmentId占쎈ご�뜝占� �뛾�룇猷뉔뇡�꼻�삕�뜝�룞�삕�땻占� �뜝�럡�뀬�뜝�럩�뮔(rownum)�뜝�럥�닡�뜝�럥六�
+//					String isCheck=req.getParameter(req.getParameter("idx"));
+//					SubmissionDto bean=(SubmissionDto)req.getAttribute("idx");
+					System.out.println("null id="+userBean.toString());
+//					System.out.println(bean.toString());
+//					String stdId=bean.getStdName();
+//					System.out.println(stdId);
 					req.setAttribute("AssignmentBean", dao.getAssignment(assignmentId));
 					req.setAttribute("submissionList", dao.getSubmissionList(assignmentId));
+//					req.setAttribute("submissionIscheck", dao.getSubmissionIscheck(assignmentId,stdId));
 					rd = req.getRequestDispatcher("teacher/assignment_T_detail.jsp");
 				
 				}else if (path.equals("/qna.tea")) {
@@ -93,14 +100,20 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
 
 				}else if (path.equals("/qna_detail.tea")) {
-					int qnaLId = Integer.parseInt(req.getParameter("idx"));	//疫뀐옙 �뵳�딅뮞占쎈뱜(占쎌굢占쎈뮉 edit占쎈퓠占쎄퐣)占쎈퓠占쎄퐣 idx嚥∽옙 assignmentId�몴占� 獄쏆룇釉섓옙占쏙옙苑� 占쎄텢占쎌뒠(rownum)占쎈툡占쎈뻷
+					int qnaLId = Integer.parseInt(req.getParameter("idx"));	//�뼨�먯삕 占쎈뎨占쎈봾裕욃뜝�럥諭�(�뜝�럩援℡뜝�럥裕� edit�뜝�럥�뱺�뜝�럡�맋)�뜝�럥�뱺�뜝�럡�맋 idx�슖�댙�삕 assignmentId占쎈ご�뜝占� �뛾�룇猷뉔뇡�꼻�삕�뜝�룞�삕�땻占� �뜝�럡�뀬�뜝�럩�뮔(rownum)�뜝�럥�닡�뜝�럥六�
 					req.setAttribute("QnaLBean", dao.getQnaL(qnaLId));
 					rd = req.getRequestDispatcher("teacher/qna_T_deatil.jsp");
 
+				}else if(path.equals("/assignment_check.tea")) {
+					int assignmentId=Integer.parseInt(req.getParameter("assignment_id"));
+					String stdId=req.getParameter("std_id");
+					String is_check=req.getParameter("is_check");
+					dao.getSubmissionIscheck(assignmentId, stdId);
+//					rd = req.getRequestDispatcher("teacher/assignment_T_detail.jsp");
 				}
 				if (path.equals("/attendance.tea")) {
-					//처음 출석상태를 전부 뽑아오기
-					//이름,버튼,상태
+					//泥섏쓬 異쒖꽍�긽�깭瑜� �쟾遺� 戮묒븘�삤湲�
+					//�씠由�,踰꾪듉,�긽�깭
 					req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 				}
@@ -146,36 +159,41 @@ public class TeacherController extends HttpServlet {
 					
 
 				
-				}else if (path.equals("/assignment_insert.tea")) {//assignment insert占쎈퓠占쎄퐣 post獄쎻뫗�뻼占쎌몵嚥∽옙 占쎄퐜野껋눘�뱽占쎈르
+				}else if (path.equals("/assignment_insert.tea")) {//assignment insert�뜝�럥�뱺�뜝�럡�맋 post�뛾�렮維쀯옙六쇔뜝�럩紐드슖�댙�삕 �뜝�럡�맂�뇦猿뗫닔占쎈굵�뜝�럥瑜�
 					
-
+					System.out.println(1);
 					AssignmentDto assignmentBean=new AssignmentDto();
 					
 					assignmentBean.setTitle(req.getParameter("title"));
 					assignmentBean.setContent(req.getParameter("content"));
 					assignmentBean.setLectureId(userBean.getLectureId());
 					assignmentBean.setWriter(userBean.getUserId());
-					result=dao.insertAssignment(assignmentBean);///result를 어떻게 사용할지 나중에 생각
+					result=dao.insertAssignment(assignmentBean);///result瑜� �뼱�뼸寃� �궗�슜�븷吏� �굹以묒뿉 �깮媛�
 					
-					rd = req.getRequestDispatcher("/assignment_detail.tea?idx=");	//리스트 페이지로
+					rd = req.getRequestDispatcher("/assignment.tea");	//由ъ뒪�듃 �럹�씠吏�濡�
 
 					
 				} else if (path.equals("/assignment_edit.tea")) {
-					String title = req.getParameter("title");
-					String content = req.getParameter("content");
-					String assignmentId = req.getParameter("assignmentId");
-					result = dao.updateAssignment(title,content,assignmentId);
-					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assignmentId);	///占쎈땾占쎌젟占쎈립 占쎈읂占쎌뵠筌욑옙嚥∽옙
+					System.out.println(2);
+//					String title = req.getParameter("title");
+//					String content = req.getParameter("content");
+//					String assignmentId = req.getParameter("assignmentId");
+//					result = dao.updateAssignment(title,content,assignmentId);
+					rd = req.getRequestDispatcher("/assignment.tea");
+//					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assignmentId);	///�뜝�럥�빢�뜝�럩�젧�뜝�럥由� �뜝�럥�쓡�뜝�럩逾좂춯�쉻�삕�슖�댙�삕
 				} else if (path.equals("/assignment_delete.tea")) {
+					System.out.println(3);
+					AssignmentDto bean=new AssignmentDto();
+					System.out.println("bean 나오냐?="+bean);
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
+					System.out.println("assignmentid="+assignmentId);
 					result = dao.deleteAssignment(assignmentId);
-					rd = req.getRequestDispatcher("teacher/assignment_T_.jsp");
-				
-				}else if (path.equals("/qnaAnswer_insert.tea")) {//qna占쎈퓠占쎄퐣 占쎈뼗癰귨옙占쎌뱽 占쎌뿯占쎌젾 占쎌굢占쎈뮉 占쎈땾占쎌젟占쎈막占쎈르 
+					rd = req.getRequestDispatcher("/assignment.tea");
+				}else if (path.equals("/qnaAnswer_insert.tea")) {//qna�뜝�럥�뱺�뜝�럡�맋 �뜝�럥堉쀧솻洹⑥삕�뜝�럩諭� �뜝�럩肉��뜝�럩�졑 �뜝�럩援℡뜝�럥裕� �뜝�럥�빢�뜝�럩�젧�뜝�럥留됧뜝�럥瑜� 
 					String answerContent = req.getParameter("answerContent");
 					int questionId = Integer.parseInt(req.getParameter("questionId"));
 					result = dao.updateQnaLAnswer(answerContent,questionId);
-					rd = req.getRequestDispatcher("/qna_detail.tea?idx="+questionId);	//�뵳�딅뮞占쎈뱜 占쎈읂占쎌뵠筌욑옙嚥∽옙
+					rd = req.getRequestDispatcher("/qna_detail.tea?idx="+questionId);	//占쎈뎨占쎈봾裕욃뜝�럥諭� �뜝�럥�쓡�뜝�럩逾좂춯�쉻�삕�슖�댙�삕
 				}else if(path.equals("/calendar_insert.tea")){
 					String startDate = req.getParameter("startDate");
 					String endDate = req.getParameter("endDate");
@@ -188,9 +206,9 @@ public class TeacherController extends HttpServlet {
 					rd.forward(req, resp);					
 				}
 				
-				//비동기 통신
+				//鍮꾨룞湲� �넻�떊
 				if(path.equals("/attendance_check.tea")){
-					//버튼값에 따라서 update를 다르게 수행
+					//踰꾪듉媛믪뿉 �뵲�씪�꽌 update瑜� �떎瑜닿쾶 �닔�뻾
 					String stdId = req.getParameter("id");
 					String btn = req.getParameter("btn");
 					System.out.println(stdId+":"+btn);
@@ -198,20 +216,26 @@ public class TeacherController extends HttpServlet {
 					
 					if(result>0){
 						PrintWriter out= resp.getWriter(); 
-						out.write("{\"msg\":\"성공적으로 수정되었습니다\"}");
+						out.write("{\"msg\":\"�꽦怨듭쟻�쑝濡� �닔�젙�릺�뿀�뒿�땲�떎\"}");
 						out.close();
 					}
 				}else {
-					System.out.println("존재하지 않는 페이지");
+					System.out.println("議댁옱�븯吏� �븡�뒗 �럹�씠吏�");
 
 				}
 			}else {
-				//teacher�뜝�룞�삕 student�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝占� �뜝�룞�삕�뜝�룞�삕�떁�뜝�룞�삕 �뜝�떦紐뚯삕 �뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕
+				//teacher占쎈쐻占쎈짗占쎌굲 student占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈쐻�뜝占� 占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈뻶占쎈쐻占쎈짗占쎌굲 占쎈쐻占쎈뼣筌뤿슣�굲 占쎈쐻占쎈짗占쎌굲 占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲占쎈쐻占쎈짗占쎌굲
 				req.getRequestDispatcher("login.bit");
 			}
 		} catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");
 		}
+		System.out.println("Tea Con : method : post - if문 퇴장");
+	}
+
+	private void println(int i) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
