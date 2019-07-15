@@ -129,5 +129,10 @@ public class UserDto {
 	}
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
-  }
+	}
+	@Override
+	public String toString() {
+		return "UserDto [userId=" + userId + ", name=" + name + ", belong="
+				+ belong + ", lectureId=" + lectureId + "]";
+	}
 }

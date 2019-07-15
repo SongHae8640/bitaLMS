@@ -37,19 +37,13 @@ public class LoginController extends HttpServlet {
 					rd.forward(req, resp);
 				//이미 로그인을 한 후에는 로그아웃을 해야지만 재로그인을 할 수 있다.
 				}else{
-					UserDto userBean = (UserDto) session.getAttribute("userBean");
-					if(userBean.getBelong().equals("teacher")){
-						resp.sendRedirect("main.tea");
-					}else if(userBean.getBelong().equals("admin")){
-						resp.sendRedirect("main.adm");
-					}else{
-						resp.sendRedirect("main.stu");
-					}
+					resp.sendRedirect("main.stu");
 				}
-			}else if(path.equals("/logout.bit")){
-				session.invalidate();
-				resp.sendRedirect("login.bit");
 			}
+		}else if(path.equals("/logout.bit")){
+			session.invalidate();
+			resp.sendRedirect("login.bit");
+		}
 		
 	}
 	

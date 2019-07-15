@@ -1,3 +1,4 @@
+<%@page import="com.bit.model.UserDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,6 +21,9 @@
 		});
 	});
 </script>
+<%
+	UserDto userBean = (UserDto) session.getAttribute("userBean");
+%>
 </head>
 <body>
 	<div>
@@ -39,6 +43,14 @@
 		</div>
 		<div id="content">
 			<h2>메인</h2>
+			<div id="content_upper">
+				<div id="calender">
+					<h1>달력</h1>
+					<jsp:include page="call_calendar_T.jsp" flush="false">
+						<jsp:param value="<%=userBean.getLectureName() %>" name="lectureName"/>
+					</jsp:include>
+				</div>
+			</div>
 		</div>
 		<div id="footer">
 			<div>

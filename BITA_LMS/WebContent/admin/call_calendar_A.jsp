@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.LectureDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -22,6 +24,10 @@
 		var yearMonthDay = date.getFullYear() + "-" + leadingZeros(date.getMonth() + 1, 2) + "-" + leadingZeros(date.getDate(), 2);
 
 		var calendarEvent;
+		var callCalendarUrl = "callCalendar.adm?idx=0";
+		
+		var selectLecture;
+		var select;
 
 
 		$(document).ready(function() {
@@ -49,7 +55,7 @@
 					calendarEvent = event;
 					$.ajax({
 						type: 'POST',
-						url: "calendar_update.adm",
+						url: "calendar_updateDrag.adm",
 						data: {
 							calendarId: event.id + "",
 							title: event.title,
@@ -76,7 +82,7 @@
 					console.log(calEvent);
 					console.log('일정 상세')
 					var htmlsContents = "";
-					htmlsContents += "<div><a>강좌번호</a> <div> " + calEvent.lectureId + "</div><br>";
+					htmlsContents += "<div><div>강좌이름</div> <div> " + calEvent.lectureName + "</div><br>";
 					htmlsContents += "<div><div> 날짜 </div><div> " + calEvent.start.format().substring(0, 10) + " ~ " + calEvent.end.format().substring(0, 10) + " </div> </div><br>";
 					htmlsContents += "<div><div> 제목 </div><div> " + calEvent.title + " </div></div><br>";
 					htmlsContents += "<div><div> 내용 </div> <div>" + calEvent.content + " </div></div>";
@@ -96,17 +102,43 @@
 			addCalBtn.addEventListener('click', function(event) {
 				addCalendar();
 			});
-
+			
+			
+			var insertAllAttendanceBtn = $('#insert_all_attendance');
+			insertAllAttendanceBtn.on('click', function() {
+				console.log("출석 생성")
+				insertAllAttendance();
+			});
+			
+			var updateAllAttendanceBtn = $('#update_all_attendance');
+			updateAllAttendanceBtn.on('click', function() {
+				updateAllAttendance();
+			});
 
 		});
+		
+		function insertAllAttendance(){
+			//내용을 다 입력 했을때 통신 시작
+			$.ajax({
+				type: 'POST',
+				url: "attendacne_allInsert.adm",
+				cache: false,
+				async: false,
+				error: function() {
+					alert('모든 학생의 출석이 생성 되지 않았습니다..');
+				},
+				success: function(e) {
+					console.log(e,'정상적으로 모든 학생의 출석이 생성되었습니다.');
+				}
+			});
+		}
 
 		function editeCalendar() {
 			closeMessage('winAlert');
 			var calEvent = calendarEvent;
 			console.log(calEvent);
 			var htmlsContents = "";
-			htmlsContents += "<div><a>강좌번호</a><input type='text' id='calendar_lecture_id' value='" + calEvent.lectureId + "'></div><br>";
-			
+			htmlsContents += "<div><div>강좌이름</div><div>" + calEvent.lectureName + "</div></div><br>";
 			htmlsContents += "<div><div>날짜</div><div><input type='text' id='calendar_start_date' value='" + calEvent.start.format().substring(0, 10) + "'> ~ <input type='text' id='calendar_end_date' value='" + calEvent.end.format().substring(0, 10) + "'></div></div><br>";
 			htmlsContents += "<div><div>제목</div><div><input type='text' id='calendar_title' value='" + calEvent.title + "'></div></div><br>";
 			htmlsContents += "<div><div>내용</div><div><input type='text' id='calendar_content' value='" + calEvent.content + "'></div></div>";
@@ -116,6 +148,55 @@
 
 			return false;
 
+		}
+		
+		function updateCalendar(){
+			console.log("일정 수정하기");			
+			var startDate = $('#calendar_start_date').val();
+			var endDate = $('#calendar_end_date').val();
+			var title = $('#calendar_title').val();
+			var content = $('#calendar_content').val();
+
+			if (!startDate) {
+				alert('시작 날짜 입력해 주세요.');
+				return false;
+			}
+			if (!endDate) {
+				alert('종료 날짜 입력해 주세요.');
+				return false;
+			}
+			if (!title) {
+				alert('일정명 입력해 주세요.');
+				return false;
+			}
+			if (!content) {
+				alert('일정 내용 입력해 주세요.');
+				return false;
+			}
+
+			//내용을 다 입력 했을때 통신 시작
+			$.ajax({
+				type: 'POST',
+				url: "calendar_updateEdit.adm",
+				data: {
+					calendarId : calendarEvent.id+"",
+					lectureId: calendarEvent.lectureId +"",
+					startDate: startDate,
+					endDate: endDate,
+					title: title,
+					content: content
+				},
+				cache: false,
+				async: false,
+				error: function() {
+					alert('저장되지 않았습니다.');
+				},
+				success: function() {
+					closeMessage('winAlert');
+					console.log('정상 저장되었습니다.');
+					$('#calendar').fullCalendar('refetchEvents');
+				}
+			});
 		}
 
 
@@ -133,7 +214,7 @@
 				type: 'POST',
 				url: "calendar_delete.adm",
 				data: {
-					calendar_id: calEvent.id + "",
+					calendarId: calEvent.id + "",
 				},
 				cache: false,
 				async: false,
@@ -154,12 +235,18 @@
 		function addCalendar() {
 			console.log('일정 추가')
 			var htmlsContents = "";
-			htmlsContents += "<div><a>강좌번호</a><div><input type='text' id='calendar_lecture_id' value=''></div></div><br>";
+			htmlsContents += "<div><div>강좌이름</div><div>"+$('#lecture_list').html()+"</div><br>";
 			htmlsContents += "<div><div>날짜</div><div><input type='text' id='calendar_start_date' value=''>-<input type='text' id='calendar_end_date' value=''></div></div><br>";
 			htmlsContents += "<div><div>제목</div><div><input type='text' id='calendar_title' value=''></div></div><br>";
 			htmlsContents += "<div><div>내용</div><div><input type='text' id='calendar_content' value=''></div></div>";
 			htmlsContents += "<div><button id='save_calendar_Btn' onclick=\"saveCalendar()\">저장하기</button></div>"
 			openPopup("일정 추가", htmlsContents, 400);
+			
+			select = $("select[name=lecture_name]")[1];
+			$(select).change(function(){
+				selectLecture = this.value;
+				console.log(selectLecture);
+			})
 
 			return false;
 		}
@@ -183,13 +270,15 @@
 			console.log("일정 저장하기");
 			saveCalBtn = document.getElementById('save_calendar_Btn');
 			//입력값 검사 
-			var lectureId = $('#calendar_lecture_id').val();
+			
+			
+			var lectureId = selectLecture;
 			var startDate = $('#calendar_start_date').val();
 			var endDate = $('#calendar_end_date').val();
 			var title = $('#calendar_title').val();
 			var content = $('#calendar_content').val();
 
-			if (!lectureId) {
+			if (!lectureId || lectureId =="0") {
 				alert('강좌명을 입력해 주세요.');
 				return false;
 			}
@@ -246,6 +335,10 @@
 			}
 			return zero + n;
 		}
+		
+		function changeLecture(){
+			
+		}
 
 	</script>
 	<style>
@@ -270,12 +363,32 @@
 
 
 
-
-
+	
+	<div id="lecture_list" style="display: none">
+		<select name="lecture_name" >
+			<option value="0" selected="selected">전체</option>
+			<%
+			ArrayList<LectureDto> lectureList = (ArrayList<LectureDto>)session.getAttribute("arrangeLectureList");
+				if(lectureList !=null){
+					for(LectureDto bean : lectureList){
+						if(bean.getLectureId()>0){
+			%>
+			<option value="<%=bean.getLectureId()%>"><%=bean.getName()%></option>
+			<%
+						}
+					}
+				}
+			%>
+		</select>
+	</div>
+	
 	<div id='calendar'></div>
+	
 	<div id='day_calender'>
 		<!--여기에 당일 일정 리스트가 내용이 들어감  -->
 		<button id="add_calendar_Btn">일정 등록</button>
+		<button id="insert_all_attendance">출석 생성</button>
+		<button id= "update_all_attendance">출석 평가</button>
 	</div>
 
 	<div class="box box-success" id="winAlert" style="width: 500px; background-color: white; display: none">
