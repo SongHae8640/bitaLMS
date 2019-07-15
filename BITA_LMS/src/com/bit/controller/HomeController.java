@@ -37,8 +37,6 @@ public class HomeController extends HttpServlet {
 			rd = req.getRequestDispatcher("home/main_H.jsp");
 		}else if(path.equals("/join.home")){
 			String id = req.getParameter("id");
-			System.out.println("id="+id);
-			req.setAttribute("id", id);
 			rd = req.getRequestDispatcher("home/join_H.jsp");
 		}else if(path.equals("/apply.home")){
 			rd = req.getRequestDispatcher("home/apply_H.jsp");	
