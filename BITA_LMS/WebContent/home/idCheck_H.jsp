@@ -17,7 +17,7 @@ body {
 	width:300px;
 	margin: 0 auto;
 }
-#id{
+#id{    
 	width:120px;
 }
 #confirm_btn{
