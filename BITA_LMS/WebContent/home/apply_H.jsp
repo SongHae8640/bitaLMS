@@ -393,8 +393,6 @@ $(document).ready(function() {
 	Object obj = request.getAttribute("errmsg");
 	if (obj != null)
 	out.println(obj);
-	else
-	out.println(obj);
 %>
 	</body>
 </html>

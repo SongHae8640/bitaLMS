@@ -151,7 +151,7 @@ public class StudentController extends HttpServlet {
 					result = dao.insertQnaL(qnaLBean);
 					if(result==1) {
 						System.out.println("문의등록성공");
-						rd = req.getRequestDispatcher("assignmentdetail.stu");	//�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �솕�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�떛�벝�삕, //�뜝�룞�삕�뜝�룞�삕 rd�뜝�룞�삕 �뜝�떛�벝�삕�뜝�뙏�뼲�삕�뜝�떦�냲�삕?
+						rd = req.getRequestDispatcher("student/qna_S.jsp");	//�뜝�룞�삕�뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �솕�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕 �뜝�떛�벝�삕, //�뜝�룞�삕�뜝�룞�삕 rd�뜝�룞�삕 �뜝�떛�벝�삕�뜝�뙏�뼲�삕�뜝�떦�냲�삕?
 					}else {
 						System.out.println("문의등록실패");
 					}

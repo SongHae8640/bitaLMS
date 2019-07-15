@@ -26,13 +26,12 @@ public class LoginController extends HttpServlet {
 		System.out.println("LoginController(doGet) :: ");
 		
 			if(path.equals("/login.bit")||path.equals("/index.bit")){
-
-				//로그인페이지는 세션이 없을때에만 접근가능
-				if(session.getAttribute("userBean") != null){
+				if(session.getAttribute("userBean") != null){ 
 					session.invalidate();
-					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
-					rd.forward(req, resp);
+					RequestDispatcher rd = req.getRequestDispatcher("index.jsp"); 
+					rd.forward(req, resp); 
 				}
+				//로그인페이지는 세션이 없을때에만 접근가능
 				if(session.getAttribute("userBean") == null){
 					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
 					rd.forward(req, resp);
@@ -62,7 +61,7 @@ public class LoginController extends HttpServlet {
 		
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login(id, pw);
-		
+		System.out.println("값확인"+dao.login(id, pw));
 		System.out.println("LoginController(doPost) :: userBean="+userBean.toString());
 		try{
 		if(userBean.getBelong().equals("teacher")){

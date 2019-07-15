@@ -87,15 +87,15 @@ public class TeacherDao extends Dao{
 	// 강좌번호(lectureId)에 해당하는 학생들의 성적을 가져오는 메서드
 	public ArrayList<ScoreDto> getScoreList(int lectureId) {
 		ArrayList<ScoreDto> list = new ArrayList<ScoreDto>();
-		String sql = "SELECT s.name, first_score, second_score,third_score,avg_score "
-				+ "FROM user01 u JOIN score s "
+		String sql = "SELECT name, first_score, second_score,third_score,avg_score "
+				+ "FROM score s JOIN user01 u "
 				+ "ON s.std_id=u.user_id "
-				+ "WHERE lecture_id = ? " + "ORDER BY s.name";
-		try {
+				+ "WHERE lecture_id = ? " + "ORDER BY name";
+		try { 
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, lectureId);		//지금 tea1계정 lectureId=0인상태라 test인자로 1줘버림
-			System.out.println("lectureId"+lectureId);
+			pstmt.setInt(1, lectureId);		
+			System.out.println("lectureId::getScoreList"+lectureId);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {   
 				ScoreDto bean = new ScoreDto();
@@ -126,7 +126,7 @@ public class TeacherDao extends Dao{
 			sql = "UPDATE score a SET a.second_score=?"
 					+"WHERE a.std_id in(SELECT b.user_id FROM user01 b WHERE lecture_id=? and name=?)";
 		}else if(count==3) {
-			sql = "UPDATE score a SET a.third_score=? , a.avg_score=?"
+			sql = "UPDATE score a SET a.third_score=?"
 					+"WHERE a.std_id in(SELECT b.user_id FROM user01 b WHERE lecture_id=? and name=?)";
 		}
 		try { 
@@ -140,8 +140,6 @@ public class TeacherDao extends Dao{
 			pstmt.setInt(2,lectureId);
 			pstmt.setString(3,name); 
 			result = pstmt.executeUpdate();
-			System.out.println(i);
-			System.out.println(score);
 			}
 			System.out.println("insertScore의 result "+result);
 		} catch (SQLException e) {
@@ -154,51 +152,67 @@ public class TeacherDao extends Dao{
 	            	e.printStackTrace();
 	            }
 	        }
-		} finally{
-			try {
+			} finally {
 				closeConnection();
+			}
+			return result;
+		}
+	
+	public int updateAvgscore(String[] name_arr,int[] score_num_arr1,int[] score_num_arr2, int[] score_num_arr3, int lectureId) {
+		String name="";
+		int score1=0;
+		int score2=0;
+		int score3=0;
+		int count = 3;
+		double avg = 0;
+		int total = 0;
+		int result=0;
+		String sql = "UPDATE score a SET a.avg_score=?"
+					+"WHERE a.std_id in(SELECT b.user_id FROM user01 b WHERE lecture_id=? and name=?)";
+		try {
+			openConnection();
+			conn.setAutoCommit(false);
+			for(int i = 0;i<name_arr.length;i++) {
+				score1=score_num_arr1[i];
+				score2=score_num_arr2[i];
+				score3=score_num_arr3[i];
+				name=name_arr[i];
+				total=score1+score2+score3;
+				if(score1==0){
+					count+=-1;
+				}else if(score2==0){
+					count+=-1;
+				}else if(score3==0){
+					count+=-1;
+				}
+				avg=total/count;
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setDouble(1,avg);
+				pstmt.setInt(2,lectureId);
+				pstmt.setString(3, name);
+				result = pstmt.executeUpdate();
+			}	
+		System.out.println("updateAvgscore의 result "+result);
+	} catch (SQLException e) {
+		e.printStackTrace();
+        if (conn != null) {
+            try {
+                System.err.print("Transaction is being rolled back");
+                conn.rollback();
+            } catch(SQLException excep) {
+            	e.printStackTrace();
+            }
+	        }
+		} finally{
+			closeConnection();
+			try {
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return result;
-	}
-	
-	public int updateAvgscore(String[] name_arr,int[] score_num_arr,int lectureId) {
-		int result=0;
-		ArrayList<Integer[]> avg_list = new ArrayList<Integer[]>();
-		String sql = "UPDATE score a SET a.avg_score=?"
-					+"WHERE a.std_id in(SELECT b.user_id FROM user01 b WHERE lecture_id=? and name=?)";
-		for(int i=0;i<3;i++) {
-			avg_list.add(score_num_arr[i]);
+			return result;
 		}
-		try {
-			openConnection();
-			for(int i = 0;i<name_arr.length;i++) {
-				
-			}
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,lectureId);
-			pstmt.setInt(2,scoreBean.getFirstScore());
-			pstmt.setInt(3,scoreBean.getSecondScore());
-			pstmt.setInt(4,scoreBean.getThirdScore());
-			pstmt.setInt(2,lectureId);
-			pstmt.setDouble(3,lectureId);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try {
-				closeConnection();
-				if(pstmt!=null)pstmt.close();
-				if(conn!=null)conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
 
 	public ArrayList<AssignmentDto> getAssignmentList(int lectureId) {
 		ArrayList<AssignmentDto> list = new ArrayList<AssignmentDto>();

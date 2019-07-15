@@ -11,6 +11,14 @@
 #content input[type=text]{
 	width: 100px;
 }
+#content input[type=text]{
+	width: 100px;
+} 
+#content #content_wrap1{
+	width: 210px;
+	margin: 0 auto;
+
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -30,12 +38,10 @@
 			$('tbody>tr>td:nth-child(1)').each(function(index, item){
 				name_list.push($(item).text());
 		});
-			alert(name_list); 
 		var score_list = new Array();
 	   		$("input[name=score]").each(function(index, item){
 		   		score_list.push($(item).val());
 	   });
-   		alert(score_list);
 		function getParameterByName(name) {	//주소에서 idx값 받아오기
 		    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 		    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -45,7 +51,6 @@
 		var idx = getParameterByName('idx');
 		//점수 입력
         var data = "name_list="+ name_list + "&score_list=" + score_list+ "&idx=" + idx;
-        alert("비동기 data값 "+data);
         $.ajax({
             type : "post",
             data : data, 
@@ -80,6 +85,7 @@
 			</ul>
 		</div>
 		<div id="content">
+		<div id="content_wrap1">
 			<h2>성적입력</h2>
 			<table border="1">
 				<thead>
@@ -142,6 +148,7 @@
 				<button type="button" id="submit_btn">확인</button>
 				<button type="button" id="cancle_btn" >취소</button>
 			</div>
+		</div>
 		</div>
 		<div id="footer">
 			<div>

@@ -36,9 +36,14 @@ public class HomeController extends HttpServlet {
 		if(path.equals("/main.home")){
 			rd = req.getRequestDispatcher("home/main_H.jsp");
 		}else if(path.equals("/join.home")){
+			String id = req.getParameter("id");
+			System.out.println("id="+id);
+			req.setAttribute("id", id);
 			rd = req.getRequestDispatcher("home/join_H.jsp");
 		}else if(path.equals("/apply.home")){
 			rd = req.getRequestDispatcher("home/apply_H.jsp");	
+		}else if(path.equals("/idcheck.home")){
+			rd = req.getRequestDispatcher("home/idCheck_H.jsp");
 		}
 		
 		if(rd!=null){
@@ -52,8 +57,8 @@ public class HomeController extends HttpServlet {
 			throws ServletException, IOException {
 		RequestDispatcher rd = null;
 		HttpSession session = req.getSession();
+		HomeDao dao = new HomeDao();
 		int result = 0;
-		
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		System.out.println("HomeController(doPost) :: path = " + path);
 		
@@ -61,7 +66,6 @@ public class HomeController extends HttpServlet {
 			
 			String id = req.getParameter("id");
 			String pw = req.getParameter("pw");
-			HomeDao dao = new HomeDao();
 			UserDto userBean = dao.login(id, pw);
 			String name = userBean.getName();
 			String message = "";
@@ -71,24 +75,30 @@ public class HomeController extends HttpServlet {
 			if(userBean.getUserId().equals(id) && userBean.getPassword().equals(pw) ){//로그인성공
 				//session
 				session.setAttribute("userBean", userBean);
-				message = name + "님 환영합니다.";
-	//			session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
-			}else{										//로그인실패
-				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
+				session.setMaxInactiveInterval(5*60);	//나중에 로그인 만료시간을 사용할때 사용, param의 단위는 초
 				doGet(req, resp);
 			}
-			//데이터 저장 화면에 출력해줘야해
-				req.setAttribute("message", message);
-				System.out.println(message);
-		        rd = req.getRequestDispatcher("/home/login_result_H.jsp");	
 			}catch(java.lang.NullPointerException e){
 				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('id&pw를 다시 확인하세요');</script>");
 			}
-			rd.forward(req, resp);
 		}else if(path.equals("/logout.home")){
 			session.invalidate();//로그아웃-invalidate는 세션자체가 갱신됨
-			 rd = req.getRequestDispatcher("/home/logout_result_H.jsp");
-			 rd.forward(req, resp); 
+		
+		}else if(path.equals("/idcheck.home")){
+			String msg ="";
+			String id = req.getParameter("id");
+			System.out.println("id"+id); 
+			result = dao.idCheck(id);
+			System.out.println("중복확인result값 "+result);
+			if(result>0){
+				msg = "사용할 수 없는 ID입니다";
+			}else{ 
+				msg = "사용가능한 ID입니다";
+			}
+			req.setAttribute("id", id);
+			req.setAttribute("msg", msg);
+			doGet(req, resp);
+		
 		}else if(path.equals("/join.home")){
 			//getParam으로 회원가입에 필요한 내용 체크 및 저장
 			//전부 체크 성공 시 저장, 하나라도 안 맞으면 다시 돌려보내기
@@ -134,18 +144,17 @@ public class HomeController extends HttpServlet {
 	 		userBean.setPhoneNumber(phone_num);
 			userBean.setInflowPath(total);
 			userBean.setBelong(belong);
-			System.out.println("2");
-			HomeDao dao = new HomeDao();
 			result = dao.insertUser(userBean);
 			System.out.println(result);
 			//정상적으로 회원 가입 한 것만
 			if(result ==1) {
 				System.out.println("회원가입성공");
-				resp.sendRedirect("main.home");
-				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('가입을 축하드립니다');</script>");
+				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('가입을 축하드립니다.');</script>");
+				rd = req.getRequestDispatcher("home/main_H.jsp");
+				rd.forward(req, resp);
 			}else {
 				//result 값에 따라 오류 메세지 
-				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('result값에따라 문구 바꾸기');</script>");
+				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('회원가입실패');</script>");
 				doGet(req, resp);
 			}
 			 
@@ -191,7 +200,6 @@ public class HomeController extends HttpServlet {
 	
 			//HomeDao 인스턴스화해서 메소드 사용
 			//중복파일 검사 후 이름 바꿔서 fileBean에 담기
-			HomeDao dao = new HomeDao();
 			int count = dao.findFile(fileBean);
 			System.out.println("count: 중복되는 파일 수 "+count);
 			if(count>0){

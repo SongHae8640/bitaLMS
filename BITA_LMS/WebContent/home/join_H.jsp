@@ -172,7 +172,7 @@ $(document).ready(function() {
                error : function(){
                	alert("id&pw를 다시 확인하세요");
                }   
-		});   
+		});
 	}); 
 	$('#submit_btn').click(function(){				//회원가입 유효성검사
 		var getCheck= RegExp(/^[a-zA-Z0-9]{4,12}$/);
@@ -272,10 +272,13 @@ $(document).ready(function() {
 		       	alert("약관에 동의해주세요");
 		        return false;
 		   	}
-	   return true;
+	       $("#joinform").submit();
 
 	});
-}); 
+	$("#id_chk").click(function(){
+		window.open('idcheck.home','pop', 'menubar=no,status=no,scrollbars=no,resizable=no ,width=320,height=300,top=50,left=50');
+	});
+});  
 </script>
 </head>
 <body>
@@ -321,11 +324,23 @@ $(document).ready(function() {
 			<br/>
 		</div>
 		<div id="con_form1">
-		<form method="post" action="join.home">
+		<form method="post" action="join.home" id="joinform">
 			<div id="con_form2">
 				<div>
 					<label>ID</label>
-					<input type="text" name="id" id="id" placeholder="내용을 입력해주세요" />
+					<%
+					String id_ck = (String)request.getAttribute("id");
+					if(id_ck==null){
+						System.out.print(id_ck);
+					%>
+					<input type="text" name="id" id="id"  placeholder="내용을 입력해주세요" /><button type="button" id="id_chk">중복확인</button>
+					<%
+					}else {
+					%>
+					<input type="text" name="id" id="id" value="<%=id_ck %>" /><button type="button" id="id_chk">중복확인</button>
+					<%
+					}
+					%>				
 				</div>
 				<div>
 					<label>비밀번호</label>
@@ -356,7 +371,7 @@ $(document).ready(function() {
 	              		<input type="checkbox" name="inflow_path" value="3"><label>블로그/카페</label>
 	              		<input type="checkbox" name="inflow_path" value="4"><label>커뮤니티</label>
 	              		<input type="checkbox" name="inflow_path" value="5"><label>학원생 추천</label>
-	              		<input type="checkbox" name="inflow_path" value="6"></label>
+	              		<input type="checkbox" name="inflow_path" value="6">
 	              		<input type="text" name="ect" id="ect" placeholder="기타" />
 	              	</div>
 				</div>
@@ -381,7 +396,7 @@ $(document).ready(function() {
    					<div><input type="checkbox" name="agree" id="agree"> 개인정보 수집 및 이용에 동의합니다.</div> 
 				</div> 
 				<div>
-					<button type="submit" id="submit_btn">확인</button>&nbsp;&nbsp;
+					<button type="button" id="submit_btn">확인</button>&nbsp;&nbsp;
 					<button type="reset" id="cancle_btn">취소</button>
 				</div>
 			</div>

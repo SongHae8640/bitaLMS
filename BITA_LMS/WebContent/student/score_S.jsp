@@ -12,7 +12,7 @@
 #menu>ul {
 	width: 610px;
 	list-style-type: none;
-	margin: 0px auto;
+	margin: 0px auto; 
 }
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="java.util.ArrayList,com.bit.model.TeacherDao,com.bit.model.ScoreDto"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +8,17 @@
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
+#content input[type=text]{
+	width: 100px;
+}
+#content input[type=text]{
+	width: 100px;
+} 
+#content #content_wrap1{
+	width: 210px;
+	margin: 0 auto;
+
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -18,14 +29,43 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#edit').click(function(){
-			$(location).attr('href', 'score_T.tea')
+		$('#cancle_btn').click(function(){
+			location.replace('score.tea');	//취소버튼 다시 목록으로 돌아가기
 		});
-		$('#cancle').click(function(){
-			$(location).attr('href', 'score_T.tea')
+		//비동기 ajax 방식으로 데이터 주고 받기 
+		$('#submit_btn').click(function(){
+		var name_list = new Array();
+			$('tbody>tr>td:nth-child(1)').each(function(index, item){
+				name_list.push($(item).text());
 		});
-		
+		var score_list = new Array();
+	   		$("input[name=score]").each(function(index, item){
+		   		score_list.push($(item).val());
+	   });
+		function getParameterByName(name) {	//주소에서 idx값 받아오기
+		    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		        results = regex.exec(location.search);
+		    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+		var idx = getParameterByName('idx');
+		//점수 입력
+        var data = "name_list="+ name_list + "&score_list=" + score_list+ "&idx=" + idx;
+        $.ajax({
+            type : "post",
+            data : data, 
+            url : "/BITA_LMS/score_insert.tea",
+            success : function(value) {
+            	console.log("통신성공 성적입력");
+            	location.replace('score.tea');
+            },
+            error : function(){
+            	console.log("통신실패 성적입력");
+            } 
+			 
+		});     
 	});
+});
 </script>
 </head>
 <body>
@@ -45,33 +85,70 @@
 			</ul>
 		</div>
 		<div id="content">
+		<div id="content_wrap1">
 			<h2>성적입력</h2>
-			<form action="score_T.jsp">
 			<table border="1">
 				<thead>
 					<tr>
 						<th>이름</th>
-						<th>1차</th>
-						<th>2차</th>
-						<th>3차</th>
+						<th class="select_test">1차</th>
+						<th class="select_test">2차</th>
+						<th class="select_test">3차</th>
 						<th>평균</th>
 					</tr>
 				</thead>
-				<thead>
+				<tbody> 
+				
+				<%
+				ArrayList<ScoreDto> scoreList = (ArrayList<ScoreDto>)request.getAttribute("scoreList");
+				System.out.println(scoreList);
+				System.out.println("idx값" +request.getAttribute("idx"));
+			
+				if(scoreList!=null){
+					for(int i=0;i<scoreList.size();i++ ){	//10개씩 보여지게  자바스크립트로..
+						String idx=(String)request.getAttribute("idx");
+						if(request.getAttribute("idx").equals("1")){ 
+				%>
 					<tr>
-						<td>홍길동</td>
-						<td><input type="text" value="90"/></td>
-						<td><input type="text" value="70"/></td>
-						<td><input type="text"></td>
-						<td>80</td>
+						<td id="name"><%=scoreList.get(i).getName()%></td>
+						<td><input type="text" name="score" value="<%=scoreList.get(i).getFirstScore()%>"/></td>
+						<td><%=scoreList.get(i).getSecondScore() %></td>
+						<td><%=scoreList.get(i).getThirdScore() %></td> 
+						<td></td>
 					</tr>
-				</thead>
+					<%
+					}else if(request.getAttribute("idx").equals("2")){ 
+					%>
+					<tr>
+						<td><%=scoreList.get(i).getName()%></td>
+						<td><%=scoreList.get(i).getFirstScore()%></td>
+						<td><input type="text" name = "score" value="<%=scoreList.get(i).getSecondScore() %>"/></td>
+						<td><%=scoreList.get(i).getThirdScore() %></td>
+						<td></td>
+				 	</tr>
+					<%
+					}else if(request.getAttribute("idx").equals("3")){ 
+					%>
+					<tr> 
+						<td><%=scoreList.get(i).getName()%></td>
+						<td><%=scoreList.get(i).getFirstScore() %></td> 
+						<td><%=scoreList.get(i).getSecondScore() %></td> 
+						<td><input type="text" name = "score"  value="<%=scoreList.get(i).getThirdScore() %>"/></td>
+				 		<td></td>
+					</tr>
+					<%   
+						}
+					}
+				}
+					%>
+				</tbody> 
 			</table>
-			<div>
-				<button type="submit" id="edit">수정</button>
-				<input type="button" value="취소" id="cancle"/>
+			<div> 
+			<input type="hidden" name="idx" value="<%=(String)request.getAttribute("idx") %>" >
+				<button type="button" id="submit_btn">확인</button>
+				<button type="button" id="cancle_btn" >취소</button>
 			</div>
-			</form>
+		</div>
 		</div>
 		<div id="footer">
 			<div>

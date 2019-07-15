@@ -36,13 +36,14 @@ public class TeacherController extends HttpServlet {
 		System.out.println("teacherController(doGet) :: path = " + path);
 
 
+		try {
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
-		
+		System.out.println("userBean"+userBean);
+		int lecture_id = userBean.getLectureId();
 		//�뜝�뙥釉앹삕�뜝�떎�뙋�삕 RequestDispatcher
 		RequestDispatcher rd = null;
 
-		try {
 			if (userBean.getBelong().equals("teacher")) {
 				TeacherDao dao = new TeacherDao();
 				///lecture_id 占쎈뮉 占쎌쁽雅뚳옙 占쎈쑅占쎄퐣 癰귨옙占쎈땾嚥∽옙 占쎈릭占쎄돌 �뜮�눖�뮉野껓옙 �넫�뿭�뱽 野껓옙 揶쏆늿�벉
@@ -71,14 +72,21 @@ public class TeacherController extends HttpServlet {
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 					 
 				}else if (path.equals("/score.tea")) {					//강사가 자신의강의 아이디를 넣으면 해당 강의의 학생들의 점수들만 볼 수 있음
-					req.setAttribute("scoreList",dao.getScoreList(1));	//test 1반일 때 나중에 userBean.getLectureId() 로 바꿔
+					req.setAttribute("scoreList",dao.getScoreList(lecture_id));	//test 1반일 때 나중에 userBean.getLectureId() 로 바꿔
+					System.out.println("/score.tea두겟"+lecture_id);
 					rd = req.getRequestDispatcher("teacher/score_T.jsp");
 					
 				}else if (path.equals("/score_insert.tea")) {			//점수 입력
 					req.setAttribute("idx", req.getParameter("idx"));
 					System.out.println(req.getParameter("idx"));
-					req.setAttribute("scoreList",dao.getScoreList(1));	//test 1반일 때 나중에 userBean.getLectureId() 로 바꿔
+					req.setAttribute("scoreList",dao.getScoreList(userBean.getLectureId()));	//test 1반일 때 나중에 userBean.getLectureId() 로 바꿔
 					rd = req.getRequestDispatcher("teacher/score_T_insert.jsp");
+					 
+				}else if (path.equals("/score_update.tea")) {			//점수 입력
+					req.setAttribute("idx", req.getParameter("idx"));
+					System.out.println(req.getParameter("idx")); 
+					req.setAttribute("scoreList",dao.getScoreList(userBean.getLectureId()));	//test 1반일 때 나중에 userBean.getLectureId() 로 바꿔
+					rd = req.getRequestDispatcher("teacher/score_T_update.jsp");
 					 
 				} else if (path.equals("/assignment.tea")) {
 					req.setAttribute("assignmentList", dao.getAssignmentList(userBean.getLectureId()));
@@ -105,8 +113,7 @@ public class TeacherController extends HttpServlet {
 					req.setAttribute("QnaLBean", dao.getQnaL(qnaLId));
 					rd = req.getRequestDispatcher("teacher/qna_T_deatil.jsp");
 
-				}
-				if (path.equals("/attendance.tea")) {
+				}else if (path.equals("/attendance.tea")) {
 					//처음 출석상태를 전부 뽑아오기
 					//이름,버튼,상태
 					req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
@@ -136,7 +143,7 @@ public class TeacherController extends HttpServlet {
 
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
-		
+		int lecture_id = userBean.getLectureId();
 
 		RequestDispatcher rd = null;
 		
@@ -192,26 +199,41 @@ public class TeacherController extends HttpServlet {
 					String name_list = req.getParameter("name_list");
 					System.out.println("이름 받아옴:"+name_list);
 					String[] name_arr = name_list.split(",");
-					String allscore_list = req.getParameter("allscore_list");
-					System.out.println("시험점수 받아옴:"+allscore_list);
-					String[] allscore_arr = allscore_list.split(",");			//숫자타입으로바꾸기
-					int[] score_num_arr = new int[allscore_arr.length];			//인트배열로 변환
-					for(int i = 0; i<allscore_arr.length; i++){  
-						score_num_arr[i] = Integer.parseInt(allscore_arr[i]);
+					
+					String score_list1 = req.getParameter("score_list1");
+					System.out.println("1시험점수 받아옴:"+score_list1);
+					String[] score_arr1 = score_list1.split(",");			//list1숫자타입으로바꾸기
+					String score_list2 = req.getParameter("score_list2");
+					System.out.println("2시험점수 받아옴:"+score_list1);
+					String[] score_arr2 = score_list2.split(",");			//list2숫자타입으로바꾸기
+					String score_list3 = req.getParameter("score_list3");
+					System.out.println("3시험점수 받아옴:"+score_list1);
+					String[] score_arr3 = score_list3.split(",");			//list3숫자타입으로바꾸기
+					int[] score_num_arr1 = new int[name_arr.length];			//인트배열로 변환
+					int[] score_num_arr2 = new int[name_arr.length];			//인트배열로 변환
+					int[] score_num_arr3 = new int[name_arr.length];			//인트배열로 변환
+					
+					for(int i = 0; i<name_arr.length; i++){  
+						score_num_arr1[i] = Integer.parseInt(score_arr1[i]);
+						score_num_arr2[i] = Integer.parseInt(score_arr2[i]);
+						score_num_arr3[i] = Integer.parseInt(score_arr3[i]);
 					}
-					result = dao.updateAvgscore(name_arr,score_num_arr, 1);	//1->dao.getScoreList(userBean.getLectureId())
+					result = dao.updateAvgscore(name_arr,score_num_arr1,score_num_arr2,score_num_arr3,lecture_id);	//1->dao.getScoreList(userBean.getLectureId())
+					if(result==1) {
+						System.out.println("평균출력성공 "+result);
+					}else {  
+						System.out.println("평균출력실패 "+result);
+					}
 				}else if(path.equals("/score_insert.tea")) {
 					String idx = req.getParameter("idx");
 					int count = Integer.parseInt(idx);
-					
-					if(idx=="1") {
-						count=1;
-					}else if(idx=="2") {
-						count=2;
-					}else if(idx=="3") { 
-						count=3;
-					}
-					
+						if(idx=="1") {
+							count=1;
+						}else if(idx=="2") {
+							count=2;
+						}else if(idx=="3") { 
+							count=3;
+						}
 					System.out.println("idx "+idx);            			//경우나눠서 count1 ,2, 3
 					String name_list = req.getParameter("name_list");
 					System.out.println("이름 받아옴:"+name_list);
@@ -224,21 +246,14 @@ public class TeacherController extends HttpServlet {
 						score_num_arr[i] = Integer.parseInt(score_arr[i]);
 					}
 			
-					result = dao.insertScore(name_arr,score_num_arr, 1,count); //1->dao.getScoreList(userBean.getLectureId())
-					System.out.println("result"+result);
-					
+					result = dao.insertScore(name_arr,score_num_arr,lecture_id,count); //1->dao.getScoreList(userBean.getLectureId())
+					System.out.println("result성적"+result);
 					if(result==1) {
 						System.out.println("성적입력성공"+result);
 					}else {  
 						System.out.println("성적입력실패"+result);
 					}
-					}
 				}
-
-				if(result>0){
-					rd.forward(req, resp);					
-				}
-				
 				//비동기 통신
 				if(path.equals("/attendance_check.tea")){
 					//버튼값에 따라서 update를 다르게 수행
@@ -260,9 +275,9 @@ public class TeacherController extends HttpServlet {
 				//teacher�뜝�룞�삕 student�뜝�룞�삕�뜝�룞�삕�뜝�룞�삕�뜝占� �뜝�룞�삕�뜝�룞�삕�떁�뜝�룞�삕 �뜝�떦紐뚯삕 �뜝�룞�삕 �뜝�룞�삕�뜝�룞�삕�뜝�룞�삕
 				req.getRequestDispatcher("login.bit");
 			}
-		} catch (java.lang.NullPointerException e) {
-			resp.sendRedirect("login.bit");
+		} 
+		}catch (java.lang.NullPointerException e) {
+			resp.sendRedirect("login.bit");	
 		}
 	}
-
 }

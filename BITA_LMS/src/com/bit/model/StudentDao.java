@@ -234,7 +234,7 @@ public class StudentDao extends Dao{
 	//학생이 scoreBean에 담긴 자신의 점수를 가져 올 수 있음
 	public ScoreDto getScoreBean(String userId) {
 		ScoreDto scoreBean = new ScoreDto();
-		String sql = "SELECT s.name,first_score,second_score,third_score,avg_score "
+		String sql = "SELECT name,first_score,second_score,third_score,avg_score "
 					+"from user01 u JOIN score s ON s.std_id=u.user_id WHERE user_id = ?";
 		try {  
 			openConnection();
