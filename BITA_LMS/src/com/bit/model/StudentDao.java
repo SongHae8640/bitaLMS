@@ -11,15 +11,6 @@ import org.json.simple.JSONArray;
 
 public class StudentDao extends Dao{
 
-	
-	
-	public ArrayList<CalendarDto> getCalendarDayList(int lectureId, String yearMonthDay){
-		openConnection();
-		
-		closeConnection();
-		return null;
-	}
-
 	public AttendanceDto getAttendance(String userId) {
 		//Student 출석상황에 필요한 정보 가져오기
 		//입실/지각/퇴실 정보 등 status, 입퇴실시간(where오늘,시분만 가져오기)
@@ -27,8 +18,6 @@ public class StudentDao extends Dao{
 		String sql = "select status,to_char(checkin_time,'hh24:mi') as \"checkinTime\","
 				+ "to_char(checkout_time,'hh24:mi') as \"checkoutTime\" from attendance"
 				+ " where to_char(day_time)=to_char(sysdate) and std_id=?";
-		
-		System.out.println(sql);
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -173,7 +162,6 @@ public class StudentDao extends Dao{
 		String sql = "select status, count(*) as \"count\""
 				+ " from attendance "
 				+ "where std_id=? group by status";
-		System.out.println(sql);
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -204,13 +192,6 @@ public class StudentDao extends Dao{
 			closeConnection();
 		}
 		return statusList;
-	}
-
-	public ArrayList<AttendanceDto> getAttendanceMonthList(String userId, String yearMonth) {
-		openConnection();
-		
-		closeConnection();
-		return null;
 	}
 
 	public ScoreDto getScoreBean(String userId) {
@@ -330,17 +311,84 @@ public class StudentDao extends Dao{
 	}
 
 	public ArrayList<QnaLDto> getQnaList(String userId) {
-		openConnection();
+		ArrayList<QnaLDto> list = new ArrayList<QnaLDto>();
+		String sql = "SELECT row_number() OVER(ORDER BY is_check , write_date desc) num ,qnal_id, u.name, std_id, type, question_content,"
+				+ "title, answer_content, TO_CHAR(write_date,'YYYY-MM-DD') as \"write_date\", is_check "
+				+ "FROM qna_l l "
+				+ "JOIN user01 u ON l.std_id = u.user_id "
+				+ "WHERE std_id = ? "
+				+ "ORDER BY is_check , write_date desc";
 		
-		closeConnection();
-		return null;
+		
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				QnaLDto bean = new QnaLDto();
+				bean.setRowNum(rs.getInt("num"));
+				bean.setQnaLId(rs.getInt("qnal_id"));
+				bean.setStuId(rs.getString("std_id"));
+				bean.setStdName(rs.getString("name"));
+				bean.setTitle(rs.getString("title"));
+				bean.setType(rs.getString("type"));
+				bean.setQuestionContent(rs.getString("question_content"));
+				bean.setAnswerContent(rs.getString("answer_content"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setIsCheck(rs.getString("is_check"));
+				list.add(bean);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			closeConnection();
+		}
+		return list;
+	}
+
+	
+	public QnaLDto getQnaL(int qnaId) {
+		QnaLDto bean = new QnaLDto();
+		String sql = "SELECT row_number() OVER(ORDER BY write_date) num ,qnal_id, u.name, std_id, type, question_content,"
+				+ "title, answer_content, TO_CHAR(write_date,'YYYY-MM-DD') as \"write_date\", is_check "
+				+ "FROM qna_l l "
+				+ "JOIN user01 u ON l.std_id = u.user_id "
+				+ "WHERE qnal_id = ?";
+		
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, qnaId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				bean.setRowNum(rs.getInt("num"));
+				bean.setQnaLId(rs.getInt("qnal_id"));
+				bean.setStuId(rs.getString("std_id"));
+				bean.setStdName(rs.getString("name"));
+				bean.setTitle(rs.getString("title"));
+				bean.setType(rs.getString("type"));
+				bean.setQuestionContent(rs.getString("question_content"));
+				bean.setAnswerContent(rs.getString("answer_content"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setIsCheck(rs.getString("is_check"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			closeConnection();
+		}		
+		return bean;
 	}
 
 	//학생이 질문을 올리는 메서드
 	//answer_content는 입력 하지 않기 때문에 null(이후에 answer_content가 not null 이고 is_check가 0인걸로 new를 확인)
 	public int insertQnaL(QnaLDto qnaLBean) {
-		String sql = "INSERT INTO qna_l(qnal_id,std_id, type, title, question_content, responder_id, write_date, is_check) "
-				+ "VALUES(qnal_id_seq.nextval,?,?,?,?,?,SYSDATE,0)";
+		String sql = "INSERT INTO qna_l(qnal_id,std_id, type, title, question_content, write_date, is_check) "
+				+ "VALUES(qnal_id_seq.nextval,?,?,?,?,SYSDATE,0)";
 		int result = -1;
 		try {
 			openConnection();
@@ -349,30 +397,32 @@ public class StudentDao extends Dao{
 			pstmt.setString(2, qnaLBean.getType());
 			pstmt.setString(3, qnaLBean.getTitle());
 			pstmt.setString(4, qnaLBean.getQuestionContent());
-			pstmt.setString(5, qnaLBean.getResponderId());
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
 			closeConnection();
-		}
-		
+		}		
 		return result;
 	}
 
-
-	public QnaLDto getQna(String qnaId) {
-		openConnection();
+	public int updateQnaL(QnaLDto qnaLBean) {
+		int result = -1;
+		String sql = "UPDATE qna_l SET title =? , question_content=? WHERE qnal_id = ?";
 		
-		closeConnection();
-		return null;
-	}
-
-	public int updateQnaL(QnaLDto qnalBean) {
-		openConnection();
-		
-		closeConnection();
-		return 0;
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, qnaLBean.getTitle());
+			pstmt.setString(2, qnaLBean.getQuestionContent());
+			pstmt.setInt(3, qnaLBean.getQnaLId());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection();
+		}
+		return result;
 	}
 
 	public int deleteQnaL(String[] qnaId) {
@@ -387,7 +437,6 @@ public class StudentDao extends Dao{
 
 	public int updateAttendance(String stuId,String check) {
 		//일괄적으로 insert는 AM 6시, 출석마감은 PM 11시에 되는걸로
-		System.out.println(check);
 		
 		String sql = "";
 		int result = 0;
@@ -397,7 +446,6 @@ public class StudentDao extends Dao{
 			sql = "UPDATE attendance SET status = '퇴실', checkout_time=sysdate WHERE std_id = ? and to_char(day_time)=to_char(sysdate)";
 		}
 		
-		System.out.println(sql);
 		
 		try {
 			openConnection();
@@ -425,18 +473,51 @@ public class StudentDao extends Dao{
 		return result;
 	}
 
-	public JSONArray getCalendarMonthListJson(String yearMonth, int lectureId) {
+	public JSONArray getAttendanceMonthListJson(String userId, String yearMonth) {
+		JSONArray jArray = new JSONArray();
+		String sql = "SELECT TO_CHAR(day_time,'YYYY-MM-DD') as \"day_time\" ,status, "
+				+ "TO_CHAR(checkin_time, 'HH24:MI') as \"checkin_time\", "
+				+ "TO_CHAR(checkout_time,'HH24:MI') as \"checkout_time\" "
+				+ "FROM attendance "
+				+ "WHERE std_id=? "
+				+ "AND TO_CHAR(day_time,'YYYY-MM') = ?";
+		System.out.println(sql);
+		
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			pstmt.setString(2, yearMonth);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				AttendanceDto bean = new AttendanceDto();
+				bean.setDayTime(rs.getString("day_time"));
+				bean.setStatus(rs.getString("status"));
+				bean.setCheckinTime(rs.getString("checkin_time"));
+				bean.setCheckoutTime(rs.getString("checkout_time"));
+				System.out.println(bean.toString());
+				jArray.add(bean.getJsonObject());
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			closeConnection();
+		}
+		
+		return jArray;
+	}
+
+	public JSONArray getCalendarMonthListJson(int lectureId) {
 		JSONArray jArray = new JSONArray();
 		String sql = "SELECT c.calendar_id, c.lecture_id, c.title, c.content,l.name, "
 				+ "TO_CHAR(c.start_date,'YYYY-MM-DD HH24:MI:SS') as \"start_date\" ,TO_CHAR(c.end_date,'YYYY-MM-DD HH24:MI:SS') as \"end_date\" "
 				+ "FROM calendar c JOIN lecture l ON c.lecture_id = l.lecture_id "
-				+ "WHERE TO_CHAR(c.start_date,'YYYY-MM') = ? AND "
-				+ "c.lecture_id = ?";	
+				+ "WHERE c.lecture_id = ? ";;	
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, yearMonth);
-			pstmt.setInt(2, lectureId);
+			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();	
 			while(rs.next()){
 				CalendarDto bean = new CalendarDto();
@@ -459,5 +540,4 @@ public class StudentDao extends Dao{
 		}
 		return jArray;
 	}
-
 }

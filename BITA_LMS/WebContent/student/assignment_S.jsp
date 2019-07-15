@@ -1,3 +1,7 @@
+<%@page import="com.bit.model.SubmsissionDto"%>
+<%@page import="com.bit.model.UserDto"%>
+<%@page import="com.bit.model.AssignmentDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -5,7 +9,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
 #menu>ul {
@@ -23,15 +29,15 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#ch').click(function(){
-			if($("#ch").prop("checked")){
-	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
-	            $("input[name=chk]").prop("checked",true);
-	            //클릭이 안되있으면
-	        }else{
-	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
-	            $("input[name=chk]").prop("checked",false);
-	        }
+		$('#ch').click(function() {
+			if ($("#ch").prop("checked")) {
+				//input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
+				$("input[name=chk]").prop("checked", true);
+				//클릭이 안되있으면
+			} else {
+				//input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
+				$("input[name=chk]").prop("checked", false);
+			}
 		});
 	});
 </script>
@@ -59,26 +65,31 @@
 						<th>작성자</th>
 						<th>작성일</th>
 						<th>확인여부</th>
-						<th><input type="checkbox" name="ch1" id="ch"/></th>
+					
 					</tr>
 				</thead>
 				<tbody>
+					<%
+						ArrayList<AssignmentDto> list=(ArrayList<AssignmentDto>)request.getAttribute("assignmentList");
+							for(AssignmentDto bean : list){
+								System.out.println("bean"+bean.toString());
+								UserDto userBean = (UserDto) session.getAttribute("userBean");
+								SubmsissionDto bean_u=(SubmsissionDto)request.getAttribute("submissionBean");
+								System.out.println("userBean"+userBean.toString());
+								System.out.println("bean_u="+bean_u);
+								
+					%>
 					<tr>
-						<td>2</td>
-						<td><a href="assignment_detail_S.stu">8/2 과제</a></td>
-						<td>김코난</td>
-						<td>2019-08-02</td>
-						<td>확인대기</td>
-						<td><input type="checkbox" name="chk"/></td>
+						<td><%=bean.getRowNum()%></td>
+						<td><a href="assignment_detail.stu?idx=<%=bean.getAssignmentId()%>"><%=bean.getTitle()%></a></td>
+						<td><%=userBean.getUserId()%></td>
+						<td><%=bean.getWriteDate()%></td>
+<%-- 						<td><%=bean_u.getIsCheck() %></td> --%>
 					</tr>
-					<tr>
-						<td>1</td>
-						<td><a href="assignment_detail_S.stu">8/1 과제</a></td>
-						<td>김코난</td>
-						<td>2019-08-01</td>
-						<td>확인완료</td>
-						<td><input type="checkbox" name="chk"/></td>
-					</tr>
+					<%
+						}
+					%>
+					
 				</tbody>
 			</table>
 		</div>

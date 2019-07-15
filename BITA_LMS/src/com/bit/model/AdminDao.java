@@ -18,16 +18,14 @@ public class AdminDao extends Dao {
 	//월별 수강생관리 페이지 월은 ?idx=""로 받아오기
 	//제일 처음 접근일 때는 sysdate로 가져오기
 	//날짜이동버튼을 누르면 제이쿼리에서 2019-07에서 -1을 하든 +1을 하든 해서 idx값으로 넘겨주기	
-	public JSONArray getCalendarMonthListJson(String yearMonth) {
+	public JSONArray getCalendarMonthListJson() {
 		JSONArray jArray = new JSONArray();
 		String sql = "SELECT c.calendar_id, c.lecture_id, c.title, c.content,l.name, "
 				+ "TO_CHAR(c.start_date,'YYYY-MM-DD HH24:MI:SS') as \"start_date\" ,TO_CHAR(c.end_date,'YYYY-MM-DD HH24:MI:SS') as \"end_date\" "
-				+ "FROM calendar c JOIN lecture l ON c.lecture_id = l.lecture_id "
-				+ "WHERE TO_CHAR(c.start_date,'YYYY-MM') = ?";	
+				+ "FROM calendar c JOIN lecture l ON c.lecture_id = l.lecture_id ";
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, yearMonth);
 			rs = pstmt.executeQuery();	
 			while(rs.next()){
 				CalendarDto bean = new CalendarDto();
@@ -51,18 +49,16 @@ public class AdminDao extends Dao {
 		return jArray;
 	}
 	
-	public JSONArray getCalendarMonthListJson(String yearMonth, int lectureId) {
+	public JSONArray getCalendarMonthListJson(int lectureId) {
 		JSONArray jArray = new JSONArray();
 		String sql = "SELECT c.calendar_id, c.lecture_id, c.title, c.content,l.name, "
 				+ "TO_CHAR(c.start_date,'YYYY-MM-DD HH24:MI:SS') as \"start_date\" ,TO_CHAR(c.end_date,'YYYY-MM-DD HH24:MI:SS') as \"end_date\" "
 				+ "FROM calendar c JOIN lecture l ON c.lecture_id = l.lecture_id "
-				+ "WHERE TO_CHAR(c.start_date,'YYYY-MM') = ? "
-				+ "AND c.lecutre_id = ?";	
+				+ "WHERE c.lecutre_id = ? ";
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, yearMonth);
-			pstmt.setInt(2, lectureId);
+			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();	
 			while(rs.next()){
 				CalendarDto bean = new CalendarDto();
@@ -697,69 +693,113 @@ public class AdminDao extends Dao {
 	public ArrayList<QnaLDto> getQnaLList() {
 		openConnection();
 		ArrayList<QnaLDto> list = new ArrayList<QnaLDto>();
-		String sql = "SELECT row_number() OVER(ORDER BY write_date) num, title, name as \"std_name\","
-				+ "TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,is_respon, type "
-				+ "FROM "
-				+ "WHERE type='행정'";
+		String sql = "SELECT row_number() OVER(ORDER BY write_date) num ,qnal_id, u.name as \"name\", std_id, type, question_content,"
+				+ "title, answer_content, TO_CHAR(write_date,'YYYY-MM-DD') as \"write_date\", is_check "
+				+ "FROM qna_l q "
+				+ "JOIN user01 u ON q.std_id = u.user_id "
+				+ "WHERE type = '행정' "
+				+ "ORDER BY is_check , write_date desc";
+		
 		
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-			while(rs.next()){
+			
+			while(rs.next()) {
 				QnaLDto bean = new QnaLDto();
 				bean.setRowNum(rs.getInt("num"));
+				bean.setQnaLId(rs.getInt("qnal_id"));
+				bean.setStuId(rs.getString("std_id"));
+				bean.setStdName(rs.getString("name"));
 				bean.setTitle(rs.getString("title"));
-				bean.setStdName(rs.getString("std_name"));
 				bean.setWriteDate(rs.getString("write_date"));
 				bean.setType(rs.getString("type"));
+				bean.setQuestionContent(rs.getString("question_content"));
+				bean.setAnswerContent(rs.getString("answer_content"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setIsCheck(rs.getString("is_check"));
 				list.add(bean);
 			}
-			
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		}finally {
 			closeConnection();
 		}
-		
 		return list;
 	}
 	
 	//행정팀 큐엔에이 상세
 	public QnaLDto getQnaL(int qnaLId) {
-		openConnection();
+		QnaLDto bean = new QnaLDto();
+		String sql ="SELECT qnal_id, u.name, std_id, type, question_content, title, "
+				+ "answer_content, TO_CHAR(write_date,'YYYY-MM-DD') as \"write_date\", is_check "
+				+ "FROM qna_l q "
+				+ "JOIN user01 u ON q.std_id = u.user_id "
+				+ "WHERE q.qnal_id = ? ";
+		
 		try{
-			
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, qnaLId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				bean.setQnaLId(rs.getInt("qnal_id"));
+				bean.setStuId(rs.getString("std_id"));
+				bean.setStdName(rs.getString("name"));
+				bean.setTitle(rs.getString("title"));
+				bean.setType(rs.getString("type"));
+				bean.setQuestionContent(rs.getString("question_content"));
+				bean.setAnswerContent(rs.getString("answer_content"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setIsCheck(rs.getString("is_check"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}finally{
 			closeConnection();
 		}
-		return null;
+		return bean;
 	}
 	
-	//행정팀 큐엔에이 삭제
-	//여러개삭제할때는 배열로 보내주면 됨
-	//그냥 하나일 수도 있고 하나면 배열에 하나만 들어있겠지
-	public int deleteQnaL(int[] qnaLIdList) {
-		openConnection();
-		try{
-			
-		}finally{
-			closeConnection();
-		}
-		return 0;	
-	}
+	
 	
 	//행정팀 큐엔에이 답변등록
 	public int updateQnaL(QnaLDto qnaLBean) {
-		openConnection();
+		int result = -1;
+		String sql = "UPDATE qna_l SET answer_content = ?, is_check='1' WHERE qnal_id =?";
 		try{
-			
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, qnaLBean.getAnswerContent());
+			pstmt.setInt(2, qnaLBean.getQnaLId());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}finally{
 			closeConnection();
 		}
-		return 0;
+		return result;
 	}
-	
+	//행정팀 큐엔에이 삭제
+	public int deleteQnaL(int qnaLId) {
+		String sql = "DELETE FROM qna_l WHERE qnal_id = ?";
+		int result = -1;
+		try{
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, qnaLId);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return result;	
+	}
 	
 
 	
@@ -847,7 +887,5 @@ public class AdminDao extends Dao {
 		
 		return jArray.toJSONString();
 	}
-
-	
 
 }

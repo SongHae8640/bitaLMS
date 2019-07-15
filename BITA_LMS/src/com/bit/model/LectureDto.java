@@ -1,7 +1,7 @@
 package com.bit.model;
 
 public class LectureDto {
-	private int lectureID, numStd, totalDays, maxStd, lv;
+	private int lectureId, numStd, totalDays, maxStd, lv, progressDays;
 	private String name, startDate, endDate, content, fileName, teaName;
 	private boolean isClose; //�ʱⰪ false
 
@@ -13,8 +13,8 @@ public class LectureDto {
 		this.teaName = teaName;
 	}
 
-	public int getLectureID() {
-		return lectureID;
+	public int getLectureId() {
+		return lectureId;
 	}
 
 	public int getNumStd() {
@@ -57,8 +57,8 @@ public class LectureDto {
 		return isClose;
 	}
 
-	public void setLectureID(int lectureID) {
-		this.lectureID = lectureID;
+	public void setLectureId(int lectureId) {
+		this.lectureId = lectureId;
 	}
 
 	public void setNumStd(int numStd) {
@@ -100,5 +100,23 @@ public class LectureDto {
 	public void setIsClose(String isClose) {
 		this.isClose = isClose.equals("1");
 	}
+	public int getProgressDays() {
+		return progressDays;
+	}
+	
+	public void setProgressDays(int progressDays) {
+		this.progressDays = progressDays;
+	}
+
+	@Override
+	public String toString() {
+		return "LectureDto [lectureId=" + lectureId + ", numStd=" + numStd
+				+ ", totalDays=" + totalDays + ", maxStd=" + maxStd + ", lv="
+				+ lv + ", name=" + name + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", content=" + content
+				+ ", fileName=" + fileName + ", teaName=" + teaName
+				+ ", isClose=" + isClose + "]";
+	}
+
 
 }

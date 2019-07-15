@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 
-
 public class TeacherDao extends Dao{
 	//번호 (제목제외) ID 이름 강좌 날짜 과정, 등록인원/최대인원
 	//이름,버튼(jquery에서),상태,아이디(hidden) where 오늘 날짜일때, 강좌아이디가 해당 아이디일 때
@@ -51,13 +50,13 @@ public class TeacherDao extends Dao{
 
 	// 강좌번호와 월을 파라미터로 주고 학생이름, 출석상태, 날짜를 리턴 받는다.
 	// 출결 관리(월별) 페이지에서 보여지는 0000-00의 값을 yyyymm 형태의 문자열로 받는다.
-	public ArrayList<AttendanceDto> getMonthAttendance(int lectureId,
-			String yyyymm) {
+	public ArrayList<AttendanceDto> getMonthAttendance(int lectureId,String yyyymm) {
 		ArrayList<AttendanceDto> list = new ArrayList<AttendanceDto>();
 		String sql = "SELECT name, status, day_time " + "FROM attendance a "
 				+ "JOIN user01  u " + "on a.std_id=u.user_id "
 				+ "WHERE a.lecture_id = ? AND "
-				+ "?=TO_CHAR(day_time,'yyyymm') " + "ORDER BY name";
+				+ "?=TO_CHAR(day_time,'yyyymm') " 
+				+ "ORDER BY name";
 
 		try {
 			openConnection();
@@ -191,10 +190,7 @@ public class TeacherDao extends Dao{
 				bean.setFileName(rs.getString("file_id"));
 				bean.setStdName(rs.getString("std_name"));
 				bean.setSubmitDate(rs.getString("submit_date"));
-				bean.setIsCheck(rs.getString("is_check")); // submission의
-															// is_check 자료형이
-															// char(1)이여서 여기서
-															// 오류가 날 수도?
+				bean.setIsCheck(rs.getString("is_check")); 
 				list.add(bean);
 			}
 
@@ -207,25 +203,30 @@ public class TeacherDao extends Dao{
 		return list;
 	}
 
-	public ArrayList<QnaLDto> getQnaLList(String teacherId) {
+	public ArrayList<QnaLDto> getQnaLList(int lectureId) {
 		ArrayList<QnaLDto> list = new ArrayList<QnaLDto>();
-		String sql = "SELECT row_number() OVER(ORDER BY write_date) num, title, name as std_name,"
-				+ "TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,answer_content, type "
-				+ "FROM qna_l ql JOIN user01 u ON ql.std_id = u.user_id "
-				+ "WHERE responder_id = ?";
+		String sql = "SELECT row_number() OVER(ORDER BY write_date) num ,q.qnal_id, u.name, type, "
+				+ "q.title, TO_CHAR(write_date,'YYYY-MM-DD') as \"write_date\", is_check "
+				+ "FROM lecture l "
+				+ "JOIN lectureUser lu ON l.lecture_id = lu.lecture_id "
+				+ "JOIN qna_l q ON lu.user_id = q.std_id "
+				+ "JOIN user01 u ON q.std_id = u.user_id "
+				+ "WHERE l.lecture_id =? AND (q.type='성적문의' OR q.type='강사')";
 
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, teacherId);
+			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				QnaLDto bean = new QnaLDto();
 				bean.setRowNum(rs.getInt("num"));
+				bean.setQnaLId(rs.getInt("qnal_id"));;
+				bean.setStdName(rs.getString("name"));
 				bean.setTitle(rs.getString("title"));
-				bean.setStdName(rs.getString("std_name"));
-				bean.setWriteDate(rs.getString("write_date"));
 				bean.setType(rs.getString("type"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setIsCheck(rs.getString("is_check"));
 				list.add(bean);
 			}
 
@@ -243,8 +244,7 @@ public class TeacherDao extends Dao{
 		String sql = "insert into assignment(assignment_id, title, content, lecture_id, write_date)";
 		sql += "values(assignment_id_seq.nextval,?,?,?,SYSDATE)";
 		int result = -1;
-
-		try {
+		try{
 			openConnection();
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setString(1, assignmentBean.getTitle());
@@ -259,7 +259,7 @@ public class TeacherDao extends Dao{
 			closeConnection();
 			
 		}		
-		return 0;
+		return result;
 	}
 
 	public int updateAssignment(String title, String content,
@@ -279,21 +279,56 @@ public class TeacherDao extends Dao{
 		return 0;
 	}
 
+	// 1:1문의로 해당 세부 내용 불러오기
 	public QnaLDto getQnaL(int qnaLId) {
-		// 1:1문의로 해당 세부 내용 불러오기
-		openConnection();
-
-		closeConnection();
-
-		return null;
+		QnaLDto bean = new QnaLDto();
+		String sql ="SELECT qnal_id, u.name, std_id, type, question_content, title, "
+				+ "answer_content, TO_CHAR(write_date,'YYYY-MM-DD') as \"write_date\", is_check "
+				+ "FROM qna_l q "
+				+ "JOIN user01 u ON q.std_id = u.user_id "
+				+ "WHERE q.qnal_id = ? ";
+		
+		try{
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, qnaLId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				bean.setQnaLId(rs.getInt("qnal_id"));
+				bean.setStuId(rs.getString("std_id"));
+				bean.setStdName(rs.getString("name"));
+				bean.setTitle(rs.getString("title"));
+				bean.setType(rs.getString("type"));
+				bean.setQuestionContent(rs.getString("question_content"));
+				bean.setAnswerContent(rs.getString("answer_content"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setIsCheck(rs.getString("is_check"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return bean;
 	}
 
-	public int updateQnaLAnswer(String answerContent, int qnaLId) {
+	public int updateQnaL(QnaLDto qnaLBean) {
+		
 		// 1:1문의에 answer_content(대답 내용) 추가하기(DB상에서는 qna_l에 있는 row UPDATE)
-		openConnection();
-
-		closeConnection();
-		return 0;
+		int result = -1;
+		String sql = "UPDATE qna_l SET answer_content = ?, is_check='1' WHERE qnal_id =?";
+		try{
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, qnaLBean.getAnswerContent());
+			pstmt.setInt(2, qnaLBean.getQnaLId());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return result;
 	}
 
 
@@ -323,24 +358,37 @@ public class TeacherDao extends Dao{
 
 	}
 
-	public int insertCalendar(String startDate, String endDate, String title,
-			String content, int lectureId) {
-		// lecture_id에 해당하는 일정 추가
-		// /end_date에 어떤 값을 넣어야 할지 고민
-		openConnection();
 
-		closeConnection();
-		return 0;
+	public ArrayList<CalendarDto> getCalendarMonthList(int lectureId,
+			String yearMonth) {
+		ArrayList<CalendarDto> list = new ArrayList<CalendarDto>();
+
+		String sql = "";
+		if (yearMonth == null) {
+			// int calendarId, lectureId;
+			// String title, content, startDate, endDate;
+			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=to_number(to_char(sysdate,'mm'))";
+		} else {
+			sql = "select calendar_id,lecture_id,title,start_date,end_date from calendar where calendar_id=?";
+		}
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				CalendarDto bean = new CalendarDto();
+				list.add(bean);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection();
+		}
+		return list;
 	}
 
-
-	public ArrayList<CalendarDto> getCalendarDayList(int lectureId,
-			String yearMonthDay) {
-		openConnection();
-
-		closeConnection();
-		return null;
-	}
 
 	public int getStuNum(int lectureId) {
 		// 학생수 반환 메서드
@@ -358,39 +406,6 @@ public class TeacherDao extends Dao{
 		return -1;
 	}
 
-	public SubmsissionDto getSubmissionNum(int lectureId) {
-		// 과제 제출(submission)한 학생수 반환 메서드
-		// 가장 최근에 낸 과제(assingment)에 제출한
-
-		openConnection();
-
-
-		SubmsissionDto bean =new SubmsissionDto();
-		ArrayList<SubmsissionDto> list=new ArrayList<SubmsissionDto>();
-		openConnection();
-		String sql="SELECT row_number() OVER(ORDER BY write_date) num, title, name as std_name,"
-				+ "TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,answer_content, type "
-				+ "FROM qna_l ql JOIN user01 u ON ql.std_id = u.user_id "
-				+ "WHERE responder_id = ?";	//수정해야함 
-		try {
-			pstmt=conn.prepareStatement(sql);
-			pstmt.setString(1, "num");
-			rs=pstmt.executeQuery();
-			if(rs.next()){
-				/*
-				 * bean.setNum(rs.getInt("num")); bean.setSub(rs.getString("sub"));
-				 * bean.setUnum(rs.getInt("unum")); bean.setName(rs.getString("name"));
-				 * bean.setNalja(rs.getDate("nalja")); bean.setPay(rs.getInt("pay"));
-				 */			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			closeConnection();
-		}
-		return bean;
-		
-		
-	}
 
 	public int getTotalDays(int lectureId) {
 		// 해당 강좌의 총일수 반환 메서드
@@ -431,18 +446,18 @@ public class TeacherDao extends Dao{
 		return 0;
 	}
 
-	public JSONArray getCalendarMonthListJson(String yearMonth, int lectureId) {
+	public JSONArray getCalendarMonthListJson(int lectureId) {
 		JSONArray jArray = new JSONArray();
 		String sql = "SELECT c.calendar_id, c.lecture_id, c.title, c.content,l.name, "
 				+ "TO_CHAR(c.start_date,'YYYY-MM-DD HH24:MI:SS') as \"start_date\" ,TO_CHAR(c.end_date,'YYYY-MM-DD HH24:MI:SS') as \"end_date\" "
 				+ "FROM calendar c JOIN lecture l ON c.lecture_id = l.lecture_id "
-				+ "WHERE TO_CHAR(c.start_date,'YYYY-MM') = ? AND "
-				+ "c.lecture_id = ?";	
+				+ "WHERE c.lecture_id = ? ";
+//				+ "AND TO_CHAR(c.start_date,'YYYY-MM') = ?";	
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, yearMonth);
-			pstmt.setInt(2, lectureId);
+			pstmt.setInt(1, lectureId);
+//			pstmt.setString(2, yearMonth);
 			rs = pstmt.executeQuery();	
 			while(rs.next()){
 				CalendarDto bean = new CalendarDto();
@@ -486,11 +501,10 @@ public class TeacherDao extends Dao{
 		}finally{
 			closeConnection();
 		}
-		return 0;
+		return result;
 	}
 
 	public int updateCalendar(CalendarDto calendarBean) {
-		System.out.println("TeacherDao :: updateCalendar - calendarBean="+calendarBean.toString());
 		String sql =" UPDATE calendar "
 				+ "SET title=?, content=?,  "
 				+ "start_date= TO_DATE(?,'YYYY-MM-DD HH24:MI:SS'), "
@@ -530,5 +544,26 @@ public class TeacherDao extends Dao{
 			closeConnection();
 		}
 		return 0;
+	}
+	public int deleteQnaL(int qnaLId) {
+		String sql = "DELETE FROM qna_l WHERE qnal_id = ?";
+		int result = -1;
+		try{
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, qnaLId);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return result;
+	}
+
+	public int getSubmissionNum(int lectureId) {
+		int result =-1;
+		return result;
 	}
 }

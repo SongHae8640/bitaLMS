@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.QnaLDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -10,6 +12,74 @@
 	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
+	#menu>ul {
+	width: 610px;
+	list-style-type: none;
+	margin: 0px auto;
+	}
+	#content{
+	height:700px;
+	margin: 0 auto;
+	}
+	#content #sidebar{
+	position:absolute;
+	top:243px;
+	height:700px;
+	width: 200px;
+	text-align:center;
+	background-color: gray;
+	}
+	#content #sidebar ul li{
+	list-style: none;
+	}
+	#content #sidebar ul li a{
+	text-decoration: none;
+	color: rgb(0,0,0);
+	}
+	#content #real_content{
+	position:relative;
+	left:300px;
+	width: 600px;
+	height:700px;
+	}
+	#content #page_name{
+	width: 120px;
+	margin: 0 auto;
+	text-align:center;
+	border: 1px solid gray;
+	}
+	#content #q_list{
+	clear:both;
+	width: 600px;
+	height:500px;
+	margin: 0 auto;
+	text-align:center;
+	}
+	#content #q_list table{
+	width: 600px;
+	margin: 0 auto;
+	}
+	#content #q_list table,th,td{
+	border: 1px solid gray;
+	}
+	#content #under_list{
+	width: 600px;
+	height:95px;
+	margin: 0 auto;
+	}
+	#content #under_list #close_button{
+	float:right;
+	width: 45px;
+	}
+	#content #under_list #search_box{
+	clear:both;
+	width: 230px;
+	margin: 0 auto;
+	}
+	#content #under_list #page_button{
+	width: 150px;
+	margin: 0 auto;
+	}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -50,7 +120,14 @@
 			</ul>
 		</div>
 		<div id="content">
+				<div id="sidebar">
+			<br/><br/><br/><br/>
+			<h3>1:1문의</h3>
+			<br/><br/>
+		</div>
+		<div id="real_content">
 			<h2>1:1문의</h2>
+
 			<table border="1">
 				<thead>
 					<tr>
@@ -60,38 +137,30 @@
 						<th>작성일</th>
 						<th>답변여부</th>
 						<th>분류</th>
-						<th><input type="checkbox" name="ch1" id="ch"/></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
+					<%
+					ArrayList<QnaLDto> qList = (ArrayList<QnaLDto>)request.getAttribute("qnaLList");
+					for(QnaLDto bean : qList){
+					%>
 					<tr>
-						<td>1</td>
-						<td><a href="qna_T_detail.tea">sub</a></td>
-						<td>name</td>
-						<td>day</td>
-						<td>vs</td>
-						<td>sort</td>
-						<th><input type="checkbox" name="chk"/></th>
+						<td><%=bean.getRowNum() %></td>
+						<td><a href="qna_detail.tea?idx=<%=bean.getQnaLId() %>"><%=bean.getTitle() %></a></td>
+						<td><%=bean.getStdName() %></td>
+						<td><%=bean.getWriteDate() %></td>
+						<td><%=bean.getIsCheck() %></td>
+						<td><%=bean.getType() %></td>
 					</tr>
+					<%
+					}
+					
+					%>
 				</tbody>
-				<tfooter>
-				<tr>
-					<td><select name="" label="">
-							<opt>
-							<option value="">답변대기</option>
-							<option value="">답변완료</option>
-							</opt>
-					</select></td>
-					<td><input type="text" name="" id="" /></td>
-					<td><button>검색</button></td>
-				</tr>
-				</tfooter>
 			</table>
-			<div>
-				<button type="">삭제</button>
-			</div>
 		</div>
+	</div>
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />

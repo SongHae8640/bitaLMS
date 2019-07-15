@@ -8,6 +8,18 @@
 	<meta charset='utf-8' />
 	<link href='css/fullcalendar.min.css' rel='stylesheet' />
 	<link href='css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+	<style>
+	body {
+		margin: 40px 10px;
+		padding: 0;
+		font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+		font-size: 14px;
+	}#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+	}
+	
+	</style>
 	<script src='js/moment.min.js'></script>
 	<script src='js/jquery-1.12.4.js'></script>
 	<script src='js/jquery.bpopup.min.js'></script>
@@ -52,7 +64,7 @@
 					calendarEvent = event;
 					$.ajax({
 						type: 'POST',
-						url: "calendar_update1.tea",
+						url: "calendar_updateDrag.tea",
 						data: {
 							calendarId: event.id + "",
 							title: event.title,
@@ -111,7 +123,6 @@
 			htmlsContents += "<div><div>날짜</div><div><input type='text' id='calendar_start_date' value='" + calEvent.start.format().substring(0, 10) + "'> ~ <input type='text' id='calendar_end_date' value='" + calEvent.end.format().substring(0, 10) + "'></div></div><br>";
 			htmlsContents += "<div><div>제목</div><div><input type='text' id='calendar_title' value='" + calEvent.title + "'></div></div><br>";
 			htmlsContents += "<div><div>내용</div><div><input type='text' id='calendar_content' value='" + calEvent.content + "'></div></div>";
-
 			htmlsContents += "<div><button id='update_calendar_Btn' onclick='updateCalendar()'>저장</button><button  onclick='closeMessage(\"winAlert\")'>취소</button></div>";
 			openPopup("일정 수정", htmlsContents, 400);
 
@@ -146,7 +157,7 @@
 			}
 			$.ajax({
 				type: 'POST',
-				url: "calendar_update2.tea",
+				url: "calendar_updateEdit.tea",
 				data: {
 					calendarId: calEvent.id + "",
 					title: title,
@@ -166,7 +177,6 @@
 				}
 			})
 		}
-
 
 		//삭제 버튼과 연동 시킬것
 		function deleteCalendar() {
@@ -236,7 +246,7 @@
 			var endDate = $('#calendar_end_date').val();
 			var title = $('#calendar_title').val();
 			var content = $('#calendar_content').val();
-
+			
 			if (!startDate) {
 				alert('시작 날짜 입력해 주세요.');
 				return false;
@@ -291,21 +301,11 @@
 		}
 
 	</script>
-	<style>
-		body {
-			margin: 40px 10px;
-			padding: 0;
-			font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
-			font-size: 14px;
-		}
 
-		#calendar {
-			max-width: 900px;
-			margin: 0 auto;
-		}
-
-	</style>
 </head>
+<%
+	UserDto userBean = (UserDto)session.getAttribute("userBean");
+%>
 
 <body>
 
@@ -317,7 +317,7 @@
 
 	<div id='calendar'></div>
 	<div id='day_calender'>
-		<!--여기에 당일 일정 리스트가 내용이 들어감  -->
+		<div><span id="lectureName"><%=userBean.getLectureName() %></span><span id="lectureId"><%=userBean.getLectureId() %></span></div>
 		<button id="add_calendar_Btn">일정 등록</button>
 	</div>
 
@@ -325,11 +325,10 @@
 		<div class="box-header with-border">
 			<h3 class="box-title" id="alert_subject" style="background-color: white"></h3>
 		</div>
-		<div class="box-body" id="alert_contents" style="font-size: 15px; background-color: white">
+		<div class="box-body" id="alert_contents" style="font-size: 15px; background-color:white">
 
 		</div>
 	</div>
-	<a id="lectureName"><%=request.getParameter("lectureName") %></a>
 
 </body>
 

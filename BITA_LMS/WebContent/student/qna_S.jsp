@@ -1,3 +1,6 @@
+<%@page import="com.bit.model.StudentDao"%>
+<%@page import="com.bit.model.QnaLDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -23,16 +26,11 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#ch').click(function(){
-			if($("#ch").prop("checked")){
-	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
-	            $("input[name=chk]").prop("checked",true);
-	            //클릭이 안되있으면
-	        }else{
-	            //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
-	            $("input[name=chk]").prop("checked",false);
-	        }
+		
+		$('#addBtn').on('click', function(){
+			location.href = "qna_insert.stu";
 		});
+
 	});
 </script>
 </head>
@@ -61,40 +59,29 @@
 						<th>작성일</th>
 						<th>답변여부</th>
 						<th>분류</th>
-						<th><input type="checkbox" name="ch1" id="ch"/></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
+					<%
+					ArrayList<QnaLDto> qList = (ArrayList<QnaLDto>)request.getAttribute("qnaLList");
+					for(QnaLDto bean : qList){
+					%>
 					<tr>
-						<td>1</td>
-						<td><a href="qna_detail_S.jsp">sub</a></td>
-						<td>name</td>
-						<td>day</td>
-						<td>vs</td>
-						<td>sort</td>
-						<th><input type="checkbox" name="chk" /></th>
+						<td><%=bean.getRowNum() %></td>
+						<td><a href="qna_detail.stu?idx=<%=bean.getQnaLId() %>"><%=bean.getTitle() %></a></td>
+						<td><%=bean.getStdName() %></td>
+						<td><%=bean.getWriteDate() %></td>
+						<td><%=bean.getIsCheck() %></td>
+						<td><%=bean.getType() %></td>
 					</tr>
+					<%
+					}
+					%>
 				</tbody>
-				<tfooter>
-				<tr>
-					<td><select name="" label="">
-							<opt>
-							<option value="">성적문의</option>
-							<option value="">강사</option>
-							<option value="">행정</option>
-							</opt>
-					</select></td>
-					<td><input type="text" name="" id="" /></td>
-					<td><button>검색</button></td>
-				</tr>
-				</tfooter>
 			</table>
 			<div>
-				<form action="qna_add_S.stu">
-					<button type="submit">등록</button>
-				</form>
-				<button type="">삭제</button>
+				<button type="button" id="addBtn">등록</button>
 			</div>
 		</div>
 		<div id="footer">

@@ -1,3 +1,7 @@
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.Date"%>
+<%@page import="com.bit.model.UserDto"%>
+<%@page import="com.bit.model.AssignmentDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -29,7 +33,7 @@
 			$('#content>button').show().eq(0).hide();
 		});
 		$('#delete').click(function(){
-			$(location).attr('href','assignment_delete_T.tea');
+			$(location).attr('href','assignment_T_delete.tea');
 		});
 	});
 </script>
@@ -52,19 +56,30 @@
 		</div>
 		<div id="content">
 			<h2>과제 등록</h2>
-			<form action="assignment_insert_T.tea">
+			<%
+			UserDto userBean = (UserDto) session.getAttribute("userBean");
+			Calendar cal = Calendar.getInstance();
+			 
+			//현재 년도, 월, 일
+			int year = cal.get ( cal.YEAR );
+			int month = cal.get ( cal.MONTH ) + 1 ;
+			int date = cal.get ( cal.DATE ) ;
+			
+			String nalja=month+"월"+date+"일";
+			%>
+			<form action="assignment_insert.tea" method="post">
 				<div>
 					<label>제목</label> <input type="text" name="title" id="title">
 				</div>
 				<div>
-					<label>작성자</label> <input type="text">
+					<label>작성자</label> <span><%=userBean.getUserId()%></span>
 				</div>
 				<div>
-					<label>날짜</label> 
+					<label>날짜</label><span><%=nalja %></span>
 				</div>
 				<div>
 					<label>내용</label>
-					<textarea name="" id="" cols="30" rows="10">hello</textarea>
+					<textarea name="content" id="content" cols="30" rows="10">hello</textarea>
 				</div>
 
 				<div>

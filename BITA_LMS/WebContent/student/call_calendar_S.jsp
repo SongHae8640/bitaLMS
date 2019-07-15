@@ -33,13 +33,13 @@
 				editable: true,
 				eventLimit: true,
 				displayEventTime: false,
+				disableDragging: false,
 				events: {
 					url: "callCalendar.stu",
 					error: function() {
 						console.log("fullcalendar 가져오기 실패")
 					},
 					success: function(calData) {
-						console.log("fullcalendar 가져오기 성공")
 						console.log(calData);
 					}
 				},
@@ -57,6 +57,9 @@
 					openPopup("일정 상세", htmlsContents, 400);
 					return false;
 
+				},
+				viewRender :function(view, element){
+					console.log(view, element);
 				}
 
 			});

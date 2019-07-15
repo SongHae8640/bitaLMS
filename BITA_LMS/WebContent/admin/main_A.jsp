@@ -6,111 +6,111 @@
 <html>
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Insert title here</title>
-	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
-	<link type="text/css" rel="stylesheet" href="css/frame.css" />
-	<style type="text/css">
-		#menu>ul {
-			width: 610px;
-			list-style-type: none;
-			margin: 0px auto;
-		}
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link
+	href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean"
+	rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="css/frame.css" />
+<style type="text/css">
+#menu>ul {
+	width: 610px;
+	list-style-type: none;
+	margin: 0px auto;
+}
+#content {
+	height: 700px;
+	margin: 0 auto;
+}
 
-		#content {
-			height: 700px;
-			margin: 0 auto;
-		}
+#content #content_upper {
+	height: 450px;
+	margin: 0 auto;
+}
 
-		#content #content_upper {
-			height: 450px;
-			margin: 0 auto;
-		}
+#content #content_under {
+	height: 250px;
+}
 
-		#content #content_under {
-			height: 250px;
-		}
+#content #content_under #myinfo {
+	float: left;
+	width: 400px;
+	margin-top: 50px;
+}
 
-		#content #content_under #myinfo {
-			float: left;
-			width: 400px;
-			margin-top: 50px;
-		}
+#content #content_under #myinfo #myinfo_form {
+	width: 300px;
+	margin: 0 auto;
+}
 
-		#content #content_under #myinfo #myinfo_form {
-			width: 300px;
-			margin: 0 auto;
-		}
+#content #content_under #myinfo #myinfo_form #mypic {
+	float: left;
+	height: 100px;
+	width: 100px;
+}
 
-		#content #content_under #myinfo #myinfo_form #mypic {
-			float: left;
-			height: 100px;
-			width: 100px;
-		}
+#content #content_under #myinfo #myinfo_form #welcome {
+	float: right;
+	line-height: 50px;
+	width: 190px;
+	text-align: center;
+}
 
-		#content #content_under #myinfo #myinfo_form #welcome {
-			float: right;
-			line-height: 50px;
-			width: 190px;
-			text-align: center;
-		}
+#content #content_under #myinfo #myinfo_form2 {
+	overflow: auto;
+	width: 300px;
+}
 
-		#content #content_under #myinfo #myinfo_form2 {
-			overflow: auto;
-			width: 300px;
-		}
+#content #content_under #mywork {
+	float: right;
+	width: 395px;
+	margin: 100px auto;
+}
 
-		#content #content_under #mywork {
-			float: right;
-			width: 395px;
-			margin: 100px auto;
-		}
+#content #content_under #mywork #mywork_form {
+	width: 395px;
+	text-align: center;
+}
+</style>
+<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 
-		#content #content_under #mywork #mywork_form {
-			width: 395px;
-			text-align: center;
-		}
-
-	</style>
-	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
-
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('.topmenu').mouseenter(function() {
-				$('.submenu').css('display', 'block')
-			});
-			$('.topmenu').mouseleave(function() {
-				$('.submenu').css('display', 'none')
-			});
-			$('#header>img').click(function() {
-				location.href = 'main.adm'
-			}).mouseenter(function() {
-				$('#header>img').css('cursor', 'pointer')
-			});
-
-			updateData();
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.topmenu').mouseenter(function() {
+			$('.submenu').css('display', 'block')
 		});
-
-		function updateData() {
-			$.ajax({
-				type: "get",
-				url: "teacher/teacherStatus.jsp",
-				datatype: "json",
-				error: function(data) {
-					var show = "";
-					$.each(data, function(index, item) {
-						console.log(item.name);
-						show += "<span>" + "지점:" + item.lecName + "</span><br>";
-						show += "<span>" + "소속:" + item.totalyDays + "</span><br>";
-						show += "<span>" + "신청 현황:" + getSubmission + "</span><br>";
-						show += "<span>" + "Q&A 문의:" + totalQnalNum + "</span><br>";
-
-					});
-				}
-			});
-		}
-
-	</script>
+		$('.topmenu').mouseleave(function() {
+			$('.submenu').css('display', 'none')
+		});
+		$('#header>img').click(function() {
+			location.href = 'main.adm'
+		}).mouseenter(function(){
+			$('#header>img').css('cursor', 'pointer')
+		});
+		
+		updateData();
+	});
+	
+	function updateData(){
+		$.ajax({
+			type:"get",
+			url:"teacher/teacherStatus.jsp",
+			datatype : "json",
+			error :function(data){
+				var show="";
+				$.each(data, function(index,item){
+					console.log(item.name);
+					show+="<span>"+"지점:"+item.lecName+"</span><br>";
+					show+="<span>"+"소속:"+item.totalyDays+"</span><br>";
+					show+="<span>"+"신청 현황:"+getSubmission+"</span><br>";
+					show+="<span>"+"Q&A 문의:"+totalQnalNum+"</span><br>";
+					
+				});
+			}
+		});
+	}
+		
+</script>
 
 </head>
 
@@ -136,16 +136,16 @@
 			<div id="content_upper">
 				<div id="calender">
 					<h1>달력</h1>
-					
 					<jsp:include page="call_calendar_A.jsp" flush="false"></jsp:include>
 				</div>
 			</div>
 			<div id="content_under">
+			<!--
 				<div id="myinfo">
 					<div id="myinfo_form">
 						<img id="mypic" alt="mypic" src="img/person_sample.png">
 						<div id="welcome">
-							<h1><%=request.getAttribute("name")%></h1>
+							<h1></h1>
 							<p>님 환영합니다!</p>
 						</div>
 					</div>
@@ -158,6 +158,7 @@
 						<label for="today_a">신청현황 </label> <span> ?? / 30</span> <br /> <label for="today_q">문의현황 </label> <span> ?? / 30</span>
 					</div>
 				</div>
+				  -->
 			</div>
 		</div>
 

@@ -4,6 +4,10 @@ public class AssignmentDto {
 	private String title,writeDate, situation,writer,content;
 	private int assignmentId, lectureId , rowNum;
 	
+	public AssignmentDto() {
+		
+	}
+	
 	public String getTitle() {
 		return title;
 	}

@@ -135,7 +135,4 @@ public class UserDto {
 		return "UserDto [userId=" + userId + ", name=" + name + ", belong="
 				+ belong + ", lectureId=" + lectureId + "]";
 	}
-
-	
-	
 }

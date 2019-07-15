@@ -45,15 +45,9 @@ public class TeacherController extends HttpServlet {
 
 		try {
 			if (userBean.getBelong().equals("teacher")) {
-				TeacherDao dao = new TeacherDao();
-		
-				
+				TeacherDao dao = new TeacherDao();				
 				if (path.equals("/main.tea")) {
-					
 					req.setAttribute("userBean", userBean);
-					
-
-
 					req.setAttribute("numStu", dao.getStuNum(userBean.getLectureId()));
 					req.setAttribute("checkinNum", dao.getCheckinNum(userBean.getLectureId()));
 					req.setAttribute("submissionNum", dao.getSubmissionNum(userBean.getLectureId()));
@@ -63,7 +57,6 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/main_T.jsp");
 
 				}else if (path.equals("/attendance.tea")) {
-
 					 req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
 					 rd = req.getRequestDispatcher("teacher/attendance_T.jsp");
 				}else if (path.equals("/score.tea")) {
@@ -86,14 +79,14 @@ public class TeacherController extends HttpServlet {
 					rd = req.getRequestDispatcher("teacher/assignment_T_detail.jsp");
 				
 				}else if (path.equals("/qna.tea")) {
-					ArrayList<QnaLDto> qnaLList = dao.getQnaLList(userBean.getUserId());
-					req.setAttribute("qnaLList", qnaLList);
+					req.setAttribute("qnaLList", dao.getQnaLList(userBean.getLectureId()));
 					rd = req.getRequestDispatcher("teacher/qna_T.jsp");
 
 				}else if (path.equals("/qna_detail.tea")) {
 					int qnaLId = Integer.parseInt(req.getParameter("idx"));	
-					req.setAttribute("QnaLBean", dao.getQnaL(qnaLId));
-					rd = req.getRequestDispatcher("teacher/qna_T_deatil.jsp");
+					System.out.println(qnaLId);
+					req.setAttribute("qnaLBean", dao.getQnaL(qnaLId));
+					rd = req.getRequestDispatcher("teacher/qna_T_detail.jsp");
 
 				}else if (path.equals("/attendance.tea")) {
 					req.setAttribute("todayAttendanceList",dao.getTodayAttendance(userBean.getLectureId()));
@@ -109,14 +102,13 @@ public class TeacherController extends HttpServlet {
 					String yearMonthDay = "2019-07-10";
 					String yearMonth = yearMonthDay.substring(0,7);
 					
-					JSONArray calendarMonthListJson = dao.getCalendarMonthListJson(yearMonth, userBean.getLectureId());
+					JSONArray calendarMonthListJson = dao.getCalendarMonthListJson(userBean.getLectureId());
 					PrintWriter out = resp.getWriter();
 					out.write(calendarMonthListJson.toJSONString());
 					out.close();
 				}
 				
 				
-				//Forward only when rd is used.
 				if(rd!=null){
 					rd.forward(req, resp);
 				}
@@ -146,8 +138,8 @@ public class TeacherController extends HttpServlet {
 
 		RequestDispatcher rd = null;
 		
-		//insert, edit, delete �쓽 寃곌낵 �궡�슜�쓣 ���옣�븯�뒗 result
-		///�뼱�뼸寃� �궗�슜�븷吏� �븘吏� 誘몄젙
+		//insert, edit, delete 의 결과 내용을 저장하는 result
+		///어떻게 사용할지 아직 미정
 		int result = 0;
 
 		try {
@@ -158,19 +150,16 @@ public class TeacherController extends HttpServlet {
 				if(path.equals("")){
 					
 
-				
-				}else if (path.equals("/assignment_insert.tea")) {//assignment insert�뜝�럥�뱺�뜝�럡�맋 post�뛾�렮維쀯옙六쇔뜝�럩紐드슖�댙�삕 �뜝�럡�맂�뇦猿뗫닔占쎈굵�뜝�럥瑜�
-					
-
+				}else if (path.equals("/assignment_insert.tea")) {//assignment insert
 					AssignmentDto assignmentBean=new AssignmentDto();
 					
 					assignmentBean.setTitle(req.getParameter("title"));
 					assignmentBean.setContent(req.getParameter("content"));
 					assignmentBean.setLectureId(userBean.getLectureId());
 					assignmentBean.setWriter(userBean.getUserId());
-					result=dao.insertAssignment(assignmentBean);///result瑜� �뼱�뼸寃� �궗�슜�븷吏� �굹以묒뿉 �깮媛�
+					result=dao.insertAssignment(assignmentBean);///result를 어떻게 사용할지 나중에 생각
 					
-					rd = req.getRequestDispatcher("/assignment_detail.tea?idx=");	//由ъ뒪�듃 �럹�씠吏�濡�
+					rd = req.getRequestDispatcher("/assignment_detail.tea?idx=");	//리스트 페이지로
 
 					
 				} else if (path.equals("/assignment_edit.tea")) {
@@ -178,30 +167,30 @@ public class TeacherController extends HttpServlet {
 					String content = req.getParameter("content");
 					String assignmentId = req.getParameter("assignmentId");
 					result = dao.updateAssignment(title,content,assignmentId);
-					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assignmentId);	///�뜝�럥�빢�뜝�럩�젧�뜝�럥由� �뜝�럥�쓡�뜝�럩逾좂춯�쉻�삕�슖�댙�삕
+					rd = req.getRequestDispatcher("/assignment_detail.ttkea?idx="+assignmentId);
+
 				} else if (path.equals("/assignment_delete.tea")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));
 					result = dao.deleteAssignment(assignmentId);
 					rd = req.getRequestDispatcher("teacher/assignment_T_.jsp");
-				
-				}else if (path.equals("/qnaAnswer_insert.tea")) {//qna�뜝�럥�뱺�뜝�럡�맋 �뜝�럥堉쀧솻洹⑥삕�뜝�럩諭� �뜝�럩肉��뜝�럩�졑 �뜝�럩援℡뜝�럥裕� �뜝�럥�빢�뜝�럩�젧�뜝�럥留됧뜝�럥瑜� 
-					String answerContent = req.getParameter("answerContent");
-					int questionId = Integer.parseInt(req.getParameter("questionId"));
-					result = dao.updateQnaLAnswer(answerContent,questionId);
-					rd = req.getRequestDispatcher("/qna_detail.tea?idx="+questionId);	//占쎈뎨占쎈봾裕욃뜝�럥諭� �뜝�럥�쓡�뜝�럩逾좂춯�쉻�삕�슖�댙�삕
-				}else if(path.equals("/calendar_insert.tea")){
-					String startDate = req.getParameter("startDate");
-					String endDate = req.getParameter("endDate");
-					String title = req.getParameter("title");
-					String content = req.getParameter("content");
-					result = dao.insertCalendar(startDate, endDate, title, content, userBean.getLectureId());
-				}
-
-				if(result>0){
-					rd.forward(req, resp);					
-				}
-				
-				if(path.equals("/attendance_check.tea")){
+				}else if(path.equals("/qna_update.tea")){
+					QnaLDto bean = new QnaLDto();
+					bean.setQnaLId(Integer.parseInt(req.getParameter("qnaLId")));
+					bean.setAnswerContent(req.getParameter("questionAnswer"));
+					System.out.println("bean = "+bean.toString());
+					result = dao.updateQnaL(bean);
+					System.out.println("result = "+result);
+					
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();
+				}else if (path.equals("/qna_delete.tea")) {
+					// 큐엔에이 삭제 페이지
+					result = dao.deleteQnaL(Integer.parseInt(req.getParameter("qnaLId")));
+					PrintWriter out = resp.getWriter();
+					out.write("OK");
+					out.close();
+				}else if(path.equals("/attendance_check.tea")){
 					String stdId = req.getParameter("id");
 					String btn = req.getParameter("btn");
 					System.out.println(stdId+":"+btn);
@@ -212,8 +201,7 @@ public class TeacherController extends HttpServlet {
 						out.write("{\"msg\":\"성공적으로 수정되었습니다\"}");
 						out.close();
 					}
-				}
-				else if (path.equals("/calendar_insert.tea")) {
+				}else if (path.equals("/calendar_insert.tea")) {
 					// calendar insert 페이지
 					CalendarDto calendarBean = new CalendarDto();
 					calendarBean.setLectureId(userBean.getLectureId());	
@@ -222,7 +210,7 @@ public class TeacherController extends HttpServlet {
 					calendarBean.setTitle(req.getParameter("title"));
 					calendarBean.setContent(req.getParameter("content"));
 					result = dao.insertCalendar(calendarBean);
-				}else if(path.equals("/calendar_update1.tea")){	//drag를 통한 업데이트
+				}else if(path.equals("/calendar_updateDrag.tea")){	//drag를 통한 업데이트
 					CalendarDto calendarBean = new CalendarDto();
 					calendarBean.setCalendarId(Integer.parseInt(req.getParameter("calendarId")));
 					calendarBean.setTitle(req.getParameter("title"));
@@ -234,7 +222,7 @@ public class TeacherController extends HttpServlet {
 					System.out.println(calendarBean.toString());
 					result = dao.updateCalendar(calendarBean);
 					System.out.println("result = "+result);
-				}else if(path.equals("/calendar_update2.tea")){	//상세 보기 > 수정을 통한 업데이트
+				}else if(path.equals("/calendar_updateEdit.tea")){	//상세 보기 > 수정을 통한 업데이트
 					CalendarDto calendarBean = new CalendarDto();
 					calendarBean.setCalendarId(Integer.parseInt(req.getParameter("calendarId")));
 					calendarBean.setTitle(req.getParameter("title"));
@@ -252,6 +240,10 @@ public class TeacherController extends HttpServlet {
 				}else {
 					System.out.println("존재하지 않는 페이지");
 
+				}
+				
+				if(result>0){
+					rd.forward(req, resp);					
 				}
 			}else {
 				

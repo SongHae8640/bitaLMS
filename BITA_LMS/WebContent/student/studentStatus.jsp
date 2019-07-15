@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> song2
 <%@page import="com.bit.model.UserDto"%>
 <%@page import="com.bit.model.StudentDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -10,7 +14,11 @@
 	int totalQnaLNum = -1;
 	int progressDays = -1;
 	
+<<<<<<< HEAD
 	//System.out.println("studentSatus :: userBean = "+userBean.toString());
+=======
+	System.out.println(userBean.toString());
+>>>>>>> song2
 	
 	
 	attendanceDays = dao.getAttendanceDays(userBean.getUserId());

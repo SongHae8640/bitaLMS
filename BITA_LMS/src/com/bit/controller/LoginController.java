@@ -23,7 +23,9 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		HttpSession session = req.getSession();
+		System.out.println("LoginController(doGet) :: ");
 		
+<<<<<<< HEAD
 		if(path.equals("/login.bit")||path.equals("/index.bit")){
 			//로그인페이지는 세션이 없을때에만 접근가능
 			if(session.getAttribute("userBean") == null){
@@ -36,6 +38,20 @@ public class LoginController extends HttpServlet {
 					resp.sendRedirect("main.tea");
 				}else if(userBean.getBelong().equals("admin")){
 					resp.sendRedirect("main.adm");
+=======
+			if(path.equals("/login.bit")||path.equals("/index.bit")){
+
+				//로그인페이지는 세션이 없을때에만 접근가능
+				if(session.getAttribute("userBean") != null){
+					session.invalidate();
+					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
+					rd.forward(req, resp);
+				}
+				if(session.getAttribute("userBean") == null){
+					RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
+					rd.forward(req, resp);
+				//이미 로그인을 한 후에는 로그아웃을 해야지만 재로그인을 할 수 있다.
+>>>>>>> song2
 				}else{
 					resp.sendRedirect("main.stu");
 				}
