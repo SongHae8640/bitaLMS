@@ -1,7 +1,10 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@page import="com.bit.model.LectureDto"%>
+<%@page import="java.util.ArrayList"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
@@ -110,6 +113,7 @@
 </script>
 
 </head>
+
 <body>
 	<div>
 		<div id="header">
@@ -121,7 +125,8 @@
 					<ul class="submenu">
 						<li><a href="register.adm">학생등록</a></li>
 						<li><a href="manage_stu.adm">수강생관리</a></li>
-					</ul></li>
+					</ul>
+				</li>
 				<li><a href="manage_lec.adm">강좌관리</a></li>
 				<li><a href="manage_tea.adm">강사관리</a></li>
 				<li><a href="qna.adm">1:1문의</a></li>
@@ -135,25 +140,25 @@
 				</div>
 			</div>
 			<div id="content_under">
+			<!--
 				<div id="myinfo">
 					<div id="myinfo_form">
 						<img id="mypic" alt="mypic" src="img/person_sample.png">
 						<div id="welcome">
-							<h1><%=request.getAttribute("name")%></h1>
+							<h1></h1>
 							<p>님 환영합니다!</p>
 						</div>
 					</div>
 					<div id="myinfo_form2">
-						<label for="branch">지점 :</label> <span>비트교육센터 안양지점</span> <br /> <label
-							for="belong">소속 :</label> <span>belong</span>
+						<label for="branch">지점 :</label> <span>비트교육센터 안양지점</span> <br /> <label for="belong">소속 :</label> <span>belong</span>
 					</div>
 				</div>
 				<div id="mywork">
 					<div id="mywork_form">
-						<label for="today_a">신청현황 </label> <span> ?? / 30</span> <br /> <label
-							for="today_q">문의현황 </label> <span> ?? / 30</span>
+						<label for="today_a">신청현황 </label> <span> ?? / 30</span> <br /> <label for="today_q">문의현황 </label> <span> ?? / 30</span>
 					</div>
 				</div>
+				  -->
 			</div>
 		</div>
 
@@ -170,4 +175,5 @@
 		</div>
 	</div>
 </body>
+
 </html>

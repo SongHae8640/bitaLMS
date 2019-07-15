@@ -164,8 +164,8 @@
 									for(LectureDto bean : LectureList){
 					%>
 					<tr>
-							<td><%=bean.getLectureID()%></td>
-							<td><a href="manage_lec_detail.adm?idx=<%=bean.getLectureID()%>"><%=bean.getName()%></a></td>
+							<td><%=bean.getLectureId()%></td>
+							<td><a href="manage_lec_detail.adm?idx=<%=bean.getLectureId()%>"><%=bean.getName()%></a></td>
 							<td><%=bean.getTeaName()%></td>
 							<td><%=bean.getStartDate()%></td>
 					</tr>

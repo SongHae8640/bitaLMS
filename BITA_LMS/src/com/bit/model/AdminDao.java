@@ -4,8 +4,10 @@
 
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,16 +20,47 @@ public class AdminDao extends Dao {
 	//월별 수강생관리 페이지 월은 ?idx=""로 받아오기
 	//제일 처음 접근일 때는 sysdate로 가져오기
 	//날짜이동버튼을 누르면 제이쿼리에서 2019-07에서 -1을 하든 +1을 하든 해서 idx값으로 넘겨주기	
-	public JSONArray getCalendarMonthListJson(String yearMonth) {
+	public JSONArray getCalendarMonthListJson() {
+		JSONArray jArray = new JSONArray();
+		String sql = "SELECT c.calendar_id, c.lecture_id, c.title, c.content,l.name, "
+				+ "TO_CHAR(c.start_date,'YYYY-MM-DD HH24:MI:SS') as \"start_date\" ,TO_CHAR(c.end_date,'YYYY-MM-DD HH24:MI:SS') as \"end_date\" "
+				+ "FROM calendar c JOIN lecture l ON c.lecture_id = l.lecture_id ";
+		try {
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();	
+			while(rs.next()){
+				CalendarDto bean = new CalendarDto();
+				bean.setCalendarId(rs.getInt("calendar_id"));
+				bean.setLectureId(rs.getInt("lecture_id"));
+				bean.setTitle(rs.getString("title"));
+				bean.setContent(rs.getString("content"));
+				bean.setStartDate(rs.getString("start_date").replaceAll(" ", "T"));
+				bean.setEndDate(rs.getString("end_date").replaceAll(" ", "T"));
+				bean.setLectureName(rs.getString("name"));
+				jArray.add(bean.getJsonObject());
+			}
+				
+		} catch (SQLException e) {
+			System.out.println(e);
+		}catch (NullPointerException e) {
+			System.out.println(e);
+		}finally{
+			closeConnection();
+		}
+		return jArray;
+	}
+	
+	public JSONArray getCalendarMonthListJson(int lectureId) {
 		JSONArray jArray = new JSONArray();
 		String sql = "SELECT c.calendar_id, c.lecture_id, c.title, c.content,l.name, "
 				+ "TO_CHAR(c.start_date,'YYYY-MM-DD HH24:MI:SS') as \"start_date\" ,TO_CHAR(c.end_date,'YYYY-MM-DD HH24:MI:SS') as \"end_date\" "
 				+ "FROM calendar c JOIN lecture l ON c.lecture_id = l.lecture_id "
-				+ "WHERE TO_CHAR(c.start_date,'YYYY-MM') = ?";	
+				+ "WHERE c.lecutre_id = ? ";
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, yearMonth);
+			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();	
 			while(rs.next()){
 				CalendarDto bean = new CalendarDto();
@@ -179,7 +212,7 @@ public class AdminDao extends Dao {
 			
 			while(rs.next()){
 				LectureDto bean = new LectureDto();
-				bean.setLectureID(rs.getInt("lecture_id"));
+				bean.setLectureId(rs.getInt("lecture_id"));
 				bean.setName(rs.getString("name"));
 				bean.setNumStd(rs.getInt("num_std"));
 				bean.setMaxStd(rs.getInt("max_std"));			
@@ -211,7 +244,7 @@ public class AdminDao extends Dao {
 			
 			while(rs.next()){
 				LectureDto bean = new LectureDto();
-				bean.setLectureID(rs.getInt("lecture_id"));
+				bean.setLectureId(rs.getInt("lecture_id"));
 				bean.setName(rs.getString("name"));
 				bean.setStartDate(rs.getString("startDate"));
 				bean.setTeaName(rs.getString("teaName"));
@@ -254,7 +287,7 @@ public class AdminDao extends Dao {
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()){
-				bean.setLectureID(rs.getInt("lecNum"));
+				bean.setLectureId(rs.getInt("lecNum"));
 				bean.setNumStd(rs.getInt("num_std"));
 				bean.setTotalDays(rs.getInt("total_days"));
 				bean.setMaxStd(rs.getInt("max_std"));
@@ -662,88 +695,280 @@ public class AdminDao extends Dao {
 	public ArrayList<QnaLDto> getQnaLList() {
 		openConnection();
 		ArrayList<QnaLDto> list = new ArrayList<QnaLDto>();
-		String sql = "SELECT row_number() OVER(ORDER BY write_date) num, title, name as \"std_name\","
-				+ "TO_CHAR(write_date,'yyyy-mm-dd') as write_date ,is_respon, type "
-				+ "FROM "
-				+ "WHERE type='행정'";
+		String sql = "SELECT row_number() OVER(ORDER BY write_date) num ,qnal_id, u.name as \"name\", std_id, type, question_content,"
+				+ "title, answer_content, TO_CHAR(write_date,'YYYY-MM-DD') as \"write_date\", is_check "
+				+ "FROM qna_l q "
+				+ "JOIN user01 u ON q.std_id = u.user_id "
+				+ "WHERE type = '행정' "
+				+ "ORDER BY is_check , write_date desc";
+		
 		
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-			while(rs.next()){
+			
+			while(rs.next()) {
 				QnaLDto bean = new QnaLDto();
 				bean.setRowNum(rs.getInt("num"));
+				bean.setQnaLId(rs.getInt("qnal_id"));
+				bean.setStuId(rs.getString("std_id"));
+				bean.setStdName(rs.getString("name"));
 				bean.setTitle(rs.getString("title"));
-				bean.setStdName(rs.getString("std_name"));
 				bean.setWriteDate(rs.getString("write_date"));
 				bean.setType(rs.getString("type"));
+				bean.setQuestionContent(rs.getString("question_content"));
+				bean.setAnswerContent(rs.getString("answer_content"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setIsCheck(rs.getString("is_check"));
 				list.add(bean);
 			}
-			
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		}finally {
 			closeConnection();
 		}
-		
 		return list;
 	}
 	
 	//행정팀 큐엔에이 상세
 	public QnaLDto getQnaL(int qnaLId) {
-		openConnection();
+		QnaLDto bean = new QnaLDto();
+		String sql ="SELECT qnal_id, u.name, std_id, type, question_content, title, "
+				+ "answer_content, TO_CHAR(write_date,'YYYY-MM-DD') as \"write_date\", is_check "
+				+ "FROM qna_l q "
+				+ "JOIN user01 u ON q.std_id = u.user_id "
+				+ "WHERE q.qnal_id = ? ";
+		
 		try{
-			
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, qnaLId);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				bean.setQnaLId(rs.getInt("qnal_id"));
+				bean.setStuId(rs.getString("std_id"));
+				bean.setStdName(rs.getString("name"));
+				bean.setTitle(rs.getString("title"));
+				bean.setType(rs.getString("type"));
+				bean.setQuestionContent(rs.getString("question_content"));
+				bean.setAnswerContent(rs.getString("answer_content"));
+				bean.setWriteDate(rs.getString("write_date"));
+				bean.setIsCheck(rs.getString("is_check"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}finally{
 			closeConnection();
 		}
-		return null;
+		return bean;
 	}
 	
-	//행정팀 큐엔에이 삭제
-	//여러개삭제할때는 배열로 보내주면 됨
-	//그냥 하나일 수도 있고 하나면 배열에 하나만 들어있겠지
-	public int deleteQnaL(int[] qnaLIdList) {
-		openConnection();
-		try{
-			
-		}finally{
-			closeConnection();
-		}
-		return 0;	
-	}
+	
 	
 	//행정팀 큐엔에이 답변등록
 	public int updateQnaL(QnaLDto qnaLBean) {
-		openConnection();
+		int result = -1;
+		String sql = "UPDATE qna_l SET answer_content = ?, is_check='1' WHERE qnal_id =?";
 		try{
-			
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, qnaLBean.getAnswerContent());
+			pstmt.setInt(2, qnaLBean.getQnaLId());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}finally{
 			closeConnection();
 		}
-		return 0;
+		return result;
 	}
-	
+	//행정팀 큐엔에이 삭제
+	public int deleteQnaL(int qnaLId) {
+		String sql = "DELETE FROM qna_l WHERE qnal_id = ?";
+		int result = -1;
+		try{
+			openConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, qnaLId);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			closeConnection();
+		}
+		return result;	
+	}
 	
 
 	
 	//매일(수업이 있는) 오전 6시 모든 학생의 출석 row를 생성
 	//checkin, checkout 모두 null
-	public int insertAttendanceAll(ArrayList<UserDto> stuList) {
-		openConnection();
+	public ArrayList<Integer> insertAttendanceAll() {
+		ArrayList<String> stuList = new ArrayList<String>();
+		ArrayList<Integer> resultList = new ArrayList<Integer>();
+		int result = -1;
 		
-		closeConnection();
-		return -1;
+		//교육 기간 중에 있는 모든 학생의 id를 모음
+		String selectStuSql = "SELECT u.user_id "
+				+ "FROM user01 u "
+				+ "JOIN lectureUser lu ON u.user_id = lu.user_id "
+				+ "JOIN lecture l ON lu.lecture_id = l.lecture_id "
+				+ "WHERE u.belong = 'student' "
+				+ "AND (SYSDATE BETWEEN l.start_date AND l.end_date)";
+		
+		//출석 테이블에 당일 row를 삽입
+		// 그냥 sysdate로 하면 시간에 따라 중복 삽입이 가능하니 년월일로 만듬
+		String insertAttendanceSql = "INSERT INTO attendance(day_time,std_id) VALUES(TO_DATE(TO_CHAR(SYSDATE,'YYYY-MM-DD'),'YYYY-MM-DD'), ?)";
+		try {
+			openConnection();
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(selectStuSql);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				stuList.add(rs.getString("user_id"));
+			}
+			System.out.println("대상 학생 id : "+stuList.toString());
+			closeConnection();
+			openConnection();
+			for(int idx = 0 ; idx <stuList.size() ; idx ++){
+				pstmt = conn.prepareStatement(insertAttendanceSql);
+				pstmt.setString(1, stuList.get(idx));
+				result = pstmt.executeUpdate();
+				System.out.println(result);
+			}
+			conn.commit();
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally{
+			try {
+				conn.setAutoCommit(true);
+				closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return resultList;
 	}
 	
 	//매일(수업이 있는) 오후 11시 모든 학생의 출석 상태를 수정
 	//checkinTime과 checkoutTime을 비교해서 출석,지각, 결석, 조퇴 중 하나로 변경
-	public int updateAttendanceAll(ArrayList<UserDto> stuList) {
-		openConnection();
+	public int updateAttendanceAll(String updateDay) {
+		//오후 11시 기준으로 출석이 있는 강좌를 듣는 학생들
+		String selectStuSql = " SELECT a.std_id, TO_CHAR(checkin_time, 'HH24:MI:SS') as \"checkin_time\" ,TO_CHAR(checkout_time, 'HH24:MI:SS') as \"checkout_time\" "
+				+ "FROM user01 u "
+				+ "JOIN lectureUser lu ON u.user_id = lu.user_id "
+				+ "JOIN lecture l ON l.lecture_id = lu.lecture_id "
+				+ "JOIN attendance a ON a.std_id = u.user_id "
+				+ "WHERE u.belong = 'student' "
+				+ "AND (SYSDATE BETWEEN l.start_date AND l.end_date)";
 		
-		closeConnection();
+		//
+		String updateStatusSql = "UPDATE attendance SET status=? "
+				+ "WHERE (? = TO_CHAR(day_time,'YYYY-MM-DD')) "
+				+ "AND std_id =?";
+		
+		
+		ArrayList<AttendanceDto> attendanceList = new ArrayList<AttendanceDto>(); 
+		ArrayList<Integer> resultList = new ArrayList<Integer>();
+		String status= "";
+		
+		
+		
+		try {
+			openConnection();
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(selectStuSql);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+				AttendanceDto bean = new AttendanceDto();
+				bean.setStdId(rs.getString("std_id"));
+				bean.setCheckinTime(rs.getString("checkin_time"));
+				bean.setCheckoutTime(rs.getString("checkout_time"));
+				
+				pstmt = conn.prepareStatement(updateStatusSql);
+				status = calculateStatus(bean);
+				pstmt.setString(1, status);
+				pstmt.setString(2, updateDay);
+				pstmt.setString(3, bean.getStdId());
+				resultList.add(pstmt.executeUpdate());
+			}
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}catch (ParseException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally{
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
+				closeConnection();
+			}
+			
+		}
+		
+		
 		return -1;
+	}
+
+	private String calculateStatus(AttendanceDto bean) throws ParseException {
+		//체크인 또는 체크아웃을 하지 않은 경우 -> 결석
+		if((bean.getCheckinTime() ==null) || (bean.getCheckoutTime() ==null)){
+			return "결석";
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date checkinTime = dateFormat.parse(bean.getCheckinTime());
+		Date checkoutTime = dateFormat.parse(bean.getCheckoutTime());
+		
+		boolean isLate = false;
+		boolean isEarly = false;
+		
+		String status ="출석";
+		
+		//지각 check
+		if(checkinTime.getHours() >9){
+			if(checkinTime.getMinutes()>40){
+				isLate = true;
+			}
+		}
+		
+		//조퇴 check
+		if(checkoutTime.getHours() < 18){
+			isEarly = true;
+		}
+		
+		if(isLate &&isEarly){
+			status = "결석";
+		}else if(isLate){
+			status = "지각";
+		}else if(isEarly){
+			status = "조퇴";
+		}
+		return status;
 	}
 
 	//출석업데이트
