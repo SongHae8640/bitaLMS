@@ -1,3 +1,5 @@
+<%@page import="com.bit.model.QnaLDto"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -75,14 +77,10 @@
 	#content #under_list div{
 	width: 80px;
 	}
-	#content #under_list #list_button{
+	#list_button{
 	float: left;
 	}
-	#content #under_list #ans_button{
-	float: right;
-	}
-	#content #under_list #ok_button{
-	width: 43px;
+	#ans_button{
 	float: right;
 	}
 </style>
@@ -95,17 +93,69 @@
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
 		});
-		$('#del_btn').click(function(){
-			var result = confirm('정말 삭제하시겠습니까?'); 
-			if(result) { //yes-해당수강신청삭제
-				location.replace('register.adm'); } 
-			else { 
-				//no-변동사항없음
-				} 
-			});
+
+		
 		$('#list_btn').click(function(){
-				location.replace('qna.adm'); } 
-			});
+				location.replace('qna.adm'); 
+		});
+		
+		$('#delete_btn').click(function(){
+			if(!confirm("정말 삭제하시겠습니까?")){
+				console.log("삭제안함")
+				return false;
+			}
+			console.log("삭제")
+			$.ajax({
+				url : "qna_delete.adm",
+				type : "POST",
+				data : {
+						qnaLId : $('#qnaLId').text()
+				},
+				success : function(data){
+					if(data =='OK'){
+						console.log("삭제 성공");
+						location.href = "qna.adm";	
+					}else{
+						console.log("삭제 실패");
+					}
+					
+				},
+				error : function(){
+					console.log("삭제 실패");
+				}
+			})
+			
+		});
+		
+		$('#ans_btn').click(function(){
+			var questionAnswer = $('#qnaLAnswer').val();
+			if(!questionAnswer){
+				alert("답변을 입력 하시오.");
+				return false;
+			}
+
+			$.ajax({
+				url : "qna_update.adm",
+				type : "POST",
+				data : {
+						qnaLId : $('#qnaLId').text(),
+						questionAnswer : questionAnswer
+				},
+				success : function(data){
+					if(data =='OK'){
+						console.log("답변 성공");
+						location.href = "qna_detail.adm?idx="+$('#qnaLId').text();	
+					}else{
+						console.log("답변 실패");
+					}
+					
+				},
+				error : function(){
+					console.log("답변 실패");
+				}
+			})
+			
+		});
 	});
 </script>
 </head>
@@ -139,42 +189,69 @@
 			</div>
 			<br/><br/>
 		<div id="q_detail">
+		<%
+			QnaLDto bean = (QnaLDto)request.getAttribute("qnaLBean");
+		%>
 			<table>
+				<div >
+					<span id="qnaLId" style="display:none;"><%=bean.getQnaLId()%></span>
+				</div>
 					<tr>
 						<th>제목</th>
-						<td>프린트사용가능한가요?</td>
+						<td><%=bean.getTitle() %></td>
 					</tr>
 					<tr>
 						<th>작성자</th>
-						<td>김코난</td>
+						<td><%=bean.getStdName() %></td>
 					</tr>
 					<tr>
 						<td colspan="2">
 						<div id="qna_content">
 							<div id="submit">
-								<span >작성일 2019-07-03</span>
+								<span ><%=bean.getWriteDate() %></span>
 							</div>
 							<div>
-								<p>출력할게 있는데 프린트사용가능한가용?</p>
+								<p><%=bean.getQuestionContent() %></p>
 							</div>
 						</div>
 						<div id="qna_answer">
-							<span>네 맘껏 사용하세요.</span>
+						<%
+							if(bean.getIsCheck().equals("1")){
+	
+						%>
+							<textarea id="qnaLAnswer" ><%=bean.getAnswerContent() %></textarea>
+						<%
+						}else{
+						%>
+							<textarea id="qnaLAnswer" placeholder="미답변 문의 입니다."></textarea>
+						<%
+							}
+						%>
 						</div>
 						</td>
 					</tr>
 			</table>
 		</div>
 		<div id="under_list">
-			<div id="list_button">
+			<div>
 				<button type="button" id="list_btn">목록</button>
 			</div>
-			<div id="ok_button">
-				<button type="button" id="dok_btn">확인</button>
+			<div>
+			<%
+				if(bean.getIsCheck().equals("1")){
+	
+			%>
+				<button type="button" id="ans_btn">답변수정</button>
+			<%
+				}else{
+			%>
+				<button type="button" id="ans_btn">답변등록</button>
+			<%
+				}
+			%>	
 			</div>
-			<div id="ans_button">
-				<button type="button">답변등록</button>
-			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
+			<div>
+				<button type="button" id="delete_btn">글삭제</button>
 			</div>
 		</div>
 	</div>

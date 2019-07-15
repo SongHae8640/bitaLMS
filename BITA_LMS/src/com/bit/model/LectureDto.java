@@ -1,9 +1,10 @@
 package com.bit.model;
 
 public class LectureDto {
+
 	private int lectureID, numStd, totalDays, maxStd, lv, progressDays, fileId, curriId;
 	private String name, startDate, endDate, content, teaName, teaId;
-	private boolean isClose; //�ʱⰪ false
+	private boolean isClose; //ÃÊ±â°ª false
 
 	public String getTeaName() {
 		return teaName;
@@ -13,8 +14,8 @@ public class LectureDto {
 		this.teaName = teaName;
 	}
 
-	public int getLectureID() {
-		return lectureID;
+	public int getLectureId() {
+		return lectureId;
 	}
 
 	public int getNumStd() {
@@ -53,8 +54,8 @@ public class LectureDto {
 		return isClose;
 	}
 
-	public void setLectureID(int lectureID) {
-		this.lectureID = lectureID;
+	public void setLectureId(int lectureId) {
+		this.lectureId = lectureId;
 	}
 
 	public void setNumStd(int numStd) {
@@ -102,7 +103,7 @@ public class LectureDto {
 
 	@Override
 	public String toString() {
-		return "LectureDto [lectureID=" + lectureID + ", numStd=" + numStd
+		return "LectureDto [lectureId=" + lectureId + ", numStd=" + numStd
 				+ ", totalDays=" + totalDays + ", maxStd=" + maxStd + ", lv="
 				+ lv + ", name=" + name + ", startDate=" + startDate
 				+ ", endDate=" + endDate + ", content=" + content

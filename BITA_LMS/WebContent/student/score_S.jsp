@@ -1,3 +1,4 @@
+<%@page import="com.bit.model.ScoreDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -11,7 +12,7 @@
 #menu>ul {
 	width: 610px;
 	list-style-type: none;
-	margin: 0px auto;
+	margin: 0px auto; 
 }
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -22,6 +23,9 @@
 		});
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
+		});
+		$('#claim_btn').click(function(){
+			location.href='qna_insert.stu';		
 		});
 	});
 </script>
@@ -45,22 +49,30 @@
 				<thead>
 					<tr>
 						<th>이름</th>
-						<th>1차</th>
+						<th>1차</th> 
 						<th>2차</th>
 						<th>3차</th>
 					</tr>
 				</thead>
-				<thead>
+				<tbody>
+				<%
+				ScoreDto scoreBean =(ScoreDto)request.getAttribute("scoreBean");
+				System.out.println("뷰-"+scoreBean);
+				if(scoreBean!=null){
+				%>  
 					<tr>
-						<th>홍길동</th>
-						<th>80</th>
-						<th>70</th>
-						<th>60</th>
+						<td><%=scoreBean.getName() %></td>
+						<td><%=scoreBean.getFirstScore() %></td>
+						<td><%=scoreBean.getSecondScore() %></td>
+						<td><%=scoreBean.getThirdScore() %></td>
 					</tr>
-				</thead>
+				<%
+				}
+				%>
+				</tbody>
 			</table>
 			<div>
-				<button onclick="location='qna_add_S.stu'">이의신청</button>
+				<button type="button" id="claim_btn">이의신청</button>
 			</div>
 		</div>
 		<div id="footer">

@@ -1,8 +1,5 @@
-<%@page import="com.bit.model.StudentDao"%>
-<%@page import="com.bit.model.QnaLDto"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="java.util.Date,java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,15 +22,20 @@
 		});
 		$('.topmenu').mouseleave(function() {
 			$('.submenu').css('display', 'none')
+		}); 
+		$("#submit_btn").click(function(){
+			if($('#title').val()==""){ 
+				alert("제목을 입력해주세요");
+				return false;
+			} 
+			if($('#questionContent').val()==""){
+				alert("내용을 입력해주세요");
+				return false;
+			}     
 		});
-		
-		$('#addBtn').on('click', function(){
-			location.href = "qna_insert.stu";
-		});
-
-	});
-</script>
-</head>
+	}); 
+</script> 
+</head> 
 <body>
 	<div>
 		<div id="header">
@@ -48,41 +50,40 @@
 			</ul>
 		</div>
 		<div id="content">
-			<h2>1:1문의</h2>
-
-			<table border="1">
-				<thead>
-					<tr>
-						<th>번호</th>
-						<th>제목</th>
-						<th>작성자</th>
-						<th>작성일</th>
-						<th>답변여부</th>
-						<th>분류</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-					<%
-					ArrayList<QnaLDto> qList = (ArrayList<QnaLDto>)request.getAttribute("qnaLList");
-					for(QnaLDto bean : qList){
-					%>
-					<tr>
-						<td><%=bean.getRowNum() %></td>
-						<td><a href="qna_detail.stu?idx=<%=bean.getQnaLId() %>"><%=bean.getTitle() %></a></td>
-						<td><%=bean.getStdName() %></td>
-						<td><%=bean.getWriteDate() %></td>
-						<td><%=bean.getIsCheck() %></td>
-						<td><%=bean.getType() %></td>
-					</tr>
-					<%
-					}
-					%>
-				</tbody>
-			</table>
-			<div>
-				<button type="button" id="addBtn">등록</button>
-			</div>
+		<%
+		String name =(String)request.getAttribute("name");
+		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
+		Date time = new Date();
+		String date = format.format(time);
+		%>
+			<h1>1:1문의 등록</h1>
+			<form action="qna_insert.stu" method="post">
+				<div>
+					<label>제목</label><input type="text" name="title" id="title"/>
+				</div>
+				<div>
+					<label>작성자</label><span><%=" "+name %></span>
+				</div>
+				<div>
+					<label>날짜</label><span><%=" "+date %></span>
+				</div>
+				<div>
+					<label>분류</label> 
+					<select name="type"  id="type">
+						<option value="이의신청">이의신청</option>
+						<option value="성적문의">성적문의</option>
+						<option value="기타문의">기타문의</option>
+					</select>
+				</div>
+				<div>
+					<label>내용</label>
+					<textarea name="questionContent" id="questionContent"></textarea>
+				</div>
+				<div>
+					<button type="submit" id="submit_btn">확인</button>
+					<button type="button" id="cancle_btn">취소</button>
+				</div>
+			</form>
 		</div>
 		<div id="footer">
 			<div>

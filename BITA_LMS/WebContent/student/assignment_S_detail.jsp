@@ -1,4 +1,5 @@
-<%@page import="com.bit.model.SubmsissionDto"%>
+<%@page import="com.bit.model.AttachedFileDto"%>
+<%@page import="com.bit.model.SubmissionDto"%>
 <%@page import="com.bit.model.AssignmentDto"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -28,15 +29,19 @@
 
 	$(document).ready(function() {
 		$('#upload').click(function() {
-
+	
 			var input = document.querySelector('#myfile');
+			var idx = document.querySelector('#idx').text;
+			alert(idx);
 			formData = new FormData();
-
 			formData.append('myfile', input.files[0]);
+			formData.append("idx", $('#idx').text());
+			formData.append("submissionBean", $('#submissionBean').text());
+			
 			$.ajax({
 				url : 'upload.bit',
 				method : 'post',
-				data : formData,
+				data : formData, 
 				contentType : false,
 				processData : false,
 				success : function() {
@@ -58,6 +63,11 @@
 				$("input[name=chk]").prop("checked", false);
 			}
 		});
+		$('#assignmentList').click(function(){
+			alert('hi');
+			window.location.href='assignment.stu';
+		});
+
 
 	});
 </script>
@@ -77,9 +87,10 @@
 		</div>
 		<div id="content">
 			<h2>과제 상세</h2>
-<% 
-					AssignmentDto bean_a=(AssignmentDto)request.getAttribute("AssignmentBean");
-					
+<% 					
+					AssignmentDto bean_a=(AssignmentDto)request.getAttribute("assignmentBean");
+/* 					int assignmentId = Integer.parseInt(request.getParameter("idx")); */
+/* 					System.out.println(str[0]); */
 				%>
 				<div>
 					<label>제목</label> <span><%=bean_a.getTitle() %></span>
@@ -89,15 +100,19 @@
 				</div>
 				<div>
 					<label>날짜</label> <span><%=bean_a.getWriteDate() %></span>
+					<a id="idx"><%=bean_a.getAssignmentId() %></a>
 				</div>
 				<div>
 					<label>내용</label>
 					<span><%=bean_a.getContent() %></span>
-				</div>
+					<span id="assignmentBean"><%=request.getAttribute("assignmentBean") %></span>
+					<span id="submissionBean"><%=request.getAttribute("submissionList") %></span>
+ 			</div>
 
 				<div>
-					<button onclick="location='assignment.tea'">과제목록</button>
+					<button id="assignmentList">과제목록</button>
 				</div>
+				
 			<table border="1">
 				<thead>
 					<tr>
@@ -110,16 +125,15 @@
 					</tr>
 				</thead>
 				<tbody>
-					<%	
-							
-						ArrayList<SubmsissionDto> list=(ArrayList<SubmsissionDto>)request.getAttribute("submissionList");
-						for(SubmsissionDto bean_s : list){
-							System.out.println("bean_s="+bean_s);
-							
+				 <%
+/* 				 			AttachedFileDto fileBean=request.getAttribute(""); */
+							ArrayList<SubmissionDto> list=(ArrayList<SubmissionDto>)request.getAttribute("submissionList");
+										for(SubmissionDto bean_s : list){
+											System.out.println("bean_s="+bean_s);
 						%>
 						<tr>
 							<td><%=bean_s.getRowNum() %></td>
-							<td><a href="#"><%=bean_s.getFileName() %></a></td>
+							<td><a id="download" href="http://localhost:9090/BITA_LMS/upload/<%=bean_s.getFileName() %>" download><%=bean_s.getFileName() %></a></td>
 							<td><%=bean_s.getStdName() %></td>
 							<td><%=bean_s.getSubmitDate() %></td>
 							<td><%=bean_s.getIsCheck() %></td>
@@ -130,6 +144,7 @@
 						}
 							
 						%>
+
 				</tbody>
 			</table>
 			<div>

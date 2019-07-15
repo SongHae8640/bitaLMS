@@ -111,9 +111,9 @@
 				%>
 					<tr>
 						<td id="name"><%=scoreList.get(i).getName()%></td>
-						<td><input type="text" name="score"/></td>
-						<td></td>
-						<td></td> 
+						<td><input type="text" name="score" value="<%=scoreList.get(i).getFirstScore()%>"/></td>
+						<td><%=scoreList.get(i).getSecondScore() %></td>
+						<td><%=scoreList.get(i).getThirdScore() %></td> 
 						<td></td>
 					</tr>
 					<%
@@ -122,8 +122,8 @@
 					<tr>
 						<td><%=scoreList.get(i).getName()%></td>
 						<td><%=scoreList.get(i).getFirstScore()%></td>
-						<td><input type="text" name = "score"/></td>
-						<td></td>
+						<td><input type="text" name = "score" value="<%=scoreList.get(i).getSecondScore() %>"/></td>
+						<td><%=scoreList.get(i).getThirdScore() %></td>
 						<td></td>
 				 	</tr>
 					<%
@@ -133,10 +133,10 @@
 						<td><%=scoreList.get(i).getName()%></td>
 						<td><%=scoreList.get(i).getFirstScore() %></td> 
 						<td><%=scoreList.get(i).getSecondScore() %></td> 
-						<td><input type="text" name = "score" /></td>
+						<td><input type="text" name = "score"  value="<%=scoreList.get(i).getThirdScore() %>"/></td>
 				 		<td></td>
 					</tr>
-					<%  
+					<%   
 						}
 					}
 				}

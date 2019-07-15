@@ -23,10 +23,10 @@
 	System.out.println(bean_l.toString());
 	
 	lecName=dao_t.getLecture(bean_t.getTeacherId());
-	totalyDays = dao_t.getTotalDays(bean_l.getLectureID());
-	totalQnaLNum=dao_a.getQnaLNum(bean_t.getTeacherId());
-	getSubmission=dao_t.getSubmissionNum(bean_l.getLectureID());
-	progessDays = dao_t.getProgressDays(bean_l.getLectureID());
+	totalyDays = dao_t.getTotalDays(bean_l.getLectureId());
+	//totalQnaLNum=dao_a.getQnaLNum(bean_t.getTeacherId());
+	//getSubmission=dao_t.getSubmissionNum(bean_l.getLectureID());
+	progessDays = dao_t.getProgressDays(bean_l.getLectureId());
 	
 	
 %>
