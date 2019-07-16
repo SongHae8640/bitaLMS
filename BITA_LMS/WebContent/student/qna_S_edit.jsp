@@ -121,11 +121,11 @@
 					<%
 						if(bean.getIsCheck().equals("1")){
 					%>
-					<textarea id="qnaLAnswer" cols="30" rows="10" readonly="readonly"><%=bean.getAnswerContent() %></textarea>
+					<textarea id="qnaLAnswer" rows="12" cols="80"  readonly="readonly"><%=bean.getAnswerContent() %></textarea>
 					<%
 						}else{
 					%>
-					<textarea id="qnaLAnswer" cols="30" rows="10" readonly="readonly" placeholder="답변 대기 중 입니다."></textarea>
+					<textarea id="qnaLAnswer" rows="12" cols="80"  readonly="readonly" placeholder="답변 대기 중 입니다."></textarea>
 					<%
 						}
 					%>

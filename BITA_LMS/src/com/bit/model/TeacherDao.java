@@ -321,7 +321,7 @@ public class TeacherDao extends Dao{
 				+ "JOIN lectureUser lu ON l.lecture_id = lu.lecture_id "
 				+ "JOIN qna_l q ON lu.user_id = q.std_id "
 				+ "JOIN user01 u ON q.std_id = u.user_id "
-				+ "WHERE l.lecture_id =? AND (q.type='성적문의' OR q.type='강사')";
+				+ "WHERE l.lecture_id =? AND (q.type='성적문의' OR q.type='강사' OR q.type='이의신청')";
 
 		try {
 			openConnection();
@@ -354,7 +354,7 @@ public class TeacherDao extends Dao{
 		// assignmnet_id 는 seq, write_date는 SYSDATE 로 INSERT
 		String sql = "insert into assignment(assignment_id, title, content, lecture_id, write_date)";
 		sql += "values(assignment_id_seq.nextval,?,?,?,SYSDATE)";
-		int result = -1;
+		result = -1;
 		try{
 			openConnection();
 			pstmt=conn.prepareStatement(sql);
@@ -780,8 +780,4 @@ public class TeacherDao extends Dao{
 		return result;
 	}
 
-	public int getSubmissionNum(int lectureId) {
-		int result =-1;
-		return result;
-	}
 }

@@ -118,7 +118,7 @@
 				</div>
 				<div>
 					<label>내용</label>
-					<textarea id="qnaLContent" cols="30" rows="10" ></textarea>
+					<textarea id="qnaLContent" rows="12" cols="80" ></textarea>
 				</div>
 				<div>
 					<button type="button" id="insertBtn">확인</button>

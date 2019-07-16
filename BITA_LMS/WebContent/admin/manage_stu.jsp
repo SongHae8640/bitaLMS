@@ -34,9 +34,6 @@
 	}
 	#content #real_content{
 	position:relative;
-	left:300px;
-	width: 600px;
-	height:700px;
 	}
 	#content #page_name{
 	width: 120px;
@@ -50,13 +47,16 @@
 	}
 	#content #lecture_list{
 	clear:both;
+	position:relative;
+	right:650px;
 	float:right;
 	width: 55px;
+	margin-bottom: 20px;
 	}
 	#content #stu_list{
 	clear:both;
 	width: 600px;
-	height:500px;
+	height:400px;
 	margin: 0 auto;
 	text-align:center;
 	}
@@ -96,7 +96,7 @@
           $( '.stu_ck' ).prop( 'checked', this.checked );
         } );
 		
-		var stuList = $('#stu_list>table>tbody>tr');
+		var stuList = $('#stu_list table>tbody>tr');
 		
 		$('.topmenu').mouseenter(function() {
 			$('.submenu').css('display', 'block')
@@ -122,7 +122,7 @@
 	                  }
 	                  else{
 	                	  stuList.hide();
-		                  var temp = $("#stu_list>table>tbody>tr>td:contains('"
+		                  var temp = $("#stu_list table>tbody>tr>td:contains('"
 		                        + k + "')");
 		                  $(temp).parent().show();
 	                  }
@@ -216,7 +216,7 @@
 				</select>
 			</div>
 			<div id="month_ck">
-				<button type="button" onclick="location.href = 'manage_stu_month.adm'">월별출석표 보기</button>
+				<button type="button" onclick="location.href = 'manage_stu_month.adm'" style="position:relative;left:650px;">월별출석표 보기</button>
 			</div>
 			<div id="stu_list">
 			<form id="form" method="post">
@@ -266,20 +266,7 @@
 		</div>
 		<div id="under_list">
 			<div id="del_button">
-				<button type="button" id="del_btn">삭제</button>
-			</div>
-			<div id="search_box">
-				<form action="register_list.adm">
-					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit">검색</button>
-				</form>
-			</div>
-			<div id="page_button">
-				<button><</button>
-				<button>1</button>
-				<button>2</button>
-				<button>3</button>
-				<button>></button>
+				<button type="button" id="del_btn" style="width:50px">삭제</button>
 			</div>
 		</div>
 	</div>

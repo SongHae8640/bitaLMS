@@ -20,7 +20,8 @@
 	}
 	#content{
 	height:700px;
-	margin: 0 auto;
+	margin: 0px auto;
+	text-align:center;
 	}
 	#content #sidebar{
 	position:absolute;
@@ -39,9 +40,6 @@
 	}
 	#content #real_content{
 	position:relative;
-	left:300px;
-	width: 600px;
-	height:700px;
 	}
 	#content #page_name{
 	width: 120px;
@@ -51,12 +49,16 @@
 	}
 	#content #people_check{
 	float:right;
+	position:relative;
 	width: 130px;
+	right: 600px;
 	}
 	#content #lecture_list{
 	clear:both;
 	float:right;
 	width: 55px;
+	position:relative;
+	right: 650px;
 	}
 	#content #app_list{
 	clear:both;
@@ -90,6 +92,9 @@
 	width: 150px;
 	margin: 0 auto;
 	}
+	#close_btn{
+		width:50px;
+	}
 </style>
 <script type="text/javascript" src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -107,6 +112,9 @@
 			location.href = 'main.adm'
 		}).mouseenter(function(){
 			$('#header>img').css('cursor', 'pointer')
+		});
+		$('#close_btn').click(function(){
+			alert('아직 마감기한이 아닙니다.');
 		});
 
 		$("select[name=lecture_name]").change(
@@ -218,8 +226,8 @@
 				    <option value="회사원" >DB</option> -->
 				</select>
 			</div>
-			<div id="app_list">
-			<table>
+			<div id="app_list" style="padding-top:10px;">
+			<table style="margin-top:20px;">
 				<thead>
 					<tr>
 						<th>번호</th>
@@ -258,21 +266,15 @@
 		</div>
 		<div id="under_list">
 			<div id="close_button">
-				<button type="button">마감</button>
+				<button type="button" id="close_btn">마감</button>
 			</div>
-			<div id="search_box">
+			<!--<div id="search_box">
 				<form action="register_list.adm">
 					<input type="text" id="search_sub" name="search_sub">
 					<button type="submit">검색</button>
 				</form>
 			</div>
-			<div id="page_button">
-				<button><</button>
-				<button>1</button>
-				<button>2</button>
-				<button>3</button>
-				<button>></button>
-			</div>
+			  -->
 		</div>
 	</div>
 	</div>

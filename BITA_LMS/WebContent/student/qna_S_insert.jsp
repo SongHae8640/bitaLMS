@@ -13,6 +13,57 @@
 	list-style-type: none;
 	margin: 0px auto;
 }
+h2{
+	 margin-top: 0px;
+	 margin-bottom:0px;
+	 padding: 0px;
+}
+#content{
+	width:  1000px;
+	height: 700px;
+	margin: 0px auto;
+	padding: 0px;
+} 
+#content #content_wrap1{
+	width: 900px;
+	margin: 0 auto;
+	height: 100%;
+	padding: 0px;
+}
+#content #content_wrap1 #content_wrap2{
+	height: 300px;
+	width:230px; 
+ 	position: relative; 
+ 	top:100px;
+ 	left:30px;
+	margin: 0 auto;
+	
+}
+#content #sidebar{
+	float:left; 
+	height:700px;  
+	width: 187px;
+	text-align:center; 
+	background-color: lightgray;
+	text-align: center;
+}
+#click{
+	display: inline-block;
+	height: 35px;
+	width:100%;
+	background-color: gray;
+}
+#btn_wrap{
+	width:105px;
+	margin: 10px auto;
+}
+#btn_wrap button{
+	display: inline-block;
+	width: 50px;
+}
+#questionContent{
+	height: 150px;
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -50,6 +101,13 @@
 			</ul>
 		</div>
 		<div id="content">
+		<div id="sidebar">
+			<br/><br/><br/><br/>
+			<h3>1:1문의</h3>
+			<br/>
+		</div>
+		<div id="content_wrap1">
+			<div id="content_wrap2">
 		<%
 		String name =(String)request.getAttribute("name");
 		SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
@@ -79,12 +137,14 @@
 					<label>내용</label>
 					<textarea name="questionContent" id="questionContent"></textarea>
 				</div>
-				<div>
+				<div id="btn_wrap"> 
 					<button type="submit" id="submit_btn">확인</button>
 					<button type="button" id="cancle_btn">취소</button>
 				</div>
 			</form>
 		</div>
+		</div>
+	</div>
 		<div id="footer">
 			<div>
 				<img alt="logo" src="img/logo.jpg" />

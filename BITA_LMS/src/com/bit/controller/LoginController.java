@@ -19,8 +19,7 @@ import com.bit.model.UserDto;
 public class LoginController extends HttpServlet {
 	
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		HttpSession session = req.getSession();
 		System.out.println("LoginController(doGet) :: ");
@@ -39,11 +38,10 @@ public class LoginController extends HttpServlet {
 				}else{
 					resp.sendRedirect("main.stu");
 				}
+			}else if(path.equals("/logout.bit")){
+				session.invalidate();
+				resp.sendRedirect("login.bit");
 			}
-		}else if(path.equals("/logout.bit")){
-			session.invalidate();
-			resp.sendRedirect("login.bit");
-		}
 		
 	}
 	

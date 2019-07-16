@@ -317,7 +317,7 @@
 
 	<div id='calendar'></div>
 	<div id='day_calender'>
-		<div><span id="lectureName"><%=userBean.getLectureName() %></span><span id="lectureId"><%=userBean.getLectureId() %></span></div>
+		<div><span id="lectureName" style="display:none"><%=userBean.getLectureName() %></span><span id="lectureId" style="display:none"><%=userBean.getLectureId() %></span></div>
 		<button id="add_calendar_Btn">일정 등록</button>
 	</div>
 

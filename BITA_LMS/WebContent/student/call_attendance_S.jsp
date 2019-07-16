@@ -71,8 +71,10 @@ body table td{
 				$('#checkbtn').text('퇴실');
 			}else if($('#status').text()=="퇴실"){
 				$('#checkbtn').hide();
+			}else {
+				$('#checkbtn').hide();
 			}
-		});
+		})
 	}
 	
 	var ajaxBtnCall = function() {

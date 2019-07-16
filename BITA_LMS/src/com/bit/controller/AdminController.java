@@ -213,11 +213,11 @@ public class AdminController extends HttpServlet {
 		int result = -1,idx = -1;
 		
 		resp.setContentType("text/html;charset=UTF-8");
+		AdminDao dao = new AdminDao();
 
 		try {
 			//admin만 접근가능
 			if (userBean.getBelong().equals("admin")) {
-				AdminDao dao = new AdminDao();
 				if (path.equals("/manage_lec_update.adm")) {
 					//강좌 수정
 					req.setCharacterEncoding("utf-8");
@@ -278,7 +278,7 @@ public class AdminController extends HttpServlet {
 					
 					LectureDto lectureBean = new LectureDto();
 					lectureBean.setContent(multi.getParameter("content_area"));
-					lectureBean.setLectureID(Integer.parseInt(multi.getParameter("lec_id")));
+					lectureBean.setLectureId(Integer.parseInt(multi.getParameter("lec_id")));
 					lectureBean.setEndDate(multi.getParameter("lec_end"));
 					lectureBean.setContent(multi.getParameter("content_area"));
 					lectureBean.setName(multi.getParameter("lec_name"));
@@ -479,15 +479,6 @@ public class AdminController extends HttpServlet {
 					
 					resp.sendRedirect("manage_tea_detail.adm?idx="+teaId);
 
-				} else if (path.equals("/register_update.adm")) {
-					// 학생등록 
-					String id = req.getParameter("id");
-					String lecName = req.getParameter("lecName");
-					System.out.println(id+":"+lecName);
-					if(id!=null&&lecName!=null){
-						result = dao.updateRegister(id,lecName);
-					}
-					resp.sendRedirect("register.adm");
 				} else if (path.equals("/register_delete.adm")){
 					// 수강신청페이지 삭제
 					int applyId = Integer.parseInt(req.getParameter("applyId"));
@@ -501,6 +492,7 @@ public class AdminController extends HttpServlet {
 					System.out.println(userId.length);
 					result = dao.deleteUser(userId);
 					System.out.println(result);
+					resp.sendRedirect("manage_stu.adm");
 				} else if (path.equals("/tea_delete.adm")){
 					// 강사 삭제(따로 분류)
 					String[] userId = new String[1];
@@ -509,6 +501,15 @@ public class AdminController extends HttpServlet {
 					userId[0] = id;
 					result = dao.deleteUser(userId);
 					resp.sendRedirect("manage_tea.adm");
+				}  else if (path.equals("/register_update.adm")) {
+					// 학생등록 
+					String id = req.getParameter("id");
+					String lecName = req.getParameter("lecName");
+					System.out.println(id+":"+lecName);
+					if(id!=null&&lecName!=null){
+						result = dao.updateRegister(id,lecName);
+						resp.sendRedirect("register.adm");
+					}
 				}
 				
 				if(rd!=null){					
@@ -518,7 +519,7 @@ public class AdminController extends HttpServlet {
 				resp.setContentType("text/html;charset=UTF-8");
 				resp.setCharacterEncoding("UTF-8");
 				//비동기 통신
-				else if (path.equals("/manage_stu_month.adm")) {
+				if (path.equals("/manage_stu_month.adm")) {
 					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
 					// 수강생관리 목록 페이지(월별) 월 이동
 					String yyyymm = req.getParameter("yearMonth");
@@ -577,19 +578,10 @@ public class AdminController extends HttpServlet {
 				}else if(path.equals("/calendar_delete.adm")){
 					result = dao.deleteCalendar(Integer.parseInt(req.getParameter("calendarId")));
 					System.out.println("result = "+result);
-				} else if (path.equals("/register_update.adm")) {
-					// 학생등록 
-					String id = req.getParameter("id");
-					String lecName = req.getParameter("lecName");
-					System.out.println(id+":"+lecName);
-					if(id!=null&&lecName!=null){
-						result = dao.updateRegister(id,lecName);
-					}
-					resp.sendRedirect("register.adm");
 				}
 
 				//비동기 통신
-				else if (path.equals("/manage_stu_month.adm")) {
+				if (path.equals("/manage_stu_month.adm")) {
 					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
 					// 수강생관리 목록 페이지(월별) 월 이동
 					String yyyymm = req.getParameter("yearMonth");
@@ -667,12 +659,9 @@ public class AdminController extends HttpServlet {
 				}
 				
 				
-				if(rd!=null){					
-					rd.forward(req, resp);
-				}else{
-					System.out.println("ajax 통신");
-				}
+				System.out.println("ajax 통신");
 			}
+			
 		} catch (java.lang.NullPointerException e) {
 			System.out.println(e);
 			resp.sendRedirect("login.bit");

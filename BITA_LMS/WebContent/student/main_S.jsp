@@ -81,7 +81,7 @@
 		<div id="content">
 			<h2>메인</h2>			
 			<div id = "calendar">
-				<jsp:include page="call_calendar_S.jsp" flush="false"/>
+				<jsp:include page="call_calendar_S.jsp" flush="false"></jsp:include>
 			</div>
 			<div id = "attendance">
 			<table>

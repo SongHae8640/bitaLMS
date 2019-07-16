@@ -276,7 +276,7 @@
 			<br/><br/>
 		<div id="lec_detail">
 			<div id="curri_thumb">
-				<img id="pic"src="img/JAVA.jpg" />
+				<img src="\BITA_LMS\save\lecture\JAVA.jpg" id="curri_thumb">
 				<label for="lecture">upload</label>
 				<input type="file" name="lecture" id="lecture" class="checkField"/>
 			</div>
@@ -286,7 +286,7 @@
 								LectureDto lectureBean = (LectureDto)request.getAttribute("lectureBean");
 								if(lectureBean !=null){
 					%>
-						<td><label for="lec_name">강좌명</label><input type="hidden" name="lec_id" id="lec_id" value="<%=lectureBean.getLectureID() %>"></td>
+						<td><label for="lec_name">강좌명</label><input type="hidden" name="lec_id" id="lec_id" value="<%=lectureBean.getLectureId() %>"></td>
 						<td><input type="text" name="lec_name" id="lec_name" class="checkField" value="<%=lectureBean.getName() %>"></td>
 					</tr>
 					<tr>
@@ -338,7 +338,7 @@
 					<td>
 						<label for="lec_file">커리큘럼 이미지</label>
 						<div id="curri_des">
-							<img src="img/<%=lectureBean.getFileId()+".jpg"%>"/>
+							<img src="\BITA_LMS\save\lecture\java_curri.jpg" id="curri_thumb">
 							<input type="file" name="lec_file" id="lec_file"/>
 						</div>
 					</td> 

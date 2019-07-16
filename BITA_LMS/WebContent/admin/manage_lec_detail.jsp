@@ -91,11 +91,11 @@
 	}
 	#content #under_list #edit_button{
 	float: right;
-	width: 45px;
+	width: 50px;
 	}
 	#content #under_list #del_button{
 	float: right;
-	width: 45px;
+	width: 50px;
 	}
 	
 </style>
@@ -153,8 +153,8 @@
 			<br/><br/>
 		<div id="lec_detail">
 				<div id="lec_form1">
-					<div id="curri_thumb">
-						<h3>커리큘럼이미지</h3>
+					<div>
+						<img src="\BITA_LMS\save\lecture\JAVA.jpg" id="curri_thumb">
 					</div>
 					<div id="lec_form2">
 					<table id="lec_table1">
@@ -163,7 +163,7 @@
 								if(lectureBean !=null){
 					%>
 							<tr>
-								<td>강좌명<input type="hidden" name="lecture_id" value="<%=lectureBean.getLectureID() %>" /></td>
+								<td>강좌명<input type="hidden" name="lecture_id" value="<%=lectureBean.getLectureId() %>" /></td>
 								<td><%=lectureBean.getName() %></td>
 							</tr>
 							<tr>
@@ -215,7 +215,7 @@
 					<tr>
 						<td>
 							<div id="curri_des">
-								<img src="img/<%=lectureBean.getFileId()+".jpg"%>"/>	
+								<img src="\BITA_LMS\save\lecture\java_curri.jpg"/>	
 							</div>
 						</td>
 					</tr>
@@ -231,7 +231,7 @@
 				<button type="submit" id="del_btn">삭제</button>
 			</div>
 			<div id="edit_button">
-				<button type="button" id="edit_btn" onclick="location.href='manage_lec_update.adm?idx=<%=lectureBean.getLectureID()%>'">수정</button>
+				<button type="button" id="edit_btn" onclick="location.href='manage_lec_update.adm?idx=<%=lectureBean.getLectureId()%>'">수정</button>
 			 	<!-- 등록 누르면 출력된 데이터 수강생관리에 전달 -->
 			</div>
 		</div>

@@ -197,7 +197,7 @@ public class HomeController extends HttpServlet {
 			fileBean.setRegId(userId);					//파일 올린 회원의 id
 		
 			//FileGroupDto생성 후 fileGBean에 데이터 담기
-			fileBean.setPath(filePath);				//파일 저장경로
+			fileBean.setPath(savePath);				//파일 저장경로
 
 			//HomeDao 인스턴스화해서 메소드 사용
 			//중복파일 검사 후 이름 바꿔서 fileBean에 담기

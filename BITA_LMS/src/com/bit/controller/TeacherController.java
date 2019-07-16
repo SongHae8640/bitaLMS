@@ -64,8 +64,8 @@ public class TeacherController extends HttpServlet {
 					//월별출석
 					rd = req.getRequestDispatcher("teacher/attendance_T_month.jsp");
 				}else if (path.equals("/score.tea")) {					//강사가 자신의강의 아이디를 넣으면 해당 강의의 학생들의 점수들만 볼 수 있음
-					req.setAttribute("scoreList",dao.getScoreList(lecture_id));	//test 1반일 때 나중에 userBean.getLectureId() 로 바꿔
-					System.out.println("/score.tea두겟"+lecture_id);
+					req.setAttribute("scoreList",dao.getScoreList(userBean.getLectureId()));	//test 1반일 때 나중에 userBean.getLectureId() 로 바꿔
+					System.out.println("/score.tea두겟"+userBean.getLectureId());
 					rd = req.getRequestDispatcher("teacher/score_T.jsp");
 					
 				}else if (path.equals("/score_insert.tea")) {			//점수 입력
@@ -271,6 +271,7 @@ public class TeacherController extends HttpServlet {
 					PrintWriter out= resp.getWriter(); 
 					out.write(dao.getMonthAttendanceJson(monthAttendance)+"");
 					out.close();
+				}
         else if(path.equals("/qna_update.tea")){
 					QnaLDto bean = new QnaLDto();
 					bean.setQnaLId(Integer.parseInt(req.getParameter("qnaLId")));
@@ -340,7 +341,7 @@ public class TeacherController extends HttpServlet {
 			}else {
 				req.getRequestDispatcher("login.bit");
 			}
-		} 
+		
 		}catch (java.lang.NullPointerException e) {
 			resp.sendRedirect("login.bit");	
 		}

@@ -8,8 +8,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -241,7 +239,7 @@ public class AdminDao extends Dao {
 				+ "TO_CHAR(start_date,'yyyymmdd') as \"startDate\" from lecture l "
 				+ "JOIN lectureuser lu on lu.lecture_id=l.lecture_id "
 				+ "JOIN user01 u on u.user_id=lu.user_id "
-				+ "where u.belong='teacher'";
+				+ "where u.belong='teacher' and l.lecture_id>0";
 		
 		System.out.println(sql);
 		try {
@@ -474,11 +472,11 @@ public class AdminDao extends Dao {
 			pstmt.setInt(5, lectureBean.getMaxStd());
 			pstmt.setInt(6, lectureBean.getLv());
 			pstmt.setString(7, lectureBean.getContent());
-			pstmt.setInt(8, lectureBean.getLectureID());
+			pstmt.setInt(8, lectureBean.getLectureId());
 			pstmt.executeUpdate();
 			
 			pstmt = conn.prepareStatement(sql3);
-			pstmt.setInt(1, lectureBean.getLectureID());
+			pstmt.setInt(1, lectureBean.getLectureId());
 			pstmt.setString(2, lectureBean.getTeaId());
 			pstmt.executeUpdate();
 			
@@ -655,7 +653,7 @@ public class AdminDao extends Dao {
 		String sql2 = "update lectureUser set lecture_id = ? where user_id=?";
 		String sql3 = "update lecture set num_std = num_std+1 where lecture_id=?";
 		String sql4 = "delete from apply where user_id=?";
-		String sql5 = "insert into score(lecture_id,std_id) values(?,?)";
+		//String sql5 = "insert into score(lecture_id,std_id) values(?,?)";
 		
 		//제대로 전송됐는지 안됐는지만 int값으로 리턴
 		try {
@@ -679,11 +677,11 @@ public class AdminDao extends Dao {
 			pstmt.addBatch();
 			pstmt.executeBatch();
 			
-			pstmt = conn.prepareStatement(sql5);
-			pstmt.setInt(1, lecture_id);
-			pstmt.setString(2, userId);
-			pstmt.addBatch();
-			pstmt.executeBatch();
+//			pstmt = conn.prepareStatement(sql5);
+//			pstmt.setInt(1, lecture_id);
+//			pstmt.setString(2, userId);
+//			pstmt.addBatch();
+//			pstmt.executeBatch();
 			
 			pstmt.clearBatch();
             conn.commit();
@@ -1072,7 +1070,7 @@ public class AdminDao extends Dao {
 		//user 테이블에 추가
 		String sql1 = "insert into user01(user_id,password,name,email,phone_number,belong) values(?,?,?,?,?,'teacher')";
 		//lectureuser 테이블에 추가 (강좌가 할당되지 않았으므로 lecture_id는 -1)
-		String sql2 = "insert into lectureuser(lecture_id,user_id) values(-1,?)";
+		String sql2 = "insert into lectureuser(lecture_id,user_id) values(0,?)";
 		
 		//파일추가
 		String sql6 = "insert into Attached_File (file_id,file_group,original_name,file_name,file_extension,ref_date,reg_id)"
@@ -1491,8 +1489,8 @@ public class AdminDao extends Dao {
 			return "결석";
 		}
 		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date checkinTime = dateFormat.parse(bean.getCheckinTime());
-		Date checkoutTime = dateFormat.parse(bean.getCheckoutTime());
+		Date checkinTime = (Date) dateFormat.parse(bean.getCheckinTime());
+		Date checkoutTime = (Date) dateFormat.parse(bean.getCheckoutTime());
 		
 		boolean isLate = false;
 		boolean isEarly = false;

@@ -14,11 +14,83 @@
 #content input[type=text]{
 	width: 100px;
 } 
-#content #content_wrap1{
-	width: 210px;
-	margin: 0 auto;
-
+.selected { 
+	background: gray;
+	cursor: pointer; 
 }
+#content input[type=text]{
+	width: 100px;
+}
+table{
+	width: 350px;
+	text-align: center;
+}
+h2{
+ margin-top: 0px;
+ margin-bottom:0px;
+ padding: 0px;
+}
+#content{
+	width:  1000px;
+	height: 700px;
+	margin: 0px auto;
+	padding: 0px;
+} 
+#content #content_wrap1{
+	width: 900px;
+	margin: 0 auto;
+	height: 100%;
+}
+#content #content_wrap1 #content_wrap2{
+	height: 300px;
+	width:350px; 
+ 	position: relative; 
+ 	top:100px;
+	margin: 0 auto;
+	
+}
+#content #content_wrap1>div{
+	width: 200px; 
+	margin: 0px auto; 
+}
+#content #sidebar{
+	float:left; 
+	height:700px;  
+	width: 187px;
+	text-align:center; 
+	background-color: lightgray;
+	text-align: center;
+}
+#content #sidebar ul{
+	text-align: center;
+	padding: 0px;
+	
+}
+#content #sidebar ul li{
+	list-style: none;
+	display: inline-block;
+	height: 35px;
+	width:100%;
+	
+}
+#content #sidebar ul li a{
+	text-decoration: none; 
+	color: rgb(0,0,0);	 
+}
+#click{
+	display: inline-block;
+	height: 35px;
+	width:100%;
+	background-color: gray;
+}
+#btn_wrap{
+	width:105px;
+	margin: 10px auto;
+}
+#btn_wrap button{
+	display: inline-block;
+	width: 50px; 
+} 
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -85,7 +157,20 @@
 			</ul>
 		</div>
 		<div id="content">
+		<div id="sidebar">
+			<br/><br/><br/><br/>
+			<h3>학생관리</h3>
+			<br/>
+			<ul>
+				<li><a href="register.adm">출결관리</a></li>
+	
+				<li id="click"><a href="manage_stu.adm">성적관리</a></li>
+
+				<li><a href="manage_stu.adm">과제관리</a></li>
+			</ul>
+		</div>
 		<div id="content_wrap1">
+		<div id="content_wrap2">
 			<h2>성적입력</h2>
 			<table border="1">
 				<thead>
@@ -143,10 +228,13 @@
 					%>
 				</tbody> 
 			</table>
-			<div> 
+			<div>
+			<div id="btn_wrap"> 
 			<input type="hidden" name="idx" value="<%=(String)request.getAttribute("idx") %>" >
 				<button type="button" id="submit_btn">확인</button>
 				<button type="button" id="cancle_btn" >취소</button>
+			</div>
+			</div>
 			</div>
 		</div>
 		</div>

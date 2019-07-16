@@ -8,6 +8,46 @@
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="css/frame.css" />
 <style type="text/css">
+#content {
+	margin: 0px auto;
+	text-align: center;
+}
+button{
+  background:#353b89;
+  color:#fff;
+  border:none;
+  position:relative;
+  height:40px;
+  font-size:12pt;
+  padding:0 20px;
+  cursor:pointer;
+  transition:800ms ease all;
+  outline:none;
+}
+button:hover{
+  background:#fff;
+  color:#353b89;
+}
+button:before,button:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: #353b89;
+  transition:400ms ease all;
+}
+button:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+button:hover:before,button:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 <script type="text/javascript">
@@ -65,20 +105,20 @@
 			-->
 		</div>
 		<div id="content">
-			<h2>로그인페이지</h2>
+			<br><br><br>
+			<h1>LOGIN</h1>
 			<form action="login.bit" method="post">
 				<div>
-					<lable for="id">id</lable>
+					<lable for="id">ID &nbsp;</lable>
 					<input type="text" name="id" id="id" />
 				</div>
-				<div>
-					<lable for="pw">pw</lable>
+				<div style="margin-top:10px;">
+					<lable for="pw">PW</lable>
 					<input type="password" name="pw" id="pw" />
 				</div>
-				<div>
+				<div style="margin-top:50px;">
 					<button type="submit">로그인</button>
 					<button type="reset">취소</button>
-					<button type="button">회원가입</button>
 				</div>
 			</form>
 		</div>

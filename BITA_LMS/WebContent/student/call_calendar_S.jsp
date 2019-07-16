@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta charset='utf-8' />
 	<link href='css/fullcalendar.min.css' rel='stylesheet' />
@@ -18,8 +17,8 @@
 		var saveCalBtn;
 
 		//호출 시점 날짜
-		var date = new Date();
-		var yearMonthDay = date.getFullYear() + "-" + leadingZeros(date.getMonth() + 1, 2) + "-" + leadingZeros(date.getDate(), 2);
+		//var date = new Date();
+		//var yearMonthDay = date.getFullYear() + "-" + leadingZeros(date.getMonth() + 1, 2) + "-" + leadingZeros(date.getDate(), 2);
 
 		var calendarEvent;
 
@@ -33,33 +32,32 @@
 				editable: true,
 				eventLimit: true,
 				displayEventTime: false,
-				disableDragging: false,
 				events: {
 					url: "callCalendar.stu",
 					error: function() {
 						console.log("fullcalendar 가져오기 실패")
 					},
 					success: function(calData) {
+						console.log("fullcalendar 가져오기 성공")
 						console.log(calData);
 					}
 				},
-
 
 				//클릭 했을때 이벤트
 				eventClick: function(calEvent, jsEvent, view) {
 					calendarEvent = calEvent;
 					console.log(calEvent);
+					console.log('일정 상세')
 					var htmlsContents = "";
-					htmlsContents += "<div><a>강좌이름</a> <div> " + calEvent.lectureName + "</div><br>";
+					htmlsContents += "<div><div>강좌이름</div> <div> " + calEvent.lectureName + "</div><br>";
 					htmlsContents += "<div><div> 날짜 </div><div> " + calEvent.start.format().substring(0, 10) + " ~ " + calEvent.end.format().substring(0, 10) + " </div> </div><br>";
 					htmlsContents += "<div><div> 제목 </div><div> " + calEvent.title + " </div></div><br>";
 					htmlsContents += "<div><div> 내용 </div> <div>" + calEvent.content + " </div></div>";
-					openPopup("일정 상세", htmlsContents, 400);
+					htmlsContents += "<div><button id='edite_calendar_Btn' onclick='editeCalendar()'>수정</button><button id='delete_calendar_Btn' onclick='deleteCalendar()'>삭제</button></div>";
+					openPopup("일정 추가", htmlsContents, 400);
+
 					return false;
 
-				},
-				viewRender :function(view, element){
-					console.log(view, element);
 				}
 
 			});
@@ -125,23 +123,13 @@
 
 <body>
 
-
-
-
-
-
-
 	<div id='calendar'></div>
-	<div id='day_calender'>
-		<!--여기에 당일 일정 리스트가 내용이 들어감  -->
-	</div>
 
 	<div class="box box-success" id="winAlert" style="width: 500px; background-color: white; display: none">
 		<div class="box-header with-border">
 			<h3 class="box-title" id="alert_subject" style="background-color: white"></h3>
 		</div>
 		<div class="box-body" id="alert_contents" style="font-size: 15px; background-color: white">
-
 		</div>
 	</div>
 

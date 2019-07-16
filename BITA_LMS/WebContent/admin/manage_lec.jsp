@@ -73,7 +73,7 @@
 	}
 	#content #under_list #reg_button{
 	float:right;
-	width: 45px;
+	width: 50px;
 	}
 	#content #under_list #search_box{
 	clear:both;
@@ -180,19 +180,6 @@
 		<div id="under_list">
 			<div id="reg_button">
 				<button type="button" id="reg_btn">등록</button>
-			</div>
-			<div id="search_box">
-				<form action="manage_lec.adm">
-					<input type="text" id="search_sub" name="search_sub">
-					<button type="submit" id="search_btn">검색</button>
-				</form>
-			</div>
-			<div id="page_button">
-				<button><</button>
-				<button>1</button>
-				<button>2</button>
-				<button>3</button>
-				<button>></button>
 			</div>
 		</div>
 	</div>

@@ -101,6 +101,7 @@ var id = $('#name').text();
 				$("label[for='attendanceProgress']").next().attr('max',data.totalDays);
 				$("label[for='lecName']").next().html('<span>'+data.lecName+' 과정</span>');
 				$("label[for='lecPeriod']").next().html('<br><span>'+data.startDate+' ~ '+data.endDate+'</span>')
+				
 			},error : function(){
                 alert("통신실패");
             }
@@ -110,6 +111,8 @@ var id = $('#name').text();
 			}else if($('#status').text()=="입실"){
 				$('#checkbtn').text('퇴실');
 			}else if($('#status').text()=="퇴실"){
+				$('#checkbtn').hide();
+			}else{
 				$('#checkbtn').hide();
 			}
 		});
@@ -141,6 +144,8 @@ var id = $('#name').text();
 			if($('#status').text()=="입실"){
 				$('#checkbtn').text('퇴실');
 			}else if($('#status').text()=="퇴실"){
+				$('#checkbtn').hide();
+			}else{
 				$('#checkbtn').hide();
 			}
 		});

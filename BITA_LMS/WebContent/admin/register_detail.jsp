@@ -34,19 +34,18 @@
 	}
 	#content #real_content{
 	position:relative;
-	left:300px;
-	width: 600px;
-	height:700px;
 	}
 	#content #real_content #app_detail{
-	width: 600px;
+	position:relative;
+
 	}
 	#app_table{
 	width:600px;
 	margin: 0 auto;
 	}
 	#content #real_content #app_detail table,th,td{
-	border: 1px solid gray; 
+	border: 1px solid gray;
+	border-collapse: collapse;
 	}
 	#content #real_content #app_detail #reg_form {
 	width:300px;
@@ -187,7 +186,7 @@
 					<tr>
 						<td colspan="2">
 						<input type="hidden" name="applyId" value="<%=registerBean.getApplyId() %>"/>
-						<div id="reg_form">
+						<div id="reg_form" style="position:relative;left:-140px">
 							<div id="submit">
 								<span>제출일 <%=registerBean.getApplyDate() %></span>
 							</div>
@@ -205,7 +204,7 @@
 							</div>
 							<div>
 								<label>파일첨부</label>
-								<a><%=registerBean.getFileId() %></a>
+								<a><a href="\BITA_LMS\save\apply\<%=registerBean.getFileId() %>.jpg" ><%=registerBean.getFileId() %>.jpg</a>
 							</div>
 						</div>
 						</td>
@@ -250,12 +249,12 @@
 					 -->
 			</table>
 		</div>
-		<div id="under_list">
+		<div id="under_list" style="margin-top:50px;">
 			<div id="list_button">
 				<button type="button" id="list_btn">목록</button>
 			</div>
 			<div id="del_button">
-				<button type="button" id="del_btn">삭제</button>
+				<button type="button" id="del_btn" style="width:50px;">삭제</button>
 			</div>
 			<div id="reg_button">
 				<button type="submit">등록</button>

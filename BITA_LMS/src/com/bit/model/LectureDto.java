@@ -2,7 +2,7 @@ package com.bit.model;
 
 public class LectureDto {
 
-	private int lectureID, numStd, totalDays, maxStd, lv, progressDays, fileId, curriId;
+	private int lectureId, numStd, totalDays, maxStd, lv, progressDays, fileId, curriId;
 	private String name, startDate, endDate, content, teaName, teaId;
 	private boolean isClose; //ÃÊ±â°ª false
 

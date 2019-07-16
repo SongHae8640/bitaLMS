@@ -14,11 +14,77 @@
 }
 #content input[type=text]{
 	width: 100px;
+}
+table{
+	width: 350px;
+	text-align: center;
+}
+h2{
+ margin-top: 0px;
+ margin-bottom:0px;
+ padding: 0px;
+}
+#content{
+	width:  1000px;
+	height: 700px;
+	margin: 0px auto;
+	padding: 0px;
 } 
 #content #content_wrap1{
-	width: 210px;
+	width: 900px;
 	margin: 0 auto;
-
+	height: 100%;
+}
+#content #content_wrap1 #content_wrap2{
+	height: 300px;
+	width:350px; 
+ 	position: relative; 
+ 	top:100px;
+	margin: 0 auto;
+	
+}
+/* #content #content_wrap1>div{ */
+/* 	width: 200px;  */
+/* 	margin: 0px auto;  */
+/* 	border: 1px solid gray; */
+/* } */
+#content #sidebar{
+	float:left; 
+	height:700px;  
+	width: 187px;
+	text-align:center; 
+	background-color: lightgray;
+	text-align: center;
+}
+#content #sidebar ul{
+	text-align: center;
+	padding: 0px;
+	
+}
+#content #sidebar ul li{
+	list-style: none;
+	display: inline-block;
+	height: 35px;
+	width:100%;
+	
+}
+#content #sidebar ul li a{
+	text-decoration: none; 
+	color: rgb(0,0,0);	 
+}
+#click{
+	display: inline-block;
+	height: 35px;
+	width:100%;
+	background-color: gray;
+}
+#btn_wrap{
+	width:90px;
+	margin: 10px auto;
+}
+#btn_wrap button{
+	display: block;
+	width: 50px;
 }
 </style>
 <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
@@ -65,12 +131,13 @@
    		$(".third").each(function(index, item){
 	   		score_list3.push($(item).text());
    });
+   		console.log(score_list3);
 		//학생 이름
 		var name_list = new Array();
 		$('tbody>tr>td:nth-child(1)').each(function(index, item){
 			name_list.push($(item).text());
 	});
- 
+		console.log(name_list);
 		//각  학생의 총점수를 보내 평균을 출력한다
 	   var data = "name_list=" + name_list + "&score_list1=" + score_list1 + "&score_list2="+ score_list2 + "&score_list3=" + score_list3;
         $.ajax({
@@ -83,8 +150,9 @@
             error : function(){
             	console.log("통신실패 평균");
             } 
-			 
-		});
+			
+        });
+		
 	});	
 	
 </script>
@@ -106,8 +174,21 @@
 			</ul>
 		</div>
 		<div id="content">
+		<div id="sidebar">
+			<br/><br/><br/><br/>
+			<h3>학생관리</h3>
+			<br/>
+			<ul>
+				<li><a href="register.adm">출결관리</a></li>
+	
+				<li id="click"><a href="manage_stu.adm">성적관리</a></li>
+
+				<li><a href="manage_stu.adm">과제관리</a></li>
+			</ul>
+		</div>
 		<div id="content_wrap1">
-			<h2>성적관리</h2>
+		<div id="content_wrap2">
+			<div><h2>성적관리</h2></div><br />
 			<span>시험을 선택해주세요</span>
 			<table border="1">
 				<thead>
@@ -141,9 +222,10 @@
 		%>
 				</tbody>
 			</table>
-			<div>
+			<div id="btn_wrap">
 				<input type="button" value="입력" id="insert_btn"/>
 				<input type="button" value="수정" id="update_btn"/>
+			</div>
 			</div>
 			</div>
 		</div>

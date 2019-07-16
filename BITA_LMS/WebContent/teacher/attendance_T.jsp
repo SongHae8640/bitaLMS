@@ -45,8 +45,8 @@
 		
 	});
 	var ajaxBtnCall = function() {
-		var btn = $('.checkBtn').val();
-		var id = $('.id').val();
+		var btn = $(this).val();
+		var id = $(this).next().val();
 		$.when($.ajax({
 			url: "attendance_check.tea", 
 			dataType: "json", 

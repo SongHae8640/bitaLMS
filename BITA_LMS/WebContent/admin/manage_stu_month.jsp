@@ -20,7 +20,7 @@
 	}
 	#content #sidebar{
 	position:absolute;
-	top:160px;
+	top:243px;
 	height:700px;
 	width: 200px;
 	text-align:center;
@@ -36,9 +36,7 @@
 	}
 	#content #real_content{
 	position:relative;
-	left:300px;
-	width: 600px;
-	height:700px;
+	
 	}
 	#content #page_name{
 	width: 120px;
@@ -84,15 +82,15 @@
 	}
 	#content #under_list #ok_button{
 	float:right;
-	width: 45px;
+	width: 50px;
 	}
 	#content #under_list #reject_button{
 	float:right;
-	width: 45px;
+	width: 50px;
 	}
 	#content #under_list #update_button{
 	float:right;
-	width: 45px;
+	width: 50px;
 	}
 	#api{
 		width:100%;
@@ -349,7 +347,7 @@
 			<div id="page_name">
 				<h2>학생출석</h2>
 			</div>
-			<div id=upper_content>
+			<div id=upper_content style="position:relative; left:650px; margin-top: 20px;">
 				<div id="month_see">
 					<button type="button" onclick="location.href='manage_stu.adm'">관리페이지 보기</button>
 				</div>

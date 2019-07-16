@@ -108,11 +108,11 @@
 	}
 	#content #under_list #ok_button{
 	float: right;
-	width: 45px;
+	width: 50px;
 	}
 	#content #under_list #reject_button{
 	float: right;
-	width: 45px;
+	width: 50px;
 	}
 	#pic, #curri_thumb{
 	width:100px;

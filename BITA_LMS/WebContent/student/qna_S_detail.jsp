@@ -89,11 +89,11 @@
 					<%
 						if(bean.getIsCheck().equals("1")){
 					%>
-					<textarea cols="30" rows="10" readonly="readonly"><%=bean.getAnswerContent() %></textarea>
+					<textarea rows="12" cols="80"  readonly="readonly"><%=bean.getAnswerContent() %></textarea>
 					<%
 						}else{
 					%>
-					<textarea cols="30" rows="10" readonly="readonly" placeholder="답변 대기 중 입니다."></textarea>
+					<textarea rows="12" cols="80" eadonly="readonly" placeholder="답변 대기 중 입니다."></textarea>
 					<%
 						}
 					%>

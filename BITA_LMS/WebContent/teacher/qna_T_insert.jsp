@@ -65,7 +65,7 @@
 			<form action="qna_T_insert.tea">
 					<h1 id="edit">답글</h1>
 					<div>						
-						<textarea rows="10" cols="30"></textarea>
+						<textarea rows="12" cols="80" ></textarea>
 					</div>
 					<div>
 						<button type="submit">답글</button>

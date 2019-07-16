@@ -1,4 +1,4 @@
-package com.bit.model;
+package com.bit.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,12 +11,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.bit.model.AttachedFileDto;
 import com.bit.model.AttendanceDto;
 import com.bit.model.QnaLDto;
 import com.bit.model.StudentDao;
+import com.bit.model.SubmissionDto;
 import com.bit.model.UserDto;
 
 @WebServlet("*.stu")
@@ -75,7 +78,7 @@ public class StudentController extends HttpServlet {
 				} else if (path.equals("/assignment_detail.stu")) {
 					int assignmentId = Integer.parseInt(req.getParameter("idx"));	//목록화면에서 과제 번호를 가져올 것
 					req.setAttribute("assignmentBean", dao.getAssignment(assignmentId));
-					req.setAttribute("submissionBean", dao.getSubmission(assignmentId, userBean.getUserId())); 
+					req.setAttribute("submissionBean", dao.getSubmissionList(assignmentId, userBean.getUserId())); 
 
 					rd = req.getRequestDispatcher("student/assignment_S_detail.jsp");
 				} else if (path.equals("/qna.stu")) {

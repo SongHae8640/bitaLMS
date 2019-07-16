@@ -67,7 +67,6 @@
 	}
 	#qna_answer{
 	height:200px;
-	background-color: gray;
 	}
 	#content #under_list{
 	width: 600px;
@@ -219,11 +218,11 @@
 							if(bean.getIsCheck().equals("1")){
 	
 						%>
-							<textarea id="qnaLAnswer" ><%=bean.getAnswerContent() %></textarea>
+							<textarea id="qnaLAnswer" rows="12" cols="80" ><%=bean.getAnswerContent() %></textarea>
 						<%
 						}else{
 						%>
-							<textarea id="qnaLAnswer" placeholder="미답변 문의 입니다."></textarea>
+							<textarea id="qnaLAnswer" rows="12" cols="80"  placeholder="미답변 문의 입니다."></textarea>
 						<%
 							}
 						%>
