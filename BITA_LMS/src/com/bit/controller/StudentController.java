@@ -32,7 +32,6 @@ public class StudentController extends HttpServlet {
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 
-		System.out.println("StudentController(doGet) :: path = " + path);
 		HttpSession session = req.getSession();
 		UserDto userBean = (UserDto) session.getAttribute("userBean");
 		try {
@@ -113,7 +112,6 @@ public class StudentController extends HttpServlet {
 					resp.setContentType("text/html;charset=UTF-8");
 					
 					// calendar 가져와야 함
-					System.out.println();
 					String yearMonthDay = "2019-07-10";
 					String yearMonth = yearMonthDay.substring(0,7);
 					
@@ -136,8 +134,6 @@ public class StudentController extends HttpServlet {
 					PrintWriter out = resp.getWriter();
 					out.write(jObj.toJSONString());
 					out.close();
-				}else {
-					System.out.println("알수 없는 페이지입니다.");
 				}
 				
 				
@@ -163,7 +159,6 @@ public class StudentController extends HttpServlet {
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 
-		System.out.println("StudentController(doPost) :: path = " + path);
 		
 		//세션 저장
 		HttpSession session = req.getSession();
@@ -236,7 +231,6 @@ public class StudentController extends HttpServlet {
 				if(path.equals("/callAttendance.stu")){
 					resp.setContentType("text/html;charset=UTF-8"); 
 					
-					System.out.println("post");
 					
 					String id = req.getParameter("id");
 
@@ -259,7 +253,6 @@ public class StudentController extends HttpServlet {
 							+ " ,\"attendanceDays\" : \""+attendanceDays+"\", \"totalDays\" : \""+totalDays+"\""
 							+ " ,\"출석\" : \""+statusNum[0]+"\", \"지각\" : \""+statusNum[1]+"\", \"조퇴\" : \""+statusNum[2]+"\", \"외출\" : \""+statusNum[3]+"\", \"결석\" : \""+statusNum[4]+"\"}";
 					//입실, 퇴실 버튼을 눌렀을 때는 출석입력하고 출석상황 갖고 오기
-					System.out.println(json);
 					PrintWriter out= resp.getWriter(); 
 					out.write(json);
 					out.close();
@@ -267,28 +260,21 @@ public class StudentController extends HttpServlet {
 					req.setCharacterEncoding("utf-8");
 					resp.setContentType("text/html;charset=UTF-8"); 
 					
-					System.out.println("btnpost");
 					
 					String btn = req.getParameter("btn");
-					System.out.println(btn);
 					
-					System.out.println(userBean.getUserId());
 					result = dao.updateAttendance(userBean.getUserId(), btn);
 					AttendanceDto AttendanceBean = null;
-					if(result<0){
-						System.out.println("오류");
-					}else{				
+					if(result>0){				
 						AttendanceBean = dao.getAttendance(userBean.getUserId());
 					}
 					json = "{\"status\" : \""+AttendanceBean.getStatus()+"\", "
 							+ " \"checkinTime\" : \""+AttendanceBean.getCheckinTime()+"\", \"checkoutTime\" : \""+AttendanceBean.getCheckoutTime()+"\"}";
 					
-					System.out.println(json);
 					PrintWriter out= resp.getWriter(); 
 					out.write(json);
 					out.close();
 				}else {
-					System.out.println("존재하지 않는 페이지");
 				}
 				
 			}else {
