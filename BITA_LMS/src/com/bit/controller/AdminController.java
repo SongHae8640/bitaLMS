@@ -53,13 +53,10 @@ public class AdminController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("AdminController(doGet) :: path = " + path);
 
 		// 세션 저장
 		HttpSession session = req.getSession();
-		UserDto userBean = (UserDto) session.getAttribute("userBean");
-		//System.out.println("AdminController(doGet) :: userBean="+userBean.toString());
-	
+		UserDto userBean = (UserDto) session.getAttribute("userBean");	
 
 		try {
 			//로그인이 안된 접속자 일때( session에 userBean이 없는경우
@@ -82,7 +79,6 @@ public class AdminController extends HttpServlet {
 				} else if (path.equals("/manage_lec_detail.adm")) {
 					// 강좌관리 상세 페이지
 					int lectureId = Integer.parseInt(req.getParameter("idx"));
-					System.out.println(lectureId);
 					req.setAttribute("lectureBean", dao.getLecture(lectureId));
 					rd = req.getRequestDispatcher("admin/manage_lec_detail.jsp");
 					rd.forward(req, resp);
@@ -113,7 +109,6 @@ public class AdminController extends HttpServlet {
 					// 강사관리 상세 페이지
 					//파일불러오기
 					String userId = req.getParameter("idx");
-					System.out.println(userId);
 					req.setAttribute("fileBean", dao.getProfileFile(userId));
 					req.setAttribute("teacherBean", dao.getTeacher(userId));
 
@@ -136,7 +131,6 @@ public class AdminController extends HttpServlet {
 					//강사 콤보박스 리스트 채우려면 강사 리스트도 불러와야
 					req.setAttribute("teacherList", dao.getComboTeacherList());
 					int lectureId = Integer.parseInt(req.getParameter("idx"));
-					System.out.println(lectureId);
 					req.setAttribute("lectureBean", dao.getLecture(lectureId));
 
 					rd = req.getRequestDispatcher("admin/manage_lec_update.jsp");
@@ -153,7 +147,6 @@ public class AdminController extends HttpServlet {
 				} else if (path.equals("/manage_tea_update.adm")) {
 					// 강사관리 강사 수정 페이지
 					String userId = req.getParameter("idx");
-					System.out.println(userId);
 					
 					//파일불러오기
 					req.setAttribute("fileBean", dao.getProfileFile(userId));
@@ -190,10 +183,8 @@ public class AdminController extends HttpServlet {
 				rd.forward(req, resp);
 			}
 		} catch (java.lang.NullPointerException e) {
-			System.out.println(e);
 			resp.sendRedirect("login.bit");
 		}catch (java.lang.IllegalStateException e) {
-			System.out.println(e);
 			resp.sendRedirect("login.bit");
 		}
 
@@ -204,7 +195,6 @@ public class AdminController extends HttpServlet {
 		RequestDispatcher rd = null;
 
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("AdminController(doPost) :: path = " + path);
 		
 		//세션 저장
 		HttpSession session = req.getSession();
@@ -226,7 +216,6 @@ public class AdminController extends HttpServlet {
 					//폴더가 없을시 만들어줘야 들어감
 
 					String savePath = req.getServletContext().getRealPath("save/lecture");
-					System.out.println("여기저장"+savePath);
 					int sizeLimit = 1024*1024*500;
 					
 					//  ↓ request 객체,               ↓ 저장될 서버 경로,       ↓ 파일 최대 크기,    ↓ 인코딩 방식,       ↓ 같은 이름의 파일명 방지 처리
@@ -239,7 +228,6 @@ public class AdminController extends HttpServlet {
 					Enumeration files = multi.getFileNames();
 					while(files.hasMoreElements()){ 
 					    String name = (String)files.nextElement(); //각각의 파일 name을 String name에 담는다.
-					    System.out.println(name);
 					    String fullfileName = multi.getFilesystemName(name); //각각의 파일 name을 통해서 파일의 정보를 얻는다.
 					    String orifileName = multi.getOriginalFileName(name).substring(0, multi.getOriginalFileName(name).lastIndexOf("."));
 					    if(name.equals("lecture")){
@@ -301,7 +289,6 @@ public class AdminController extends HttpServlet {
 					//폴더가 없을시 만들어줘야 들어감
 
 					String savePath = req.getServletContext().getRealPath("save/lecture");
-					System.out.println("여기저장"+savePath);
 					int sizeLimit = 1024*1024*500;
 					
 					//  ↓ request 객체,               ↓ 저장될 서버 경로,       ↓ 파일 최대 크기,    ↓ 인코딩 방식,       ↓ 같은 이름의 파일명 방지 처리
@@ -314,7 +301,6 @@ public class AdminController extends HttpServlet {
 					Enumeration files = multi.getFileNames();
 					while(files.hasMoreElements()){ 
 					    String name = (String)files.nextElement(); //각각의 파일 name을 String name에 담는다.
-					    System.out.println(name);
 					    String fullfileName = multi.getFilesystemName(name); //각각의 파일 name을 통해서 파일의 정보를 얻는다.
 					    String orifileName = multi.getOriginalFileName(name).substring(0, multi.getOriginalFileName(name).lastIndexOf("."));
 					    if(name.equals("lecture")){
@@ -377,7 +363,6 @@ public class AdminController extends HttpServlet {
 					//파일이 저장될 서버의 경로
 					//폴더가 없을시 만들어줘야 들어감
 					String savePath = req.getServletContext().getRealPath("save/profile");
-					System.out.println("여기저장"+savePath);
 					int sizeLimit = 1024*1024*15;
 					
 					//  ↓ request 객체,               ↓ 저장될 서버 경로,       ↓ 파일 최대 크기,    ↓ 인코딩 방식,       ↓ 같은 이름의 파일명 방지 처리
@@ -394,14 +379,9 @@ public class AdminController extends HttpServlet {
 					String oriFileName = multi.getOriginalFileName("teacher").substring(0, multi.getOriginalFileName("teacher").lastIndexOf("."));
 					String filePath = savePath+"\\"+fullfileName; //파일패쓰
 					// 업로드한 파일의 전체 경로를 DB에 저장하기 위함
-					System.out.println("oriFileName: "+oriFileName);
-					System.out.println("fullfileName: "+fullfileName);
-					System.out.println("fileExtend: "+fileExtend);
-					System.out.println("filePath: "+filePath);
 					
 					String teaId = multi.getParameter("tea_id");
-					System.out.println("teaId::"+teaId);
-					
+ 					
 					//AttechedFileDto생성 후 fileBean에 데이터 담기
 					AttachedFileDto fileBean = new AttachedFileDto();
 					fileBean.setFileGroup("profile");	
@@ -421,7 +401,6 @@ public class AdminController extends HttpServlet {
 					teaBean.setPassword(multi.getParameter("tea_password"));
 					
 					result = dao.insertTeacher(teaBean,multi.getParameterValues("tea_career1"),multi.getParameterValues("tea_career2"),multi.getParameterValues("tea_qul"),fileBean);
-					System.out.println("insertTeacher::result="+result);
 					
 					resp.sendRedirect("manage_tea_detail.adm?idx="+teaId);
 
@@ -431,7 +410,6 @@ public class AdminController extends HttpServlet {
 					//파일이 저장될 서버의 경로
 					//폴더가 없을시 만들어줘야 들어감
 					String savePath = req.getServletContext().getRealPath("save/profile");
-					System.out.println("여기저장"+savePath);
 					int sizeLimit = 1024*1024*15;
 					
 					//  ↓ request 객체,               ↓ 저장될 서버 경로,       ↓ 파일 최대 크기,    ↓ 인코딩 방식,       ↓ 같은 이름의 파일명 방지 처리
@@ -448,13 +426,7 @@ public class AdminController extends HttpServlet {
 					String filePath = savePath+"\\"+fullfileName; //파일패쓰
 
 					// 업로드한 파일의 전체 경로를 DB에 저장하기 위함
-					System.out.println("oriFileName: "+oriFileName);
-					System.out.println("fullfileName: "+fullfileName);
-					System.out.println("fileExtend: "+fileExtend);
-					System.out.println("filePath: "+filePath);
-					
 					String teaId = multi.getParameter("userId");
-					System.out.println("teaId::"+teaId);
 					
 					//AttechedFileDto생성 후 fileBean에 데이터 담기
 					AttachedFileDto fileBean = new AttachedFileDto();
@@ -475,7 +447,6 @@ public class AdminController extends HttpServlet {
 					teaBean.setPassword(multi.getParameter("tea_password")); 
 					
 					result = dao.updateTeacher(teaBean,multi.getParameterValues("tea_career1"),multi.getParameterValues("tea_career2"),multi.getParameterValues("tea_qul"),fileBean);
-					System.out.println("updateTeacher::result="+result);
 					
 					resp.sendRedirect("manage_tea_detail.adm?idx="+teaId);
 
@@ -489,15 +460,12 @@ public class AdminController extends HttpServlet {
 				} else if (path.equals("/user_delete.adm")){
 					// 학생 및 강사 삭제
 					String[] userId = req.getParameterValues("userId");
-					System.out.println(userId.length);
 					result = dao.deleteUser(userId);
-					System.out.println(result);
 					resp.sendRedirect("manage_stu.adm");
 				} else if (path.equals("/tea_delete.adm")){
 					// 강사 삭제(따로 분류)
 					String[] userId = new String[1];
 					String id = req.getParameter("userId");
-					System.out.println(id+"가 삭제됩니다.");
 					userId[0] = id;
 					result = dao.deleteUser(userId);
 					resp.sendRedirect("manage_tea.adm");
@@ -505,7 +473,6 @@ public class AdminController extends HttpServlet {
 					// 학생등록 
 					String id = req.getParameter("id");
 					String lecName = req.getParameter("lecName");
-					System.out.println(id+":"+lecName);
 					if(id!=null&&lecName!=null){
 						result = dao.updateRegister(id,lecName);
 						resp.sendRedirect("register.adm");
@@ -523,7 +490,6 @@ public class AdminController extends HttpServlet {
 					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
 					// 수강생관리 목록 페이지(월별) 월 이동
 					String yyyymm = req.getParameter("yearMonth");
-					System.out.println(yyyymm);
 					ArrayList<AttendanceDto> manageStuMonth = dao.getManageStuMonth(yyyymm);
 					PrintWriter out= resp.getWriter(); 
 					out.write(dao.getManageStuMonthJson(manageStuMonth)+"");
@@ -534,7 +500,6 @@ public class AdminController extends HttpServlet {
 					String yyyymm = req.getParameter("nowDay");
 					String[] userId = req.getParameterValues("arrId");
 					String[] status = req.getParameterValues("arrStatus");					
-					System.out.println(yyyymm);
 					result = dao.updateManageStuMonth(yyyymm,userId,status);
 					if(result>0){
 						PrintWriter out= resp.getWriter(); 
@@ -549,9 +514,7 @@ public class AdminController extends HttpServlet {
 					calendarBean.setEndDate(req.getParameter("endDate")+" 23:59:00");
 					calendarBean.setTitle(req.getParameter("title"));
 					calendarBean.setContent(req.getParameter("content"));
-					System.out.println(calendarBean.toString());
 					result = dao.insertCalendar(calendarBean);
-					System.out.println("result = "+result);
 				}else if(path.equals("/calendar_updateDrag.adm")){
 					CalendarDto calendarBean = new CalendarDto();
 					calendarBean.setCalendarId(Integer.parseInt(req.getParameter("calendarId")));
@@ -561,9 +524,7 @@ public class AdminController extends HttpServlet {
 					calendarBean.setStartDate(req.getParameter("startDate").replaceAll("T", " "));
 					calendarBean.setEndDate(req.getParameter("endDate").replaceAll("T", " "));
 					calendarBean.setContent(req.getParameter("content"));
-					System.out.println(calendarBean.toString());
 					result = dao.updateCalendar(calendarBean);
-					System.out.println("result = "+result);
 				}else if(path.equals("/calendar_updateEdit.adm")){
 					CalendarDto calendarBean = new CalendarDto();
 					calendarBean.setCalendarId(Integer.parseInt(req.getParameter("calendarId")));
@@ -572,12 +533,9 @@ public class AdminController extends HttpServlet {
 					calendarBean.setStartDate(req.getParameter("startDate")+" 00:00:00");
 					calendarBean.setEndDate(req.getParameter("endDate")+" 23:59:00");
 					calendarBean.setContent(req.getParameter("content"));
-					System.out.println(calendarBean.toString());
 					result = dao.updateCalendar(calendarBean);
-					System.out.println("result = "+result);
 				}else if(path.equals("/calendar_delete.adm")){
 					result = dao.deleteCalendar(Integer.parseInt(req.getParameter("calendarId")));
-					System.out.println("result = "+result);
 				}
 
 				//비동기 통신
@@ -585,7 +543,6 @@ public class AdminController extends HttpServlet {
 					req.setAttribute("arrangeLectureList", dao.getArrangeLectureList());
 					// 수강생관리 목록 페이지(월별) 월 이동
 					String yyyymm = req.getParameter("yearMonth");
-					System.out.println(yyyymm);
 					ArrayList<AttendanceDto> manageStuMonth = dao.getManageStuMonth(yyyymm);
 					PrintWriter out= resp.getWriter(); 
 					out.write(dao.getManageStuMonthJson(manageStuMonth)+"");
@@ -596,7 +553,6 @@ public class AdminController extends HttpServlet {
 					String yyyymm = req.getParameter("nowDay");
 					String[] userId = req.getParameterValues("arrId");
 					String[] status = req.getParameterValues("arrStatus");					
-					System.out.println(yyyymm);
 					result = dao.updateManageStuMonth(yyyymm,userId,status);
 					if(result>0){
 						PrintWriter out= resp.getWriter(); 
@@ -611,9 +567,7 @@ public class AdminController extends HttpServlet {
 					calendarBean.setEndDate(req.getParameter("endDate")+" 23:59:00");
 					calendarBean.setTitle(req.getParameter("title"));
 					calendarBean.setContent(req.getParameter("content"));
-					System.out.println(calendarBean.toString());
 					result = dao.insertCalendar(calendarBean);
-					System.out.println("result = "+result);
 				}else if(path.equals("/calendar_update.adm")){
 					CalendarDto calendarBean = new CalendarDto();
 					calendarBean.setCalendarId(Integer.parseInt(req.getParameter("calendarId")));
@@ -623,19 +577,14 @@ public class AdminController extends HttpServlet {
 					calendarBean.setStartDate(req.getParameter("startDate").replaceAll("T", " "));
 					calendarBean.setEndDate(req.getParameter("endDate").replaceAll("T", " "));
 					calendarBean.setContent(req.getParameter("content"));
-					System.out.println(calendarBean.toString());
 					result = dao.updateCalendar(calendarBean);
-					System.out.println("result = "+result);
 				}else if(path.equals("/calendar_delete.adm")){
 					result = dao.deleteCalendar(Integer.parseInt(req.getParameter("calendarId")));
-					System.out.println("result = "+result);
 				}else if(path.equals("/qna_update.adm")){
 					QnaLDto bean = new QnaLDto();
 					bean.setQnaLId(Integer.parseInt(req.getParameter("qnaLId")));
 					bean.setAnswerContent(req.getParameter("questionAnswer"));
-					System.out.println("bean = "+bean.toString());
 					result = dao.updateQnaL(bean);
-					System.out.println("result = "+result);
 					
 					PrintWriter out = resp.getWriter();
 					out.write("OK");
@@ -648,22 +597,18 @@ public class AdminController extends HttpServlet {
 					out.close();					
 				}
 				else if (path.equals("/attendacne_allInsert.adm")) {
-					System.out.println("추가!!");
 					// 큐엔에이 삭제 페이지
 					dao.insertAttendanceAll();
 					PrintWriter out = resp.getWriter();
 					out.write("OK");
 					out.close();					
 				}else {
-					System.out.println("주소 없음 ");
 				}
 				
 				
-				System.out.println("ajax 통신");
 			}
 			
 		} catch (java.lang.NullPointerException e) {
-			System.out.println(e);
 			resp.sendRedirect("login.bit");
 		}
 	}
