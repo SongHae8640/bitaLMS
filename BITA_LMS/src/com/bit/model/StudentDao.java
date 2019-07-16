@@ -200,7 +200,6 @@ public class StudentDao extends Dao{
 					+"from user01 u JOIN score s ON s.std_id=u.user_id WHERE user_id = ?";
 		try {  
 			openConnection();
-			System.out.println("연결");
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, userId);
 			rs = pstmt.executeQuery();
@@ -211,7 +210,6 @@ public class StudentDao extends Dao{
 				scoreBean.setThirdScore(rs.getInt("third_score"));
 				scoreBean.setAvgScore(rs.getDouble("avg_score"));
 			}
-			System.out.println(scoreBean.toString());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
@@ -224,7 +222,6 @@ public class StudentDao extends Dao{
 		ArrayList<AssignmentDto> list = new ArrayList<AssignmentDto>();
 		String sql = "SELECT row_number() OVER(ORDER BY write_date) num,assignment_id,title,"
 				+ "TO_CHAR(write_date,'yyyy-mm-dd') AS write_date  " + "FROM assignment " + "WHERE lecture_id =?";
-				System.out.println("list sql="+sql);		
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -258,7 +255,6 @@ public class StudentDao extends Dao{
 				+ "FROM lectureUser lu " + "JOIN user01 u ON lu.user_id = u.user_id "
 				+ "JOIN assignment a ON a.lecture_id = lu.lecture_id "
 				+ "WHERE u.belong = 'teacher' AND a.assignment_id = ?";
-		System.out.println("assignment=" + sql);
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -295,7 +291,6 @@ public class StudentDao extends Dao{
 				+ "TO_CHAR(submit_date,'yyyy-mm-dd') as submit_date,is_check ,assignment_id"
 				+ "FROM submission s JOIN user01 u ON s.std_id = u.user_id join attached_file a on a.file_id=s.file_id"
 				+ " WHERE assignment_id=? and std_id=?";
-		System.out.println("submission sql=" + sql);
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -313,7 +308,6 @@ public class StudentDao extends Dao{
 															// is_check 자료형이
 															// char(1)이여서 여기서
 															// 오류가 날 수도?
-				System.out.println("stdName=" + bean.getStdName());
 				list.add(bean);
 			}
 		} catch (SQLException e) {
@@ -333,8 +327,6 @@ public class StudentDao extends Dao{
 		String sql2 = "INSERT INTO submission(assignment_id, std_id,submit_date,file_id,is_check) VALUES(?,?,SYSDATE,file_id_seq.currval,'0')"; // reg
 																																	// id?file
 																																	// group?
-		System.out.println("attached sql1=" + sql1);
-		System.out.println("attached sql2=" + sql2);
 		try {
 			openConnection();
 //			conn.setAutoCommit(false);
@@ -344,16 +336,11 @@ public class StudentDao extends Dao{
 			pstmt.setString(2, fileBean.getFileName());
 			pstmt.setString(3, fileBean.getFileExtension());
 			pstmt.setString(4, userBean.getUserId());
-			System.out.println("1");
 			result1 = pstmt.executeUpdate();
-			System.out.println("result1=" + result1);
-			System.out.println("attached sql1=" + sql1);
 			if (result1 == 1) {
 				pstmt = conn.prepareStatement(sql2);
 				pstmt.setInt(1, bean_s.getAssignmentId());
 				pstmt.setString(2, bean_s.getStdName());
-				System.out.println("result2=" + result2);
-				System.out.println("attached sql2=" + sql2);
 				result2=pstmt.executeUpdate();
 			}
 		} catch (SQLException e) {
@@ -548,7 +535,6 @@ public class StudentDao extends Dao{
 				+ "FROM attendance "
 				+ "WHERE std_id=? "
 				+ "AND TO_CHAR(day_time,'YYYY-MM') = ?";
-		System.out.println(sql);
 		
 		try {
 			openConnection();
@@ -562,7 +548,6 @@ public class StudentDao extends Dao{
 				bean.setStatus(rs.getString("status"));
 				bean.setCheckinTime(rs.getString("checkin_time"));
 				bean.setCheckoutTime(rs.getString("checkout_time"));
-				System.out.println(bean.toString());
 				jArray.add(bean.getJsonObject());
 			}
 		} catch (SQLException e) {
@@ -599,9 +584,7 @@ public class StudentDao extends Dao{
 			}
 				
 		} catch (SQLException e) {
-			System.out.println(e);
 		}catch (NullPointerException e) {
-			System.out.println(e);
 		}finally{
 			closeConnection();
 		}

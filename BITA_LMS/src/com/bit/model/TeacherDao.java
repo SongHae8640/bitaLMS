@@ -35,10 +35,7 @@ public class TeacherDao extends Dao{
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, lectureId);
 			rs = pstmt.executeQuery();
-			System.out
-					.println("getTodayAttendance :: lectureId = " + lectureId);
 			while (rs.next()) {
-				System.out.println("bean +1");
 				AttendanceDto bean = new AttendanceDto();
 				bean.setDayTime(rs.getString("day_time"));
 				bean.setName(rs.getString("name"));
@@ -68,7 +65,6 @@ public class TeacherDao extends Dao{
 					+ " where to_date(trunc(day_time,'mm'))=to_date(?) and a.lecture_id=?"
 					+ " order by u.name, a.day_time";
 		
-		System.out.println(sql);
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, yyyymm+"-01");
@@ -107,7 +103,6 @@ public class TeacherDao extends Dao{
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, lectureId);		
-			System.out.println("lectureId::getScoreList"+lectureId);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {   
 				ScoreDto bean = new ScoreDto();
@@ -153,12 +148,10 @@ public class TeacherDao extends Dao{
 			pstmt.setString(3,name); 
 			result = pstmt.executeUpdate();
 			}
-			System.out.println("insertScore의 result "+result);
 		} catch (SQLException e) {
 			e.printStackTrace();
 	        if (conn != null) {
 	            try {
-	                System.err.print("Transaction is being rolled back");
 	                conn.rollback();
 	            } catch(SQLException excep) {
 	            	e.printStackTrace();
@@ -204,12 +197,10 @@ public class TeacherDao extends Dao{
 				pstmt.setString(3, name);
 				result = pstmt.executeUpdate();
 			}	
-		System.out.println("updateAvgscore의 result "+result);
 	} catch (SQLException e) {
 		e.printStackTrace();
         if (conn != null) {
             try {
-                System.err.print("Transaction is being rolled back");
                 conn.rollback();
             } catch(SQLException excep) {
             	e.printStackTrace();
@@ -288,7 +279,6 @@ public class TeacherDao extends Dao{
 				+ "TO_CHAR(submit_date,'yyyy-mm-dd') as submit_date,is_check,std_id "
 				+ "FROM submission s JOIN user01 u ON s.std_id = u.user_id join attached_file a on a.file_id=s.file_id"
 				+ " WHERE assignment_id=?";
-		System.out.println("submission sql=" + sql);
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -362,7 +352,6 @@ public class TeacherDao extends Dao{
 			pstmt.setString(2, assignmentBean.getContent());
 			pstmt.setInt(3, assignmentBean.getLectureId());
 			result=pstmt.executeUpdate();
-			System.out.println(result);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
@@ -387,15 +376,12 @@ public class TeacherDao extends Dao{
 		int result2=0;
 		String sql="delete from submission where assignment_id=? ";
 		String sql1="delete from assignment where assignment_id=?";
-		System.out.println("delete sql="+sql);
-		System.out.println("delete sql2="+sql1);
 		try {
 			conn.setAutoCommit(false);
 			openConnection();
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1, assignmentId);
 			result1=pstmt.executeUpdate();
-			System.out.println(1);
 			if(result1==1) {
 				pstmt = conn.prepareStatement(sql1);
 				pstmt.setInt(1, assignmentId);
@@ -490,7 +476,6 @@ public class TeacherDao extends Dao{
 			sql = "UPDATE attendance SET status = '퇴실', checkout_time = sysdate ";
 		}
 		sql += "WHERE std_id = ? and to_Char(day_time,'yyyymmdd')=to_Char(sysdate,'yyyymmdd')";
-		System.out.println(sql);
 		
 		try {
 			openConnection();
@@ -559,7 +544,6 @@ public class TeacherDao extends Dao{
 		//과제 확인 메서드
 		SubmissionDto bean_s=new SubmissionDto();
 		String sql="update submission set is_check='1' where assignment_id=? and std_id=?";
-		System.out.println("check sql"+sql);
 		try {
 			openConnection();
 			pstmt=conn.prepareStatement(sql);
@@ -659,8 +643,7 @@ public class TeacherDao extends Dao{
                 jObject.put("status", monthAttendance.get(i).getStatus());
                 jArray.add(jObject);
             }
-            System.out.println(jArray.toJSONString());
-		} 
+        	} 
 		
 		return jArray.toJSONString();
   }
@@ -690,9 +673,7 @@ public class TeacherDao extends Dao{
 			}
 				
 		} catch (SQLException e) {
-			System.out.println(e);
 		}catch (NullPointerException e) {
-			System.out.println(e);
 		}finally{
 			closeConnection();
 		}

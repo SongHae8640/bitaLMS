@@ -35,10 +35,7 @@ public class UploadController extends HttpServlet{
 		MultipartRequest mr = null;
 		mr=new MultipartRequest(req, path,maxsize,"utf-8",dfrp);
 		
-		System.out.println(path);
-		System.out.println(mr.getParameter("id"));
 		String origin=mr.getOriginalFileName("myfile");
-		System.out.println(origin);
 		String rename=mr.getFilesystemName("myfile");
 		
 		

@@ -1,4 +1,4 @@
-package com.bit.model;
+﻿package com.bit.model;
 import java.sql.SQLException;
 
 public class HomeDao extends Dao{
@@ -21,8 +21,6 @@ public class HomeDao extends Dao{
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
 			rs = pstmt.executeQuery();
-			System.out.println("dao "+id);
-			System.out.println(pw);
 			if(rs.next()){
 				bean.setUserId(rs.getString("user_id"));
 				bean.setPassword(rs.getString("password")); 
@@ -40,7 +38,6 @@ public class HomeDao extends Dao{
 		} finally{
 			closeConnection();
 		}
-		  System.out.println(bean);
 		return bean;
 	}
 	public int findFile(AttachedFileDto fileBean){
@@ -70,8 +67,6 @@ public class HomeDao extends Dao{
 		//어플라이아이디 = 시퀀스
 		//apply_id apply_date lecture_id file_name user_id
 		//apply,Attached_File,File_Group 에 데이터 한번에 넣기
-		System.out.println(applyBean.toString());
-		System.out.println(fileBean.toString());
 		String sql1 = "insert into Attached_File (file_id,file_group,original_name,file_name,file_extension,ref_date,reg_id)"
 					+"values (file_id_seq.nextval,?,?,?,?,sysdate,?)";
 		String sql2	="insert into apply (apply_id,apply_date,lecture_id,file_id,user_id)"
@@ -86,19 +81,16 @@ public class HomeDao extends Dao{
 			pstmt.setString(4, fileBean.getFileExtension());
 			pstmt.setString(5, applyBean.getUserId());
 			result1 = pstmt.executeUpdate();
-			System.out.println("result1 "+result1);
 			if(result1==1){
 			pstmt = conn.prepareStatement(sql2);		
 			pstmt.setInt(1, applyBean.getLectureId());
 			pstmt.setString(2, applyBean.getUserId());
 			result2 = pstmt.executeUpdate();
-			System.out.println("result2 "+result2);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 	        if (conn != null) {
 	            try {
-	                System.err.print("Transaction is being rolled back");
 	                conn.rollback();
 	            } catch(SQLException excep) {
 	            	e.printStackTrace();
@@ -130,10 +122,8 @@ public class HomeDao extends Dao{
 			pstmt.setString(1,userBean.getUserId());
 			pstmt.setString(2,userBean.getPassword());
 			pstmt.setString(3,userBean.getName());
-			System.out.println("이름"+userBean.getName());
 			pstmt.setString(4,userBean.getEmail());
 			pstmt.setString(5,userBean.getPhoneNumber());
-			System.out.println(userBean.getInflowPath());
 			pstmt.setString(6,userBean.getInflowPath());
 			pstmt.setString(7,"before");			//수강신청등록 전 학생값=0
 			result1 = pstmt.executeUpdate();
@@ -147,7 +137,6 @@ public class HomeDao extends Dao{
 			e.printStackTrace();
 	        if (conn != null) {
 	            try {
-	                System.err.print("Transaction is being rolled back");
 	                conn.rollback();
 	            } catch(SQLException excep) {
 	            	e.printStackTrace();

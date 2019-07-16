@@ -41,9 +41,7 @@ public class AdminDao extends Dao {
 			}
 				
 		} catch (SQLException e) {
-			System.out.println(e);
 		}catch (NullPointerException e) {
-			System.out.println(e);
 		}finally{
 			closeConnection();
 		}
@@ -74,9 +72,7 @@ public class AdminDao extends Dao {
 			}
 				
 		} catch (SQLException e) {
-			System.out.println(e);
 		}catch (NullPointerException e) {
-			System.out.println(e);
 		}finally{
 			closeConnection();
 		}
@@ -141,21 +137,17 @@ public class AdminDao extends Dao {
 				+ "end_date = TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') "
 				+ "WHERE calendar_id = ?";
 		int result = -1;
-		System.out.println(sql);
 					
 		try {
 			
 			openConnection();
-			System.out.println("openConnection");
 			pstmt = conn.prepareStatement(sql); 
-			System.out.println("prepareStatement");
 			pstmt.setString(1, calendarBean.getTitle());
 			pstmt.setString(2, calendarBean.getContent());
 			pstmt.setString(3, calendarBean.getStartDate());
 			pstmt.setString(4, calendarBean.getEndDate());
 			pstmt.setInt(5, calendarBean.getCalendarId());	
 			result = pstmt.executeUpdate();
-			System.out.println("executeUpdate");
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}finally{
@@ -241,7 +233,6 @@ public class AdminDao extends Dao {
 				+ "JOIN user01 u on u.user_id=lu.user_id "
 				+ "where u.belong='teacher' and l.lecture_id>0";
 		
-		System.out.println(sql);
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -282,7 +273,6 @@ public class AdminDao extends Dao {
 				+ " JOIN user01 u on u.user_id=lu.user_id"
 				+ " where l.lecture_id=? and u.belong='teacher'";
 		
-		System.out.println(sql);
 
 		try {
 			openConnection();
@@ -305,7 +295,6 @@ public class AdminDao extends Dao {
 //				bean.setFileId(rs.getInt("file_id"));
 //				bean.setIsClose(rs.getString("is_close"));
 			}
-			System.out.println(bean.toString());
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -358,7 +347,6 @@ public class AdminDao extends Dao {
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				lectureBean.setFileId(rs.getInt("file_id"));
-				System.out.println(rs.getInt("file_id"));
 			}
 			
 			pstmt = conn.prepareStatement(sql1);
@@ -373,7 +361,6 @@ public class AdminDao extends Dao {
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				lectureBean.setFileId(rs.getInt("file_id"));
-				System.out.println(rs.getInt("file_id"));
 			}
 			
 			pstmt = conn.prepareStatement(sql3);
@@ -382,11 +369,9 @@ public class AdminDao extends Dao {
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				lectureBean.setTotalDays(rs.getInt("totalDays"));
-				System.out.println(rs.getInt("totalDays"));
 			}
 			
 			//name, start_date, end_date, total_days, max_std, lv, content, file_id, curri_id
-			System.out.println(sql4);
 			pstmt = conn.prepareStatement(sql4);
 			pstmt.setString(1, lectureBean.getName());
 			pstmt.setString(2, lectureBean.getStartDate());
@@ -463,7 +448,6 @@ public class AdminDao extends Dao {
 			pstmt.executeUpdate();
 			
 			//name, start_date, end_date, total_days, max_std, lv, content, file_id, curri_id
-			System.out.println(sql2);
 			pstmt = conn.prepareStatement(sql2);
 			pstmt.setString(1, lectureBean.getName());
 			pstmt.setString(2, lectureBean.getStartDate());
@@ -539,7 +523,6 @@ public class AdminDao extends Dao {
 		+"ORDER BY apply_id desc";
 //		+"WHERE a.lecture_id = ?"; 
 		
-		System.out.println(sql);
 		try {
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -576,7 +559,6 @@ public class AdminDao extends Dao {
 				+"INNER JOIN lecture l on l.lecture_id = a.lecture_id "
 				+"WHERE apply_id = ?";
 		
-		System.out.println(sql);
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -726,7 +708,6 @@ public class AdminDao extends Dao {
 				//날짜는 오늘 기준
 				+ "where u.belong='student' and a.day_time>to_date(to_char(sysdate))";
 		
-		System.out.println(sql);
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -742,7 +723,6 @@ public class AdminDao extends Dao {
 				bean.setAttendanceStatus(rs.getString("status"));
 				bean.setLectureName(rs.getString("lecName"));
 				list.add(bean);
-				System.out.println(bean.toString());
 			}
 			
 		} catch (SQLException e) {
@@ -774,7 +754,6 @@ public class AdminDao extends Dao {
 					+ " order by u.name, a.day_time";
 		}
 		
-		System.out.println(sql);
 		try {
 			pstmt = conn.prepareStatement(sql);
 			if(yyyymm!=null){
@@ -814,7 +793,6 @@ public class AdminDao extends Dao {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, userId[i]);
 				pstmt.executeUpdate();
-				System.out.println(userId[i]);
 				result++;
 			}
 			
@@ -854,7 +832,6 @@ public class AdminDao extends Dao {
 				+ "inner join lecture l on lu.lecture_id=l.lecture_id "
 				+ "where u.belong='teacher' and type='학력'";
 		
-		System.out.println(sql);
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -891,7 +868,6 @@ public class AdminDao extends Dao {
 					+ "inner join lecture l on lu.lecture_id=l.lecture_id "
 					+ "where u.belong='teacher' and lu.lecture_id<=0";
 			
-			System.out.println(sql);
 			try {
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
@@ -971,7 +947,6 @@ public class AdminDao extends Dao {
 				+ "from attached_file af inner join file_group fg on fg.file_group = af.file_group "
 				+ "where af.reg_id=? and af.file_group='profile'";
 		
-		System.out.println(sql);
 		try { 
 			openConnection();
 
@@ -1001,7 +976,6 @@ public class AdminDao extends Dao {
 				+ "inner join user01"
 				+ "where af.file_group='profile'";
 		
-		System.out.println(sql);
 		try { 
 			openConnection();
 
@@ -1034,7 +1008,6 @@ public class AdminDao extends Dao {
 				+ "inner join teacher_info ti on ti.teacher_id=u.user_id "
 				+ "where u.user_id=? order by ti.type";
 		
-		System.out.println(sql);
 		try { 
 			openConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -1109,7 +1082,6 @@ public class AdminDao extends Dao {
 			pstmt.executeUpdate();
 			
 			for(int i=0; i<career.length; i++){
-				System.out.println(career[i]);
 				pstmt = conn.prepareStatement(sql3);
 				pstmt.setString(1, "경력사항");
 				pstmt.setString(2, career[i]);
@@ -1117,7 +1089,6 @@ public class AdminDao extends Dao {
 				pstmt.executeUpdate();
 			}
 			for(int i=0; i<book.length; i++){
-				System.out.println(book[i]);
 				pstmt = conn.prepareStatement(sql3);
 				pstmt.setString(1, "저서");
 				pstmt.setString(2, book[i]);
@@ -1125,7 +1096,6 @@ public class AdminDao extends Dao {
 				pstmt.executeUpdate();
 			}
 			for(int i=0; i<certificate.length; i++){
-				System.out.println(certificate[i]);
 				pstmt = conn.prepareStatement(sql3);
 				pstmt.setString(1, "자격");
 				pstmt.setString(2, certificate[i]);
@@ -1204,7 +1174,6 @@ public class AdminDao extends Dao {
 			pstmt.executeUpdate();
 			
 			for(int i=0; i<career.length; i++){
-				System.out.println(career[i]);
 				pstmt = conn.prepareStatement(sql4);
 				pstmt.setString(1, "경력사항");
 				pstmt.setString(2, career[i]);
@@ -1212,7 +1181,6 @@ public class AdminDao extends Dao {
 				pstmt.executeUpdate();
 			}
 			for(int i=0; i<book.length; i++){
-				System.out.println(book[i]);
 				pstmt = conn.prepareStatement(sql4);
 				pstmt.setString(1, "저서");
 				pstmt.setString(2, book[i]);
@@ -1220,7 +1188,6 @@ public class AdminDao extends Dao {
 				pstmt.executeUpdate();
 			}
 			for(int i=0; i<certificate.length; i++){
-				System.out.println(certificate[i]);
 				pstmt = conn.prepareStatement(sql4);
 				pstmt.setString(1, "자격");
 				pstmt.setString(2, certificate[i]);
@@ -1379,14 +1346,12 @@ public class AdminDao extends Dao {
 			while(rs.next()){
 				stuList.add(rs.getString("user_id"));
 			}
-			System.out.println("대상 학생 id : "+stuList.toString());
 			closeConnection();
 			openConnection();
 			for(int idx = 0 ; idx <stuList.size() ; idx ++){
 				pstmt = conn.prepareStatement(insertAttendanceSql);
 				pstmt.setString(1, stuList.get(idx));
 				result = pstmt.executeUpdate();
-				System.out.println(result);
 			}
 			conn.commit();
 		} catch (SQLException e) {
@@ -1533,13 +1498,10 @@ public class AdminDao extends Dao {
 					if(num!=0){
 						dayNum = (i+1)%(num*((status.length)/(userId.length)));						
 					}
-					System.out.println(userId[num]+""+status[i]);
 					sql.add("UPDATE attendance SET status = '공결' "
 							+ "WHERE std_id = '"+userId[num]+"' and "
 									+ "trunc(day_time,'dd')=trunc(to_date('"+yyyymm+"-"+dayNum+"'),'dd')");
-					System.out.println("UPDATE attendance SET status = '공결' "
-							+ "WHERE std_id = '"+userId[num]+"' and "
-									+ "trunc(day_time,'dd')=trunc(to_date('"+yyyymm+"-"+dayNum+"'),'dd')");
+					
 				}
 			}
 		}
@@ -1580,8 +1542,7 @@ public class AdminDao extends Dao {
                 jObject.put("status", list.get(i).getStatus());
                 jArray.add(jObject);
             }
-            System.out.println(jArray.toJSONString());
-		} 
+        	} 
 		
 		return jArray.toJSONString();
 	}
