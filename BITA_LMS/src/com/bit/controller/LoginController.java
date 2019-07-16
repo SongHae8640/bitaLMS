@@ -22,7 +22,6 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
 		HttpSession session = req.getSession();
-		System.out.println("LoginController(doGet) :: ");
 		
 			if(path.equals("/login.bit")||path.equals("/index.bit")){
 				if(session.getAttribute("userBean") != null){ 
@@ -53,8 +52,6 @@ public class LoginController extends HttpServlet {
 		
 		UserDao dao = new UserDao();
 		UserDto userBean = dao.login(id, pw);
-		System.out.println("값확인"+dao.login(id, pw));
-		System.out.println("LoginController(doPost) :: userBean="+userBean.toString());
 		try{
 		if(userBean.getBelong().equals("teacher")){
 			//session
