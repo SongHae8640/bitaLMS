@@ -28,7 +28,6 @@ public class HomeController extends HttpServlet {
 		RequestDispatcher rd = null;
 		
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("HomeController(doGet) :: path = " + path);
 		
 		// 세션 저장
 		HttpSession session = req.getSession();
@@ -58,7 +57,6 @@ public class HomeController extends HttpServlet {
 		HomeDao dao = new HomeDao();
 		int result = 0;
 		String path = req.getRequestURI().replaceAll(req.getContextPath(), "");
-		System.out.println("HomeController(doPost) :: path = " + path);
 		
 		if(path.equals("/login.home")){
 			
@@ -69,7 +67,6 @@ public class HomeController extends HttpServlet {
 			String message = "";
 			
 		try{
-			System.out.println(userBean.getUserId());
 			if(userBean.getUserId().equals(id) && userBean.getPassword().equals(pw) ){//로그인성공
 				//session
 				session.setAttribute("userBean", userBean);
@@ -85,9 +82,7 @@ public class HomeController extends HttpServlet {
 		}else if(path.equals("/idcheck.home")){
 			String msg ="";
 			String id = req.getParameter("id");
-			System.out.println("id"+id); 
 			result = dao.idCheck(id);
-			System.out.println("중복확인result값 "+result);
 			if(result>0){
 				msg = "사용할 수 없는 ID입니다";
 			}else{ 
@@ -104,12 +99,10 @@ public class HomeController extends HttpServlet {
 			req.setCharacterEncoding("UTF-8");
 			resp.setContentType("text/html;charset=UTF-8");
 			String user_id = req.getParameter("id");
-			System.out.println("user_id"+user_id);
 			String password = req.getParameter("pw");
 			String name = req.getParameter("name");
 			String email = req.getParameter("email");
 			String phone_num = req.getParameter("phone_num");
-			System.out.println(phone_num);
 			String belong="-1";			//등록 전 학생 default값 -1
 			String[] inflow_path_num = req.getParameterValues("inflow_path");	//유입경로(중복O)
 			String ect = req.getParameter("ect");
@@ -132,7 +125,6 @@ public class HomeController extends HttpServlet {
 				}	
 				total+=inflow_path+",";
 			} 
-			System.out.println("1");
 			int Idx = total.lastIndexOf(","); total = total.substring(0, Idx);
 			UserDto userBean = new UserDto();
 			userBean.setUserId(user_id);
@@ -143,10 +135,8 @@ public class HomeController extends HttpServlet {
 			userBean.setInflowPath(total);
 			userBean.setBelong(belong);
 			result = dao.insertUser(userBean);
-			System.out.println(result);
 			//정상적으로 회원 가입 한 것만
 			if(result ==1) {
-				System.out.println("회원가입성공");
 				req.setAttribute("errmsg", "<script type=\"text/javascript\">alert('가입을 축하드립니다.');</script>");
 				rd = req.getRequestDispatcher("home/main_H.jsp");
 				rd.forward(req, resp);
@@ -161,7 +151,6 @@ public class HomeController extends HttpServlet {
 			//파일이 저장될 서버의 경로
 			// String savePath = "D:/Projects/workspace/projectName/WebContent/save";
 			String savePath = req.getServletContext().getRealPath("save");
-			System.out.println("여기저장"+savePath);
 			int sizeLimit = 1024*1024*15;
 			//  ↓ request 객체,               ↓ 저장될 서버 경로,       ↓ 파일 최대 크기,    ↓ 인코딩 방식,       ↓ 같은 이름의 파일명 방지 처리
 			// (HttpServletRequest request, String saveDirectory, int maxPostSize, String encoding, FileRenamePolicy policy)
@@ -172,17 +161,13 @@ public class HomeController extends HttpServlet {
 			//getParam으로 수강에 필요한 내용 저장 
 			UserDto userBean = (UserDto)session.getAttribute("userBean");	//로그인한 세션 받아오기-여기서 아이디 받아와야 함  
 			String userId = userBean.getUserId();							//수강신청한 회원의 Id 
-			System.out.println(userId);
 			String lectureId =multi.getParameter("lecture_Id"); 			//강좌번호  
-			System.out.println("lectureId(자바1,디비2,웹3)"+lectureId);
 			int param = Integer.parseInt(lectureId); 				
 			String fullfileName = multi.getOriginalFileName("user_apply");		
 			int Idx = fullfileName .lastIndexOf(".");								
 			String oriFileName = fullfileName.substring(0, Idx);
 			String fileExtend = fullfileName.substring(fullfileName.lastIndexOf(".")+1);//확장자이름 
 			// 업로드한 파일의 전체 경로를 DB에 저장하기 위함
-			System.out.println("oriFileName: 사용자가 올리는 파일이름 "+oriFileName);
-			System.out.println("fileExtend: 확장자이름 "+fileExtend);
 			
 			//ApplyDto생성 후 applyBean에 데이터 담기 
 			ApplyDto applyBean = new ApplyDto(); 
@@ -202,19 +187,15 @@ public class HomeController extends HttpServlet {
 			//HomeDao 인스턴스화해서 메소드 사용
 			//중복파일 검사 후 이름 바꿔서 fileBean에 담기
 			int count = dao.findFile(fileBean);
-			System.out.println("count: 중복되는 파일 수 "+count);
 			if(count>0){
 				String fileName = oriFileName+"("+count+")";
 				fileBean.setFileName(fileName);	//중복파일이름 생성~~!
-				System.out.println("fileName: "+fileName);
 			}else{
 				String fileName = oriFileName;
 				fileBean.setFileName(fileName);
-				System.out.println("fileName: "+fileName);
 			}
 			//파일업로드한거 insert 
 			result = dao.insertApply(applyBean,fileBean);	 
-			System.out.println("수강신청결과"+result); 
 			
 			//정상적으로 수강신청 한 것만
 			if(result ==1) {
